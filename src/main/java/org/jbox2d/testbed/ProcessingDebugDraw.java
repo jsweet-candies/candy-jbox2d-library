@@ -34,7 +34,7 @@ import org.jbox2d.dynamics.DebugDraw;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.core.PGraphics3D;
+import processing.opengl.PGraphics3D;
 import processing.core.PImage;
 
 /**

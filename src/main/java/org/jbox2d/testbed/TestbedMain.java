@@ -118,46 +118,48 @@ public class TestbedMain extends PApplet {
 //    	smooth();
     	frameRate(targetFPS);
     	g = new ProcessingDebugDraw(this);
-    	    	
-    	for (int i=0; i<100; ++i) {
-    		this.requestFocus();
-    	}
+    	 
+    	// TODO : fix
+//    	for (int i=0; i<100; ++i) {
+//    		this.requestFocus();
+//    	}
     	
     	/* Register the examples */
     	registerExamples(ExampleList.getExamples(this));
     	
     	//Set up the mouse wheel listener to control zooming
-    	addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-            	if (currentTest != null) {
-            		ProcessingDebugDraw d = (ProcessingDebugDraw)(currentTest.m_debugDraw);
-            		int notches = e.getWheelRotation();
-            		
-                	Vec2 oldCenter = new Vec2();
-                	OBBViewportTransform trans = (OBBViewportTransform) d.getViewportTranform();
-                	d.getScreenToWorldToOut(mouseX, mouseY, oldCenter);
-                	//Change the zoom and clamp it to reasonable values - can't clamp now.
-                	if (notches < 0) {
-                		trans.mulByTransform( Mat22.createScaleTransform( 1.05f ));
-                		currentTest.cachedCamScale *= 1.05;
-                	}
-                	else if (notches > 0) {
-                		trans.mulByTransform( Mat22.createScaleTransform( .95f ));
-                		currentTest.cachedCamScale *= .95f;
-                	}
-                	
-                	Vec2 newCenter = new Vec2();
-                	d.getScreenToWorldToOut(mouseX, mouseY, newCenter);
-                	
-                	
-                	Vec2 transformedMove = oldCenter.subLocal(newCenter);
-                	d.getViewportTranform().getCenter().addLocal(transformedMove);
-
-                	currentTest.cachedCamX = d.getViewportTranform().getCenter().x;
-                	currentTest.cachedCamY = d.getViewportTranform().getCenter().y;
-            	}
-            }
-        });
+    	// TODO : fix
+//    	addMouseWheelListener(new MouseWheelListener() {
+//            public void mouseWheelMoved(MouseWheelEvent e) {
+//            	if (currentTest != null) {
+//            		ProcessingDebugDraw d = (ProcessingDebugDraw)(currentTest.m_debugDraw);
+//            		int notches = e.getWheelRotation();
+//            		
+//                	Vec2 oldCenter = new Vec2();
+//                	OBBViewportTransform trans = (OBBViewportTransform) d.getViewportTranform();
+//                	d.getScreenToWorldToOut(mouseX, mouseY, oldCenter);
+//                	//Change the zoom and clamp it to reasonable values - can't clamp now.
+//                	if (notches < 0) {
+//                		trans.mulByTransform( Mat22.createScaleTransform( 1.05f ));
+//                		currentTest.cachedCamScale *= 1.05;
+//                	}
+//                	else if (notches > 0) {
+//                		trans.mulByTransform( Mat22.createScaleTransform( .95f ));
+//                		currentTest.cachedCamScale *= .95f;
+//                	}
+//                	
+//                	Vec2 newCenter = new Vec2();
+//                	d.getScreenToWorldToOut(mouseX, mouseY, newCenter);
+//                	
+//                	
+//                	Vec2 transformedMove = oldCenter.subLocal(newCenter);
+//                	d.getViewportTranform().getCenter().addLocal(transformedMove);
+//
+//                	currentTest.cachedCamX = d.getViewportTranform().getCenter().x;
+//                	currentTest.cachedCamY = d.getViewportTranform().getCenter().y;
+//            	}
+//            }
+//        });
     	
     	
     	/* Set up the timers for FPS reporting */

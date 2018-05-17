@@ -191,7 +191,7 @@ public class Physics {
 		
 		m_border = createHollowBox(screenW*.5f, screenH*.5f, borderBoxWidth, borderBoxHeight, 10.0f);
 		
-		parent.registerDraw(this);
+		parent.registerMethod("draw", this);
 	}
 	
 	/**
@@ -745,7 +745,7 @@ public class Physics {
 	 * the PApplet's draw events.
 	 */
 	public void destroy() {
-		m_parent.unregisterDraw(this);
+		m_parent.unregisterMethod("draw", this);
 	}
 	
 	/**
