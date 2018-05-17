@@ -123,37 +123,37 @@ namespace org.jbox2d.callbacks {
         /**
          * Draw shapes
          */
-        public static e_shapeBit : number; public static e_shapeBit_$LI$() : number { if(DebugDraw.e_shapeBit == null) DebugDraw.e_shapeBit = 1 << 1; return DebugDraw.e_shapeBit; };
+        public static e_shapeBit : number = 1 << 1;
 
         /**
          * Draw joint connections
          */
-        public static e_jointBit : number; public static e_jointBit_$LI$() : number { if(DebugDraw.e_jointBit == null) DebugDraw.e_jointBit = 1 << 2; return DebugDraw.e_jointBit; };
+        public static e_jointBit : number = 1 << 2;
 
         /**
          * Draw axis aligned bounding boxes
          */
-        public static e_aabbBit : number; public static e_aabbBit_$LI$() : number { if(DebugDraw.e_aabbBit == null) DebugDraw.e_aabbBit = 1 << 3; return DebugDraw.e_aabbBit; };
+        public static e_aabbBit : number = 1 << 3;
 
         /**
          * Draw pairs of connected objects
          */
-        public static e_pairBit : number; public static e_pairBit_$LI$() : number { if(DebugDraw.e_pairBit == null) DebugDraw.e_pairBit = 1 << 4; return DebugDraw.e_pairBit; };
+        public static e_pairBit : number = 1 << 4;
 
         /**
          * Draw center of mass frame
          */
-        public static e_centerOfMassBit : number; public static e_centerOfMassBit_$LI$() : number { if(DebugDraw.e_centerOfMassBit == null) DebugDraw.e_centerOfMassBit = 1 << 5; return DebugDraw.e_centerOfMassBit; };
+        public static e_centerOfMassBit : number = 1 << 5;
 
         /**
          * Draw dynamic tree
          */
-        public static e_dynamicTreeBit : number; public static e_dynamicTreeBit_$LI$() : number { if(DebugDraw.e_dynamicTreeBit == null) DebugDraw.e_dynamicTreeBit = 1 << 6; return DebugDraw.e_dynamicTreeBit; };
+        public static e_dynamicTreeBit : number = 1 << 6;
 
         /**
          * Draw only the wireframe for drawing performance
          */
-        public static e_wireframeDrawingBit : number; public static e_wireframeDrawingBit_$LI$() : number { if(DebugDraw.e_wireframeDrawingBit == null) DebugDraw.e_wireframeDrawingBit = 1 << 7; return DebugDraw.e_wireframeDrawingBit; };
+        public static e_wireframeDrawingBit : number = 1 << 7;
 
         m_drawFlags : number;
 
@@ -1040,7 +1040,11 @@ namespace org.jbox2d.collision.broadphase {
          */
         raycast(callback : org.jbox2d.callbacks.TreeRayCastCallback, input : org.jbox2d.collision.RayCastInput);
 
-        computeHeight(node? : any) : any;
+        /**
+         * Compute the height of the tree.
+         * @return {number}
+         */
+        computeHeight() : number;
 
         /**
          * Compute the height of the binary tree in O(N) time. Should not be called often.
@@ -1067,7 +1071,7 @@ namespace org.jbox2d.collision.broadphase {
          */
         getAreaRatio() : number;
 
-        drawTree(argDraw? : any, node? : any, spot? : any, height? : any) : any;
+        drawTree(draw : org.jbox2d.callbacks.DebugDraw);
     }
 }
 namespace org.jbox2d.collision.broadphase {
@@ -1216,7 +1220,7 @@ namespace org.jbox2d.collision.broadphase {
          * @param {org.jbox2d.callbacks.DebugDraw} argDraw
          */
         public drawTree(argDraw : org.jbox2d.callbacks.DebugDraw) {
-            this.m_tree['drawTree$org_jbox2d_callbacks_DebugDraw'](argDraw);
+            this.m_tree.drawTree(argDraw);
         }
 
         /**
@@ -2351,25 +2355,25 @@ namespace org.jbox2d.collision.broadphase {
             };
         }
 
-        public computeHeight(node? : any) : any {
-            if(((typeof node === 'number') || node === null)) {
-                return <any>this.computeHeight$int(node);
-            } else if(node === undefined) {
-                return <any>this.computeHeight$();
-            } else throw new Error('invalid overload');
-        }
-
         public computeHeight$() : number {
             return this.computeHeight$int(this.m_root);
         }
 
-        /*private*/ computeHeight$int(node : number) : number {
+        public computeHeight$int(node : number) : number {
             if(this.m_child1[node] === DynamicTreeFlatNodes.NULL_NODE) {
                 return 0;
             }
             let height1 : number = this.computeHeight$int(this.m_child1[node]);
             let height2 : number = this.computeHeight$int(this.m_child2[node]);
             return 1 + org.jbox2d.common.MathUtils.max$int$int(height1, height2);
+        }
+
+        public computeHeight(node? : any) : any {
+            if(((typeof node === 'number') || node === null)) {
+                return <any>this.computeHeight$int(node);
+            } else if(node === undefined) {
+                return <any>this.computeHeight$();
+            } else throw new Error('invalid overload');
         }
 
         /**
@@ -2705,14 +2709,6 @@ namespace org.jbox2d.collision.broadphase {
             this.validateMetrics(child2);
         }
 
-        public drawTree(argDraw? : any, node? : any, spot? : any, height? : any) : any {
-            if(((argDraw != null && argDraw instanceof <any>org.jbox2d.callbacks.DebugDraw) || argDraw === null) && ((typeof node === 'number') || node === null) && ((typeof spot === 'number') || spot === null) && ((typeof height === 'number') || height === null)) {
-                return <any>this.drawTree$org_jbox2d_callbacks_DebugDraw$int$int$int(argDraw, node, spot, height);
-            } else if(((argDraw != null && argDraw instanceof <any>org.jbox2d.callbacks.DebugDraw) || argDraw === null) && node === undefined && spot === undefined && height === undefined) {
-                return <any>this.drawTree$org_jbox2d_callbacks_DebugDraw(argDraw);
-            } else throw new Error('invalid overload');
-        }
-
         public drawTree$org_jbox2d_callbacks_DebugDraw(argDraw : org.jbox2d.callbacks.DebugDraw) {
             if(this.m_root === DynamicTreeFlatNodes.NULL_NODE) {
                 return;
@@ -2740,6 +2736,14 @@ namespace org.jbox2d.collision.broadphase {
             if(c2 !== DynamicTreeFlatNodes.NULL_NODE) {
                 this.drawTree$org_jbox2d_callbacks_DebugDraw$int$int$int(argDraw, c2, spot + 1, height);
             }
+        }
+
+        public drawTree(argDraw? : any, node? : any, spot? : any, height? : any) : any {
+            if(((argDraw != null && argDraw instanceof <any>org.jbox2d.callbacks.DebugDraw) || argDraw === null) && ((typeof node === 'number') || node === null) && ((typeof spot === 'number') || spot === null) && ((typeof height === 'number') || height === null)) {
+                return <any>this.drawTree$org_jbox2d_callbacks_DebugDraw$int$int$int(argDraw, node, spot, height);
+            } else if(((argDraw != null && argDraw instanceof <any>org.jbox2d.callbacks.DebugDraw) || argDraw === null) && node === undefined && spot === undefined && height === undefined) {
+                return <any>this.drawTree$org_jbox2d_callbacks_DebugDraw(argDraw);
+            } else throw new Error('invalid overload');
         }
     }
     DynamicTreeFlatNodes["__class"] = "org.jbox2d.collision.broadphase.DynamicTreeFlatNodes";
@@ -5774,9 +5778,9 @@ namespace org.jbox2d.common {
      * @class
      */
     export class PlatformMathUtils {
-        static SHIFT23 : number; public static SHIFT23_$LI$() : number { if(PlatformMathUtils.SHIFT23 == null) PlatformMathUtils.SHIFT23 = 1 << 23; return PlatformMathUtils.SHIFT23; };
+        static SHIFT23 : number = 1 << 23;
 
-        static INV_SHIFT23 : number; public static INV_SHIFT23_$LI$() : number { if(PlatformMathUtils.INV_SHIFT23 == null) PlatformMathUtils.INV_SHIFT23 = (<any>Math).fround(1.0 / PlatformMathUtils.SHIFT23_$LI$()); return PlatformMathUtils.INV_SHIFT23; };
+        static INV_SHIFT23 : number; public static INV_SHIFT23_$LI$() : number { if(PlatformMathUtils.INV_SHIFT23 == null) PlatformMathUtils.INV_SHIFT23 = (<any>Math).fround(1.0 / PlatformMathUtils.SHIFT23); return PlatformMathUtils.INV_SHIFT23; };
 
         public static fastPow(a : number, b : number) : number {
             let x : number = /* floatToRawIntBits */((f) => { let buf = new ArrayBuffer(4); (new Float32Array(buf))[0]=f; return (new Uint32Array(buf))[0]; })(a);
@@ -5786,7 +5790,7 @@ namespace org.jbox2d.common {
             b *= (<any>Math).fround(x + (<any>Math).fround(((<any>Math).fround(y - (<any>Math).fround(y * y))) * 0.346607));
             y = (<any>Math).fround(b - (b >= 0?(<number>b|0):(<number>b|0) - 1));
             y = (<any>Math).fround(((<any>Math).fround(y - (<any>Math).fround(y * y))) * 0.33971);
-            return ((v) => { let buf = new ArrayBuffer(4); (new Uint32Array(buf))[0]=v; return (new Float32Array(buf))[0]; })((<number>((<any>Math).fround(((<any>Math).fround((<any>Math).fround(b + 127) - y)) * PlatformMathUtils.SHIFT23_$LI$()))|0));
+            return ((v) => { let buf = new ArrayBuffer(4); (new Uint32Array(buf))[0]=v; return (new Float32Array(buf))[0]; })((<number>((<any>Math).fround(((<any>Math).fround((<any>Math).fround(b + 127) - y)) * PlatformMathUtils.SHIFT23))|0));
         }
     }
     PlatformMathUtils["__class"] = "org.jbox2d.common.PlatformMathUtils";
@@ -8679,7 +8683,14 @@ namespace org.jbox2d.dynamics.contacts {
             this.pool = argPool;
         }
 
-        public init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
+        /**
+         * initialization for pooling
+         * @param {org.jbox2d.dynamics.Fixture} fA
+         * @param {number} indexA
+         * @param {org.jbox2d.dynamics.Fixture} fB
+         * @param {number} indexB
+         */
+        public init(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
             this.m_flags = Contact.ENABLED_FLAG;
             this.m_fixtureA = fA;
             this.m_fixtureB = fB;
@@ -8700,19 +8711,6 @@ namespace org.jbox2d.dynamics.contacts {
             this.m_friction = Contact.mixFriction(fA.m_friction, fB.m_friction);
             this.m_restitution = Contact.mixRestitution(fA.m_restitution, fB.m_restitution);
             this.m_tangentSpeed = 0;
-        }
-
-        /**
-         * initialization for pooling
-         * @param {org.jbox2d.dynamics.Fixture} fA
-         * @param {number} indexA
-         * @param {org.jbox2d.dynamics.Fixture} fB
-         * @param {number} indexB
-         */
-        public init(fA? : any, indexA? : any, fB? : any, indexB? : any) : any {
-            if(((fA != null && fA instanceof <any>org.jbox2d.dynamics.Fixture) || fA === null) && ((typeof indexA === 'number') || indexA === null) && ((fB != null && fB instanceof <any>org.jbox2d.dynamics.Fixture) || fB === null) && ((typeof indexB === 'number') || indexB === null)) {
-                return <any>this.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA, indexA, fB, indexB);
-            } else throw new Error('invalid overload');
         }
 
         /**
@@ -11872,11 +11870,11 @@ namespace org.jbox2d.dynamics {
             if(reg != null) {
                 if(reg.primary) {
                     let c : org.jbox2d.dynamics.contacts.Contact = reg.creator.pop();
-                    c.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fixtureA, indexA, fixtureB, indexB);
+                    c.init(fixtureA, indexA, fixtureB, indexB);
                     return c;
                 } else {
                     let c : org.jbox2d.dynamics.contacts.Contact = reg.creator.pop();
-                    c.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fixtureB, indexB, fixtureA, indexA);
+                    c.init(fixtureB, indexB, fixtureA, indexA);
                     return c;
                 }
             } else {
@@ -12220,8 +12218,8 @@ namespace org.jbox2d.dynamics {
                 return;
             }
             let flags : number = this.m_debugDraw.getFlags();
-            let wireframe : boolean = (flags & org.jbox2d.callbacks.DebugDraw.e_wireframeDrawingBit_$LI$()) !== 0;
-            if((flags & org.jbox2d.callbacks.DebugDraw.e_shapeBit_$LI$()) !== 0) {
+            let wireframe : boolean = (flags & org.jbox2d.callbacks.DebugDraw.e_wireframeDrawingBit) !== 0;
+            if((flags & org.jbox2d.callbacks.DebugDraw.e_shapeBit) !== 0) {
                 for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {
                     this.xf.set$org_jbox2d_common_Transform(b.getTransform());
                     for(let f : org.jbox2d.dynamics.Fixture = b.getFixtureList(); f != null; f = f.getNext()) {
@@ -12245,12 +12243,12 @@ namespace org.jbox2d.dynamics {
                 };
                 this.drawParticleSystem(this.m_particleSystem);
             }
-            if((flags & org.jbox2d.callbacks.DebugDraw.e_jointBit_$LI$()) !== 0) {
+            if((flags & org.jbox2d.callbacks.DebugDraw.e_jointBit) !== 0) {
                 for(let j : org.jbox2d.dynamics.joints.Joint = this.m_jointList; j != null; j = j.getNext()) {
                     this.drawJoint(j);
                 };
             }
-            if((flags & org.jbox2d.callbacks.DebugDraw.e_pairBit_$LI$()) !== 0) {
+            if((flags & org.jbox2d.callbacks.DebugDraw.e_pairBit) !== 0) {
                 this.color.set$float$float$float(0.3, 0.9, 0.9);
                 for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_contactManager.m_contactList; c != null; c = c.getNext()) {
                     let fixtureA : org.jbox2d.dynamics.Fixture = c.getFixtureA();
@@ -12260,7 +12258,7 @@ namespace org.jbox2d.dynamics {
                     this.m_debugDraw.drawSegment(this.cA, this.cB, this.color);
                 };
             }
-            if((flags & org.jbox2d.callbacks.DebugDraw.e_aabbBit_$LI$()) !== 0) {
+            if((flags & org.jbox2d.callbacks.DebugDraw.e_aabbBit) !== 0) {
                 this.color.set$float$float$float(0.9, 0.3, 0.9);
                 for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {
                     if(b.isActive() === false) {
@@ -12282,14 +12280,14 @@ namespace org.jbox2d.dynamics {
                     };
                 };
             }
-            if((flags & org.jbox2d.callbacks.DebugDraw.e_centerOfMassBit_$LI$()) !== 0) {
+            if((flags & org.jbox2d.callbacks.DebugDraw.e_centerOfMassBit) !== 0) {
                 for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {
                     this.xf.set$org_jbox2d_common_Transform(b.getTransform());
                     this.xf.p.set$org_jbox2d_common_Vec2(b.getWorldCenter());
                     this.m_debugDraw.drawTransform(this.xf);
                 };
             }
-            if((flags & org.jbox2d.callbacks.DebugDraw.e_dynamicTreeBit_$LI$()) !== 0) {
+            if((flags & org.jbox2d.callbacks.DebugDraw.e_dynamicTreeBit) !== 0) {
                 this.m_contactManager.m_broadPhase.drawTree(this.m_debugDraw);
             }
             this.m_debugDraw.flush();
@@ -13027,7 +13025,7 @@ namespace org.jbox2d.dynamics {
         }
 
         /*private*/ drawParticleSystem(system : org.jbox2d.particle.ParticleSystem) {
-            let wireframe : boolean = (this.m_debugDraw.getFlags() & org.jbox2d.callbacks.DebugDraw.e_wireframeDrawingBit_$LI$()) !== 0;
+            let wireframe : boolean = (this.m_debugDraw.getFlags() & org.jbox2d.callbacks.DebugDraw.e_wireframeDrawingBit) !== 0;
             let particleCount : number = system.getParticleCount();
             if(particleCount !== 0) {
                 let particleRadius : number = system.getParticleRadius();
@@ -13926,12 +13924,12 @@ namespace org.jbox2d.particle {
         /**
          * resists penetration
          */
-        public static b2_solidParticleGroup : number; public static b2_solidParticleGroup_$LI$() : number { if(ParticleGroupType.b2_solidParticleGroup == null) ParticleGroupType.b2_solidParticleGroup = 1 << 0; return ParticleGroupType.b2_solidParticleGroup; };
+        public static b2_solidParticleGroup : number = 1 << 0;
 
         /**
          * keeps its shape
          */
-        public static b2_rigidParticleGroup : number; public static b2_rigidParticleGroup_$LI$() : number { if(ParticleGroupType.b2_rigidParticleGroup == null) ParticleGroupType.b2_rigidParticleGroup = 1 << 1; return ParticleGroupType.b2_rigidParticleGroup; };
+        public static b2_rigidParticleGroup : number = 1 << 1;
     }
     ParticleGroupType["__class"] = "org.jbox2d.particle.ParticleGroupType";
 
@@ -13949,47 +13947,47 @@ namespace org.jbox2d.particle {
         /**
          * removed after next step
          */
-        public static b2_zombieParticle : number; public static b2_zombieParticle_$LI$() : number { if(ParticleType.b2_zombieParticle == null) ParticleType.b2_zombieParticle = 1 << 1; return ParticleType.b2_zombieParticle; };
+        public static b2_zombieParticle : number = 1 << 1;
 
         /**
          * zero velocity
          */
-        public static b2_wallParticle : number; public static b2_wallParticle_$LI$() : number { if(ParticleType.b2_wallParticle == null) ParticleType.b2_wallParticle = 1 << 2; return ParticleType.b2_wallParticle; };
+        public static b2_wallParticle : number = 1 << 2;
 
         /**
          * with restitution from stretching
          */
-        public static b2_springParticle : number; public static b2_springParticle_$LI$() : number { if(ParticleType.b2_springParticle == null) ParticleType.b2_springParticle = 1 << 3; return ParticleType.b2_springParticle; };
+        public static b2_springParticle : number = 1 << 3;
 
         /**
          * with restitution from deformation
          */
-        public static b2_elasticParticle : number; public static b2_elasticParticle_$LI$() : number { if(ParticleType.b2_elasticParticle == null) ParticleType.b2_elasticParticle = 1 << 4; return ParticleType.b2_elasticParticle; };
+        public static b2_elasticParticle : number = 1 << 4;
 
         /**
          * with viscosity
          */
-        public static b2_viscousParticle : number; public static b2_viscousParticle_$LI$() : number { if(ParticleType.b2_viscousParticle == null) ParticleType.b2_viscousParticle = 1 << 5; return ParticleType.b2_viscousParticle; };
+        public static b2_viscousParticle : number = 1 << 5;
 
         /**
          * without isotropic pressure
          */
-        public static b2_powderParticle : number; public static b2_powderParticle_$LI$() : number { if(ParticleType.b2_powderParticle == null) ParticleType.b2_powderParticle = 1 << 6; return ParticleType.b2_powderParticle; };
+        public static b2_powderParticle : number = 1 << 6;
 
         /**
          * with surface tension
          */
-        public static b2_tensileParticle : number; public static b2_tensileParticle_$LI$() : number { if(ParticleType.b2_tensileParticle == null) ParticleType.b2_tensileParticle = 1 << 7; return ParticleType.b2_tensileParticle; };
+        public static b2_tensileParticle : number = 1 << 7;
 
         /**
          * mixing color between contacting particles
          */
-        public static b2_colorMixingParticle : number; public static b2_colorMixingParticle_$LI$() : number { if(ParticleType.b2_colorMixingParticle == null) ParticleType.b2_colorMixingParticle = 1 << 8; return ParticleType.b2_colorMixingParticle; };
+        public static b2_colorMixingParticle : number = 1 << 8;
 
         /**
          * call b2DestructionListener on destruction
          */
-        public static b2_destructionListener : number; public static b2_destructionListener_$LI$() : number { if(ParticleType.b2_destructionListener == null) ParticleType.b2_destructionListener = 1 << 9; return ParticleType.b2_destructionListener; };
+        public static b2_destructionListener : number = 1 << 9;
     }
     ParticleType["__class"] = "org.jbox2d.particle.ParticleType";
 
@@ -14475,6 +14473,11 @@ namespace org.jbox2d.pooling.stacks {
         }
     }
     DynamicIntStack["__class"] = "org.jbox2d.pooling.stacks.DynamicIntStack";
+
+}
+namespace org.jbox2d.util.nonconvex {
+    export class ShapeDef {    }
+    ShapeDef["__class"] = "org.jbox2d.util.nonconvex.ShapeDef";
 
 }
 namespace org.jbox2d.collision.shapes {
@@ -17820,7 +17823,7 @@ namespace org.jbox2d.dynamics.contacts {
          * @param {number} indexB
          */
         public init(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
-            super.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA, indexA, fB, indexB);
+            super.init(fA, indexA, fB, indexB);
         }
 
         /*private*/ edge : org.jbox2d.collision.shapes.EdgeShape = new org.jbox2d.collision.shapes.EdgeShape();
@@ -17854,7 +17857,7 @@ namespace org.jbox2d.dynamics.contacts {
          * @param {number} indexB
          */
         public init(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
-            super.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA, indexA, fB, indexB);
+            super.init(fA, indexA, fB, indexB);
         }
 
         /*private*/ edge : org.jbox2d.collision.shapes.EdgeShape = new org.jbox2d.collision.shapes.EdgeShape();
@@ -17889,7 +17892,7 @@ namespace org.jbox2d.dynamics.contacts {
         }
 
         public init$org_jbox2d_dynamics_Fixture$org_jbox2d_dynamics_Fixture(fixtureA : org.jbox2d.dynamics.Fixture, fixtureB : org.jbox2d.dynamics.Fixture) {
-            super.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fixtureA, 0, fixtureB, 0);
+            super.init(fixtureA, 0, fixtureB, 0);
         }
 
         /**
@@ -17911,10 +17914,6 @@ namespace org.jbox2d.dynamics.contacts {
             super(argPool);
         }
 
-        public init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
-            super.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA, indexA, fB, indexB);
-        }
-
         /**
          * 
          * @param {org.jbox2d.dynamics.Fixture} fA
@@ -17922,10 +17921,8 @@ namespace org.jbox2d.dynamics.contacts {
          * @param {org.jbox2d.dynamics.Fixture} fB
          * @param {number} indexB
          */
-        public init(fA? : any, indexA? : any, fB? : any, indexB? : any) : any {
-            if(((fA != null && fA instanceof <any>org.jbox2d.dynamics.Fixture) || fA === null) && ((typeof indexA === 'number') || indexA === null) && ((fB != null && fB instanceof <any>org.jbox2d.dynamics.Fixture) || fB === null) && ((typeof indexB === 'number') || indexB === null)) {
-                return <any>this.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA, indexA, fB, indexB);
-            } else throw new Error('invalid overload');
+        public init(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
+            super.init(fA, indexA, fB, indexB);
         }
 
         /**
@@ -17947,10 +17944,6 @@ namespace org.jbox2d.dynamics.contacts {
             super(argPool);
         }
 
-        public init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
-            super.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA, indexA, fB, indexB);
-        }
-
         /**
          * 
          * @param {org.jbox2d.dynamics.Fixture} fA
@@ -17958,10 +17951,8 @@ namespace org.jbox2d.dynamics.contacts {
          * @param {org.jbox2d.dynamics.Fixture} fB
          * @param {number} indexB
          */
-        public init(fA? : any, indexA? : any, fB? : any, indexB? : any) : any {
-            if(((fA != null && fA instanceof <any>org.jbox2d.dynamics.Fixture) || fA === null) && ((typeof indexA === 'number') || indexA === null) && ((fB != null && fB instanceof <any>org.jbox2d.dynamics.Fixture) || fB === null) && ((typeof indexB === 'number') || indexB === null)) {
-                return <any>this.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fA, indexA, fB, indexB);
-            } else throw new Error('invalid overload');
+        public init(fA : org.jbox2d.dynamics.Fixture, indexA : number, fB : org.jbox2d.dynamics.Fixture, indexB : number) {
+            super.init(fA, indexA, fB, indexB);
         }
 
         /**
@@ -17992,7 +17983,7 @@ namespace org.jbox2d.dynamics.contacts {
         }
 
         public init$org_jbox2d_dynamics_Fixture$org_jbox2d_dynamics_Fixture(fixtureA : org.jbox2d.dynamics.Fixture, fixtureB : org.jbox2d.dynamics.Fixture) {
-            super.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fixtureA, 0, fixtureB, 0);
+            super.init(fixtureA, 0, fixtureB, 0);
         }
 
         /**
@@ -18023,7 +18014,7 @@ namespace org.jbox2d.dynamics.contacts {
         }
 
         public init$org_jbox2d_dynamics_Fixture$org_jbox2d_dynamics_Fixture(fixtureA : org.jbox2d.dynamics.Fixture, fixtureB : org.jbox2d.dynamics.Fixture) {
-            super.init$org_jbox2d_dynamics_Fixture$int$org_jbox2d_dynamics_Fixture$int(fixtureA, 0, fixtureB, 0);
+            super.init(fixtureA, 0, fixtureB, 0);
         }
 
         /**
@@ -23281,29 +23272,29 @@ namespace org.jbox2d.particle {
         /**
          * All particle types that require creating pairs
          */
-        static k_pairFlags : number; public static k_pairFlags_$LI$() : number { if(ParticleSystem.k_pairFlags == null) ParticleSystem.k_pairFlags = org.jbox2d.particle.ParticleType.b2_springParticle_$LI$(); return ParticleSystem.k_pairFlags; };
+        static k_pairFlags : number; public static k_pairFlags_$LI$() : number { if(ParticleSystem.k_pairFlags == null) ParticleSystem.k_pairFlags = org.jbox2d.particle.ParticleType.b2_springParticle; return ParticleSystem.k_pairFlags; };
 
         /**
          * All particle types that require creating triads
          */
-        static k_triadFlags : number; public static k_triadFlags_$LI$() : number { if(ParticleSystem.k_triadFlags == null) ParticleSystem.k_triadFlags = org.jbox2d.particle.ParticleType.b2_elasticParticle_$LI$(); return ParticleSystem.k_triadFlags; };
+        static k_triadFlags : number; public static k_triadFlags_$LI$() : number { if(ParticleSystem.k_triadFlags == null) ParticleSystem.k_triadFlags = org.jbox2d.particle.ParticleType.b2_elasticParticle; return ParticleSystem.k_triadFlags; };
 
         /**
          * All particle types that require computing depth
          */
-        static k_noPressureFlags : number; public static k_noPressureFlags_$LI$() : number { if(ParticleSystem.k_noPressureFlags == null) ParticleSystem.k_noPressureFlags = org.jbox2d.particle.ParticleType.b2_powderParticle_$LI$(); return ParticleSystem.k_noPressureFlags; };
+        static k_noPressureFlags : number; public static k_noPressureFlags_$LI$() : number { if(ParticleSystem.k_noPressureFlags == null) ParticleSystem.k_noPressureFlags = org.jbox2d.particle.ParticleType.b2_powderParticle; return ParticleSystem.k_noPressureFlags; };
 
         static xTruncBits : number = 12;
 
         static yTruncBits : number = 12;
 
-        static tagBits : number; public static tagBits_$LI$() : number { if(ParticleSystem.tagBits == null) ParticleSystem.tagBits = 8 * 4 - 1; return ParticleSystem.tagBits; };
+        static tagBits : number = 8 * 4 - 1;
 
         static yOffset : number; public static yOffset_$LI$() : number { if(ParticleSystem.yOffset == null) ParticleSystem.yOffset = 1 << (ParticleSystem.yTruncBits - 1); return ParticleSystem.yOffset; };
 
-        static yShift : number; public static yShift_$LI$() : number { if(ParticleSystem.yShift == null) ParticleSystem.yShift = ParticleSystem.tagBits_$LI$() - ParticleSystem.yTruncBits; return ParticleSystem.yShift; };
+        static yShift : number; public static yShift_$LI$() : number { if(ParticleSystem.yShift == null) ParticleSystem.yShift = ParticleSystem.tagBits - ParticleSystem.yTruncBits; return ParticleSystem.yShift; };
 
-        static xShift : number; public static xShift_$LI$() : number { if(ParticleSystem.xShift == null) ParticleSystem.xShift = ParticleSystem.tagBits_$LI$() - ParticleSystem.yTruncBits - ParticleSystem.xTruncBits; return ParticleSystem.xShift; };
+        static xShift : number; public static xShift_$LI$() : number { if(ParticleSystem.xShift == null) ParticleSystem.xShift = ParticleSystem.tagBits - ParticleSystem.yTruncBits - ParticleSystem.xTruncBits; return ParticleSystem.xShift; };
 
         static xScale : number; public static xScale_$LI$() : number { if(ParticleSystem.xScale == null) ParticleSystem.xScale = 1 << ParticleSystem.xShift_$LI$(); return ParticleSystem.xScale; };
 
@@ -23566,9 +23557,9 @@ namespace org.jbox2d.particle {
         }
 
         public destroyParticle(index : number, callDestructionListener : boolean) {
-            let flags : number = org.jbox2d.particle.ParticleType.b2_zombieParticle_$LI$();
+            let flags : number = org.jbox2d.particle.ParticleType.b2_zombieParticle;
             if(callDestructionListener) {
-                flags |= org.jbox2d.particle.ParticleType.b2_destructionListener_$LI$();
+                flags |= org.jbox2d.particle.ParticleType.b2_destructionListener;
             }
             this.m_flagsBuffer.data[index] |= flags;
         }
@@ -23705,7 +23696,7 @@ namespace org.jbox2d.particle {
                 this.createParticleGroupCallback.firstIndex = firstIndex;
                 diagram.getNodes(this.createParticleGroupCallback);
             }
-            if((groupDef.groupFlags & org.jbox2d.particle.ParticleGroupType.b2_solidParticleGroup_$LI$()) !== 0) {
+            if((groupDef.groupFlags & org.jbox2d.particle.ParticleGroupType.b2_solidParticleGroup) !== 0) {
                 this.computeDepthForGroup(group);
             }
             return group;
@@ -23749,7 +23740,7 @@ namespace org.jbox2d.particle {
             if((particleFlags & ParticleSystem.k_triadFlags_$LI$()) !== 0) {
                 let diagram : org.jbox2d.particle.VoronoiDiagram = new org.jbox2d.particle.VoronoiDiagram(groupB.m_lastIndex - groupA.m_firstIndex);
                 for(let i : number = groupA.m_firstIndex; i < groupB.m_lastIndex; i++) {
-                    if((this.m_flagsBuffer.data[i] & org.jbox2d.particle.ParticleType.b2_zombieParticle_$LI$()) === 0) {
+                    if((this.m_flagsBuffer.data[i] & org.jbox2d.particle.ParticleType.b2_zombieParticle) === 0) {
                         diagram.addGenerator(this.m_positionBuffer.data[i], i);
                     }
                 };
@@ -23768,7 +23759,7 @@ namespace org.jbox2d.particle {
             groupA.m_lastIndex = groupB.m_lastIndex;
             groupB.m_firstIndex = groupB.m_lastIndex;
             this.destroyParticleGroup(groupB);
-            if((groupFlags & org.jbox2d.particle.ParticleGroupType.b2_solidParticleGroup_$LI$()) !== 0) {
+            if((groupFlags & org.jbox2d.particle.ParticleGroupType.b2_solidParticleGroup) !== 0) {
                 this.computeDepthForGroup(groupA);
             }
         }
@@ -23912,7 +23903,7 @@ namespace org.jbox2d.particle {
             if(exceptZombie) {
                 let j : number = this.m_contactCount;
                 for(let i : number = 0; i < j; i++) {
-                    if((this.m_contactBuffer[i].flags & org.jbox2d.particle.ParticleType.b2_zombieParticle_$LI$()) !== 0) {
+                    if((this.m_contactBuffer[i].flags & org.jbox2d.particle.ParticleType.b2_zombieParticle) !== 0) {
                         --j;
                         let temp : org.jbox2d.particle.ParticleContact = this.m_contactBuffer[j];
                         this.m_contactBuffer[j] = this.m_contactBuffer[i];
@@ -23986,7 +23977,7 @@ namespace org.jbox2d.particle {
             for(let i : number = 0; i < this.m_count; i++) {
                 this.m_allParticleFlags |= this.m_flagsBuffer.data[i];
             };
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_zombieParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_zombieParticle) !== 0) {
                 this.solveZombie();
             }
             if(this.m_count === 0) {
@@ -24011,10 +24002,10 @@ namespace org.jbox2d.particle {
                 }
             };
             this.solveCollision(step);
-            if((this.m_allGroupFlags & org.jbox2d.particle.ParticleGroupType.b2_rigidParticleGroup_$LI$()) !== 0) {
+            if((this.m_allGroupFlags & org.jbox2d.particle.ParticleGroupType.b2_rigidParticleGroup) !== 0) {
                 this.solveRigid(step);
             }
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_wallParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_wallParticle) !== 0) {
                 this.solveWall(step);
             }
             for(let i : number = 0; i < this.m_count; i++) {
@@ -24025,25 +24016,25 @@ namespace org.jbox2d.particle {
             };
             this.updateBodyContacts();
             this.updateContacts(false);
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_viscousParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_viscousParticle) !== 0) {
                 this.solveViscous(step);
             }
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_powderParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_powderParticle) !== 0) {
                 this.solvePowder(step);
             }
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_tensileParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_tensileParticle) !== 0) {
                 this.solveTensile(step);
             }
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_elasticParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_elasticParticle) !== 0) {
                 this.solveElastic(step);
             }
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_springParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_springParticle) !== 0) {
                 this.solveSpring(step);
             }
-            if((this.m_allGroupFlags & org.jbox2d.particle.ParticleGroupType.b2_solidParticleGroup_$LI$()) !== 0) {
+            if((this.m_allGroupFlags & org.jbox2d.particle.ParticleGroupType.b2_solidParticleGroup) !== 0) {
                 this.solveSolid(step);
             }
-            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_colorMixingParticle_$LI$()) !== 0) {
+            if((this.m_allParticleFlags & org.jbox2d.particle.ParticleType.b2_colorMixingParticle) !== 0) {
                 this.solveColorMixing(step);
             }
             this.solvePressure(step);
@@ -24171,7 +24162,7 @@ namespace org.jbox2d.particle {
 
         public solveWall(step : org.jbox2d.dynamics.TimeStep) {
             for(let i : number = 0; i < this.m_count; i++) {
-                if((this.m_flagsBuffer.data[i] & org.jbox2d.particle.ParticleType.b2_wallParticle_$LI$()) !== 0) {
+                if((this.m_flagsBuffer.data[i] & org.jbox2d.particle.ParticleType.b2_wallParticle) !== 0) {
                     let r : org.jbox2d.common.Vec2 = this.m_velocityBuffer.data[i];
                     r.x = 0.0;
                     r.y = 0.0;
@@ -24189,7 +24180,7 @@ namespace org.jbox2d.particle {
 
         solveRigid(step : org.jbox2d.dynamics.TimeStep) {
             for(let group : org.jbox2d.particle.ParticleGroup = this.m_groupList; group != null; group = group.getNext()) {
-                if((group.m_groupFlags & org.jbox2d.particle.ParticleGroupType.b2_rigidParticleGroup_$LI$()) !== 0) {
+                if((group.m_groupFlags & org.jbox2d.particle.ParticleGroupType.b2_rigidParticleGroup) !== 0) {
                     group.updateStatistics();
                     let temp : org.jbox2d.common.Vec2 = this.tempVec;
                     let cross : org.jbox2d.common.Vec2 = this.tempVec2;
@@ -24216,7 +24207,7 @@ namespace org.jbox2d.particle {
             let elasticStrength : number = (<any>Math).fround(step.inv_dt * this.m_elasticStrength);
             for(let k : number = 0; k < this.m_triadCount; k++) {
                 let triad : ParticleSystem.Triad = this.m_triadBuffer[k];
-                if((triad.flags & org.jbox2d.particle.ParticleType.b2_elasticParticle_$LI$()) !== 0) {
+                if((triad.flags & org.jbox2d.particle.ParticleType.b2_elasticParticle) !== 0) {
                     let a : number = triad.indexA;
                     let b : number = triad.indexB;
                     let c : number = triad.indexC;
@@ -24258,7 +24249,7 @@ namespace org.jbox2d.particle {
             let springStrength : number = (<any>Math).fround(step.inv_dt * this.m_springStrength);
             for(let k : number = 0; k < this.m_pairCount; k++) {
                 let pair : ParticleSystem.Pair = this.m_pairBuffer[k];
-                if((pair.flags & org.jbox2d.particle.ParticleType.b2_springParticle_$LI$()) !== 0) {
+                if((pair.flags & org.jbox2d.particle.ParticleType.b2_springParticle) !== 0) {
                     let a : number = pair.indexA;
                     let b : number = pair.indexB;
                     let pa : org.jbox2d.common.Vec2 = this.m_positionBuffer.data[a];
@@ -24289,7 +24280,7 @@ namespace org.jbox2d.particle {
             };
             for(let k : number = 0; k < this.m_contactCount; k++) {
                 let contact : org.jbox2d.particle.ParticleContact = this.m_contactBuffer[k];
-                if((contact.flags & org.jbox2d.particle.ParticleType.b2_tensileParticle_$LI$()) !== 0) {
+                if((contact.flags & org.jbox2d.particle.ParticleType.b2_tensileParticle) !== 0) {
                     let a : number = contact.indexA;
                     let b : number = contact.indexB;
                     let w : number = contact.weight;
@@ -24309,7 +24300,7 @@ namespace org.jbox2d.particle {
             let strengthB : number = (<any>Math).fround(this.m_surfaceTensionStrengthB * this.getCriticalVelocity(step));
             for(let k : number = 0; k < this.m_contactCount; k++) {
                 let contact : org.jbox2d.particle.ParticleContact = this.m_contactBuffer[k];
-                if((contact.flags & org.jbox2d.particle.ParticleType.b2_tensileParticle_$LI$()) !== 0) {
+                if((contact.flags & org.jbox2d.particle.ParticleType.b2_tensileParticle) !== 0) {
                     let a : number = contact.indexA;
                     let b : number = contact.indexB;
                     let w : number = contact.weight;
@@ -24337,7 +24328,7 @@ namespace org.jbox2d.particle {
             for(let k : number = 0; k < this.m_bodyContactCount; k++) {
                 let contact : org.jbox2d.particle.ParticleBodyContact = this.m_bodyContactBuffer[k];
                 let a : number = contact.index;
-                if((this.m_flagsBuffer.data[a] & org.jbox2d.particle.ParticleType.b2_viscousParticle_$LI$()) !== 0) {
+                if((this.m_flagsBuffer.data[a] & org.jbox2d.particle.ParticleType.b2_viscousParticle) !== 0) {
                     let b : org.jbox2d.dynamics.Body = contact.body;
                     let w : number = contact.weight;
                     let m : number = contact.mass;
@@ -24360,7 +24351,7 @@ namespace org.jbox2d.particle {
             };
             for(let k : number = 0; k < this.m_contactCount; k++) {
                 let contact : org.jbox2d.particle.ParticleContact = this.m_contactBuffer[k];
-                if((contact.flags & org.jbox2d.particle.ParticleType.b2_viscousParticle_$LI$()) !== 0) {
+                if((contact.flags & org.jbox2d.particle.ParticleType.b2_viscousParticle) !== 0) {
                     let a : number = contact.indexA;
                     let b : number = contact.indexB;
                     let w : number = contact.weight;
@@ -24384,7 +24375,7 @@ namespace org.jbox2d.particle {
             for(let k : number = 0; k < this.m_bodyContactCount; k++) {
                 let contact : org.jbox2d.particle.ParticleBodyContact = this.m_bodyContactBuffer[k];
                 let a : number = contact.index;
-                if((this.m_flagsBuffer.data[a] & org.jbox2d.particle.ParticleType.b2_powderParticle_$LI$()) !== 0) {
+                if((this.m_flagsBuffer.data[a] & org.jbox2d.particle.ParticleType.b2_powderParticle) !== 0) {
                     let w : number = contact.weight;
                     if(w > minWeight) {
                         let b : org.jbox2d.dynamics.Body = contact.body;
@@ -24405,7 +24396,7 @@ namespace org.jbox2d.particle {
             };
             for(let k : number = 0; k < this.m_contactCount; k++) {
                 let contact : org.jbox2d.particle.ParticleContact = this.m_contactBuffer[k];
-                if((contact.flags & org.jbox2d.particle.ParticleType.b2_powderParticle_$LI$()) !== 0) {
+                if((contact.flags & org.jbox2d.particle.ParticleType.b2_powderParticle) !== 0) {
                     let w : number = contact.weight;
                     if(w > minWeight) {
                         let a : number = contact.indexA;
@@ -24456,7 +24447,7 @@ namespace org.jbox2d.particle {
                 let contact : org.jbox2d.particle.ParticleContact = this.m_contactBuffer[k];
                 let a : number = contact.indexA;
                 let b : number = contact.indexB;
-                if((this.m_flagsBuffer.data[a] & this.m_flagsBuffer.data[b] & org.jbox2d.particle.ParticleType.b2_colorMixingParticle_$LI$()) !== 0) {
+                if((this.m_flagsBuffer.data[a] & this.m_flagsBuffer.data[b] & org.jbox2d.particle.ParticleType.b2_colorMixingParticle) !== 0) {
                     let colorA : org.jbox2d.particle.ParticleColor = this.m_colorBuffer.data[a];
                     let colorB : org.jbox2d.particle.ParticleColor = this.m_colorBuffer.data[b];
                     let dr : number = (colorMixing256 * (colorB.r - colorA.r)) >> 8;
@@ -24480,9 +24471,9 @@ namespace org.jbox2d.particle {
             let newIndices : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.m_count);
             for(let i : number = 0; i < this.m_count; i++) {
                 let flags : number = this.m_flagsBuffer.data[i];
-                if((flags & org.jbox2d.particle.ParticleType.b2_zombieParticle_$LI$()) !== 0) {
+                if((flags & org.jbox2d.particle.ParticleType.b2_zombieParticle) !== 0) {
                     let destructionListener : org.jbox2d.callbacks.ParticleDestructionListener = this.m_world.getParticleDestructionListener();
-                    if((flags & org.jbox2d.particle.ParticleType.b2_destructionListener_$LI$()) !== 0 && destructionListener != null) {
+                    if((flags & org.jbox2d.particle.ParticleType.b2_destructionListener) !== 0 && destructionListener != null) {
                         destructionListener['sayGoodbye$int'](i);
                     }
                     newIndices[i] = org.jbox2d.common.Settings.invalidParticleIndex_$LI$();
@@ -24602,7 +24593,7 @@ namespace org.jbox2d.particle {
                     group.m_firstIndex = firstIndex;
                     group.m_lastIndex = lastIndex;
                     if(modified) {
-                        if((group.m_groupFlags & org.jbox2d.particle.ParticleGroupType.b2_rigidParticleGroup_$LI$()) !== 0) {
+                        if((group.m_groupFlags & org.jbox2d.particle.ParticleGroupType.b2_rigidParticleGroup) !== 0) {
                             group.m_toBeSplit = true;
                         }
                     }
@@ -25379,7 +25370,7 @@ namespace org.jbox2d.particle {
                             let n : org.jbox2d.common.Vec2 = this.tempVec;
                             d = fixture.computeDistance(ap, childIndex, n);
                             if(d < this.system.m_particleDiameter) {
-                                let invAm : number = (this.system.m_flagsBuffer.data[a] & org.jbox2d.particle.ParticleType.b2_wallParticle_$LI$()) !== 0?0:this.system.getParticleInvMass();
+                                let invAm : number = (this.system.m_flagsBuffer.data[a] & org.jbox2d.particle.ParticleType.b2_wallParticle) !== 0?0:this.system.getParticleInvMass();
                                 let rpx : number = (<any>Math).fround(ap.x - bp.x);
                                 let rpy : number = (<any>Math).fround(ap.y - bp.y);
                                 let rpn : number = (<any>Math).fround((<any>Math).fround(rpx * n.y) - (<any>Math).fround(rpy * n.x));
@@ -26280,8 +26271,6 @@ org.jbox2d.particle.ParticleSystem.yShift_$LI$();
 
 org.jbox2d.particle.ParticleSystem.yOffset_$LI$();
 
-org.jbox2d.particle.ParticleSystem.tagBits_$LI$();
-
 org.jbox2d.particle.ParticleSystem.k_noPressureFlags_$LI$();
 
 org.jbox2d.particle.ParticleSystem.k_triadFlags_$LI$();
@@ -26316,28 +26305,6 @@ org.jbox2d.common.MathUtils.PI_$LI$();
 
 org.jbox2d.common.MathUtils.__static_initialize();
 
-org.jbox2d.particle.ParticleType.b2_destructionListener_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_colorMixingParticle_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_tensileParticle_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_powderParticle_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_viscousParticle_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_elasticParticle_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_springParticle_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_wallParticle_$LI$();
-
-org.jbox2d.particle.ParticleType.b2_zombieParticle_$LI$();
-
-org.jbox2d.particle.ParticleGroupType.b2_rigidParticleGroup_$LI$();
-
-org.jbox2d.particle.ParticleGroupType.b2_solidParticleGroup_$LI$();
-
 org.jbox2d.dynamics.World.LIQUID_INT_$LI$();
 
 org.jbox2d.dynamics.Profile.SHORT_FRACTION_$LI$();
@@ -26368,8 +26335,6 @@ org.jbox2d.common.Settings.PI_$LI$();
 
 org.jbox2d.common.PlatformMathUtils.INV_SHIFT23_$LI$();
 
-org.jbox2d.common.PlatformMathUtils.SHIFT23_$LI$();
-
 org.jbox2d.common.Color3f.RED_$LI$();
 
 org.jbox2d.common.Color3f.GREEN_$LI$();
@@ -26379,17 +26344,3 @@ org.jbox2d.common.Color3f.BLUE_$LI$();
 org.jbox2d.common.Color3f.BLACK_$LI$();
 
 org.jbox2d.common.Color3f.WHITE_$LI$();
-
-org.jbox2d.callbacks.DebugDraw.e_wireframeDrawingBit_$LI$();
-
-org.jbox2d.callbacks.DebugDraw.e_dynamicTreeBit_$LI$();
-
-org.jbox2d.callbacks.DebugDraw.e_centerOfMassBit_$LI$();
-
-org.jbox2d.callbacks.DebugDraw.e_pairBit_$LI$();
-
-org.jbox2d.callbacks.DebugDraw.e_aabbBit_$LI$();
-
-org.jbox2d.callbacks.DebugDraw.e_jointBit_$LI$();
-
-org.jbox2d.callbacks.DebugDraw.e_shapeBit_$LI$();
