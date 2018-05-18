@@ -268,12 +268,13 @@ public class TestbedMain extends PApplet {
     
     }
     
-    /** Dispatch mousePressed events to the current test. */
-    public void mousePressed() {
-    	if (currentTest == null || handleOptions) return;
-    	currentTest.mouseDown(new Vec2(mouseX, mouseY));
-    }
-    
+//    /** Dispatch mousePressed events to the current test. */
+    // TODO
+//    public void mousePressed() {
+//    	if (currentTest == null || handleOptions) return;
+//    	currentTest.mouseDown(new Vec2(mouseX, mouseY));
+//    }
+//    
     /** Dispatch mouseReleased events to the current test. */
     public void mouseReleased() {
     	if (currentTest == null || handleOptions) return;
@@ -295,62 +296,63 @@ public class TestbedMain extends PApplet {
      * Apply keyboard shortcuts, do keypress handling, and then
      * send the key event to the current test if appropriate.
      */
-    public void keyPressed() {
-    	if (key=='o') {
-    		handleOptions = !handleOptions;
-    		if (handleOptions) options.initialize(currentTest);
-    	}
-    	
-    	if (keyCode == PApplet.SHIFT) {
-            shiftKey = true;
-        }
-    	if (handleOptions) return;
-    	if (keyCode == PApplet.RIGHT) {
-    		++currentTestIndex;
-    		if (currentTestIndex >= tests.size()) currentTestIndex = 0;
-    		//System.out.println(currentTestIndex);
-    		currentTest = tests.get(currentTestIndex);
-    		currentTest.needsReset = true;
-    		return;
-    	} else if (keyCode == PApplet.LEFT) {
-    		--currentTestIndex;
-    		if (currentTestIndex < 0) currentTestIndex = tests.size()-1;
-    		//System.out.println(currentTestIndex);
-    		currentTest = tests.get(currentTestIndex);
-    		currentTest.needsReset = true;
-    		return;
-    	}
-    	if (currentTest == null || currentTest.settings == null) return;
-    	if (key == 'r') currentTest.needsReset = true;
-    	if (key == ' ') currentTest.launchBomb();
-    	if (key == 'p') {
-    		currentTest.settings.pause = !currentTest.settings.pause;
-    	}
-    	if (key == '+' && currentTest.settings.pause) {
-        	currentTest.settings.singleStep = true;
-        }
-    	if (key == 's') currentTest.settings.drawStats = !currentTest.settings.drawStats;
-    	if (key == 'c') currentTest.settings.drawContactPoints = !currentTest.settings.drawContactPoints;
-    	if (key == 'b') currentTest.settings.drawAABBs = !currentTest.settings.drawAABBs;
-    	
-    	// Testing joint walking
-//    	if (key == '0') {
-//    		Body bodyAtPoint = currentTest.getBodyAtPoint(currentTest.getMouseWorld());
-//    		if (bodyAtPoint != null) {
-//    			System.out.println(bodyAtPoint.getConnectedDynamicBodyIsland().size());
-//    		}
+    // TODO
+//    public void keyPressed() {
+//    	if (key=='o') {
+//    		handleOptions = !handleOptions;
+//    		if (handleOptions) options.initialize(currentTest);
 //    	}
-    	
-    	// Testing contact graph walking
-//    	if (key == '0') {
-//    		Body bodyAtPoint = currentTest.getBodyAtPoint(currentTest.getMouseWorld());
-//    		if (bodyAtPoint != null) {
-//    			System.out.println(bodyAtPoint.getTouchingDynamicBodyIsland().size());
-//    		}
+//    	
+//    	if (keyCode == PApplet.SHIFT) {
+//            shiftKey = true;
+//        }
+//    	if (handleOptions) return;
+//    	if (keyCode == PApplet.RIGHT) {
+//    		++currentTestIndex;
+//    		if (currentTestIndex >= tests.size()) currentTestIndex = 0;
+//    		//System.out.println(currentTestIndex);
+//    		currentTest = tests.get(currentTestIndex);
+//    		currentTest.needsReset = true;
+//    		return;
+//    	} else if (keyCode == PApplet.LEFT) {
+//    		--currentTestIndex;
+//    		if (currentTestIndex < 0) currentTestIndex = tests.size()-1;
+//    		//System.out.println(currentTestIndex);
+//    		currentTest = tests.get(currentTestIndex);
+//    		currentTest.needsReset = true;
+//    		return;
 //    	}
-    		
-    	currentTest.keyPressed(key);
-    }
+//    	if (currentTest == null || currentTest.settings == null) return;
+//    	if (key == 'r') currentTest.needsReset = true;
+//    	if (key == ' ') currentTest.launchBomb();
+//    	if (key == 'p') {
+//    		currentTest.settings.pause = !currentTest.settings.pause;
+//    	}
+//    	if (key == '+' && currentTest.settings.pause) {
+//        	currentTest.settings.singleStep = true;
+//        }
+//    	if (key == 's') currentTest.settings.drawStats = !currentTest.settings.drawStats;
+//    	if (key == 'c') currentTest.settings.drawContactPoints = !currentTest.settings.drawContactPoints;
+//    	if (key == 'b') currentTest.settings.drawAABBs = !currentTest.settings.drawAABBs;
+//    	
+//    	// Testing joint walking
+////    	if (key == '0') {
+////    		Body bodyAtPoint = currentTest.getBodyAtPoint(currentTest.getMouseWorld());
+////    		if (bodyAtPoint != null) {
+////    			System.out.println(bodyAtPoint.getConnectedDynamicBodyIsland().size());
+////    		}
+////    	}
+//    	
+//    	// Testing contact graph walking
+////    	if (key == '0') {
+////    		Body bodyAtPoint = currentTest.getBodyAtPoint(currentTest.getMouseWorld());
+////    		if (bodyAtPoint != null) {
+////    			System.out.println(bodyAtPoint.getTouchingDynamicBodyIsland().size());
+////    		}
+////    	}
+//    		
+//    	currentTest.keyPressed(key);
+//    }
     
     /** Handle keyReleased events and pass them on to currentTest. */
     public void keyReleased() {

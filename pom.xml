@@ -81,6 +81,7 @@
 					<tsOut>src/main/resources/META-INF/resources/webjars/${project.artifactId}/${project.version}</tsOut>
 					<targetVersion>ES5</targetVersion>
                     <encoding>UTF-8</encoding>
+                    <ignoreTypeScriptErrors>true</ignoreTypeScriptErrors>
 				</configuration>
 				<executions>
 					<execution>
