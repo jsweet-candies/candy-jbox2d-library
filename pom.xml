@@ -86,10 +86,11 @@
 					<verbose>true</verbose>
 					<bundle>true</bundle>
 					<outDir>src/main/resources/META-INF/resources/webjars/${project.artifactId}/${project.version}</outDir>
-					<tsOut>src/main/resources/META-INF/resources/typings/${project.artifactId}/${project.version}</tsOut>
+					<tsOut>src/main/resources/META-INF/resources/webjars/${project.artifactId}/${project.version}</tsOut>
+					<declaration>true</declaration>
+					<dtsOut>src/main/resources/META-INF/resources/typings/${project.artifactId}/${project.version}</dtsOut>
 					<targetVersion>ES5</targetVersion>
 					<encoding>UTF-8</encoding>
-					<ignoreTypeScriptErrors>true</ignoreTypeScriptErrors>
 					<factoryClassName>org.jsweet.extension.processing.ProcessingJSweetFactory</factoryClassName>
 				</configuration>
 				<executions>
