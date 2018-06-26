@@ -40,17 +40,6 @@
 			<version>6-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jsweet</groupId>
-			<artifactId>jsweet-core</artifactId>
-			<version>6-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.processing</groupId>
-			<artifactId>core</artifactId>
-			<version>3.3.7</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.jsweet.extension</groupId>
 			<artifactId>processing-jsweet-support</artifactId>
 			<version>3.3.7-SNAPSHOT</version>

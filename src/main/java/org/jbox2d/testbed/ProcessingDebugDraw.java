@@ -223,7 +223,7 @@ public class ProcessingDebugDraw extends DebugDraw {
 		//if (true) return;
 		if (firstTime) {
 			g.textFont(m_font);
-			if (g.g instanceof PGraphics3D) g.textMode(PApplet.SCREEN);
+			if (g.g != null && g.g.is3D()) g.textMode(PApplet.SCREEN);
 			firstTime = false;
 		}
 		g.fill(color.x,color.y,color.z);
@@ -272,7 +272,7 @@ public class ProcessingDebugDraw extends DebugDraw {
         g.pushMatrix();
         g.translate(position.x, position.y);
         Mat22 mat = transform.getTransform();
-        if (g.g instanceof PGraphics3D) {
+        if (g.g != null && g.g.is3D()) {
         	g.applyMatrix( mat.col1.x, mat.col2.x, 0, 0,
         			mat.col1.y, mat.col2.y, 0, 0,
         			0, 0, 1, 0,

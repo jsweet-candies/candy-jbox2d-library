@@ -1521,7 +1521,10 @@ class PolyNode{
 	}
 	
 	PolyNode getRightestConnection(PolyNode incoming){
-		if (nConnected == 0) assert(false); // This means the connection graph is inconsistent
+		if (nConnected == 0) {
+			assert(false); // This means the connection graph is inconsistent
+			return null;
+		}
 		if (nConnected == 1) {
 			//b2Assert(false);
 			// Because of the possibility of collapsing nearby points,
