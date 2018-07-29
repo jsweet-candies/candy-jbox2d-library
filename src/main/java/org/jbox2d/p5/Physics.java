@@ -27,7 +27,7 @@ import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.testbed.ProcessingDebugDraw;
 import org.jbox2d.testbed.TestSettings;
 
-import processing.core.PApplet;
+import def.processing.core.PApplet;
 
 /**
  * A wrapper class to make using JBox2d with Processing dead simple.
@@ -210,7 +210,9 @@ public class Physics {
 			try{
 				m_customRenderingMethod.invoke(m_customRenderingObject, m_world);
 			} catch (Exception e) {
-				m_parent.die("Error invoking custom rendering method.", e);
+				System.err.println("error " + e);
+				e.printStackTrace();
+				m_parent.exit();
 			}
 		}
 
@@ -275,9 +277,10 @@ public class Physics {
 	      m_customRenderingObject = object;
 	      m_customRenderingMethod = method;
 	    } catch (Exception e) {
-	      m_parent.die("Could not register " + methodName + "(World) for " + object + 
-	    		  ", make sure the method name is spelled correctly and that the method " +
-	    		  "takes a World object as an argument!", e);
+			System.err.println("Could not register " + methodName + "(World) for " + object + 
+		    		  ", make sure the method name is spelled correctly and that the method " +
+		    		  "takes a World object as an argument!" + e);
+			e.printStackTrace();
 	    }
 	}
 	

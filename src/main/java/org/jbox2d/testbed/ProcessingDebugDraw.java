@@ -32,10 +32,10 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.common.XForm;
 import org.jbox2d.dynamics.DebugDraw;
 
-import processing.core.PApplet;
-import processing.core.PFont;
-import processing.opengl.PGraphics3D;
-import processing.core.PImage;
+import def.processing.core.PApplet;
+import def.processing.core.PFont;
+import def.processing.core.PGraphics;
+import def.processing.core.PImage;
 
 /**
  * Implementation of DebugDraw using Processing (http://www.processing.org)
@@ -47,6 +47,7 @@ public class ProcessingDebugDraw extends DebugDraw {
 
 	private boolean firstTime = true;
 	public PApplet g;
+	public PGraphics pg;
 	public PFont m_font;
 	public float fontHeight;
 	private final OBBViewportTransform transform;
@@ -56,6 +57,7 @@ public class ProcessingDebugDraw extends DebugDraw {
 		transform = (OBBViewportTransform) super.getViewportTranform();
 		
 		g = pApplet;
+		pg = g.createGraphics(pApplet.displayWidth, pApplet.displayHeight);
 		screen = this;
 		m_font = g.createFont("LucidaGrande-Bold",12);//-Bold-14.vlw");
 		fontHeight = 14.0f;
@@ -223,7 +225,7 @@ public class ProcessingDebugDraw extends DebugDraw {
 		//if (true) return;
 		if (firstTime) {
 			g.textFont(m_font);
-			if (g.g != null && g.g.is3D()) g.textMode(PApplet.SCREEN);
+			if (pg != null && pg.is3D()) g.textMode(PApplet.SCREEN);
 			firstTime = false;
 		}
 		g.fill(color.x,color.y,color.z);
@@ -272,7 +274,7 @@ public class ProcessingDebugDraw extends DebugDraw {
         g.pushMatrix();
         g.translate(position.x, position.y);
         Mat22 mat = transform.getTransform();
-        if (g.g != null && g.g.is3D()) {
+        if (pg.is3D()) {
         	g.applyMatrix( mat.col1.x, mat.col2.x, 0, 0,
         			mat.col1.y, mat.col2.y, 0, 0,
         			0, 0, 1, 0,

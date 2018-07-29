@@ -4550,8 +4550,8 @@ var org;
                             this.world = null;
                         (function () {
                             var w = null;
-                            for (var index134 = 0; index134 < bodies.length; index134++) {
-                                var b = bodies[index134];
+                            for (var index147 = 0; index147 < bodies.length; index147++) {
+                                var b = bodies[index147];
                                 {
                                     /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -4581,8 +4581,8 @@ var org;
                             this.world = null;
                         (function () {
                             var w = null;
-                            for (var index135 = 0; index135 < groups_1.length; index135++) {
-                                var bg = groups_1[index135];
+                            for (var index148 = 0; index148 < groups_1.length; index148++) {
+                                var bg = groups_1[index148];
                                 {
                                     /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -4629,8 +4629,8 @@ var org;
                 BodyGroup.prototype.getBodiesDeep = function () {
                     var res = ([]);
                     /* addAll */ (function (l1, l2) { return l1.push.apply(l1, l2); })(res, this.bodies);
-                    for (var index136 = 0; index136 < this.children.length; index136++) {
-                        var bg = this.children[index136];
+                    for (var index149 = 0; index149 < this.children.length; index149++) {
+                        var bg = this.children[index149];
                         {
                             /* addAll */ (function (l1, l2) { return l1.push.apply(l1, l2); })(res, bg.getBodiesDeep());
                         }
@@ -5526,6 +5526,10 @@ var org;
                      */
                     Controller.prototype.step = function (step) {
                     };
+                    /**
+                     * Controllers override this to provide debug drawing.
+                     * @param {org.jbox2d.dynamics.DebugDraw} debugDraw
+                     */
                     Controller.prototype.draw = function (debugDraw) {
                     };
                     /**
@@ -6480,7 +6484,7 @@ var org;
             var Physics = (function () {
                 function Physics(parent, screenW, screenH, gravX, gravY, screenAABBWidth, screenAABBHeight, borderBoxWidth, borderBoxHeight, pixelsPerMeter) {
                     var _this = this;
-                    if (((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && ((typeof gravX === 'number') || gravX === null) && ((typeof gravY === 'number') || gravY === null) && ((typeof screenAABBWidth === 'number') || screenAABBWidth === null) && ((typeof screenAABBHeight === 'number') || screenAABBHeight === null) && ((typeof borderBoxWidth === 'number') || borderBoxWidth === null) && ((typeof borderBoxHeight === 'number') || borderBoxHeight === null) && ((typeof pixelsPerMeter === 'number') || pixelsPerMeter === null)) {
+                    if (((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("def.processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("def.processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && ((typeof gravX === 'number') || gravX === null) && ((typeof gravY === 'number') || gravY === null) && ((typeof screenAABBWidth === 'number') || screenAABBWidth === null) && ((typeof screenAABBHeight === 'number') || screenAABBHeight === null) && ((typeof borderBoxWidth === 'number') || borderBoxWidth === null) && ((typeof borderBoxHeight === 'number') || borderBoxHeight === null) && ((typeof pixelsPerMeter === 'number') || pixelsPerMeter === null)) {
                         var __args = Array.prototype.slice.call(arguments);
                         if (this.m_world === undefined)
                             this.m_world = null;
@@ -6559,7 +6563,7 @@ var org;
                             parent.registerMethod("draw", _this);
                         })();
                     }
-                    else if (((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && gravX === undefined && gravY === undefined && screenAABBWidth === undefined && screenAABBHeight === undefined && borderBoxWidth === undefined && borderBoxHeight === undefined && pixelsPerMeter === undefined) {
+                    else if (((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("def.processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("def.processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && gravX === undefined && gravY === undefined && screenAABBWidth === undefined && screenAABBHeight === undefined && borderBoxWidth === undefined && borderBoxHeight === undefined && pixelsPerMeter === undefined) {
                         var __args = Array.prototype.slice.call(arguments);
                         {
                             var __args_6 = Array.prototype.slice.call(arguments);
@@ -6651,6 +6655,9 @@ var org;
                     else
                         throw new Error('invalid overload');
                 }
+                /**
+                 * Called automatically by Processing.
+                 */
                 Physics.prototype.draw = function () {
                     this.m_world.setWarmStarting(this.m_settings.enableWarmStarting);
                     this.m_world.setPositionCorrection(this.m_settings.enablePositionCorrection);
@@ -6664,7 +6671,9 @@ var org;
                             /* invoke */ this.m_customRenderingMethod.fn.apply(this.m_customRenderingObject, [this.m_world]);
                         }
                         catch (e) {
-                            this.m_parent.die("Error invoking custom rendering method.", e);
+                            console.error("error " + e);
+                            console.error(e.message, e);
+                            this.m_parent.exit();
                         }
                         ;
                     }
@@ -6732,7 +6741,8 @@ var org;
                         this.m_customRenderingMethod = method;
                     }
                     catch (e) {
-                        this.m_parent.die("Could not register " + methodName + "(World) for " + object + ", make sure the method name is spelled correctly and that the method takes a World object as an argument!", e);
+                        console.error("Could not register " + methodName + "(World) for " + object + ", make sure the method name is spelled correctly and that the method takes a World object as an argument!" + e);
+                        console.error(e.message, e);
                     }
                     ;
                 };
@@ -7955,115 +7965,6 @@ var org;
     (function (jbox2d) {
         var testbed;
         (function (testbed) {
-            var mathtests;
-            (function (mathtests) {
-                var SqrtTest = (function () {
-                    function SqrtTest() {
-                    }
-                    SqrtTest.main = function (args) {
-                        var result;
-                        for (var i = 0; i < 1000000000; i++) {
-                            result = org.jbox2d.common.MathUtils.sqrt(i);
-                            result = Math.fround(Math.sqrt(i));
-                        }
-                        ;
-                        var times = 1000000000;
-                        var startTime;
-                        var afterTime;
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = Math.fround(Math.sqrt(i / Math.sqrt(i)));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        var jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("jmath time: " + jmathseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = org.jbox2d.common.MathUtils.sqrt(Math.fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        var mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("math util time: " + mathutilseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = Math.fround(Math.sqrt(Math.fround(i / Math.fround(Math.sqrt(i)))));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("jmath time: " + jmathseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = org.jbox2d.common.MathUtils.sqrt(Math.fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("math util time: " + mathutilseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = Math.fround(Math.sqrt(Math.fround(i / Math.fround(Math.sqrt(i)))));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("jmath time: " + jmathseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = org.jbox2d.common.MathUtils.sqrt(Math.fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("math util time: " + mathutilseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = Math.fround(Math.sqrt(Math.fround(i / Math.fround(Math.sqrt(i)))));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("jmath time: " + jmathseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = org.jbox2d.common.MathUtils.sqrt(Math.fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("math util time: " + mathutilseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = Math.fround(Math.sqrt(Math.fround(i / Math.fround(Math.sqrt(i)))));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("jmath time: " + jmathseconds);
-                        startTime = (Date.now() * 1000000);
-                        for (var i = 0; i < times; i++) {
-                            result = org.jbox2d.common.MathUtils.sqrt(Math.fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-                        }
-                        ;
-                        afterTime = (Date.now() * 1000000);
-                        mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-                        console.info("math util time: " + mathutilseconds);
-                    };
-                    return SqrtTest;
-                }());
-                mathtests.SqrtTest = SqrtTest;
-                SqrtTest["__class"] = "org.jbox2d.testbed.mathtests.SqrtTest";
-            })(mathtests = testbed.mathtests || (testbed.mathtests = {}));
-        })(testbed = jbox2d.testbed || (jbox2d.testbed = {}));
-    })(jbox2d = org.jbox2d || (org.jbox2d = {}));
-})(org || (org = {}));
-(function (org) {
-    var jbox2d;
-    (function (jbox2d) {
-        var testbed;
-        (function (testbed) {
             /**
              * Settings for the current test.  Mostly self-explanatory.
              * <BR><BR>
@@ -8523,36 +8424,36 @@ var org;
                         this.connectionsUR = ([]);
                     }
                     BlobStructure.prototype.updateSprings = function () {
-                        for (var index137 = 0; index137 < this.connections.length; index137++) {
-                            var iiff = this.connections[index137];
+                        for (var index150 = 0; index150 < this.connections.length; index150++) {
+                            var iiff = this.connections[index150];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index138 = 0; index138 < this.connectionsR.length; index138++) {
-                            var iiff = this.connectionsR[index138];
+                        for (var index151 = 0; index151 < this.connectionsR.length; index151++) {
+                            var iiff = this.connectionsR[index151];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index139 = 0; index139 < this.connectionsDR.length; index139++) {
-                            var iiff = this.connectionsDR[index139];
+                        for (var index152 = 0; index152 < this.connectionsDR.length; index152++) {
+                            var iiff = this.connectionsDR[index152];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index140 = 0; index140 < this.connectionsD.length; index140++) {
-                            var iiff = this.connectionsD[index140];
+                        for (var index153 = 0; index153 < this.connectionsD.length; index153++) {
+                            var iiff = this.connectionsD[index153];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index141 = 0; index141 < this.connectionsUR.length; index141++) {
-                            var iiff = this.connectionsUR[index141];
+                        for (var index154 = 0; index154 < this.connectionsUR.length; index154++) {
+                            var iiff = this.connectionsUR[index154];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
@@ -9341,8 +9242,8 @@ var org;
                         p1.addForceY(this.param);
                     };
                     /**
-                     * Calculates the correct timestep given the current setup of the
-                     * system, prints a message if the current time step is too large.
+                     * Calculates the correct timestep given the current setup of the system, prints
+                     * a message if the current time step is too large.
                      */
                     SPHGroup.prototype.calcCorrectDeltaT = function () {
                         var i = 0;
@@ -12140,6 +12041,10 @@ var org;
                         }
                         ;
                     };
+                    /**
+                     *
+                     * @param {org.jbox2d.dynamics.DebugDraw} debugDraw
+                     */
                     BuoyancyController.prototype.draw = function (debugDraw) {
                         var r = 1000;
                         var p1 = this.normal.mul(this.offset).addLocal$org_jbox2d_common_Vec2(org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(this.normal, r));
@@ -12236,6 +12141,8 @@ var org;
                     /*private*/ _this.firstTime = true;
                     if (_this.g === undefined)
                         _this.g = null;
+                    if (_this.pg === undefined)
+                        _this.pg = null;
                     if (_this.m_font === undefined)
                         _this.m_font = null;
                     if (_this.fontHeight === undefined)
@@ -12244,6 +12151,7 @@ var org;
                         _this.transform = null;
                     _this.transform = _super.prototype.getViewportTranform.call(_this);
                     _this.g = pApplet;
+                    _this.pg = _this.g.createGraphics(pApplet.displayWidth, pApplet.displayHeight);
                     ProcessingDebugDraw.screen = _this;
                     _this.m_font = _this.g.createFont("LucidaGrande-Bold", 12);
                     _this.fontHeight = 14.0;
@@ -12440,7 +12348,7 @@ var org;
                 ProcessingDebugDraw.prototype.drawString = function (x, y, s, color) {
                     if (this.firstTime) {
                         this.g.textFont(this.m_font);
-                        if (this.g.g != null && this.g.g.is3D())
+                        if (this.pg != null && this.pg.is3D())
                             this.g.textMode(PConstants.SCREEN);
                         this.firstTime = false;
                     }
@@ -12503,7 +12411,7 @@ var org;
                     this.g.pushMatrix();
                     this.g.translate(ProcessingDebugDraw.position_$LI$().x, ProcessingDebugDraw.position_$LI$().y);
                     var mat = this.transform.getTransform();
-                    if (this.g.g != null && this.g.g.is3D()) {
+                    if (this.pg.is3D()) {
                         this.g.applyMatrix(mat.col1.x, mat.col2.x, 0, 0, mat.col1.y, mat.col2.y, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
                     }
                     else {
@@ -18137,8 +18045,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getConnectedBodyIsland_impl = function (parent, parentResult) {
                     var connected = this.getConnectedBodies();
-                    for (var index142 = 0; index142 < connected.length; index142++) {
-                        var b = connected[index142];
+                    for (var index155 = 0; index155 < connected.length; index155++) {
+                        var b = connected[index155];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18175,8 +18083,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getConnectedDynamicBodyIsland_impl = function (parent, parentResult) {
                     var connected = this.getConnectedBodies();
-                    for (var index143 = 0; index143 < connected.length; index143++) {
-                        var b = connected[index143];
+                    for (var index156 = 0; index156 < connected.length; index156++) {
+                        var b = connected[index156];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18212,8 +18120,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getTouchingBodyIsland_impl = function (parent, parentResult) {
                     var touching = this.getBodiesInContact();
-                    for (var index144 = 0; index144 < touching.length; index144++) {
-                        var b = touching[index144];
+                    for (var index157 = 0; index157 < touching.length; index157++) {
+                        var b = touching[index157];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18247,8 +18155,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getTouchingDynamicBodyIsland_impl = function (parent, parentResult) {
                     var touching = this.getBodiesInContact();
-                    for (var index145 = 0; index145 < touching.length; index145++) {
-                        var b = touching[index145];
+                    for (var index158 = 0; index158 < touching.length; index158++) {
+                        var b = touching[index158];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -21198,8 +21106,8 @@ var org;
                  * @private
                  */
                 /*private*/ World.prototype.postStep = function (dt, iterations) {
-                    for (var index146 = 0; index146 < this.postStepList.length; index146++) {
-                        var s = this.postStepList[index146];
+                    for (var index159 = 0; index159 < this.postStepList.length; index159++) {
+                        var s = this.postStepList[index159];
                         {
                             s.step(dt, iterations);
                         }
@@ -23679,4 +23587,3 @@ org.jbox2d.common.Color3f.BLUE_$LI$();
 org.jbox2d.common.Color3f.BLACK_$LI$();
 org.jbox2d.common.Color3f.WHITE_$LI$();
 org.jbox2d.collision.Collision.NULL_FEATURE_$LI$();
-org.jbox2d.testbed.mathtests.SqrtTest.main(null);

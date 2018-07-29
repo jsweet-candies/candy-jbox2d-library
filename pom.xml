@@ -40,6 +40,11 @@
 			<version>6-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jsweet.candies</groupId>
+			<artifactId>processing</artifactId>
+			<version>3.3.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.jsweet.extension</groupId>
 			<artifactId>processing-jsweet-support</artifactId>
 			<version>3.3.7-SNAPSHOT</version>
@@ -88,6 +93,13 @@
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>jsweet</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
 						</goals>
 					</execution>
 				</executions>

@@ -1866,7 +1866,10 @@ declare namespace org.jbox2d.dynamics.controllers {
          * @param {org.jbox2d.dynamics.TimeStep} step
          */
         step(step: org.jbox2d.dynamics.TimeStep): void;
-        async: any;
+        /**
+         * Controllers override this to provide debug drawing.
+         * @param {org.jbox2d.dynamics.DebugDraw} debugDraw
+         */
         draw(debugDraw: org.jbox2d.dynamics.DebugDraw): void;
         /**
          * Adds a body to the controller list.
@@ -2393,7 +2396,9 @@ declare namespace org.jbox2d.p5 {
         };
         m_customRenderingObject: any;
         constructor(parent?: any, screenW?: any, screenH?: any, gravX?: any, gravY?: any, screenAABBWidth?: any, screenAABBHeight?: any, borderBoxWidth?: any, borderBoxHeight?: any, pixelsPerMeter?: any);
-        async: any;
+        /**
+         * Called automatically by Processing.
+         */
         draw(): void;
         /**
          * For advanced users only.
@@ -3031,9 +3036,6 @@ declare namespace org.jbox2d.testbed.mathtests {
     }
 }
 declare namespace org.jbox2d.testbed.mathtests {
-    class SqrtTest {
-        static main(args: string[]): void;
-    }
 }
 declare namespace org.jbox2d.testbed {
     /**
@@ -3345,8 +3347,8 @@ declare namespace org.jbox2d.util.sph {
          */
         calcSPHEquations(p1: org.jbox2d.util.sph.SmoothParticle, p2: org.jbox2d.util.sph.SmoothParticle): void;
         /**
-         * Calculates the correct timestep given the current setup of the
-         * system, prints a message if the current time step is too large.
+         * Calculates the correct timestep given the current setup of the system, prints
+         * a message if the current time step is too large.
          */
         calcCorrectDeltaT(): void;
         /**
@@ -3915,7 +3917,10 @@ declare namespace org.jbox2d.dynamics.controllers {
          * @param {org.jbox2d.dynamics.TimeStep} step
          */
         step(step: org.jbox2d.dynamics.TimeStep): void;
-        async: any;
+        /**
+         *
+         * @param {org.jbox2d.dynamics.DebugDraw} debugDraw
+         */
         draw(debugDraw: org.jbox2d.dynamics.DebugDraw): void;
     }
 }
@@ -3956,7 +3961,8 @@ declare namespace org.jbox2d.testbed {
         static screen: ProcessingDebugDraw;
         firstTime: boolean;
         g: any;
-        m_font: any;
+        pg: PGraphics;
+        m_font: PFont;
         fontHeight: number;
         transform: org.jbox2d.common.OBBViewportTransform;
         constructor(pApplet: any);

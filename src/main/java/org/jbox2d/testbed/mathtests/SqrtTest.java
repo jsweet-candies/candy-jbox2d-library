@@ -2,6 +2,9 @@ package org.jbox2d.testbed.mathtests;
 
 import org.jbox2d.common.MathUtils;
 
+import jsweet.lang.Erased;
+
+@Erased
 public class SqrtTest {
 	
 	public static void main(String[] args) {

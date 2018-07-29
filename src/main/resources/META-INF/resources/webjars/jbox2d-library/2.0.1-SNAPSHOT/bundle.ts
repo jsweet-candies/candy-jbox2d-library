@@ -4400,8 +4400,8 @@ namespace org.jbox2d.dynamics {
                 if(this.world===undefined) this.world = null;
                 (() => {
                     let w : org.jbox2d.dynamics.World = null;
-                    for(let index134=0; index134 < bodies.length; index134++) {
-                        let b = bodies[index134];
+                    for(let index147=0; index147 < bodies.length; index147++) {
+                        let b = bodies[index147];
                         {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.bodies, b);
                             if(w == null) w = b.getWorld(); else if(b.getWorld() !== w) {
@@ -4420,8 +4420,8 @@ namespace org.jbox2d.dynamics {
                 if(this.world===undefined) this.world = null;
                 (() => {
                     let w : org.jbox2d.dynamics.World = null;
-                    for(let index135=0; index135 < groups.length; index135++) {
-                        let bg = groups[index135];
+                    for(let index148=0; index148 < groups.length; index148++) {
+                        let bg = groups[index148];
                         {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.children, bg);
                             if(w == null) w = bg.getWorld(); else if(bg.getWorld() !== w) {
@@ -4461,8 +4461,8 @@ namespace org.jbox2d.dynamics {
         public getBodiesDeep() : Array<org.jbox2d.dynamics.Body> {
             let res : Array<org.jbox2d.dynamics.Body> = <any>([]);
             /* addAll */((l1, l2) => l1.push.apply(l1, l2))(res, this.bodies);
-            for(let index136=0; index136 < this.children.length; index136++) {
-                let bg = this.children[index136];
+            for(let index149=0; index149 < this.children.length; index149++) {
+                let bg = this.children[index149];
                 {
                     /* addAll */((l1, l2) => l1.push.apply(l1, l2))(res, bg.getBodiesDeep());
                 }
@@ -5414,7 +5414,7 @@ namespace org.jbox2d.dynamics.controllers {
         public step(step : org.jbox2d.dynamics.TimeStep) {
         }
 
-         async /**
+        /**
          * Controllers override this to provide debug drawing.
          * @param {org.jbox2d.dynamics.DebugDraw} debugDraw
          */
@@ -6435,7 +6435,7 @@ namespace org.jbox2d.p5 {
         /*private*/ m_customRenderingObject : any;
 
         public constructor(parent? : any, screenW? : any, screenH? : any, gravX? : any, gravY? : any, screenAABBWidth? : any, screenAABBHeight? : any, borderBoxWidth? : any, borderBoxHeight? : any, pixelsPerMeter? : any) {
-            if(((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && ((typeof gravX === 'number') || gravX === null) && ((typeof gravY === 'number') || gravY === null) && ((typeof screenAABBWidth === 'number') || screenAABBWidth === null) && ((typeof screenAABBHeight === 'number') || screenAABBHeight === null) && ((typeof borderBoxWidth === 'number') || borderBoxWidth === null) && ((typeof borderBoxHeight === 'number') || borderBoxHeight === null) && ((typeof pixelsPerMeter === 'number') || pixelsPerMeter === null)) {
+            if(((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("def.processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("def.processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && ((typeof gravX === 'number') || gravX === null) && ((typeof gravY === 'number') || gravY === null) && ((typeof screenAABBWidth === 'number') || screenAABBWidth === null) && ((typeof screenAABBHeight === 'number') || screenAABBHeight === null) && ((typeof borderBoxWidth === 'number') || borderBoxWidth === null) && ((typeof borderBoxHeight === 'number') || borderBoxHeight === null) && ((typeof pixelsPerMeter === 'number') || pixelsPerMeter === null)) {
                 let __args = Array.prototype.slice.call(arguments);
                 if(this.m_world===undefined) this.m_world = null;
                 if(this.m_parent===undefined) this.m_parent = null;
@@ -6485,7 +6485,7 @@ namespace org.jbox2d.p5 {
                     this.m_border = this.createHollowBox((<any>Math).fround(screenW * 0.5), (<any>Math).fround(screenH * 0.5), borderBoxWidth, borderBoxHeight, 10.0);
                     parent.registerMethod("draw", this);
                 })();
-            } else if(((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && gravX === undefined && gravY === undefined && screenAABBWidth === undefined && screenAABBHeight === undefined && borderBoxWidth === undefined && borderBoxHeight === undefined && pixelsPerMeter === undefined) {
+            } else if(((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("def.processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("def.processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && gravX === undefined && gravY === undefined && screenAABBWidth === undefined && screenAABBHeight === undefined && borderBoxWidth === undefined && borderBoxHeight === undefined && pixelsPerMeter === undefined) {
                 let __args = Array.prototype.slice.call(arguments);
                 {
                     let __args = Array.prototype.slice.call(arguments);
@@ -6548,7 +6548,7 @@ namespace org.jbox2d.p5 {
             } else throw new Error('invalid overload');
         }
 
-         async /**
+        /**
          * Called automatically by Processing.
          */
         public draw() {
@@ -6562,7 +6562,9 @@ namespace org.jbox2d.p5 {
                 try {
                     /* invoke */this.m_customRenderingMethod.fn.apply(this.m_customRenderingObject, [this.m_world]);
                 } catch(e) {
-                    this.m_parent.die("Error invoking custom rendering method.", e);
+                    console.error("error " + e);
+                    console.error(e.message, e);
+                    this.m_parent.exit();
                 };
             }
         }
@@ -6626,7 +6628,8 @@ namespace org.jbox2d.p5 {
                 this.m_customRenderingObject = object;
                 this.m_customRenderingMethod = method;
             } catch(e) {
-                this.m_parent.die("Could not register " + methodName + "(World) for " + object + ", make sure the method name is spelled correctly and that the method takes a World object as an argument!", e);
+                console.error("Could not register " + methodName + "(World) for " + object + ", make sure the method name is spelled correctly and that the method takes a World object as an argument!" + e);
+                console.error(e.message, e);
             };
         }
 
@@ -7703,92 +7706,7 @@ namespace org.jbox2d.testbed.mathtests {
     SinCosTable["__class"] = "org.jbox2d.testbed.mathtests.SinCosTable";
 
 }
-namespace org.jbox2d.testbed.mathtests {
-    export class SqrtTest {
-        public static main(args : string[]) {
-            let result : number;
-            for(let i : number = 0; i < 1000000000; i++) {
-                result = org.jbox2d.common.MathUtils.sqrt(i);
-                result = (<any>Math).fround(Math.sqrt(i));
-            };
-            let times : number = 1000000000;
-            let startTime : number;
-            let afterTime : number;
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = (<any>Math).fround(Math.sqrt(i / Math.sqrt(i)));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            let jmathseconds : number = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("jmath time: " + jmathseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = org.jbox2d.common.MathUtils.sqrt((<any>Math).fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            let mathutilseconds : number = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("math util time: " + mathutilseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = (<any>Math).fround(Math.sqrt((<any>Math).fround(i / (<any>Math).fround(Math.sqrt(i)))));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("jmath time: " + jmathseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = org.jbox2d.common.MathUtils.sqrt((<any>Math).fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("math util time: " + mathutilseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = (<any>Math).fround(Math.sqrt((<any>Math).fround(i / (<any>Math).fround(Math.sqrt(i)))));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("jmath time: " + jmathseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = org.jbox2d.common.MathUtils.sqrt((<any>Math).fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("math util time: " + mathutilseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = (<any>Math).fround(Math.sqrt((<any>Math).fround(i / (<any>Math).fround(Math.sqrt(i)))));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("jmath time: " + jmathseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = org.jbox2d.common.MathUtils.sqrt((<any>Math).fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("math util time: " + mathutilseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = (<any>Math).fround(Math.sqrt((<any>Math).fround(i / (<any>Math).fround(Math.sqrt(i)))));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            jmathseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("jmath time: " + jmathseconds);
-            startTime = /* nanoTime */(Date.now() * 1000000);
-            for(let i : number = 0; i < times; i++) {
-                result = org.jbox2d.common.MathUtils.sqrt((<any>Math).fround(i / org.jbox2d.common.MathUtils.sqrt(i)));
-            };
-            afterTime = /* nanoTime */(Date.now() * 1000000);
-            mathutilseconds = (afterTime - startTime) * 1.0 / 1000000000;
-            console.info("math util time: " + mathutilseconds);
-        }
-    }
-    SqrtTest["__class"] = "org.jbox2d.testbed.mathtests.SqrtTest";
-
-}
+namespace org.jbox2d.testbed.mathtests {}
 namespace org.jbox2d.testbed {
     /**
      * Settings for the current test.  Mostly self-explanatory.
@@ -8231,36 +8149,36 @@ namespace org.jbox2d.util.blob {
         currentDamping : number = 0.9;
 
         updateSprings() {
-            for(let index137=0; index137 < this.connections.length; index137++) {
-                let iiff = this.connections[index137];
+            for(let index150=0; index150 < this.connections.length; index150++) {
+                let iiff = this.connections[index150];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index138=0; index138 < this.connectionsR.length; index138++) {
-                let iiff = this.connectionsR[index138];
+            for(let index151=0; index151 < this.connectionsR.length; index151++) {
+                let iiff = this.connectionsR[index151];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index139=0; index139 < this.connectionsDR.length; index139++) {
-                let iiff = this.connectionsDR[index139];
+            for(let index152=0; index152 < this.connectionsDR.length; index152++) {
+                let iiff = this.connectionsDR[index152];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index140=0; index140 < this.connectionsD.length; index140++) {
-                let iiff = this.connectionsD[index140];
+            for(let index153=0; index153 < this.connectionsD.length; index153++) {
+                let iiff = this.connectionsD[index153];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index141=0; index141 < this.connectionsUR.length; index141++) {
-                let iiff = this.connectionsUR[index141];
+            for(let index154=0; index154 < this.connectionsUR.length; index154++) {
+                let iiff = this.connectionsUR[index154];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
@@ -8919,8 +8837,8 @@ namespace org.jbox2d.util.sph {
         }
 
         /**
-         * Calculates the correct timestep given the current setup of the
-         * system, prints a message if the current time step is too large.
+         * Calculates the correct timestep given the current setup of the system, prints
+         * a message if the current time step is too large.
          */
         public calcCorrectDeltaT() {
             let i : number = 0;
@@ -11366,7 +11284,7 @@ namespace org.jbox2d.dynamics.controllers {
             };
         }
 
-         async /**
+        /**
          * 
          * @param {org.jbox2d.dynamics.DebugDraw} debugDraw
          */
@@ -11456,7 +11374,9 @@ namespace org.jbox2d.testbed {
 
         public g : any;
 
-        public m_font : any;
+        public pg : PGraphics;
+
+        public m_font : PFont;
 
         public fontHeight : number;
 
@@ -11465,11 +11385,13 @@ namespace org.jbox2d.testbed {
         public constructor(pApplet : any) {
             super(new org.jbox2d.common.OBBViewportTransform());
             if(this.g===undefined) this.g = null;
+            if(this.pg===undefined) this.pg = null;
             if(this.m_font===undefined) this.m_font = null;
             if(this.fontHeight===undefined) this.fontHeight = 0;
             if(this.transform===undefined) this.transform = null;
             this.transform = <org.jbox2d.common.OBBViewportTransform><any>super.getViewportTranform();
             this.g = pApplet;
+            this.pg = this.g.createGraphics(pApplet.displayWidth, pApplet.displayHeight);
             ProcessingDebugDraw.screen = this;
             this.m_font = this.g.createFont("LucidaGrande-Bold", 12);
             this.fontHeight = 14.0;
@@ -11657,7 +11579,7 @@ namespace org.jbox2d.testbed {
         public drawString(x : number, y : number, s : string, color : org.jbox2d.common.Color3f) {
             if(this.firstTime) {
                 this.g.textFont(this.m_font);
-                if(this.g.g != null && this.g.g.is3D()) this.g.textMode(PConstants.SCREEN);
+                if(this.pg != null && this.pg.is3D()) this.g.textMode(PConstants.SCREEN);
                 this.firstTime = false;
             }
             this.g.fill(color.x, color.y, color.z);
@@ -11718,7 +11640,7 @@ namespace org.jbox2d.testbed {
             this.g.pushMatrix();
             this.g.translate(ProcessingDebugDraw.position_$LI$().x, ProcessingDebugDraw.position_$LI$().y);
             let mat : org.jbox2d.common.Mat22 = this.transform.getTransform();
-            if(this.g.g != null && this.g.g.is3D()) {
+            if(this.pg.is3D()) {
                 this.g.applyMatrix(mat.col1.x, mat.col2.x, 0, 0, mat.col1.y, mat.col2.y, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
             } else {
                 this.g.applyMatrix(mat.col1.x, mat.col2.x, 0, mat.col1.y, mat.col2.y, 0);
@@ -17153,8 +17075,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getConnectedBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let connected : Array<Body> = this.getConnectedBodies();
-            for(let index142=0; index142 < connected.length; index142++) {
-                let b = connected[index142];
+            for(let index155=0; index155 < connected.length; index155++) {
+                let b = connected[index155];
                 {
                     if(b === parent || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -17179,8 +17101,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getConnectedDynamicBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let connected : Array<Body> = this.getConnectedBodies();
-            for(let index143=0; index143 < connected.length; index143++) {
-                let b = connected[index143];
+            for(let index156=0; index156 < connected.length; index156++) {
+                let b = connected[index156];
                 {
                     if(b === parent || !b.isDynamic() || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -17205,8 +17127,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getTouchingBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let touching : Array<Body> = this.getBodiesInContact();
-            for(let index144=0; index144 < touching.length; index144++) {
-                let b = touching[index144];
+            for(let index157=0; index157 < touching.length; index157++) {
+                let b = touching[index157];
                 {
                     if(b === parent || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -17229,8 +17151,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getTouchingDynamicBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let touching : Array<Body> = this.getBodiesInContact();
-            for(let index145=0; index145 < touching.length; index145++) {
-                let b = touching[index145];
+            for(let index158=0; index158 < touching.length; index158++) {
+                let b = touching[index158];
                 {
                     if(b === parent || !b.isDynamic() || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -19898,8 +19820,8 @@ namespace org.jbox2d.dynamics {
          * @private
          */
         /*private*/ postStep(dt : number, iterations : number) {
-            for(let index146=0; index146 < this.postStepList.length; index146++) {
-                let s = this.postStepList[index146];
+            for(let index159=0; index159 < this.postStepList.length; index159++) {
+                let s = this.postStepList[index159];
                 {
                     s.step(dt, iterations);
                 }
@@ -22476,5 +22398,3 @@ org.jbox2d.common.Color3f.BLACK_$LI$();
 org.jbox2d.common.Color3f.WHITE_$LI$();
 
 org.jbox2d.collision.Collision.NULL_FEATURE_$LI$();
-
-org.jbox2d.testbed.mathtests.SqrtTest.main(null);
