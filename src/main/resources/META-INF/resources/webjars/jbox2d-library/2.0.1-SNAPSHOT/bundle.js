@@ -22,7 +22,7 @@ var org;
                 function AABB(lowerVertex, upperVertex) {
                     var _this = this;
                     if (((lowerVertex != null && lowerVertex instanceof org.jbox2d.common.Vec2) || lowerVertex === null) && ((upperVertex != null && upperVertex instanceof org.jbox2d.common.Vec2) || upperVertex === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.lowerBound === undefined)
                             this.lowerBound = null;
                         if (this.upperBound === undefined)
@@ -57,10 +57,10 @@ var org;
                         })();
                     }
                     else if (((lowerVertex != null && lowerVertex instanceof org.jbox2d.collision.AABB) || lowerVertex === null) && upperVertex === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         var copy = __args[0];
                         {
-                            var __args_1 = Array.prototype.slice.call(arguments);
+                            var __args_1 = arguments;
                             var lowerVertex_1 = copy.lowerBound;
                             var upperVertex_1 = copy.upperBound;
                             if (this.lowerBound === undefined)
@@ -98,7 +98,7 @@ var org;
                         }
                     }
                     else if (lowerVertex === undefined && upperVertex === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.lowerBound === undefined)
                             this.lowerBound = null;
                         if (this.upperBound === undefined)
@@ -181,7 +181,7 @@ var org;
                 function Bound(b) {
                     var _this = this;
                     if (((b != null && b instanceof org.jbox2d.collision.Bound) || b === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.value === undefined)
                             this.value = 0;
                         if (this.proxyId === undefined)
@@ -201,7 +201,7 @@ var org;
                         })();
                     }
                     else if (b === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.value === undefined)
                             this.value = 0;
                         if (this.proxyId === undefined)
@@ -370,7 +370,7 @@ var org;
                 function ContactID(c) {
                     var _this = this;
                     if (((c != null && c instanceof org.jbox2d.collision.ContactID) || c === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.key === undefined)
                             this.key = 0;
                         if (this.features === undefined)
@@ -385,7 +385,7 @@ var org;
                         })();
                     }
                     else if (c === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.key === undefined)
                             this.key = 0;
                         if (this.features === undefined)
@@ -1029,7 +1029,7 @@ var org;
                 function Point(_p) {
                     var _this = this;
                     if (((_p != null && _p instanceof org.jbox2d.common.Vec2) || _p === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.p === undefined)
                             this.p = null;
                         if (this.p === undefined)
@@ -1049,7 +1049,7 @@ var org;
                         })();
                     }
                     else if (_p === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.p === undefined)
                             this.p = null;
                         if (this.p === undefined)
@@ -1119,7 +1119,7 @@ var org;
                 function Manifold(other) {
                     var _this = this;
                     if (((other != null && other instanceof org.jbox2d.collision.Manifold) || other === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.points === undefined)
                             this.points = null;
                         if (this.normal === undefined)
@@ -1154,7 +1154,7 @@ var org;
                         })();
                     }
                     else if (other === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.points === undefined)
                             this.points = null;
                         if (this.normal === undefined)
@@ -1216,7 +1216,7 @@ var org;
                 function ManifoldPoint(cp) {
                     var _this = this;
                     if (((cp != null && cp instanceof org.jbox2d.collision.ManifoldPoint) || cp === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.localPoint1 === undefined)
                             this.localPoint1 = null;
                         if (this.localPoint2 === undefined)
@@ -1271,7 +1271,7 @@ var org;
                         })();
                     }
                     else if (cp === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.localPoint1 === undefined)
                             this.localPoint1 = null;
                         if (this.localPoint2 === undefined)
@@ -1339,7 +1339,7 @@ var org;
                 function MassData(md) {
                     var _this = this;
                     if (((md != null && md instanceof org.jbox2d.collision.MassData) || md === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.mass === undefined)
                             this.mass = 0;
                         if (this.center === undefined)
@@ -1369,7 +1369,7 @@ var org;
                         })();
                     }
                     else if (md === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.mass === undefined)
                             this.mass = 0;
                         if (this.center === undefined)
@@ -1427,7 +1427,7 @@ var org;
                 function OBB(_R, _center, _extents) {
                     var _this = this;
                     if (((_R != null && _R instanceof org.jbox2d.common.Mat22) || _R === null) && ((_center != null && _center instanceof org.jbox2d.common.Vec2) || _center === null) && ((_extents != null && _extents instanceof org.jbox2d.common.Vec2) || _extents === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.R === undefined)
                             this.R = null;
                         if (this.center === undefined)
@@ -1477,10 +1477,10 @@ var org;
                         })();
                     }
                     else if (((_R != null && _R instanceof org.jbox2d.collision.OBB) || _R === null) && _center === undefined && _extents === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         var copy = __args[0];
                         {
-                            var __args_2 = Array.prototype.slice.call(arguments);
+                            var __args_2 = arguments;
                             var _R_1 = copy.R;
                             var _center_1 = copy.center;
                             var _extents_1 = copy.extents;
@@ -1534,7 +1534,7 @@ var org;
                         }
                     }
                     else if (_R === undefined && _center === undefined && _extents === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.R === undefined)
                             this.R = null;
                         if (this.center === undefined)
@@ -1583,7 +1583,7 @@ var org;
                 function Pair(other) {
                     var _this = this;
                     if (((other != null && other instanceof org.jbox2d.collision.Pair) || other === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.userData === undefined)
                             this.userData = null;
                         if (this.proxyId1 === undefined)
@@ -1612,7 +1612,7 @@ var org;
                         })();
                     }
                     else if (other === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.userData === undefined)
                             this.userData = null;
                         if (this.proxyId1 === undefined)
@@ -2801,7 +2801,7 @@ var org;
                 function Mat22(col1x, col2x, col1y, col2y) {
                     var _this = this;
                     if (((typeof col1x === 'number') || col1x === null) && ((typeof col2x === 'number') || col2x === null) && ((typeof col1y === 'number') || col1y === null) && ((typeof col2y === 'number') || col2y === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.col1 === undefined)
                             this.col1 = null;
                         if (this.col2 === undefined)
@@ -2816,7 +2816,7 @@ var org;
                         })();
                     }
                     else if (((col1x != null && col1x instanceof org.jbox2d.common.Vec2) || col1x === null) && ((col2x != null && col2x instanceof org.jbox2d.common.Vec2) || col2x === null) && col1y === undefined && col2y === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         var c1_1 = __args[0];
                         var c2_1 = __args[1];
                         if (this.col1 === undefined)
@@ -2853,7 +2853,7 @@ var org;
                         })();
                     }
                     else if (col1x === undefined && col2x === undefined && col1y === undefined && col2y === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.col1 === undefined)
                             this.col1 = null;
                         if (this.col2 === undefined)
@@ -3360,7 +3360,7 @@ var org;
                     var _this = this;
                     /*private*/ this.temp = new org.jbox2d.common.Vec3();
                     if (((argCol1 != null && argCol1 instanceof org.jbox2d.common.Vec3) || argCol1 === null) && ((argCol2 != null && argCol2 instanceof org.jbox2d.common.Vec3) || argCol2 === null) && ((argCol3 != null && argCol3 instanceof org.jbox2d.common.Vec3) || argCol3 === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.col1 === undefined)
                             this.col1 = null;
                         if (this.col2 === undefined)
@@ -3411,7 +3411,7 @@ var org;
                         })();
                     }
                     else if (argCol1 === undefined && argCol2 === undefined && argCol3 === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.col1 === undefined)
                             this.col1 = null;
                         if (this.col2 === undefined)
@@ -3750,7 +3750,7 @@ var org;
                 function Vec2(x, y) {
                     var _this = this;
                     if (((typeof x === 'number') || x === null) && ((typeof y === 'number') || y === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.x === undefined)
                             this.x = 0;
                         if (this.y === undefined)
@@ -3768,10 +3768,10 @@ var org;
                         })();
                     }
                     else if (((x != null && x instanceof org.jbox2d.common.Vec2) || x === null) && y === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         var toCopy = __args[0];
                         {
-                            var __args_3 = Array.prototype.slice.call(arguments);
+                            var __args_3 = arguments;
                             var x_1 = toCopy.x;
                             var y_1 = toCopy.y;
                             if (this.x === undefined)
@@ -3792,9 +3792,9 @@ var org;
                         }
                     }
                     else if (x === undefined && y === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         {
-                            var __args_4 = Array.prototype.slice.call(arguments);
+                            var __args_4 = arguments;
                             var x_2 = 0;
                             var y_2 = 0;
                             if (this.x === undefined)
@@ -4123,7 +4123,7 @@ var org;
                 function Vec3(argX, argY, argZ) {
                     var _this = this;
                     if (((typeof argX === 'number') || argX === null) && ((typeof argY === 'number') || argY === null) && ((typeof argZ === 'number') || argZ === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.x === undefined)
                             this.x = 0;
                         if (this.y === undefined)
@@ -4143,7 +4143,7 @@ var org;
                         })();
                     }
                     else if (((argX != null && argX instanceof org.jbox2d.common.Vec3) || argX === null) && argY === undefined && argZ === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         var argCopy_1 = __args[0];
                         if (this.x === undefined)
                             this.x = 0;
@@ -4164,7 +4164,7 @@ var org;
                         })();
                     }
                     else if (argX === undefined && argY === undefined && argZ === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.x === undefined)
                             this.x = 0;
                         if (this.y === undefined)
@@ -4301,7 +4301,7 @@ var org;
                 function XForm(_position, _R) {
                     var _this = this;
                     if (((_position != null && _position instanceof org.jbox2d.common.Vec2) || _position === null) && ((_R != null && _R instanceof org.jbox2d.common.Mat22) || _R === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.position === undefined)
                             this.position = null;
                         if (this.R === undefined)
@@ -4336,7 +4336,7 @@ var org;
                         })();
                     }
                     else if (((_position != null && _position instanceof org.jbox2d.common.XForm) || _position === null) && _R === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         var xf_1 = __args[0];
                         if (this.position === undefined)
                             this.position = null;
@@ -4372,7 +4372,7 @@ var org;
                         })();
                     }
                     else if (_position === undefined && _R === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.position === undefined)
                             this.position = null;
                         if (this.R === undefined)
@@ -4541,7 +4541,7 @@ var org;
                     /*private*/ this.children = ([]);
                     /*private*/ this.bodies = ([]);
                     if (((bodies != null && bodies instanceof Array && (bodies.length == 0 || bodies[0] == null || (bodies[0] != null && bodies[0] instanceof org.jbox2d.dynamics.Body))) || bodies === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.world === undefined)
                             this.world = null;
                         this.children = ([]);
@@ -4550,8 +4550,8 @@ var org;
                             this.world = null;
                         (function () {
                             var w = null;
-                            for (var index147 = 0; index147 < bodies.length; index147++) {
-                                var b = bodies[index147];
+                            for (var index134 = 0; index134 < bodies.length; index134++) {
+                                var b = bodies[index134];
                                 {
                                     /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -4571,7 +4571,7 @@ var org;
                         })();
                     }
                     else if (((bodies != null && bodies instanceof Array && (bodies.length == 0 || bodies[0] == null || (bodies[0] != null && bodies[0] instanceof org.jbox2d.dynamics.BodyGroup))) || bodies === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         var groups_1 = __args[0];
                         if (this.world === undefined)
                             this.world = null;
@@ -4581,8 +4581,8 @@ var org;
                             this.world = null;
                         (function () {
                             var w = null;
-                            for (var index148 = 0; index148 < groups_1.length; index148++) {
-                                var bg = groups_1[index148];
+                            for (var index135 = 0; index135 < groups_1.length; index135++) {
+                                var bg = groups_1[index135];
                                 {
                                     /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -4629,8 +4629,8 @@ var org;
                 BodyGroup.prototype.getBodiesDeep = function () {
                     var res = ([]);
                     /* addAll */ (function (l1, l2) { return l1.push.apply(l1, l2); })(res, this.bodies);
-                    for (var index149 = 0; index149 < this.children.length; index149++) {
-                        var bg = this.children[index149];
+                    for (var index136 = 0; index136 < this.children.length; index136++) {
+                        var bg = this.children[index136];
                         {
                             /* addAll */ (function (l1, l2) { return l1.push.apply(l1, l2); })(res, bg.getBodiesDeep());
                         }
@@ -4691,9 +4691,9 @@ var org;
                     function Contact(s1, s2) {
                         var _this = this;
                         if (((s1 != null && s1 instanceof org.jbox2d.collision.shapes.Shape) || s1 === null) && ((s2 != null && s2 instanceof org.jbox2d.collision.shapes.Shape) || s2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             {
-                                var __args_5 = Array.prototype.slice.call(arguments);
+                                var __args_5 = arguments;
                                 if (this.m_world === undefined)
                                     this.m_world = null;
                                 if (this.m_prev === undefined)
@@ -4770,7 +4770,7 @@ var org;
                             })();
                         }
                         else if (s1 === undefined && s2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.m_world === undefined)
                                 this.m_world = null;
                             if (this.m_prev === undefined)
@@ -6485,7 +6485,7 @@ var org;
                 function Physics(parent, screenW, screenH, gravX, gravY, screenAABBWidth, screenAABBHeight, borderBoxWidth, borderBoxHeight, pixelsPerMeter) {
                     var _this = this;
                     if (((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("def.processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("def.processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && ((typeof gravX === 'number') || gravX === null) && ((typeof gravY === 'number') || gravY === null) && ((typeof screenAABBWidth === 'number') || screenAABBWidth === null) && ((typeof screenAABBHeight === 'number') || screenAABBHeight === null) && ((typeof borderBoxWidth === 'number') || borderBoxWidth === null) && ((typeof borderBoxHeight === 'number') || borderBoxHeight === null) && ((typeof pixelsPerMeter === 'number') || pixelsPerMeter === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.m_world === undefined)
                             this.m_world = null;
                         if (this.m_parent === undefined)
@@ -6564,9 +6564,9 @@ var org;
                         })();
                     }
                     else if (((parent != null && (parent["__interfaces"] != null && parent["__interfaces"].indexOf("def.processing.core.PApplet") >= 0 || parent.constructor != null && parent.constructor["__interfaces"] != null && parent.constructor["__interfaces"].indexOf("def.processing.core.PApplet") >= 0)) || parent === null) && ((typeof screenW === 'number') || screenW === null) && ((typeof screenH === 'number') || screenH === null) && gravX === undefined && gravY === undefined && screenAABBWidth === undefined && screenAABBHeight === undefined && borderBoxWidth === undefined && borderBoxHeight === undefined && pixelsPerMeter === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         {
-                            var __args_6 = Array.prototype.slice.call(arguments);
+                            var __args_6 = arguments;
                             var gravX_1 = 0.0;
                             var gravY_1 = -10.0;
                             var screenAABBWidth_1 = Math.fround(2 * __args_6[1]);
@@ -8424,36 +8424,36 @@ var org;
                         this.connectionsUR = ([]);
                     }
                     BlobStructure.prototype.updateSprings = function () {
-                        for (var index150 = 0; index150 < this.connections.length; index150++) {
-                            var iiff = this.connections[index150];
+                        for (var index137 = 0; index137 < this.connections.length; index137++) {
+                            var iiff = this.connections[index137];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index151 = 0; index151 < this.connectionsR.length; index151++) {
-                            var iiff = this.connectionsR[index151];
+                        for (var index138 = 0; index138 < this.connectionsR.length; index138++) {
+                            var iiff = this.connectionsR[index138];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index152 = 0; index152 < this.connectionsDR.length; index152++) {
-                            var iiff = this.connectionsDR[index152];
+                        for (var index139 = 0; index139 < this.connectionsDR.length; index139++) {
+                            var iiff = this.connectionsDR[index139];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index153 = 0; index153 < this.connectionsD.length; index153++) {
-                            var iiff = this.connectionsD[index153];
+                        for (var index140 = 0; index140 < this.connectionsD.length; index140++) {
+                            var iiff = this.connectionsD[index140];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index154 = 0; index154 < this.connectionsUR.length; index154++) {
-                            var iiff = this.connectionsUR[index154];
+                        for (var index141 = 0; index141 < this.connectionsUR.length; index141++) {
+                            var iiff = this.connectionsUR[index141];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
@@ -8698,9 +8698,9 @@ var org;
                     function Triangle(x1, y1, x2, y2, x3, y3) {
                         var _this = this;
                         if (((typeof x1 === 'number') || x1 === null) && ((typeof y1 === 'number') || y1 === null) && ((typeof x2 === 'number') || x2 === null) && ((typeof y2 === 'number') || y2 === null) && ((typeof x3 === 'number') || x3 === null) && ((typeof y3 === 'number') || y3 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             {
-                                var __args_7 = Array.prototype.slice.call(arguments);
+                                var __args_7 = arguments;
                                 if (this.x === undefined)
                                     this.x = null;
                                 if (this.y === undefined)
@@ -8740,7 +8740,7 @@ var org;
                             })();
                         }
                         else if (x1 === undefined && y1 === undefined && x2 === undefined && y2 === undefined && x3 === undefined && y3 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.x === undefined)
                                 this.x = null;
                             if (this.y === undefined)
@@ -8801,7 +8801,7 @@ var org;
                     function Parameter(p) {
                         var _this = this;
                         if (((p != null && p instanceof org.jbox2d.util.sph.Parameter) || p === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.numPts === undefined)
                                 this.numPts = 0;
                             if (this.velocityScale === undefined)
@@ -8906,7 +8906,7 @@ var org;
                             })();
                         }
                         else if (p === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.numPts === undefined)
                                 this.numPts = 0;
                             if (this.velocityScale === undefined)
@@ -9032,7 +9032,7 @@ var org;
                     function Particle(p, v, m) {
                         var _this = this;
                         if (((p != null && p instanceof org.jbox2d.common.Vec2) || p === null) && ((v != null && v instanceof org.jbox2d.common.Vec2) || v === null) && ((typeof m === 'number') || m === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.pos === undefined)
                                 this.pos = null;
                             if (this.vel === undefined)
@@ -9076,7 +9076,7 @@ var org;
                             })();
                         }
                         else if (((p != null && p instanceof org.jbox2d.util.sph.Particle) || p === null) && v === undefined && m === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             var P_1 = __args[0];
                             if (this.pos === undefined)
                                 this.pos = null;
@@ -9122,7 +9122,7 @@ var org;
                             })();
                         }
                         else if (p === undefined && v === undefined && m === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.pos === undefined)
                                 this.pos = null;
                             if (this.vel === undefined)
@@ -9325,7 +9325,7 @@ var org;
                     function CircleDef(argVec) {
                         var _this = this;
                         if (((argVec != null && argVec instanceof org.jbox2d.common.Vec2) || argVec === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.radius === undefined)
                                 _this.radius = 0;
@@ -9352,7 +9352,7 @@ var org;
                             })();
                         }
                         else if (argVec === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.radius === undefined)
                                 _this.radius = 0;
@@ -10211,7 +10211,7 @@ var org;
                     function Polygon(_x, _y, nVert) {
                         var _this = this;
                         if (((_x != null && _x instanceof Array && (_x.length == 0 || _x[0] == null || (typeof _x[0] === 'number'))) || _x === null) && ((_y != null && _y instanceof Array && (_y.length == 0 || _y[0] == null || (typeof _y[0] === 'number'))) || _y === null) && ((typeof nVert === 'number') || nVert === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.nVertices === undefined)
                                 this.nVertices = 0;
                             if (this.x === undefined)
@@ -10247,9 +10247,9 @@ var org;
                             })();
                         }
                         else if (((_x != null && _x instanceof Array && (_x.length == 0 || _x[0] == null || (typeof _x[0] === 'number'))) || _x === null) && ((_y != null && _y instanceof Array && (_y.length == 0 || _y[0] == null || (typeof _y[0] === 'number'))) || _y === null) && nVert === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             {
-                                var __args_8 = Array.prototype.slice.call(arguments);
+                                var __args_8 = arguments;
                                 var nVert_1 = __args_8[0].length;
                                 if (this.nVertices === undefined)
                                     this.nVertices = 0;
@@ -10287,7 +10287,7 @@ var org;
                             }
                         }
                         else if (((_x != null && _x instanceof Array && (_x.length == 0 || _x[0] == null || (_x[0] != null && _x[0] instanceof org.jbox2d.common.Vec2))) || _x === null) && ((typeof _y === 'number') || _y === null) && nVert === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             var v_1 = __args[0];
                             var nVert_2 = __args[1];
                             if (this.nVertices === undefined)
@@ -10325,10 +10325,10 @@ var org;
                             })();
                         }
                         else if (((_x != null && _x instanceof Array && (_x.length == 0 || _x[0] == null || (_x[0] != null && _x[0] instanceof org.jbox2d.common.Vec2))) || _x === null) && _y === undefined && nVert === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             var v_2 = __args[0];
                             {
-                                var __args_9 = Array.prototype.slice.call(arguments);
+                                var __args_9 = arguments;
                                 var nVert_3 = __args_9[0].length;
                                 if (this.nVertices === undefined)
                                     this.nVertices = 0;
@@ -10366,7 +10366,7 @@ var org;
                             }
                         }
                         else if (((_x != null && _x instanceof org.jbox2d.util.nonconvex.Triangle) || _x === null) && _y === undefined && nVert === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             var t_1 = __args[0];
                             if (this.nVertices === undefined)
                                 this.nVertices = 0;
@@ -10402,7 +10402,7 @@ var org;
                             })();
                         }
                         else if (_x === undefined && _y === undefined && nVert === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.nVertices === undefined)
                                 this.nVertices = 0;
                             if (this.x === undefined)
@@ -11719,7 +11719,7 @@ var org;
                         this.connected = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(PolyNode.MAX_CONNECTED);
                         if (((pos != null && pos instanceof org.jbox2d.common.Vec2) || pos === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.nConnected === undefined)
                                 this.nConnected = 0;
                             if (this.visited === undefined)
@@ -11741,7 +11741,7 @@ var org;
                             })();
                         }
                         else if (pos === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             if (this.nConnected === undefined)
                                 this.nConnected = 0;
                             if (this.visited === undefined)
@@ -14112,7 +14112,7 @@ var org;
                     function CircleContact(shape1, shape2) {
                         var _this = this;
                         if (((shape1 != null && shape1 instanceof org.jbox2d.collision.shapes.Shape) || shape1 === null) && ((shape2 != null && shape2 instanceof org.jbox2d.collision.shapes.Shape) || shape2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, shape1, shape2) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -14130,7 +14130,7 @@ var org;
                             })();
                         }
                         else if (shape1 === undefined && shape2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -14263,7 +14263,7 @@ var org;
                     function EdgeAndCircleContact(s1, s2) {
                         var _this = this;
                         if (((s1 != null && s1 instanceof org.jbox2d.collision.shapes.Shape) || s1 === null) && ((s2 != null && s2 instanceof org.jbox2d.collision.shapes.Shape) || s2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, s1, s2) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -14277,7 +14277,7 @@ var org;
                             })();
                         }
                         else if (s1 === undefined && s2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -14410,7 +14410,7 @@ var org;
                     function PointAndCircleContact(shape1, shape2) {
                         var _this = this;
                         if (((shape1 != null && shape1 instanceof org.jbox2d.collision.shapes.Shape) || shape1 === null) && ((shape2 != null && shape2 instanceof org.jbox2d.collision.shapes.Shape) || shape2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, shape1, shape2) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -14428,7 +14428,7 @@ var org;
                             })();
                         }
                         else if (shape1 === undefined && shape2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -14561,7 +14561,7 @@ var org;
                     function PolyContact(s1, s2) {
                         var _this = this;
                         if (((s1 != null && s1 instanceof org.jbox2d.collision.shapes.Shape) || s1 === null) && ((s2 != null && s2 instanceof org.jbox2d.collision.shapes.Shape) || s2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, s1, s2) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -14575,7 +14575,7 @@ var org;
                             })();
                         }
                         else if (s1 === undefined && s2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -16825,7 +16825,7 @@ var org;
                 function Body(bd, world) {
                     var _this = this;
                     if (((bd != null && bd instanceof org.jbox2d.dynamics.BodyDef) || bd === null) && ((world != null && world instanceof org.jbox2d.dynamics.World) || world === null)) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         if (this.m_uniqueID === undefined)
                             this.m_uniqueID = 0;
                         if (this.m_flags === undefined)
@@ -16990,9 +16990,9 @@ var org;
                         })();
                     }
                     else if (bd === undefined && world === undefined) {
-                        var __args = Array.prototype.slice.call(arguments);
+                        var __args = arguments;
                         {
-                            var __args_10 = Array.prototype.slice.call(arguments);
+                            var __args_10 = arguments;
                             var bd_1 = new org.jbox2d.dynamics.BodyDef();
                             var world_1 = null;
                             if (this.m_uniqueID === undefined)
@@ -18045,8 +18045,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getConnectedBodyIsland_impl = function (parent, parentResult) {
                     var connected = this.getConnectedBodies();
-                    for (var index155 = 0; index155 < connected.length; index155++) {
-                        var b = connected[index155];
+                    for (var index142 = 0; index142 < connected.length; index142++) {
+                        var b = connected[index142];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18083,8 +18083,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getConnectedDynamicBodyIsland_impl = function (parent, parentResult) {
                     var connected = this.getConnectedBodies();
-                    for (var index156 = 0; index156 < connected.length; index156++) {
-                        var b = connected[index156];
+                    for (var index143 = 0; index143 < connected.length; index143++) {
+                        var b = connected[index143];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18120,8 +18120,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getTouchingBodyIsland_impl = function (parent, parentResult) {
                     var touching = this.getBodiesInContact();
-                    for (var index157 = 0; index157 < touching.length; index157++) {
-                        var b = touching[index157];
+                    for (var index144 = 0; index144 < touching.length; index144++) {
+                        var b = touching[index144];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18155,8 +18155,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getTouchingDynamicBodyIsland_impl = function (parent, parentResult) {
                     var touching = this.getBodiesInContact();
-                    for (var index158 = 0; index158 < touching.length; index158++) {
-                        var b = touching[index158];
+                    for (var index145 = 0; index145 < touching.length; index145++) {
+                        var b = touching[index145];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18260,7 +18260,7 @@ var org;
                     function SmoothParticle(p, v, m, d, pr, len, speedSnd) {
                         var _this = this;
                         if (((p != null && p instanceof org.jbox2d.common.Vec2) || p === null) && ((v != null && v instanceof org.jbox2d.common.Vec2) || v === null) && ((typeof m === 'number') || m === null) && ((typeof d === 'number') || d === null) && ((typeof pr === 'number') || pr === null) && ((typeof len === 'number') || len === null) && ((typeof speedSnd === 'number') || speedSnd === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, p, v, m) || this;
                             if (_this.ID === undefined)
                                 _this.ID = 0;
@@ -18321,7 +18321,7 @@ var org;
                             })();
                         }
                         else if (((p != null && p instanceof org.jbox2d.util.sph.SmoothParticle) || p === null) && v === undefined && m === undefined && d === undefined && pr === undefined && len === undefined && speedSnd === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             var SP_1 = __args[0];
                             _this = _super.call(this) || this;
                             if (_this.ID === undefined)
@@ -18407,7 +18407,7 @@ var org;
                             })();
                         }
                         else if (p === undefined && v === undefined && m === undefined && d === undefined && pr === undefined && len === undefined && speedSnd === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.ID === undefined)
                                 _this.ID = 0;
@@ -18711,7 +18711,7 @@ var org;
                     function PointAndPolyContact(s1, s2) {
                         var _this = this;
                         if (((s1 != null && s1 instanceof org.jbox2d.collision.shapes.Shape) || s1 === null) && ((s2 != null && s2 instanceof org.jbox2d.collision.shapes.Shape) || s2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, s1, s2) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -18727,7 +18727,7 @@ var org;
                             })();
                         }
                         else if (s1 === undefined && s2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -18896,7 +18896,7 @@ var org;
                     function PolyAndCircleContact(s1, s2) {
                         var _this = this;
                         if (((s1 != null && s1 instanceof org.jbox2d.collision.shapes.Shape) || s1 === null) && ((s2 != null && s2 instanceof org.jbox2d.collision.shapes.Shape) || s2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, s1, s2) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -18910,7 +18910,7 @@ var org;
                             })();
                         }
                         else if (s1 === undefined && s2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -19073,7 +19073,7 @@ var org;
                     function PolyAndEdgeContact(shape1, shape2) {
                         var _this = this;
                         if (((shape1 != null && shape1 instanceof org.jbox2d.collision.shapes.Shape) || shape1 === null) && ((shape2 != null && shape2 instanceof org.jbox2d.collision.shapes.Shape) || shape2 === null)) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this, shape1, shape2) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -19087,7 +19087,7 @@ var org;
                             })();
                         }
                         else if (shape1 === undefined && shape2 === undefined) {
-                            var __args = Array.prototype.slice.call(arguments);
+                            var __args = arguments;
                             _this = _super.call(this) || this;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
@@ -21106,8 +21106,8 @@ var org;
                  * @private
                  */
                 /*private*/ World.prototype.postStep = function (dt, iterations) {
-                    for (var index159 = 0; index159 < this.postStepList.length; index159++) {
-                        var s = this.postStepList[index159];
+                    for (var index146 = 0; index146 < this.postStepList.length; index146++) {
+                        var s = this.postStepList[index146];
                         {
                             s.step(dt, iterations);
                         }
