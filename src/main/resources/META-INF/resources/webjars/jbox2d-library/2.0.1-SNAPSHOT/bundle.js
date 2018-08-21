@@ -4580,8 +4580,8 @@ var org;
                             this.world = null;
                         (function () {
                             var w = null;
-                            for (var index134 = 0; index134 < bodies.length; index134++) {
-                                var b = bodies[index134];
+                            for (var index147 = 0; index147 < bodies.length; index147++) {
+                                var b = bodies[index147];
                                 {
                                     /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -4611,8 +4611,8 @@ var org;
                             this.world = null;
                         (function () {
                             var w = null;
-                            for (var index135 = 0; index135 < groups_1.length; index135++) {
-                                var bg = groups_1[index135];
+                            for (var index148 = 0; index148 < groups_1.length; index148++) {
+                                var bg = groups_1[index148];
                                 {
                                     /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -4659,8 +4659,8 @@ var org;
                 BodyGroup.prototype.getBodiesDeep = function () {
                     var res = ([]);
                     /* addAll */ (function (l1, l2) { return l1.push.apply(l1, l2); })(res, this.bodies);
-                    for (var index136 = 0; index136 < this.children.length; index136++) {
-                        var bg = this.children[index136];
+                    for (var index149 = 0; index149 < this.children.length; index149++) {
+                        var bg = this.children[index149];
                         {
                             /* addAll */ (function (l1, l2) { return l1.push.apply(l1, l2); })(res, bg.getBodiesDeep());
                         }
@@ -8534,36 +8534,36 @@ var org;
                         this.connectionsUR = ([]);
                     }
                     BlobStructure.prototype.updateSprings = function () {
-                        for (var index137 = 0; index137 < this.connections.length; index137++) {
-                            var iiff = this.connections[index137];
+                        for (var index150 = 0; index150 < this.connections.length; index150++) {
+                            var iiff = this.connections[index150];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index138 = 0; index138 < this.connectionsR.length; index138++) {
-                            var iiff = this.connectionsR[index138];
+                        for (var index151 = 0; index151 < this.connectionsR.length; index151++) {
+                            var iiff = this.connectionsR[index151];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index139 = 0; index139 < this.connectionsDR.length; index139++) {
-                            var iiff = this.connectionsDR[index139];
+                        for (var index152 = 0; index152 < this.connectionsDR.length; index152++) {
+                            var iiff = this.connectionsDR[index152];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index140 = 0; index140 < this.connectionsD.length; index140++) {
-                            var iiff = this.connectionsD[index140];
+                        for (var index153 = 0; index153 < this.connectionsD.length; index153++) {
+                            var iiff = this.connectionsD[index153];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (var index141 = 0; index141 < this.connectionsUR.length; index141++) {
-                            var iiff = this.connectionsUR[index141];
+                        for (var index154 = 0; index154 < this.connectionsUR.length; index154++) {
+                            var iiff = this.connectionsUR[index154];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
@@ -18413,8 +18413,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getConnectedBodyIsland_impl = function (parent, parentResult) {
                     var connected = this.getConnectedBodies();
-                    for (var index142 = 0; index142 < connected.length; index142++) {
-                        var b = connected[index142];
+                    for (var index155 = 0; index155 < connected.length; index155++) {
+                        var b = connected[index155];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18451,8 +18451,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getConnectedDynamicBodyIsland_impl = function (parent, parentResult) {
                     var connected = this.getConnectedBodies();
-                    for (var index143 = 0; index143 < connected.length; index143++) {
-                        var b = connected[index143];
+                    for (var index156 = 0; index156 < connected.length; index156++) {
+                        var b = connected[index156];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18488,8 +18488,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getTouchingBodyIsland_impl = function (parent, parentResult) {
                     var touching = this.getBodiesInContact();
-                    for (var index144 = 0; index144 < touching.length; index144++) {
-                        var b = touching[index144];
+                    for (var index157 = 0; index157 < touching.length; index157++) {
+                        var b = touching[index157];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -18523,8 +18523,8 @@ var org;
                 };
                 /*private*/ Body.prototype.getTouchingDynamicBodyIsland_impl = function (parent, parentResult) {
                     var touching = this.getBodiesInContact();
-                    for (var index145 = 0; index145 < touching.length; index145++) {
-                        var b = touching[index145];
+                    for (var index158 = 0; index158 < touching.length; index158++) {
+                        var b = touching[index158];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -21644,8 +21644,8 @@ var org;
                  * @private
                  */
                 /*private*/ World.prototype.postStep = function (dt, iterations) {
-                    for (var index146 = 0; index146 < this.postStepList.length; index146++) {
-                        var s = this.postStepList[index146];
+                    for (var index159 = 0; index159 < this.postStepList.length; index159++) {
+                        var s = this.postStepList[index159];
                         {
                             s.step(dt, iterations);
                         }

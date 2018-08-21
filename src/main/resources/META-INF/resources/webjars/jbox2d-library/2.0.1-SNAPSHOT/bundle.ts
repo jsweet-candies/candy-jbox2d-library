@@ -4400,8 +4400,8 @@ namespace org.jbox2d.dynamics {
                 if(this.world===undefined) this.world = null;
                 (() => {
                     let w : org.jbox2d.dynamics.World = null;
-                    for(let index134=0; index134 < bodies.length; index134++) {
-                        let b = bodies[index134];
+                    for(let index147=0; index147 < bodies.length; index147++) {
+                        let b = bodies[index147];
                         {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.bodies, b);
                             if(w == null) w = b.getWorld(); else if(b.getWorld() !== w) {
@@ -4420,8 +4420,8 @@ namespace org.jbox2d.dynamics {
                 if(this.world===undefined) this.world = null;
                 (() => {
                     let w : org.jbox2d.dynamics.World = null;
-                    for(let index135=0; index135 < groups.length; index135++) {
-                        let bg = groups[index135];
+                    for(let index148=0; index148 < groups.length; index148++) {
+                        let bg = groups[index148];
                         {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.children, bg);
                             if(w == null) w = bg.getWorld(); else if(bg.getWorld() !== w) {
@@ -4461,8 +4461,8 @@ namespace org.jbox2d.dynamics {
         public getBodiesDeep() : Array<org.jbox2d.dynamics.Body> {
             let res : Array<org.jbox2d.dynamics.Body> = <any>([]);
             /* addAll */((l1, l2) => l1.push.apply(l1, l2))(res, this.bodies);
-            for(let index136=0; index136 < this.children.length; index136++) {
-                let bg = this.children[index136];
+            for(let index149=0; index149 < this.children.length; index149++) {
+                let bg = this.children[index149];
                 {
                     /* addAll */((l1, l2) => l1.push.apply(l1, l2))(res, bg.getBodiesDeep());
                 }
@@ -8149,36 +8149,36 @@ namespace org.jbox2d.util.blob {
         currentDamping : number = 0.9;
 
         updateSprings() {
-            for(let index137=0; index137 < this.connections.length; index137++) {
-                let iiff = this.connections[index137];
+            for(let index150=0; index150 < this.connections.length; index150++) {
+                let iiff = this.connections[index150];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index138=0; index138 < this.connectionsR.length; index138++) {
-                let iiff = this.connectionsR[index138];
+            for(let index151=0; index151 < this.connectionsR.length; index151++) {
+                let iiff = this.connectionsR[index151];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index139=0; index139 < this.connectionsDR.length; index139++) {
-                let iiff = this.connectionsDR[index139];
+            for(let index152=0; index152 < this.connectionsDR.length; index152++) {
+                let iiff = this.connectionsDR[index152];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index140=0; index140 < this.connectionsD.length; index140++) {
-                let iiff = this.connectionsD[index140];
+            for(let index153=0; index153 < this.connectionsD.length; index153++) {
+                let iiff = this.connectionsD[index153];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index141=0; index141 < this.connectionsUR.length; index141++) {
-                let iiff = this.connectionsUR[index141];
+            for(let index154=0; index154 < this.connectionsUR.length; index154++) {
+                let iiff = this.connectionsUR[index154];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
@@ -17075,8 +17075,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getConnectedBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let connected : Array<Body> = this.getConnectedBodies();
-            for(let index142=0; index142 < connected.length; index142++) {
-                let b = connected[index142];
+            for(let index155=0; index155 < connected.length; index155++) {
+                let b = connected[index155];
                 {
                     if(b === parent || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -17101,8 +17101,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getConnectedDynamicBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let connected : Array<Body> = this.getConnectedBodies();
-            for(let index143=0; index143 < connected.length; index143++) {
-                let b = connected[index143];
+            for(let index156=0; index156 < connected.length; index156++) {
+                let b = connected[index156];
                 {
                     if(b === parent || !b.isDynamic() || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -17127,8 +17127,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getTouchingBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let touching : Array<Body> = this.getBodiesInContact();
-            for(let index144=0; index144 < touching.length; index144++) {
-                let b = touching[index144];
+            for(let index157=0; index157 < touching.length; index157++) {
+                let b = touching[index157];
                 {
                     if(b === parent || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -17151,8 +17151,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getTouchingDynamicBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let touching : Array<Body> = this.getBodiesInContact();
-            for(let index145=0; index145 < touching.length; index145++) {
-                let b = touching[index145];
+            for(let index158=0; index158 < touching.length; index158++) {
+                let b = touching[index158];
                 {
                     if(b === parent || !b.isDynamic() || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -19820,8 +19820,8 @@ namespace org.jbox2d.dynamics {
          * @private
          */
         /*private*/ postStep(dt : number, iterations : number) {
-            for(let index146=0; index146 < this.postStepList.length; index146++) {
-                let s = this.postStepList[index146];
+            for(let index159=0; index159 < this.postStepList.length; index159++) {
+                let s = this.postStepList[index159];
                 {
                     s.step(dt, iterations);
                 }
