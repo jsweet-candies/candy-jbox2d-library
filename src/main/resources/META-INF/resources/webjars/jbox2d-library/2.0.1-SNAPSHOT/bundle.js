@@ -347,7 +347,7 @@ var org;
                 function Collision() {
                 }
                 Collision.NULL_FEATURE_$LI$ = function () { if (Collision.NULL_FEATURE == null)
-                    Collision.NULL_FEATURE = Number.MAX_VALUE; return Collision.NULL_FEATURE; };
+                    Collision.NULL_FEATURE = 2147483647; return Collision.NULL_FEATURE; };
                 ;
                 return Collision;
             }());
@@ -544,11 +544,13 @@ var org;
                     /*private*/ this.CPp2 = new org.jbox2d.common.Vec2();
                     /*private*/ this.CPd = new org.jbox2d.common.Vec2();
                     for (var i = 0; i < 3; ++i) {
-                        this.p1s[i] = new org.jbox2d.common.Vec2();
-                        this.p2s[i] = new org.jbox2d.common.Vec2();
-                        this.points[i] = new org.jbox2d.common.Vec2();
+                        {
+                            this.p1s[i] = new org.jbox2d.common.Vec2();
+                            this.p2s[i] = new org.jbox2d.common.Vec2();
+                            this.points[i] = new org.jbox2d.common.Vec2();
+                        }
+                        ;
                     }
-                    ;
                 }
                 Distance.prototype.ProcessTwo = function (x1, x2, p1s, p2s, points) {
                     this.p2r.x = -points[1].x;
@@ -628,16 +630,18 @@ var org;
                 Distance.prototype.InPoints = function (w, points, pointCount) {
                     var k_tolerance = Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON);
                     for (var i = 0; i < pointCount; ++i) {
-                        var v = points[i];
-                        var dx = org.jbox2d.common.MathUtils.abs(Math.fround(w.x - v.x));
-                        var dy = org.jbox2d.common.MathUtils.abs(Math.fround(w.y - v.y));
-                        var mx = org.jbox2d.common.MathUtils.max$float$float(org.jbox2d.common.MathUtils.abs(w.x), org.jbox2d.common.MathUtils.abs(points[i].x));
-                        var my = org.jbox2d.common.MathUtils.max$float$float(org.jbox2d.common.MathUtils.abs(w.y), org.jbox2d.common.MathUtils.abs(points[i].y));
-                        if (dx < Math.fround(k_tolerance * (Math.fround(mx + 1.0))) && dy < Math.fround(k_tolerance * (Math.fround(my + 1.0)))) {
-                            return true;
+                        {
+                            var v = points[i];
+                            var dx = org.jbox2d.common.MathUtils.abs(Math.fround(w.x - v.x));
+                            var dy = org.jbox2d.common.MathUtils.abs(Math.fround(w.y - v.y));
+                            var mx = org.jbox2d.common.MathUtils.max$float$float(org.jbox2d.common.MathUtils.abs(w.x), org.jbox2d.common.MathUtils.abs(points[i].x));
+                            var my = org.jbox2d.common.MathUtils.max$float$float(org.jbox2d.common.MathUtils.abs(w.y), org.jbox2d.common.MathUtils.abs(points[i].y));
+                            if (dx < Math.fround(k_tolerance * (Math.fround(mx + 1.0))) && dy < Math.fround(k_tolerance * (Math.fround(my + 1.0)))) {
+                                return true;
+                            }
                         }
+                        ;
                     }
-                    ;
                     return false;
                 };
                 /**
@@ -666,61 +670,65 @@ var org;
                     var vSqr = 0.0;
                     var maxIterations = 20;
                     for (var iter = 0; iter < maxIterations; ++iter) {
-                        this.v.set$float$float(Math.fround(x2.x - x1.x), Math.fround(x2.y - x1.y));
-                        shape1.support(this.w1, xf1, this.v);
-                        this.vNeg.set$float$float(-this.v.x, -this.v.y);
-                        shape2.support(this.w2, xf2, this.vNeg);
-                        vSqr = org.jbox2d.common.Vec2.dot(this.v, this.v);
-                        this.w.set$float$float(Math.fround(this.w2.x - this.w1.x), Math.fround(this.w2.y - this.w1.y));
-                        var vw = org.jbox2d.common.Vec2.dot(this.v, this.w);
-                        if (Math.fround(vSqr - vw) <= Math.fround(0.01 * vSqr) || this.InPoints(this.w, this.points, pointCount)) {
-                            if (pointCount === 0) {
-                                x1.set$org_jbox2d_common_Vec2(this.w1);
-                                x2.set$org_jbox2d_common_Vec2(this.w2);
+                        {
+                            this.v.set$float$float(Math.fround(x2.x - x1.x), Math.fround(x2.y - x1.y));
+                            shape1.support(this.w1, xf1, this.v);
+                            this.vNeg.set$float$float(-this.v.x, -this.v.y);
+                            shape2.support(this.w2, xf2, this.vNeg);
+                            vSqr = org.jbox2d.common.Vec2.dot(this.v, this.v);
+                            this.w.set$float$float(Math.fround(this.w2.x - this.w1.x), Math.fround(this.w2.y - this.w1.y));
+                            var vw = org.jbox2d.common.Vec2.dot(this.v, this.w);
+                            if (Math.fround(vSqr - vw) <= Math.fround(0.01 * vSqr) || this.InPoints(this.w, this.points, pointCount)) {
+                                if (pointCount === 0) {
+                                    x1.set$org_jbox2d_common_Vec2(this.w1);
+                                    x2.set$org_jbox2d_common_Vec2(this.w2);
+                                }
+                                this.g_GJK_Iterations = iter;
+                                return org.jbox2d.common.MathUtils.sqrt(vSqr);
                             }
-                            this.g_GJK_Iterations = iter;
-                            return org.jbox2d.common.MathUtils.sqrt(vSqr);
-                        }
-                        switch ((pointCount)) {
-                            case 0:
-                                this.p1s[0].set$org_jbox2d_common_Vec2(this.w1);
-                                this.p2s[0].set$org_jbox2d_common_Vec2(this.w2);
-                                this.points[0].set$org_jbox2d_common_Vec2(this.w);
-                                x1.set$org_jbox2d_common_Vec2(this.p1s[0]);
-                                x2.set$org_jbox2d_common_Vec2(this.p2s[0]);
-                                ++pointCount;
-                                break;
-                            case 1:
-                                this.p1s[1].set$org_jbox2d_common_Vec2(this.w1);
-                                this.p2s[1].set$org_jbox2d_common_Vec2(this.w2);
-                                this.points[1].set$org_jbox2d_common_Vec2(this.w);
-                                pointCount = this.ProcessTwo(x1, x2, this.p1s, this.p2s, this.points);
-                                break;
-                            case 2:
-                                this.p1s[2].set$org_jbox2d_common_Vec2(this.w1);
-                                this.p2s[2].set$org_jbox2d_common_Vec2(this.w2);
-                                this.points[2].set$org_jbox2d_common_Vec2(this.w);
-                                pointCount = this.ProcessThree(x1, x2, this.p1s, this.p2s, this.points);
-                                break;
-                        }
-                        if (pointCount === 3) {
-                            this.g_GJK_Iterations = iter;
-                            return 0.0;
-                        }
-                        var maxSqr = -Number.MAX_VALUE;
-                        for (var i = 0; i < pointCount; ++i) {
-                            maxSqr = org.jbox2d.common.MathUtils.max$float$float(maxSqr, org.jbox2d.common.Vec2.dot(this.points[i], this.points[i]));
+                            switch ((pointCount)) {
+                                case 0:
+                                    this.p1s[0].set$org_jbox2d_common_Vec2(this.w1);
+                                    this.p2s[0].set$org_jbox2d_common_Vec2(this.w2);
+                                    this.points[0].set$org_jbox2d_common_Vec2(this.w);
+                                    x1.set$org_jbox2d_common_Vec2(this.p1s[0]);
+                                    x2.set$org_jbox2d_common_Vec2(this.p2s[0]);
+                                    ++pointCount;
+                                    break;
+                                case 1:
+                                    this.p1s[1].set$org_jbox2d_common_Vec2(this.w1);
+                                    this.p2s[1].set$org_jbox2d_common_Vec2(this.w2);
+                                    this.points[1].set$org_jbox2d_common_Vec2(this.w);
+                                    pointCount = this.ProcessTwo(x1, x2, this.p1s, this.p2s, this.points);
+                                    break;
+                                case 2:
+                                    this.p1s[2].set$org_jbox2d_common_Vec2(this.w1);
+                                    this.p2s[2].set$org_jbox2d_common_Vec2(this.w2);
+                                    this.points[2].set$org_jbox2d_common_Vec2(this.w);
+                                    pointCount = this.ProcessThree(x1, x2, this.p1s, this.p2s, this.points);
+                                    break;
+                            }
+                            if (pointCount === 3) {
+                                this.g_GJK_Iterations = iter;
+                                return 0.0;
+                            }
+                            var maxSqr = -3.4028235E38;
+                            for (var i = 0; i < pointCount; ++i) {
+                                {
+                                    maxSqr = org.jbox2d.common.MathUtils.max$float$float(maxSqr, org.jbox2d.common.Vec2.dot(this.points[i], this.points[i]));
+                                }
+                                ;
+                            }
+                            if (pointCount === 3 || vSqr <= Math.fround(Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON) * maxSqr)) {
+                                this.g_GJK_Iterations = iter;
+                                var vx = Math.fround(x2.x - x1.x);
+                                var vy = Math.fround(x2.y - x1.y);
+                                vSqr = Math.fround(Math.fround(vx * vx) + Math.fround(vy * vy));
+                                return org.jbox2d.common.MathUtils.sqrt(vSqr);
+                            }
                         }
                         ;
-                        if (pointCount === 3 || vSqr <= Math.fround(Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON) * maxSqr)) {
-                            this.g_GJK_Iterations = iter;
-                            var vx = Math.fround(x2.x - x1.x);
-                            var vy = Math.fround(x2.y - x1.y);
-                            vSqr = Math.fround(Math.fround(vx * vx) + Math.fround(vy * vy));
-                            return org.jbox2d.common.MathUtils.sqrt(vSqr);
-                        }
                     }
-                    ;
                     this.g_GJK_Iterations = maxIterations;
                     return org.jbox2d.common.MathUtils.sqrt(vSqr);
                 };
@@ -1005,7 +1013,7 @@ var org;
                         return this.DistanceGeneric(x1, x2, shape1, xf1, shape2, xf2);
                     }
                     else if (type1 === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE && type2 === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE) {
-                        return Number.MAX_VALUE;
+                        return 3.4028235E38;
                     }
                     else if (type1 === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE && type2 === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE) {
                         return this.DistanceCirclePoint(x2, x1, shape2, xf2, shape1, xf1);
@@ -1148,9 +1156,11 @@ var org;
                             } })(other.normal);
                             _this.pointCount = other.pointCount;
                             for (var i = 0; i < other.points.length; i++) {
-                                _this.points[i] = new org.jbox2d.collision.ManifoldPoint(other.points[i]);
+                                {
+                                    _this.points[i] = new org.jbox2d.collision.ManifoldPoint(other.points[i]);
+                                }
+                                ;
                             }
-                            ;
                         })();
                     }
                     else if (other === undefined) {
@@ -1171,9 +1181,11 @@ var org;
                             _this.points = (function (s) { var a = []; while (s-- > 0)
                                 a.push(null); return a; })(org.jbox2d.common.Settings.maxManifoldPoints);
                             for (var i = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; i++) {
-                                _this.points[i] = new org.jbox2d.collision.ManifoldPoint();
+                                {
+                                    _this.points[i] = new org.jbox2d.collision.ManifoldPoint();
+                                }
+                                ;
                             }
-                            ;
                             _this.normal = new org.jbox2d.common.Vec2();
                             _this.pointCount = 0;
                         })();
@@ -1188,9 +1200,11 @@ var org;
                  */
                 Manifold.prototype.set = function (cp) {
                     for (var i = 0; i < cp.pointCount; i++) {
-                        this.points[i].set(cp.points[i]);
+                        {
+                            this.points[i].set(cp.points[i]);
+                        }
+                        ;
                     }
-                    ;
                     this.normal.set$org_jbox2d_common_Vec2(cp.normal);
                     this.pointCount = cp.pointCount;
                     return this;
@@ -1861,22 +1875,24 @@ var org;
                         var cLocalx = Math.fround(Math.fround(v1x * xf1.R.col1.x) + Math.fround(v1y * xf1.R.col1.y));
                         var cLocaly = Math.fround(Math.fround(v1x * xf1.R.col2.x) + Math.fround(v1y * xf1.R.col2.y));
                         var normalIndex = 0;
-                        var separation = -Number.MAX_VALUE;
+                        var separation = -3.4028235E38;
                         var radius = circle.getRadius();
                         var vertexCount = polygon.getVertexCount();
                         var vertices = polygon.getVertices();
                         var normals = polygon.getNormals();
                         for (var i = 0; i < vertexCount; ++i) {
-                            var s = Math.fround(Math.fround(normals[i].x * (Math.fround(cLocalx - vertices[i].x))) + Math.fround(normals[i].y * (Math.fround(cLocaly - vertices[i].y))));
-                            if (s > circle.m_radius) {
-                                return;
+                            {
+                                var s = Math.fround(Math.fround(normals[i].x * (Math.fround(cLocalx - vertices[i].x))) + Math.fround(normals[i].y * (Math.fround(cLocaly - vertices[i].y))));
+                                if (s > circle.m_radius) {
+                                    return;
+                                }
+                                if (s > separation) {
+                                    normalIndex = i;
+                                    separation = s;
+                                }
                             }
-                            if (s > separation) {
-                                normalIndex = i;
-                                separation = s;
-                            }
+                            ;
                         }
-                        ;
                         if (separation < org.jbox2d.common.Settings.EPSILON) {
                             manifold.pointCount = 1;
                             manifold.normal.x = Math.fround(Math.fround(xf1.R.col1.x * normals[normalIndex].x) + Math.fround(xf1.R.col2.x * normals[normalIndex].y));
@@ -2116,15 +2132,17 @@ var org;
                         var normal1x = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col1);
                         var normal1y = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col2);
                         var index = 0;
-                        var minDot = Number.MAX_VALUE;
+                        var minDot = 3.4028235E38;
                         for (var i = 0; i < count2; ++i) {
-                            var dot = Math.fround(Math.fround(vertices2[i].x * normal1x) + Math.fround(vertices2[i].y * normal1y));
-                            if (dot < minDot) {
-                                minDot = dot;
-                                index = i;
+                            {
+                                var dot = Math.fround(Math.fround(vertices2[i].x * normal1x) + Math.fround(vertices2[i].y * normal1y));
+                                if (dot < minDot) {
+                                    minDot = dot;
+                                    index = i;
+                                }
                             }
+                            ;
                         }
-                        ;
                         var v = vertices1[edge1];
                         var v1x = Math.fround(Math.fround(xf1.position.x + Math.fround(xf1.R.col1.x * v.x)) + Math.fround(xf1.R.col2.x * v.y));
                         var v1y = Math.fround(Math.fround(xf1.position.y + Math.fround(xf1.R.col1.y * v.x)) + Math.fround(xf1.R.col2.y * v.y));
@@ -2157,15 +2175,17 @@ var org;
                         this.dLocal1.x = (Math.fround(Math.fround(dx * b.x) + Math.fround(dy * b.y)));
                         this.dLocal1.y = (Math.fround(Math.fround(dx * b1.x) + Math.fround(dy * b1.y)));
                         var edge = 0;
-                        var maxDot = -Number.MAX_VALUE;
+                        var maxDot = -3.4028235E38;
                         for (var i = 0; i < count1; ++i) {
-                            var dot = org.jbox2d.common.Vec2.dot(normals1[i], this.dLocal1);
-                            if (dot > maxDot) {
-                                maxDot = dot;
-                                edge = i;
+                            {
+                                var dot = org.jbox2d.common.Vec2.dot(normals1[i], this.dLocal1);
+                                if (dot > maxDot) {
+                                    maxDot = dot;
+                                    edge = i;
+                                }
                             }
+                            ;
                         }
-                        ;
                         var s = this.edgeSeparation(poly1, xf1, edge, poly2, xf2);
                         if (s > 0.0) {
                             separation.bestSeparation = s;
@@ -2202,23 +2222,25 @@ var org;
                             return separation;
                         }
                         while ((true)) {
-                            if (increment === -1) {
-                                edge = bestEdge - 1 >= 0 ? bestEdge - 1 : count1 - 1;
-                            }
-                            else {
-                                edge = bestEdge + 1 < count1 ? bestEdge + 1 : 0;
-                            }
-                            s = this.edgeSeparation(poly1, xf1, edge, poly2, xf2);
-                            if (s > 0.0) {
-                                separation.bestSeparation = s;
-                                return separation;
-                            }
-                            if (s > bestSeparation) {
-                                bestEdge = edge;
-                                bestSeparation = s;
-                            }
-                            else {
-                                break;
+                            {
+                                if (increment === -1) {
+                                    edge = bestEdge - 1 >= 0 ? bestEdge - 1 : count1 - 1;
+                                }
+                                else {
+                                    edge = bestEdge + 1 < count1 ? bestEdge + 1 : 0;
+                                }
+                                s = this.edgeSeparation(poly1, xf1, edge, poly2, xf2);
+                                if (s > 0.0) {
+                                    separation.bestSeparation = s;
+                                    return separation;
+                                }
+                                if (s > bestSeparation) {
+                                    bestEdge = edge;
+                                    bestSeparation = s;
+                                }
+                                else {
+                                    break;
+                                }
                             }
                         }
                         ;
@@ -2235,15 +2257,17 @@ var org;
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals1[edge1], this.mulTemp);
                         org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf2.R, this.mulTemp, this.normal1);
                         var index = 0;
-                        var minDot = Number.MAX_VALUE;
+                        var minDot = 3.4028235E38;
                         for (var i = 0; i < count2; ++i) {
-                            var dot = org.jbox2d.common.Vec2.dot(this.normal1, normals2[i]);
-                            if (dot < minDot) {
-                                minDot = dot;
-                                index = i;
+                            {
+                                var dot = org.jbox2d.common.Vec2.dot(this.normal1, normals2[i]);
+                                if (dot < minDot) {
+                                    minDot = dot;
+                                    index = i;
+                                }
                             }
+                            ;
                         }
-                        ;
                         var i1 = index;
                         var i2 = i1 + 1 < count2 ? i1 + 1 : 0;
                         c[0] = new CollidePoly.ClipVertex();
@@ -2326,25 +2350,27 @@ var org;
                         }
                         var pointCount = 0;
                         for (var i = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; ++i) {
-                            var separation = Math.fround(org.jbox2d.common.Vec2.dot(this.frontNormal, clipPoints2[i].v) - frontOffset);
-                            if (separation <= 0.0) {
-                                var cp = manif.points[pointCount];
-                                cp.separation = separation;
-                                var vec = clipPoints2[i].v;
-                                var u1x = Math.fround(vec.x - xfA.position.x);
-                                var u1y = Math.fround(vec.y - xfA.position.y);
-                                cp.localPoint1.x = (Math.fround(Math.fround(u1x * xfA.R.col1.x) + Math.fround(u1y * xfA.R.col1.y)));
-                                cp.localPoint1.y = (Math.fround(Math.fround(u1x * xfA.R.col2.x) + Math.fround(u1y * xfA.R.col2.y)));
-                                u1x = Math.fround(vec.x - xfB.position.x);
-                                u1y = Math.fround(vec.y - xfB.position.y);
-                                cp.localPoint2.x = (Math.fround(Math.fround(u1x * xfB.R.col1.x) + Math.fround(u1y * xfB.R.col1.y)));
-                                cp.localPoint2.y = (Math.fround(Math.fround(u1x * xfB.R.col2.x) + Math.fround(u1y * xfB.R.col2.y)));
-                                cp.id.set(clipPoints2[i].id);
-                                cp.id.features.flip = flip;
-                                ++pointCount;
+                            {
+                                var separation = Math.fround(org.jbox2d.common.Vec2.dot(this.frontNormal, clipPoints2[i].v) - frontOffset);
+                                if (separation <= 0.0) {
+                                    var cp = manif.points[pointCount];
+                                    cp.separation = separation;
+                                    var vec = clipPoints2[i].v;
+                                    var u1x = Math.fround(vec.x - xfA.position.x);
+                                    var u1y = Math.fround(vec.y - xfA.position.y);
+                                    cp.localPoint1.x = (Math.fround(Math.fround(u1x * xfA.R.col1.x) + Math.fround(u1y * xfA.R.col1.y)));
+                                    cp.localPoint1.y = (Math.fround(Math.fround(u1x * xfA.R.col2.x) + Math.fround(u1y * xfA.R.col2.y)));
+                                    u1x = Math.fround(vec.x - xfB.position.x);
+                                    u1y = Math.fround(vec.y - xfB.position.y);
+                                    cp.localPoint2.x = (Math.fround(Math.fround(u1x * xfB.R.col1.x) + Math.fround(u1y * xfB.R.col1.y)));
+                                    cp.localPoint2.y = (Math.fround(Math.fround(u1x * xfB.R.col2.x) + Math.fround(u1y * xfB.R.col2.y)));
+                                    cp.id.set(clipPoints2[i].id);
+                                    cp.id.features.flip = flip;
+                                    ++pointCount;
+                                }
                             }
+                            ;
                         }
-                        ;
                         manif.pointCount = pointCount;
                         return;
                     };
@@ -2361,23 +2387,25 @@ var org;
                         org.jbox2d.common.XForm.mulToOut(xf2, point.getMemberLocalPosition(), this.colPPc);
                         org.jbox2d.common.XForm.mulTransToOut(xf1, this.colPPc, this.colPPcLocal);
                         var normalIndex = 0;
-                        var separation = -Number.MAX_VALUE;
+                        var separation = -3.4028235E38;
                         var vertexCount = polygon.getVertexCount();
                         var vertices = polygon.getVertices();
                         var normals = polygon.getNormals();
                         for (var i = 0; i < vertexCount; ++i) {
-                            this.colPPsub.set$org_jbox2d_common_Vec2(this.colPPcLocal);
-                            this.colPPsub.subLocal(vertices[i]);
-                            var s = org.jbox2d.common.Vec2.dot(normals[i], this.colPPsub);
-                            if (s > 0) {
-                                return;
+                            {
+                                this.colPPsub.set$org_jbox2d_common_Vec2(this.colPPcLocal);
+                                this.colPPsub.subLocal(vertices[i]);
+                                var s = org.jbox2d.common.Vec2.dot(normals[i], this.colPPsub);
+                                if (s > 0) {
+                                    return;
+                                }
+                                if (s > separation) {
+                                    normalIndex = i;
+                                    separation = s;
+                                }
                             }
-                            if (s > separation) {
-                                normalIndex = i;
-                                separation = s;
-                            }
+                            ;
                         }
-                        ;
                         if (separation < org.jbox2d.common.Settings.EPSILON) {
                             manifold.pointCount = 1;
                             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals[normalIndex], manifold.normal);
@@ -2451,11 +2479,11 @@ var org;
                         org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, this.PEn, this.PEnLocal);
                         var separation1;
                         var separationIndex1 = -1;
-                        var separationMax1 = -Number.MAX_VALUE;
+                        var separationMax1 = -3.4028235E38;
                         var separation2;
                         var separationIndex2 = -1;
-                        var separationMax2 = -Number.MAX_VALUE;
-                        var separationMax = -Number.MAX_VALUE;
+                        var separationMax2 = -3.4028235E38;
+                        var separationMax = -3.4028235E38;
                         var separationV1 = false;
                         var separationIndex = -1;
                         var vertexCount = polygon.getVertexCount();
@@ -2469,58 +2497,60 @@ var org;
                         var nextSepN = 0.0;
                         var enterSepN = 0.0;
                         var exitSepN = 0.0;
-                        var deepestSepN = Number.MAX_VALUE;
+                        var deepestSepN = 3.4028235E38;
                         this.temp.set$org_jbox2d_common_Vec2(vertices[vertexCount - 1]);
                         this.temp.subLocal(this.PEv1Local);
                         prevSepN = org.jbox2d.common.Vec2.dot(this.temp, this.PEnLocal);
                         for (var i = 0; i < vertexCount; i++) {
-                            this.temp.set$org_jbox2d_common_Vec2(this.PEv1Local);
-                            this.temp.subLocal(vertices[i]);
-                            separation1 = org.jbox2d.common.Vec2.dot(this.temp, normals[i]);
-                            this.temp.set$org_jbox2d_common_Vec2(this.PEv2Local);
-                            this.temp.subLocal(vertices[i]);
-                            separation2 = org.jbox2d.common.Vec2.dot(this.temp, normals[i]);
-                            if (separation2 < separation1) {
-                                if (separation2 > separationMax) {
-                                    separationMax = separation2;
-                                    separationV1 = false;
-                                    separationIndex = i;
+                            {
+                                this.temp.set$org_jbox2d_common_Vec2(this.PEv1Local);
+                                this.temp.subLocal(vertices[i]);
+                                separation1 = org.jbox2d.common.Vec2.dot(this.temp, normals[i]);
+                                this.temp.set$org_jbox2d_common_Vec2(this.PEv2Local);
+                                this.temp.subLocal(vertices[i]);
+                                separation2 = org.jbox2d.common.Vec2.dot(this.temp, normals[i]);
+                                if (separation2 < separation1) {
+                                    if (separation2 > separationMax) {
+                                        separationMax = separation2;
+                                        separationV1 = false;
+                                        separationIndex = i;
+                                    }
                                 }
-                            }
-                            else {
-                                if (separation1 > separationMax) {
-                                    separationMax = separation1;
-                                    separationV1 = true;
-                                    separationIndex = i;
+                                else {
+                                    if (separation1 > separationMax) {
+                                        separationMax = separation1;
+                                        separationV1 = true;
+                                        separationIndex = i;
+                                    }
                                 }
+                                if (separation1 > separationMax1) {
+                                    separationMax1 = separation1;
+                                    separationIndex1 = i;
+                                }
+                                if (separation2 > separationMax2) {
+                                    separationMax2 = separation2;
+                                    separationIndex2 = i;
+                                }
+                                this.temp.set$org_jbox2d_common_Vec2(vertices[i]);
+                                this.temp.subLocal(this.PEv1Local);
+                                nextSepN = org.jbox2d.common.Vec2.dot(this.temp, this.PEnLocal);
+                                if (nextSepN >= 0.0 && prevSepN < 0.0) {
+                                    exitStartIndex = (i === 0) ? vertexCount - 1 : i - 1;
+                                    exitEndIndex = i;
+                                    exitSepN = prevSepN;
+                                }
+                                else if (nextSepN < 0.0 && prevSepN >= 0.0) {
+                                    enterStartIndex = (i === 0) ? vertexCount - 1 : i - 1;
+                                    enterEndIndex = i;
+                                    enterSepN = nextSepN;
+                                }
+                                if (nextSepN < deepestSepN) {
+                                    deepestSepN = nextSepN;
+                                }
+                                prevSepN = nextSepN;
                             }
-                            if (separation1 > separationMax1) {
-                                separationMax1 = separation1;
-                                separationIndex1 = i;
-                            }
-                            if (separation2 > separationMax2) {
-                                separationMax2 = separation2;
-                                separationIndex2 = i;
-                            }
-                            this.temp.set$org_jbox2d_common_Vec2(vertices[i]);
-                            this.temp.subLocal(this.PEv1Local);
-                            nextSepN = org.jbox2d.common.Vec2.dot(this.temp, this.PEnLocal);
-                            if (nextSepN >= 0.0 && prevSepN < 0.0) {
-                                exitStartIndex = (i === 0) ? vertexCount - 1 : i - 1;
-                                exitEndIndex = i;
-                                exitSepN = prevSepN;
-                            }
-                            else if (nextSepN < 0.0 && prevSepN >= 0.0) {
-                                enterStartIndex = (i === 0) ? vertexCount - 1 : i - 1;
-                                enterEndIndex = i;
-                                enterSepN = nextSepN;
-                            }
-                            if (nextSepN < deepestSepN) {
-                                deepestSepN = nextSepN;
-                            }
-                            prevSepN = nextSepN;
+                            ;
                         }
-                        ;
                         if (enterStartIndex === -1) {
                             return;
                         }
@@ -3967,7 +3997,7 @@ var org;
                  * @return {boolean}
                  */
                 Vec2.prototype.isValid = function () {
-                    return this.x !== NaN && this.x !== Number.NEGATIVE_INFINITY && this.x !== Number.POSITIVE_INFINITY && this.y !== NaN && this.y !== Number.NEGATIVE_INFINITY && this.y !== Number.POSITIVE_INFINITY;
+                    return this.x !== NaN && this.x !== -Infinity && this.x !== Infinity && this.y !== NaN && this.y !== -Infinity && this.y !== Infinity;
                 };
                 /**
                  * Return a new vector that has positive components.
@@ -4906,10 +4936,12 @@ var org;
                             else {
                                 var c = register.createFcn.create(shape2, shape1);
                                 for (var i = 0; i < c.getManifoldCount(); ++i) {
-                                    var m = c.getManifolds()[i];
-                                    m.normal.negateLocal();
+                                    {
+                                        var m = c.getManifolds()[i];
+                                        m.normal.negateLocal();
+                                    }
+                                    ;
                                 }
-                                ;
                                 return c;
                             }
                         }
@@ -4919,12 +4951,14 @@ var org;
                     };
                     /*private*/ Contact.getContactRegister = function (type1, type2) {
                         for (var i = 0; i < Contact.s_registers.length; ++i) {
-                            var cr = Contact.s_registers[i];
-                            if (cr.s1 === type1 && cr.s2 === type2) {
-                                return cr;
+                            {
+                                var cr = Contact.s_registers[i];
+                                if (cr.s1 === type1 && cr.s2 === type2) {
+                                    return cr;
+                                }
                             }
+                            ;
                         }
-                        ;
                         return null;
                     };
                     Contact.destroy = function (contact) {
@@ -4975,9 +5009,11 @@ var org;
                         this.points = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(org.jbox2d.common.Settings.maxManifoldPoints);
                         for (var i = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; i++) {
-                            this.points[i] = new org.jbox2d.dynamics.contacts.ContactConstraintPoint();
+                            {
+                                this.points[i] = new org.jbox2d.dynamics.contacts.ContactConstraintPoint();
+                            }
+                            ;
                         }
-                        ;
                         this.pointCount = 0;
                         this.normal = new org.jbox2d.common.Vec2();
                         this.manifold = new org.jbox2d.collision.Manifold();
@@ -4991,9 +5027,11 @@ var org;
                         this.body1 = cp.body1;
                         this.body2 = cp.body2;
                         for (var i = 0; i < cp.pointCount; i++) {
-                            this.points[i].set(cp.points[i]);
+                            {
+                                this.points[i].set(cp.points[i]);
+                            }
+                            ;
                         }
-                        ;
                     };
                     return ContactConstraint;
                 }());
@@ -5228,257 +5266,287 @@ var org;
                         this.m_step = step;
                         this.m_constraintCount = 0;
                         for (var i = 0; i < contactCount; i++) {
-                            this.m_constraintCount += contacts[i].getManifoldCount();
+                            {
+                                this.m_constraintCount += contacts[i].getManifoldCount();
+                            }
+                            ;
                         }
-                        ;
                         this.m_constraints = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(this.m_constraintCount);
                         for (var i = 0; i < this.m_constraintCount; i++) {
-                            this.m_constraints[i] = new org.jbox2d.dynamics.contacts.ContactConstraint();
-                        }
-                        ;
-                        var count = 0;
-                        for (var i = 0; i < contactCount; i++) {
-                            var contact = contacts[i];
-                            var b1 = contact.m_shape1.getBody();
-                            var b2 = contact.m_shape2.getBody();
-                            var manifoldCount = contact.getManifoldCount();
-                            var manifolds = contact.getManifolds();
-                            var friction = contact.m_friction;
-                            var restitution = contact.m_restitution;
-                            var v1 = b1.m_linearVelocity;
-                            var v2 = b2.m_linearVelocity;
-                            var w1 = b1.m_angularVelocity;
-                            var w2 = b2.m_angularVelocity;
-                            for (var j = 0; j < manifoldCount; ++j) {
-                                var manifold = manifolds[j];
-                                var normal = manifold.normal;
-                                var c = this.m_constraints[count];
-                                c.body1 = b1;
-                                c.body2 = b2;
-                                c.manifold = manifold;
-                                c.normal.set$org_jbox2d_common_Vec2(normal);
-                                c.pointCount = manifold.pointCount;
-                                c.friction = friction;
-                                c.restitution = restitution;
-                                for (var k = 0; k < c.pointCount; ++k) {
-                                    var cp = manifold.points[k];
-                                    var ccp = c.points[k];
-                                    ccp.normalImpulse = cp.normalImpulse;
-                                    ccp.tangentImpulse = cp.tangentImpulse;
-                                    ccp.separation = cp.separation;
-                                    ccp.positionImpulse = 0.0;
-                                    ccp.localAnchor1.set$org_jbox2d_common_Vec2(cp.localPoint1);
-                                    ccp.localAnchor2.set$org_jbox2d_common_Vec2(cp.localPoint2);
-                                    var v3x = Math.fround(cp.localPoint1.x - b1.m_sweep.localCenter.x);
-                                    var v3y = Math.fround(cp.localPoint1.y - b1.m_sweep.localCenter.y);
-                                    ccp.r1.set$float$float(Math.fround(Math.fround(b1.m_xf.R.col1.x * v3x) + Math.fround(b1.m_xf.R.col2.x * v3y)), Math.fround(Math.fround(b1.m_xf.R.col1.y * v3x) + Math.fround(b1.m_xf.R.col2.y * v3y)));
-                                    var v4x = Math.fround(cp.localPoint2.x - b2.m_sweep.localCenter.x);
-                                    var v4y = Math.fround(cp.localPoint2.y - b2.m_sweep.localCenter.y);
-                                    ccp.r2.set$float$float(Math.fround(Math.fround(b2.m_xf.R.col1.x * v4x) + Math.fround(b2.m_xf.R.col2.x * v4y)), Math.fround(Math.fround(b2.m_xf.R.col1.y * v4x) + Math.fround(b2.m_xf.R.col2.y * v4y)));
-                                    var rn1 = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(ccp.r1, normal);
-                                    var rn2 = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(ccp.r2, normal);
-                                    rn1 *= rn1;
-                                    rn2 *= rn2;
-                                    var kNormal = Math.fround(Math.fround(Math.fround(b1.m_invMass + b2.m_invMass) + Math.fround(b1.m_invI * rn1)) + Math.fround(b2.m_invI * rn2));
-                                    ccp.normalMass = Math.fround(1.0 / kNormal);
-                                    var kEqualized = Math.fround(Math.fround(b1.m_mass * b1.m_invMass) + Math.fround(b2.m_mass * b2.m_invMass));
-                                    kEqualized += Math.fround(Math.fround(Math.fround(b1.m_mass * b1.m_invI) * rn1) + Math.fround(Math.fround(b2.m_mass * b2.m_invI) * rn2));
-                                    ccp.equalizedMass = Math.fround(1.0 / kEqualized);
-                                    var tangentx = normal.y;
-                                    var tangenty = -normal.x;
-                                    var a = ccp.r1;
-                                    var rt1 = Math.fround(Math.fround(a.x * tangenty) - Math.fround(a.y * tangentx));
-                                    var a1 = ccp.r2;
-                                    var rt2 = Math.fround(Math.fround(a1.x * tangenty) - Math.fround(a1.y * tangentx));
-                                    rt1 *= rt1;
-                                    rt2 *= rt2;
-                                    var kTangent = Math.fround(Math.fround(Math.fround(b1.m_invMass + b2.m_invMass) + Math.fround(b1.m_invI * rt1)) + Math.fround(b2.m_invI * rt2));
-                                    ccp.tangentMass = Math.fround(1.0 / kTangent);
-                                    ccp.velocityBias = 0.0;
-                                    if (ccp.separation > 0.0) {
-                                        ccp.velocityBias = Math.fround(-60.0 * ccp.separation);
-                                    }
-                                    var a2 = ccp.r2;
-                                    var a3 = ccp.r1;
-                                    var bufferx = Math.fround(Math.fround(Math.fround(Math.fround(-w2 * a2.y) - (Math.fround(-w1 * a3.y))) + v2.x) - v1.x);
-                                    var buffery = Math.fround(Math.fround(Math.fround(Math.fround(w2 * a2.x) - Math.fround(w1 * a3.x)) + v2.y) - v1.y);
-                                    var vRel = Math.fround(Math.fround(c.normal.x * bufferx) + Math.fround(c.normal.y * buffery));
-                                    if (vRel < -org.jbox2d.common.Settings.velocityThreshold_$LI$()) {
-                                        ccp.velocityBias += Math.fround(-c.restitution * vRel);
-                                    }
-                                }
-                                ;
-                                ++count;
+                            {
+                                this.m_constraints[i] = new org.jbox2d.dynamics.contacts.ContactConstraint();
                             }
                             ;
                         }
-                        ;
+                        var count = 0;
+                        for (var i = 0; i < contactCount; i++) {
+                            {
+                                var contact = contacts[i];
+                                var b1 = contact.m_shape1.getBody();
+                                var b2 = contact.m_shape2.getBody();
+                                var manifoldCount = contact.getManifoldCount();
+                                var manifolds = contact.getManifolds();
+                                var friction = contact.m_friction;
+                                var restitution = contact.m_restitution;
+                                var v1 = b1.m_linearVelocity;
+                                var v2 = b2.m_linearVelocity;
+                                var w1 = b1.m_angularVelocity;
+                                var w2 = b2.m_angularVelocity;
+                                for (var j = 0; j < manifoldCount; ++j) {
+                                    {
+                                        var manifold = manifolds[j];
+                                        var normal = manifold.normal;
+                                        var c = this.m_constraints[count];
+                                        c.body1 = b1;
+                                        c.body2 = b2;
+                                        c.manifold = manifold;
+                                        c.normal.set$org_jbox2d_common_Vec2(normal);
+                                        c.pointCount = manifold.pointCount;
+                                        c.friction = friction;
+                                        c.restitution = restitution;
+                                        for (var k = 0; k < c.pointCount; ++k) {
+                                            {
+                                                var cp = manifold.points[k];
+                                                var ccp = c.points[k];
+                                                ccp.normalImpulse = cp.normalImpulse;
+                                                ccp.tangentImpulse = cp.tangentImpulse;
+                                                ccp.separation = cp.separation;
+                                                ccp.positionImpulse = 0.0;
+                                                ccp.localAnchor1.set$org_jbox2d_common_Vec2(cp.localPoint1);
+                                                ccp.localAnchor2.set$org_jbox2d_common_Vec2(cp.localPoint2);
+                                                var v3x = Math.fround(cp.localPoint1.x - b1.m_sweep.localCenter.x);
+                                                var v3y = Math.fround(cp.localPoint1.y - b1.m_sweep.localCenter.y);
+                                                ccp.r1.set$float$float(Math.fround(Math.fround(b1.m_xf.R.col1.x * v3x) + Math.fround(b1.m_xf.R.col2.x * v3y)), Math.fround(Math.fround(b1.m_xf.R.col1.y * v3x) + Math.fround(b1.m_xf.R.col2.y * v3y)));
+                                                var v4x = Math.fround(cp.localPoint2.x - b2.m_sweep.localCenter.x);
+                                                var v4y = Math.fround(cp.localPoint2.y - b2.m_sweep.localCenter.y);
+                                                ccp.r2.set$float$float(Math.fround(Math.fround(b2.m_xf.R.col1.x * v4x) + Math.fround(b2.m_xf.R.col2.x * v4y)), Math.fround(Math.fround(b2.m_xf.R.col1.y * v4x) + Math.fround(b2.m_xf.R.col2.y * v4y)));
+                                                var rn1 = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(ccp.r1, normal);
+                                                var rn2 = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(ccp.r2, normal);
+                                                rn1 *= rn1;
+                                                rn2 *= rn2;
+                                                var kNormal = Math.fround(Math.fround(Math.fround(b1.m_invMass + b2.m_invMass) + Math.fround(b1.m_invI * rn1)) + Math.fround(b2.m_invI * rn2));
+                                                ccp.normalMass = Math.fround(1.0 / kNormal);
+                                                var kEqualized = Math.fround(Math.fround(b1.m_mass * b1.m_invMass) + Math.fround(b2.m_mass * b2.m_invMass));
+                                                kEqualized += Math.fround(Math.fround(Math.fround(b1.m_mass * b1.m_invI) * rn1) + Math.fround(Math.fround(b2.m_mass * b2.m_invI) * rn2));
+                                                ccp.equalizedMass = Math.fround(1.0 / kEqualized);
+                                                var tangentx = normal.y;
+                                                var tangenty = -normal.x;
+                                                var a = ccp.r1;
+                                                var rt1 = Math.fround(Math.fround(a.x * tangenty) - Math.fround(a.y * tangentx));
+                                                var a1 = ccp.r2;
+                                                var rt2 = Math.fround(Math.fround(a1.x * tangenty) - Math.fround(a1.y * tangentx));
+                                                rt1 *= rt1;
+                                                rt2 *= rt2;
+                                                var kTangent = Math.fround(Math.fround(Math.fround(b1.m_invMass + b2.m_invMass) + Math.fround(b1.m_invI * rt1)) + Math.fround(b2.m_invI * rt2));
+                                                ccp.tangentMass = Math.fround(1.0 / kTangent);
+                                                ccp.velocityBias = 0.0;
+                                                if (ccp.separation > 0.0) {
+                                                    ccp.velocityBias = Math.fround(-60.0 * ccp.separation);
+                                                }
+                                                var a2 = ccp.r2;
+                                                var a3 = ccp.r1;
+                                                var bufferx = Math.fround(Math.fround(Math.fround(Math.fround(-w2 * a2.y) - (Math.fround(-w1 * a3.y))) + v2.x) - v1.x);
+                                                var buffery = Math.fround(Math.fround(Math.fround(Math.fround(w2 * a2.x) - Math.fround(w1 * a3.x)) + v2.y) - v1.y);
+                                                var vRel = Math.fround(Math.fround(c.normal.x * bufferx) + Math.fround(c.normal.y * buffery));
+                                                if (vRel < -org.jbox2d.common.Settings.velocityThreshold_$LI$()) {
+                                                    ccp.velocityBias += Math.fround(-c.restitution * vRel);
+                                                }
+                                            }
+                                            ;
+                                        }
+                                        ++count;
+                                    }
+                                    ;
+                                }
+                            }
+                            ;
+                        }
                     };
                     ContactSolver.prototype.initVelocityConstraints = function (step) {
                         for (var i = 0; i < this.m_constraintCount; ++i) {
-                            var c = this.m_constraints[i];
-                            var b1 = c.body1;
-                            var b2 = c.body2;
-                            var invMass1 = b1.m_invMass;
-                            var invI1 = b1.m_invI;
-                            var invMass2 = b2.m_invMass;
-                            var invI2 = b2.m_invI;
-                            var normalx = c.normal.x;
-                            var normaly = c.normal.y;
-                            var tangentx = normaly;
-                            var tangenty = -normalx;
-                            if (step.warmStarting) {
-                                for (var j = 0; j < c.pointCount; ++j) {
-                                    var ccp = c.points[j];
-                                    ccp.normalImpulse *= step.dtRatio;
-                                    ccp.tangentImpulse *= step.dtRatio;
-                                    var px = (Math.fround(Math.fround(ccp.normalImpulse * normalx) + Math.fround(ccp.tangentImpulse * tangentx)));
-                                    var py = (Math.fround(Math.fround(ccp.normalImpulse * normaly) + Math.fround(ccp.tangentImpulse * tangenty)));
-                                    b1.m_angularVelocity -= Math.fround(invI1 * (Math.fround(Math.fround(ccp.r1.x * py) - Math.fround(ccp.r1.y * px))));
-                                    b1.m_linearVelocity.x -= Math.fround(px * invMass1);
-                                    b1.m_linearVelocity.y -= Math.fround(py * invMass1);
-                                    b2.m_angularVelocity += Math.fround(invI2 * (Math.fround(Math.fround(ccp.r2.x * py) - Math.fround(ccp.r2.y * px))));
-                                    b2.m_linearVelocity.x += Math.fround(px * invMass2);
-                                    b2.m_linearVelocity.y += Math.fround(py * invMass2);
+                            {
+                                var c = this.m_constraints[i];
+                                var b1 = c.body1;
+                                var b2 = c.body2;
+                                var invMass1 = b1.m_invMass;
+                                var invI1 = b1.m_invI;
+                                var invMass2 = b2.m_invMass;
+                                var invI2 = b2.m_invI;
+                                var normalx = c.normal.x;
+                                var normaly = c.normal.y;
+                                var tangentx = normaly;
+                                var tangenty = -normalx;
+                                if (step.warmStarting) {
+                                    for (var j = 0; j < c.pointCount; ++j) {
+                                        {
+                                            var ccp = c.points[j];
+                                            ccp.normalImpulse *= step.dtRatio;
+                                            ccp.tangentImpulse *= step.dtRatio;
+                                            var px = (Math.fround(Math.fround(ccp.normalImpulse * normalx) + Math.fround(ccp.tangentImpulse * tangentx)));
+                                            var py = (Math.fround(Math.fround(ccp.normalImpulse * normaly) + Math.fround(ccp.tangentImpulse * tangenty)));
+                                            b1.m_angularVelocity -= Math.fround(invI1 * (Math.fround(Math.fround(ccp.r1.x * py) - Math.fround(ccp.r1.y * px))));
+                                            b1.m_linearVelocity.x -= Math.fround(px * invMass1);
+                                            b1.m_linearVelocity.y -= Math.fround(py * invMass1);
+                                            b2.m_angularVelocity += Math.fround(invI2 * (Math.fround(Math.fround(ccp.r2.x * py) - Math.fround(ccp.r2.y * px))));
+                                            b2.m_linearVelocity.x += Math.fround(px * invMass2);
+                                            b2.m_linearVelocity.y += Math.fround(py * invMass2);
+                                        }
+                                        ;
+                                    }
                                 }
-                                ;
-                            }
-                            else {
-                                for (var j = 0; j < c.pointCount; ++j) {
-                                    var ccp = c.points[j];
-                                    ccp.normalImpulse = 0.0;
-                                    ccp.tangentImpulse = 0.0;
+                                else {
+                                    for (var j = 0; j < c.pointCount; ++j) {
+                                        {
+                                            var ccp = c.points[j];
+                                            ccp.normalImpulse = 0.0;
+                                            ccp.tangentImpulse = 0.0;
+                                        }
+                                        ;
+                                    }
                                 }
-                                ;
                             }
+                            ;
                         }
-                        ;
                     };
                     ContactSolver.prototype.solveVelocityConstraints = function () {
                         for (var i = 0; i < this.m_constraintCount; ++i) {
-                            var c = this.m_constraints[i];
-                            var b1 = c.body1;
-                            var b2 = c.body2;
-                            var w1 = b1.m_angularVelocity;
-                            var w2 = b2.m_angularVelocity;
-                            var v1x = b1.m_linearVelocity.x;
-                            var v1y = b1.m_linearVelocity.y;
-                            var v2x = b2.m_linearVelocity.x;
-                            var v2y = b2.m_linearVelocity.y;
-                            var invMass1 = b1.m_invMass;
-                            var invI1 = b1.m_invI;
-                            var invMass2 = b2.m_invMass;
-                            var invI2 = b2.m_invI;
-                            var normalx = c.normal.x;
-                            var normaly = c.normal.y;
-                            var tangentx = normaly;
-                            var tangenty = -normalx;
-                            var friction = c.friction;
-                            for (var j = 0; j < c.pointCount; ++j) {
-                                var ccp = c.points[j];
-                                var dvx = Math.fround(Math.fround(Math.fround(v2x - Math.fround(w2 * ccp.r2.y)) - v1x) + Math.fround(w1 * ccp.r1.y));
-                                var dvy = Math.fround(Math.fround(Math.fround(v2y + Math.fround(w2 * ccp.r2.x)) - v1y) - Math.fround(w1 * ccp.r1.x));
-                                var vn = Math.fround(Math.fround(dvx * normalx) + Math.fround(dvy * normaly));
-                                var lambda = Math.fround(-ccp.normalMass * (Math.fround(vn - ccp.velocityBias)));
-                                var newImpulse = org.jbox2d.common.MathUtils.max$float$float(Math.fround(ccp.normalImpulse + lambda), 0.0);
-                                lambda = Math.fround(newImpulse - ccp.normalImpulse);
-                                var Px = Math.fround(lambda * normalx);
-                                var Py = Math.fround(lambda * normaly);
-                                v1x -= Math.fround(invMass1 * Px);
-                                v1y -= Math.fround(invMass1 * Py);
-                                w1 -= Math.fround(invI1 * (Math.fround(Math.fround(ccp.r1.x * Py) - Math.fround(ccp.r1.y * Px))));
-                                v2x += Math.fround(invMass2 * Px);
-                                v2y += Math.fround(invMass2 * Py);
-                                w2 += Math.fround(invI2 * (Math.fround(Math.fround(ccp.r2.x * Py) - Math.fround(ccp.r2.y * Px))));
-                                ccp.normalImpulse = newImpulse;
+                            {
+                                var c = this.m_constraints[i];
+                                var b1 = c.body1;
+                                var b2 = c.body2;
+                                var w1 = b1.m_angularVelocity;
+                                var w2 = b2.m_angularVelocity;
+                                var v1x = b1.m_linearVelocity.x;
+                                var v1y = b1.m_linearVelocity.y;
+                                var v2x = b2.m_linearVelocity.x;
+                                var v2y = b2.m_linearVelocity.y;
+                                var invMass1 = b1.m_invMass;
+                                var invI1 = b1.m_invI;
+                                var invMass2 = b2.m_invMass;
+                                var invI2 = b2.m_invI;
+                                var normalx = c.normal.x;
+                                var normaly = c.normal.y;
+                                var tangentx = normaly;
+                                var tangenty = -normalx;
+                                var friction = c.friction;
+                                for (var j = 0; j < c.pointCount; ++j) {
+                                    {
+                                        var ccp = c.points[j];
+                                        var dvx = Math.fround(Math.fround(Math.fround(v2x - Math.fround(w2 * ccp.r2.y)) - v1x) + Math.fround(w1 * ccp.r1.y));
+                                        var dvy = Math.fround(Math.fround(Math.fround(v2y + Math.fround(w2 * ccp.r2.x)) - v1y) - Math.fround(w1 * ccp.r1.x));
+                                        var vn = Math.fround(Math.fround(dvx * normalx) + Math.fround(dvy * normaly));
+                                        var lambda = Math.fround(-ccp.normalMass * (Math.fround(vn - ccp.velocityBias)));
+                                        var newImpulse = org.jbox2d.common.MathUtils.max$float$float(Math.fround(ccp.normalImpulse + lambda), 0.0);
+                                        lambda = Math.fround(newImpulse - ccp.normalImpulse);
+                                        var Px = Math.fround(lambda * normalx);
+                                        var Py = Math.fround(lambda * normaly);
+                                        v1x -= Math.fround(invMass1 * Px);
+                                        v1y -= Math.fround(invMass1 * Py);
+                                        w1 -= Math.fround(invI1 * (Math.fround(Math.fround(ccp.r1.x * Py) - Math.fround(ccp.r1.y * Px))));
+                                        v2x += Math.fround(invMass2 * Px);
+                                        v2y += Math.fround(invMass2 * Py);
+                                        w2 += Math.fround(invI2 * (Math.fround(Math.fround(ccp.r2.x * Py) - Math.fround(ccp.r2.y * Px))));
+                                        ccp.normalImpulse = newImpulse;
+                                    }
+                                    ;
+                                }
+                                for (var j = 0; j < c.pointCount; ++j) {
+                                    {
+                                        var ccp = c.points[j];
+                                        var dvx = Math.fround(Math.fround(Math.fround(v2x - Math.fround(w2 * ccp.r2.y)) - v1x) + Math.fround(w1 * ccp.r1.y));
+                                        var dvy = Math.fround(Math.fround(Math.fround(v2y + Math.fround(w2 * ccp.r2.x)) - v1y) - Math.fround(w1 * ccp.r1.x));
+                                        var vt = Math.fround(Math.fround(dvx * tangentx) + Math.fround(dvy * tangenty));
+                                        var lambda = Math.fround(ccp.tangentMass * (-vt));
+                                        var maxFriction = Math.fround(friction * ccp.normalImpulse);
+                                        var newImpulse = org.jbox2d.common.MathUtils.max$float$float(-maxFriction, org.jbox2d.common.MathUtils.min(Math.fround(ccp.tangentImpulse + lambda), maxFriction));
+                                        lambda = Math.fround(newImpulse - ccp.tangentImpulse);
+                                        var px = Math.fround(lambda * tangentx);
+                                        var py = Math.fround(lambda * tangenty);
+                                        v1x -= Math.fround(px * invMass1);
+                                        v1y -= Math.fround(py * invMass1);
+                                        w1 -= Math.fround(invI1 * (Math.fround(Math.fround(ccp.r1.x * py) - Math.fround(ccp.r1.y * px))));
+                                        v2x += Math.fround(px * invMass2);
+                                        v2y += Math.fround(py * invMass2);
+                                        w2 += Math.fround(invI2 * (Math.fround(Math.fround(ccp.r2.x * py) - Math.fround(ccp.r2.y * px))));
+                                        ccp.tangentImpulse = newImpulse;
+                                    }
+                                    ;
+                                }
+                                b1.m_linearVelocity.x = v1x;
+                                b1.m_linearVelocity.y = v1y;
+                                b1.m_angularVelocity = w1;
+                                b2.m_linearVelocity.x = v2x;
+                                b2.m_linearVelocity.y = v2y;
+                                b2.m_angularVelocity = w2;
                             }
                             ;
-                            for (var j = 0; j < c.pointCount; ++j) {
-                                var ccp = c.points[j];
-                                var dvx = Math.fround(Math.fround(Math.fround(v2x - Math.fround(w2 * ccp.r2.y)) - v1x) + Math.fround(w1 * ccp.r1.y));
-                                var dvy = Math.fround(Math.fround(Math.fround(v2y + Math.fround(w2 * ccp.r2.x)) - v1y) - Math.fround(w1 * ccp.r1.x));
-                                var vt = Math.fround(Math.fround(dvx * tangentx) + Math.fround(dvy * tangenty));
-                                var lambda = Math.fround(ccp.tangentMass * (-vt));
-                                var maxFriction = Math.fround(friction * ccp.normalImpulse);
-                                var newImpulse = org.jbox2d.common.MathUtils.max$float$float(-maxFriction, org.jbox2d.common.MathUtils.min(Math.fround(ccp.tangentImpulse + lambda), maxFriction));
-                                lambda = Math.fround(newImpulse - ccp.tangentImpulse);
-                                var px = Math.fround(lambda * tangentx);
-                                var py = Math.fround(lambda * tangenty);
-                                v1x -= Math.fround(px * invMass1);
-                                v1y -= Math.fround(py * invMass1);
-                                w1 -= Math.fround(invI1 * (Math.fround(Math.fround(ccp.r1.x * py) - Math.fround(ccp.r1.y * px))));
-                                v2x += Math.fround(px * invMass2);
-                                v2y += Math.fround(py * invMass2);
-                                w2 += Math.fround(invI2 * (Math.fround(Math.fround(ccp.r2.x * py) - Math.fround(ccp.r2.y * px))));
-                                ccp.tangentImpulse = newImpulse;
-                            }
-                            ;
-                            b1.m_linearVelocity.x = v1x;
-                            b1.m_linearVelocity.y = v1y;
-                            b1.m_angularVelocity = w1;
-                            b2.m_linearVelocity.x = v2x;
-                            b2.m_linearVelocity.y = v2y;
-                            b2.m_angularVelocity = w2;
                         }
-                        ;
                     };
                     ContactSolver.prototype.finalizeVelocityConstraints = function () {
                         for (var i = 0; i < this.m_constraintCount; ++i) {
-                            var c = this.m_constraints[i];
-                            var m = c.manifold;
-                            for (var j = 0; j < c.pointCount; ++j) {
-                                m.points[j].normalImpulse = c.points[j].normalImpulse;
-                                m.points[j].tangentImpulse = c.points[j].tangentImpulse;
+                            {
+                                var c = this.m_constraints[i];
+                                var m = c.manifold;
+                                for (var j = 0; j < c.pointCount; ++j) {
+                                    {
+                                        m.points[j].normalImpulse = c.points[j].normalImpulse;
+                                        m.points[j].tangentImpulse = c.points[j].tangentImpulse;
+                                    }
+                                    ;
+                                }
                             }
                             ;
                         }
-                        ;
                     };
                     ContactSolver.prototype.solvePositionConstraints = function (baumgarte) {
                         var minSeparation = 0.0;
                         for (var i = 0; i < this.m_constraintCount; ++i) {
-                            var c = this.m_constraints[i];
-                            var b1 = c.body1;
-                            var b2 = c.body2;
-                            var invMass1 = Math.fround(b1.m_mass * b1.m_invMass);
-                            var invI1 = Math.fround(b1.m_mass * b1.m_invI);
-                            var invMass2 = Math.fround(b2.m_mass * b2.m_invMass);
-                            var invI2 = Math.fround(b2.m_mass * b2.m_invI);
-                            var normal = c.normal;
-                            for (var j = 0; j < c.pointCount; ++j) {
-                                var ccp = c.points[j];
-                                var vx = Math.fround(ccp.localAnchor1.x - b1.m_sweep.localCenter.x);
-                                var vy = Math.fround(ccp.localAnchor1.y - b1.m_sweep.localCenter.y);
-                                var r1x = Math.fround(Math.fround(b1.m_xf.R.col1.x * vx) + Math.fround(b1.m_xf.R.col2.x * vy));
-                                var r1y = Math.fround(Math.fround(b1.m_xf.R.col1.y * vx) + Math.fround(b1.m_xf.R.col2.y * vy));
-                                vx = Math.fround(ccp.localAnchor2.x - b2.m_sweep.localCenter.x);
-                                vy = Math.fround(ccp.localAnchor2.y - b2.m_sweep.localCenter.y);
-                                var r2x = Math.fround(Math.fround(b2.m_xf.R.col1.x * vx) + Math.fround(b2.m_xf.R.col2.x * vy));
-                                var r2y = Math.fround(Math.fround(b2.m_xf.R.col1.y * vx) + Math.fround(b2.m_xf.R.col2.y * vy));
-                                var dpx = Math.fround(Math.fround(Math.fround(b2.m_sweep.c.x + r2x) - b1.m_sweep.c.x) - r1x);
-                                var dpy = Math.fround(Math.fround(Math.fround(b2.m_sweep.c.y + r2y) - b1.m_sweep.c.y) - r1y);
-                                var separation = Math.fround(Math.fround(Math.fround(dpx * normal.x) + Math.fround(dpy * normal.y)) + ccp.separation);
-                                minSeparation = org.jbox2d.common.MathUtils.min(minSeparation, separation);
-                                var C = Math.fround(baumgarte * org.jbox2d.common.MathUtils.clamp$float$float$float(Math.fround(separation + org.jbox2d.common.Settings.linearSlop_$LI$()), -org.jbox2d.common.Settings.maxLinearCorrection_$LI$(), 0.0));
-                                var dImpulse = Math.fround(-ccp.equalizedMass * C);
-                                var impulse0 = ccp.positionImpulse;
-                                ccp.positionImpulse = org.jbox2d.common.MathUtils.max$float$float(Math.fround(impulse0 + dImpulse), 0.0);
-                                dImpulse = Math.fround(ccp.positionImpulse - impulse0);
-                                var impulsex = Math.fround(dImpulse * normal.x);
-                                var impulsey = Math.fround(dImpulse * normal.y);
-                                b1.m_sweep.c.x -= Math.fround(invMass1 * impulsex);
-                                b1.m_sweep.c.y -= Math.fround(invMass1 * impulsey);
-                                b1.m_sweep.a -= Math.fround(invI1 * (Math.fround(Math.fround(r1x * impulsey) - Math.fround(r1y * impulsex))));
-                                b1.synchronizeTransform();
-                                b2.m_sweep.c.x += Math.fround(invMass2 * impulsex);
-                                b2.m_sweep.c.y += Math.fround(invMass2 * impulsey);
-                                b2.m_sweep.a += Math.fround(invI2 * (Math.fround(Math.fround(r2x * impulsey) - Math.fround(r2y * impulsex))));
-                                b2.synchronizeTransform();
+                            {
+                                var c = this.m_constraints[i];
+                                var b1 = c.body1;
+                                var b2 = c.body2;
+                                var invMass1 = Math.fround(b1.m_mass * b1.m_invMass);
+                                var invI1 = Math.fround(b1.m_mass * b1.m_invI);
+                                var invMass2 = Math.fround(b2.m_mass * b2.m_invMass);
+                                var invI2 = Math.fround(b2.m_mass * b2.m_invI);
+                                var normal = c.normal;
+                                for (var j = 0; j < c.pointCount; ++j) {
+                                    {
+                                        var ccp = c.points[j];
+                                        var vx = Math.fround(ccp.localAnchor1.x - b1.m_sweep.localCenter.x);
+                                        var vy = Math.fround(ccp.localAnchor1.y - b1.m_sweep.localCenter.y);
+                                        var r1x = Math.fround(Math.fround(b1.m_xf.R.col1.x * vx) + Math.fround(b1.m_xf.R.col2.x * vy));
+                                        var r1y = Math.fround(Math.fround(b1.m_xf.R.col1.y * vx) + Math.fround(b1.m_xf.R.col2.y * vy));
+                                        vx = Math.fround(ccp.localAnchor2.x - b2.m_sweep.localCenter.x);
+                                        vy = Math.fround(ccp.localAnchor2.y - b2.m_sweep.localCenter.y);
+                                        var r2x = Math.fround(Math.fround(b2.m_xf.R.col1.x * vx) + Math.fround(b2.m_xf.R.col2.x * vy));
+                                        var r2y = Math.fround(Math.fround(b2.m_xf.R.col1.y * vx) + Math.fround(b2.m_xf.R.col2.y * vy));
+                                        var dpx = Math.fround(Math.fround(Math.fround(b2.m_sweep.c.x + r2x) - b1.m_sweep.c.x) - r1x);
+                                        var dpy = Math.fround(Math.fround(Math.fround(b2.m_sweep.c.y + r2y) - b1.m_sweep.c.y) - r1y);
+                                        var separation = Math.fround(Math.fround(Math.fround(dpx * normal.x) + Math.fround(dpy * normal.y)) + ccp.separation);
+                                        minSeparation = org.jbox2d.common.MathUtils.min(minSeparation, separation);
+                                        var C = Math.fround(baumgarte * org.jbox2d.common.MathUtils.clamp$float$float$float(Math.fround(separation + org.jbox2d.common.Settings.linearSlop_$LI$()), -org.jbox2d.common.Settings.maxLinearCorrection_$LI$(), 0.0));
+                                        var dImpulse = Math.fround(-ccp.equalizedMass * C);
+                                        var impulse0 = ccp.positionImpulse;
+                                        ccp.positionImpulse = org.jbox2d.common.MathUtils.max$float$float(Math.fround(impulse0 + dImpulse), 0.0);
+                                        dImpulse = Math.fround(ccp.positionImpulse - impulse0);
+                                        var impulsex = Math.fround(dImpulse * normal.x);
+                                        var impulsey = Math.fround(dImpulse * normal.y);
+                                        b1.m_sweep.c.x -= Math.fround(invMass1 * impulsex);
+                                        b1.m_sweep.c.y -= Math.fround(invMass1 * impulsey);
+                                        b1.m_sweep.a -= Math.fround(invI1 * (Math.fround(Math.fround(r1x * impulsey) - Math.fround(r1y * impulsex))));
+                                        b1.synchronizeTransform();
+                                        b2.m_sweep.c.x += Math.fround(invMass2 * impulsex);
+                                        b2.m_sweep.c.y += Math.fround(invMass2 * impulsey);
+                                        b2.m_sweep.a += Math.fround(invI2 * (Math.fround(Math.fround(r2x * impulsey) - Math.fround(r2y * impulsex))));
+                                        b2.synchronizeTransform();
+                                    }
+                                    ;
+                                }
                             }
                             ;
                         }
-                        ;
                         return minSeparation >= Math.fround(-1.5 * org.jbox2d.common.Settings.linearSlop_$LI$());
                     };
                     return ContactSolver;
@@ -5560,7 +5628,9 @@ var org;
                     Controller.prototype.removeBody = function (body) {
                         var edge = this.m_bodyList;
                         while ((edge != null && edge.body !== body)) {
-                            edge = edge.nextBody;
+                            {
+                                edge = edge.nextBody;
+                            }
                         }
                         ;
                         if (edge.prevBody != null) {
@@ -5585,14 +5655,16 @@ var org;
                      */
                     Controller.prototype.clear = function () {
                         while ((this.m_bodyList != null)) {
-                            var edge = this.m_bodyList;
-                            this.m_bodyList = edge.nextBody;
-                            if (edge.prevController != null)
-                                edge.prevController.nextController = edge.nextController;
-                            if (edge.nextController != null)
-                                edge.nextController.prevController = edge.prevController;
-                            if (edge === edge.body.m_controllerList)
-                                edge.body.m_controllerList = edge.nextController;
+                            {
+                                var edge = this.m_bodyList;
+                                this.m_bodyList = edge.nextBody;
+                                if (edge.prevController != null)
+                                    edge.prevController.nextController = edge.nextController;
+                                if (edge.nextController != null)
+                                    edge.nextController.prevController = edge.prevController;
+                                if (edge === edge.body.m_controllerList)
+                                    edge.body.m_controllerList = edge.nextController;
+                            }
                         }
                         ;
                         this.m_bodyCount = 0;
@@ -6431,21 +6503,25 @@ var org;
                     var body1 = null;
                     var body2 = null;
                     while ((!found)) {
-                        if (i >= shapes1.length || shapes1[i] == null)
-                            return null;
-                        if (shapes1[i].testPoint(shapes1[i].getBody().getMemberXForm(), pA))
-                            body1 = shapes1[i++].getBody();
-                        for (j = 0; j < shapes2.length; ++j) {
-                            if (shapes2[j] == null)
-                                break;
-                            if (shapes2[j].testPoint(shapes2[j].getBody().getMemberXForm(), pB))
-                                body2 = shapes2[j].getBody();
-                            if (body2 !== body1) {
-                                found = true;
-                                break;
+                        {
+                            if (i >= shapes1.length || shapes1[i] == null)
+                                return null;
+                            if (shapes1[i].testPoint(shapes1[i].getBody().getMemberXForm(), pA))
+                                body1 = shapes1[i++].getBody();
+                            for (j = 0; j < shapes2.length; ++j) {
+                                {
+                                    if (shapes2[j] == null)
+                                        break;
+                                    if (shapes2[j].testPoint(shapes2[j].getBody().getMemberXForm(), pB))
+                                        body2 = shapes2[j].getBody();
+                                    if (body2 !== body1) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                ;
                             }
                         }
-                        ;
                     }
                     ;
                     if (body1 == null || body2 == null)
@@ -6926,10 +7002,12 @@ var org;
                     var nVertices = (vertices.length / 2 | 0);
                     var pd = new org.jbox2d.collision.shapes.PolygonDef();
                     for (var i = 0; i < nVertices; ++i) {
-                        var v = this.screenToWorld$float$float(vertices[2 * i], vertices[2 * i + 1]);
-                        pd.addVertex(v);
+                        {
+                            var v = this.screenToWorld$float$float(vertices[2 * i], vertices[2 * i + 1]);
+                            pd.addVertex(v);
+                        }
+                        ;
                     }
-                    ;
                     this.setShapeDefProperties(pd);
                     var bd = new org.jbox2d.dynamics.BodyDef();
                     this.setBodyDefProperties(bd);
@@ -7223,9 +7301,11 @@ var org;
                     if (this.m_border == null)
                         return;
                     for (var i = 0; i < this.m_border.length; ++i) {
-                        this.removeBody(this.m_border[i]);
+                        {
+                            this.removeBody(this.m_border[i]);
+                        }
+                        ;
                     }
-                    ;
                     this.m_border = null;
                 };
                 /**
@@ -7925,9 +8005,11 @@ var org;
                         this.sinLUT = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(this.tableLength);
                         for (var i = 0; i < this.tableLength; i++) {
-                            this.sinLUT[i] = Math.fround(Math.sin(Math.fround(i * this.precision)));
+                            {
+                                this.sinLUT[i] = Math.fround(Math.sin(Math.fround(i * this.precision)));
+                            }
+                            ;
                         }
-                        ;
                     }
                     SinCosTable.TWOPI_$LI$ = function () { if (SinCosTable.TWOPI == null)
                         SinCosTable.TWOPI = Math.fround((Math.PI * 2)); return SinCosTable.TWOPI; };
@@ -8093,7 +8175,7 @@ var org;
                             body.setMassFromShapes();
                             rjd.initialize(prevBody, body, new org.jbox2d.common.Vec2(0.0, 5.0));
                             rjd.motorSpeed = Math.fround(1.0 * 3.1415);
-                            rjd.maxMotorTorque = Number.MAX_VALUE;
+                            rjd.maxMotorTorque = 3.4028235E38;
                             rjd.enableMotor = true;
                             this.m_joint1 = world.createJoint(rjd);
                             prevBody = body;
@@ -8118,32 +8200,36 @@ var org;
                             pjd.enableMotor = false;
                             this.m_joint2 = world.createJoint(pjd);
                             for (var i = 0; i < 100; ++i) {
-                                sd.setAsBox$float$float(0.4, 0.3);
-                                sd.density = 0.1;
-                                bd.position.set$float$float(-1.0, Math.fround(23.0 + i));
-                                if (PistonBenchmark.BULLETS)
-                                    bd.isBullet = true;
-                                else
-                                    bd.isBullet = false;
-                                body = world.createBody(bd);
-                                body.createShape(sd);
-                                body.setMassFromShapes();
+                                {
+                                    sd.setAsBox$float$float(0.4, 0.3);
+                                    sd.density = 0.1;
+                                    bd.position.set$float$float(-1.0, Math.fround(23.0 + i));
+                                    if (PistonBenchmark.BULLETS)
+                                        bd.isBullet = true;
+                                    else
+                                        bd.isBullet = false;
+                                    body = world.createBody(bd);
+                                    body.createShape(sd);
+                                    body.setMassFromShapes();
+                                }
+                                ;
                             }
-                            ;
                             var cd = new org.jbox2d.collision.shapes.CircleDef();
                             cd.density = 2.0;
                             cd.radius = 0.36;
                             for (var i = 0; i < 100; ++i) {
-                                bd.position.set$float$float(1.0, Math.fround(23.0 + i));
-                                if (PistonBenchmark.BULLETS)
-                                    bd.isBullet = true;
-                                else
-                                    bd.isBullet = false;
-                                body = world.createBody(bd);
-                                body.createShape(cd);
-                                body.setMassFromShapes();
+                                {
+                                    bd.position.set$float$float(1.0, Math.fround(23.0 + i));
+                                    if (PistonBenchmark.BULLETS)
+                                        bd.isBullet = true;
+                                    else
+                                        bd.isBullet = false;
+                                    body = world.createBody(bd);
+                                    body.createShape(cd);
+                                    body.setMassFromShapes();
+                                }
+                                ;
                             }
-                            ;
                             sd.density = 0.0;
                             sd.friction = 0.0;
                             sd.setAsBox$float$float(1.0, 100.0);
@@ -8192,10 +8278,14 @@ var org;
                     };
                     BlobMaker.createBlob$org_jbox2d_util_blob_BlobStructure$org_jbox2d_util_blob_BlobContainer$org_jbox2d_dynamics_World$float$float$float$float = function (s, c, w, scaleX, scaleY, transX, transY) {
                         var aabb = c.getAABB();
-                        while ((transX > 0.0))
+                        while ((transX > 0.0)) {
                             transX -= scaleX;
-                        while ((transY > 0.0))
+                        }
+                        ;
+                        while ((transY > 0.0)) {
                             transY -= scaleY;
+                        }
+                        ;
                         var xMin = Math.fround(aabb.lowerBound.x + transX);
                         var yMin = Math.fround(aabb.lowerBound.y + transY);
                         var nWidth = (Math.ceil(Math.fround((Math.fround(aabb.upperBound.x - xMin)) / scaleX)) | 0);
@@ -8213,88 +8303,108 @@ var org;
                         cd.friction = BlobMaker.pointFriction;
                         var index = 0;
                         for (var j = 0; j < nHeight; ++j) {
-                            var yStart = Math.fround(Math.fround(yMin + transY) + Math.fround(j * scaleY));
-                            for (var i = 0; i < nWidth; ++i) {
-                                var xStart = Math.fround(Math.fround(xMin + transX) + Math.fround(i * scaleX));
-                                for (var k = 0; k < nPerCell; ++k) {
-                                    var position = new org.jbox2d.common.Vec2(Math.fround(/* get */ s.points[k].position.x + xStart), Math.fround(/* get */ s.points[k].position.y + yStart));
-                                    if (!c.containsPoint(position)) {
-                                        bodies[index++] = null;
-                                        continue;
+                            {
+                                var yStart = Math.fround(Math.fround(yMin + transY) + Math.fround(j * scaleY));
+                                for (var i = 0; i < nWidth; ++i) {
+                                    {
+                                        var xStart = Math.fround(Math.fround(xMin + transX) + Math.fround(i * scaleX));
+                                        for (var k = 0; k < nPerCell; ++k) {
+                                            {
+                                                var position = new org.jbox2d.common.Vec2(Math.fround(/* get */ s.points[k].position.x + xStart), Math.fround(/* get */ s.points[k].position.y + yStart));
+                                                if (!c.containsPoint(position)) {
+                                                    bodies[index++] = null;
+                                                    continue;
+                                                }
+                                                var bd = new org.jbox2d.dynamics.BodyDef();
+                                                bd.position = position;
+                                                bd.fixedRotation = false;
+                                                bd.angularDamping = 0.2;
+                                                bodies[index] = w.createBody(bd);
+                                                bodies[index].createShape(cd);
+                                                bodies[index].setMassFromShapes();
+                                                ++index;
+                                            }
+                                            ;
+                                        }
                                     }
-                                    var bd = new org.jbox2d.dynamics.BodyDef();
-                                    bd.position = position;
-                                    bd.fixedRotation = false;
-                                    bd.angularDamping = 0.2;
-                                    bodies[index] = w.createBody(bd);
-                                    bodies[index].createShape(cd);
-                                    bodies[index].setMassFromShapes();
-                                    ++index;
+                                    ;
                                 }
-                                ;
                             }
                             ;
                         }
-                        ;
                         for (var j = 0; j < nHeight; ++j) {
-                            var rowStartIndex = j * nWidth * nPerCell;
-                            for (var i = 0; i < nWidth; ++i) {
-                                var boxStartIndex = rowStartIndex + i * nPerCell;
-                                var indexUR = -(nWidth - 1) * nPerCell + boxStartIndex;
-                                var indexR = nPerCell + boxStartIndex;
-                                var indexDR = (nWidth + 1) * nPerCell + boxStartIndex;
-                                var indexD = nWidth * nPerCell + boxStartIndex;
-                                for (var k = 0; k < s.connections.length; ++k) {
-                                    var iiff = s.connections[k];
-                                    var a = iiff.a + boxStartIndex;
-                                    var b = iiff.b + boxStartIndex;
-                                    var freq = iiff.c;
-                                    var damp = iiff.d;
-                                    BlobMaker.createConnection(bodies, a, b, freq, damp, w);
+                            {
+                                var rowStartIndex = j * nWidth * nPerCell;
+                                for (var i = 0; i < nWidth; ++i) {
+                                    {
+                                        var boxStartIndex = rowStartIndex + i * nPerCell;
+                                        var indexUR = -(nWidth - 1) * nPerCell + boxStartIndex;
+                                        var indexR = nPerCell + boxStartIndex;
+                                        var indexDR = (nWidth + 1) * nPerCell + boxStartIndex;
+                                        var indexD = nWidth * nPerCell + boxStartIndex;
+                                        for (var k = 0; k < s.connections.length; ++k) {
+                                            {
+                                                var iiff = s.connections[k];
+                                                var a = iiff.a + boxStartIndex;
+                                                var b = iiff.b + boxStartIndex;
+                                                var freq = iiff.c;
+                                                var damp = iiff.d;
+                                                BlobMaker.createConnection(bodies, a, b, freq, damp, w);
+                                            }
+                                            ;
+                                        }
+                                        for (var k = 0; k < s.connectionsR.length; ++k) {
+                                            {
+                                                var iiff = s.connectionsR[k];
+                                                var a = iiff.a + boxStartIndex;
+                                                var b = iiff.b + indexR;
+                                                var freq = iiff.c;
+                                                var damp = iiff.d;
+                                                BlobMaker.createConnection(bodies, a, b, freq, damp, w);
+                                            }
+                                            ;
+                                        }
+                                        for (var k = 0; k < s.connectionsDR.length; ++k) {
+                                            {
+                                                var iiff = s.connectionsDR[k];
+                                                var a = iiff.a + boxStartIndex;
+                                                var b = iiff.b + indexDR;
+                                                var freq = iiff.c;
+                                                var damp = iiff.d;
+                                                BlobMaker.createConnection(bodies, a, b, freq, damp, w);
+                                            }
+                                            ;
+                                        }
+                                        for (var k = 0; k < s.connectionsD.length; ++k) {
+                                            {
+                                                var iiff = s.connectionsD[k];
+                                                var a = iiff.a + boxStartIndex;
+                                                var b = iiff.b + indexD;
+                                                var freq = iiff.c;
+                                                var damp = iiff.d;
+                                                BlobMaker.createConnection(bodies, a, b, freq, damp, w);
+                                            }
+                                            ;
+                                        }
+                                        for (var k = 0; k < s.connectionsUR.length; ++k) {
+                                            {
+                                                if (j === 0)
+                                                    break;
+                                                var iiff = s.connectionsUR[k];
+                                                var a = iiff.a + boxStartIndex;
+                                                var b = iiff.b + indexUR;
+                                                var freq = iiff.c;
+                                                var damp = iiff.d;
+                                                BlobMaker.createConnection(bodies, a, b, freq, damp, w);
+                                            }
+                                            ;
+                                        }
+                                    }
+                                    ;
                                 }
-                                ;
-                                for (var k = 0; k < s.connectionsR.length; ++k) {
-                                    var iiff = s.connectionsR[k];
-                                    var a = iiff.a + boxStartIndex;
-                                    var b = iiff.b + indexR;
-                                    var freq = iiff.c;
-                                    var damp = iiff.d;
-                                    BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                                }
-                                ;
-                                for (var k = 0; k < s.connectionsDR.length; ++k) {
-                                    var iiff = s.connectionsDR[k];
-                                    var a = iiff.a + boxStartIndex;
-                                    var b = iiff.b + indexDR;
-                                    var freq = iiff.c;
-                                    var damp = iiff.d;
-                                    BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                                }
-                                ;
-                                for (var k = 0; k < s.connectionsD.length; ++k) {
-                                    var iiff = s.connectionsD[k];
-                                    var a = iiff.a + boxStartIndex;
-                                    var b = iiff.b + indexD;
-                                    var freq = iiff.c;
-                                    var damp = iiff.d;
-                                    BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                                }
-                                ;
-                                for (var k = 0; k < s.connectionsUR.length; ++k) {
-                                    if (j === 0)
-                                        break;
-                                    var iiff = s.connectionsUR[k];
-                                    var a = iiff.a + boxStartIndex;
-                                    var b = iiff.b + indexUR;
-                                    var freq = iiff.c;
-                                    var damp = iiff.d;
-                                    BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                                }
-                                ;
                             }
                             ;
                         }
-                        ;
                     };
                     /**
                      * Creates a blob in a given physics world.
@@ -9199,33 +9309,37 @@ var org;
                         this.t = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(nParts);
                         for (var i = 0; i < nParts; ++i) {
-                            var x = parent.random(aabb.lowerBound.x, aabb.upperBound.x);
-                            var y = parent.random(aabb.lowerBound.y, aabb.upperBound.y);
-                            this.t[i] = new org.jbox2d.util.sph.SmoothParticle();
-                            this.t[i].pos.set$org_jbox2d_common_Vec2(new org.jbox2d.common.Vec2(x, y));
-                            this.t[i].vel.set$org_jbox2d_common_Vec2(this.param.initVel);
-                            this.t[i].mass = (1.0);
-                            this.t[i].setDensity(this.param.initDensity);
-                            this.t[i].setPressure(this.param.initPressure);
-                            this.t[i].setSmoothingLength(this.param.h);
-                            this.t[i].setSpeedSound(this.param.c);
-                            this.t[i].undeleteParticle();
-                            this.t[i].ID = i;
-                            this.t[i].setShapeID(-1);
+                            {
+                                var x = parent.random(aabb.lowerBound.x, aabb.upperBound.x);
+                                var y = parent.random(aabb.lowerBound.y, aabb.upperBound.y);
+                                this.t[i] = new org.jbox2d.util.sph.SmoothParticle();
+                                this.t[i].pos.set$org_jbox2d_common_Vec2(new org.jbox2d.common.Vec2(x, y));
+                                this.t[i].vel.set$org_jbox2d_common_Vec2(this.param.initVel);
+                                this.t[i].mass = (1.0);
+                                this.t[i].setDensity(this.param.initDensity);
+                                this.t[i].setPressure(this.param.initPressure);
+                                this.t[i].setSmoothingLength(this.param.h);
+                                this.t[i].setSpeedSound(this.param.c);
+                                this.t[i].undeleteParticle();
+                                this.t[i].ID = i;
+                                this.t[i].setShapeID(-1);
+                            }
+                            ;
                         }
-                        ;
                     }
                     /**
                      * This method calculates the pressure of each particle
                      */
                     SPHGroup.prototype.calcPressure = function () {
                         for (var i = 0; i < this.t.length; i++) {
-                            if (!this.t[i].isEmpty()) {
-                                this.t[i].setMinMaxDensity();
-                                this.t[i].calcPressure(this.param);
+                            {
+                                if (!this.t[i].isEmpty()) {
+                                    this.t[i].setMinMaxDensity();
+                                    this.t[i].calcPressure(this.param);
+                                }
                             }
+                            ;
                         }
-                        ;
                     };
                     /**
                      * Calculates SPH density/velocity contributions to p1 as a result of p2.
@@ -9253,15 +9367,17 @@ var org;
                         var accelSquared = 0;
                         maxAccelSquared = 0;
                         for (i = 0; i < this.t.length; i++) {
-                            if (!this.t[i].isEmpty()) {
-                                accelX = this.t[i].getChangeVelocityX();
-                                accelY = this.t[i].getChangeVelocityY();
-                                accelSquared = accelX * accelX + accelY * accelY;
-                                if (accelSquared > maxAccelSquared)
-                                    maxAccelSquared = accelSquared;
+                            {
+                                if (!this.t[i].isEmpty()) {
+                                    accelX = this.t[i].getChangeVelocityX();
+                                    accelY = this.t[i].getChangeVelocityY();
+                                    accelSquared = accelX * accelX + accelY * accelY;
+                                    if (accelSquared > maxAccelSquared)
+                                        maxAccelSquared = accelSquared;
+                                }
                             }
+                            ;
                         }
-                        ;
                         var calcDeltaT = 10000000;
                         if (maxAccelSquared > 0.0) {
                             calcDeltaT = 0.25 * Math.sqrt(this.param.h / Math.sqrt(maxAccelSquared));
@@ -9277,26 +9393,32 @@ var org;
                     SPHGroup.prototype.updateParticles = function () {
                         this.calcPressure();
                         for (var i = 0; i < this.t.length; ++i) {
-                            this.t[i].zeroSPHVars();
-                            for (var j = 0; j < this.t.length; ++j) {
-                                if (i === j)
-                                    continue;
-                                this.calcSPHEquations(this.t[i], this.t[j]);
+                            {
+                                this.t[i].zeroSPHVars();
+                                for (var j = 0; j < this.t.length; ++j) {
+                                    {
+                                        if (i === j)
+                                            continue;
+                                        this.calcSPHEquations(this.t[i], this.t[j]);
+                                    }
+                                    ;
+                                }
                             }
                             ;
                         }
-                        ;
                         var dt = Math.fround(this.param.deltaT);
                         for (var i = 0; i < this.t.length; ++i) {
-                            var p = this.t[i];
-                            p.vel.x += Math.fround(Math.fround(p.getChangeVelocityX()) * dt);
-                            p.vel.y += Math.fround(Math.fround(p.getChangeVelocityY()) * dt);
-                            p.density += Math.fround(Math.fround(p.getChangeDensity()) * dt);
-                            p.pos.x += Math.fround(p.vel.x * dt);
-                            p.pos.y += Math.fround(p.vel.y * dt);
-                            console.info(p.getChangeVelocityY());
+                            {
+                                var p = this.t[i];
+                                p.vel.x += Math.fround(Math.fround(p.getChangeVelocityX()) * dt);
+                                p.vel.y += Math.fround(Math.fround(p.getChangeVelocityY()) * dt);
+                                p.density += Math.fround(Math.fround(p.getChangeDensity()) * dt);
+                                p.pos.x += Math.fround(p.vel.x * dt);
+                                p.pos.y += Math.fround(p.vel.y * dt);
+                                console.info(p.getChangeVelocityY());
+                            }
+                            ;
                         }
-                        ;
                     };
                     return SPHGroup;
                 }());
@@ -9518,19 +9640,21 @@ var org;
                         this.userData = copyMe.userData;
                         this.vertices = ([]);
                         for (var i = 0; i < copyMe.vertices.length; ++i) {
-                            this.addVertex(/* clone */ /* clone */ (function (o) { if (o.clone != undefined) {
-                                return o.clone();
-                            }
-                            else {
-                                var clone = Object.create(o);
-                                for (var p in o) {
-                                    if (o.hasOwnProperty(p))
-                                        clone[p] = o[p];
+                            {
+                                this.addVertex(/* clone */ /* clone */ (function (o) { if (o.clone != undefined) {
+                                    return o.clone();
                                 }
-                                return clone;
-                            } })(/* get */ copyMe.vertices[i]));
+                                else {
+                                    var clone = Object.create(o);
+                                    for (var p in o) {
+                                        if (o.hasOwnProperty(p))
+                                            clone[p] = o[p];
+                                    }
+                                    return clone;
+                                } })(/* get */ copyMe.vertices[i]));
+                            }
+                            ;
                         }
-                        ;
                     };
                     /**
                      * Add a vertex to the polygon.
@@ -9572,9 +9696,11 @@ var org;
                         xf.position.set$org_jbox2d_common_Vec2(center);
                         xf.R.set$float(angle);
                         for (var i = 0; i < this.vertices.length; ++i) {
-                            org.jbox2d.common.XForm.mulToOut(xf, /* get */ this.vertices[i], /* get */ this.vertices[i]);
+                            {
+                                org.jbox2d.common.XForm.mulToOut(xf, /* get */ this.vertices[i], /* get */ this.vertices[i]);
+                            }
+                            ;
                         }
-                        ;
                     };
                     /**
                      * Build vertices to represent an oriented box.
@@ -9638,29 +9764,33 @@ var org;
                     this.m_pairBuffer = (function (s) { var a = []; while (s-- > 0)
                         a.push(null); return a; })(org.jbox2d.common.Settings.maxPairs_$LI$());
                     for (var i = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {
-                        this.m_hashTable[i] = PairManager.NULL_PAIR_$LI$();
+                        {
+                            this.m_hashTable[i] = PairManager.NULL_PAIR_$LI$();
+                        }
+                        ;
                     }
-                    ;
                     this.m_freePair = 0;
                     for (var i = 0; i < org.jbox2d.common.Settings.maxPairs_$LI$(); ++i) {
-                        this.m_pairs[i] = new org.jbox2d.collision.Pair();
-                        this.m_pairs[i].proxyId1 = PairManager.NULL_PROXY_$LI$();
-                        this.m_pairs[i].proxyId2 = PairManager.NULL_PROXY_$LI$();
-                        this.m_pairs[i].userData = null;
-                        this.m_pairs[i].status = 0;
-                        this.m_pairs[i].next = i + 1;
-                        this.m_pairBuffer[i] = new org.jbox2d.collision.BufferedPair();
+                        {
+                            this.m_pairs[i] = new org.jbox2d.collision.Pair();
+                            this.m_pairs[i].proxyId1 = PairManager.NULL_PROXY_$LI$();
+                            this.m_pairs[i].proxyId2 = PairManager.NULL_PROXY_$LI$();
+                            this.m_pairs[i].userData = null;
+                            this.m_pairs[i].status = 0;
+                            this.m_pairs[i].next = i + 1;
+                            this.m_pairBuffer[i] = new org.jbox2d.collision.BufferedPair();
+                        }
+                        ;
                     }
-                    ;
                     this.m_pairs[org.jbox2d.common.Settings.maxPairs_$LI$() - 1].next = PairManager.NULL_PAIR_$LI$();
                     this.m_pairCount = 0;
                     this.m_pairBufferCount = 0;
                 }
                 PairManager.NULL_PAIR_$LI$ = function () { if (PairManager.NULL_PAIR == null)
-                    PairManager.NULL_PAIR = Number.MAX_VALUE; return PairManager.NULL_PAIR; };
+                    PairManager.NULL_PAIR = 2147483647; return PairManager.NULL_PAIR; };
                 ;
                 PairManager.NULL_PROXY_$LI$ = function () { if (PairManager.NULL_PROXY == null)
-                    PairManager.NULL_PROXY = Number.MAX_VALUE; return PairManager.NULL_PROXY; };
+                    PairManager.NULL_PROXY = 2147483647; return PairManager.NULL_PROXY; };
                 ;
                 PairManager.TABLE_CAPACITY_$LI$ = function () { if (PairManager.TABLE_CAPACITY == null)
                     PairManager.TABLE_CAPACITY = org.jbox2d.common.Settings.maxPairs_$LI$(); return PairManager.TABLE_CAPACITY; };
@@ -9706,29 +9836,31 @@ var org;
                     var isHash = true;
                     var pderefnode = 0;
                     while ((derefnode !== PairManager.NULL_PAIR_$LI$())) {
-                        if (this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[derefnode], proxyId1, proxyId2)) {
-                            var index = derefnode;
-                            if (isHash) {
-                                this.m_hashTable[hash] = this.m_pairs[this.m_hashTable[hash]].next;
+                        {
+                            if (this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[derefnode], proxyId1, proxyId2)) {
+                                var index = derefnode;
+                                if (isHash) {
+                                    this.m_hashTable[hash] = this.m_pairs[this.m_hashTable[hash]].next;
+                                }
+                                else {
+                                    this.m_pairs[pderefnode].next = this.m_pairs[derefnode].next;
+                                }
+                                var pair = this.m_pairs[index];
+                                var userData = pair.userData;
+                                pair.next = this.m_freePair;
+                                pair.proxyId1 = PairManager.NULL_PROXY_$LI$();
+                                pair.proxyId2 = PairManager.NULL_PROXY_$LI$();
+                                pair.userData = null;
+                                pair.status = 0;
+                                this.m_freePair = index;
+                                --this.m_pairCount;
+                                return userData;
                             }
                             else {
-                                this.m_pairs[pderefnode].next = this.m_pairs[derefnode].next;
+                                pderefnode = derefnode;
+                                derefnode = this.m_pairs[derefnode].next;
+                                isHash = false;
                             }
-                            var pair = this.m_pairs[index];
-                            var userData = pair.userData;
-                            pair.next = this.m_freePair;
-                            pair.proxyId1 = PairManager.NULL_PROXY_$LI$();
-                            pair.proxyId2 = PairManager.NULL_PROXY_$LI$();
-                            pair.userData = null;
-                            pair.status = 0;
-                            this.m_freePair = index;
-                            --this.m_pairCount;
-                            return userData;
-                        }
-                        else {
-                            pderefnode = derefnode;
-                            derefnode = this.m_pairs[derefnode].next;
-                            isHash = false;
                         }
                     }
                     ;
@@ -9783,30 +9915,34 @@ var org;
                     var removeCount = 0;
                     var proxies = this.m_broadPhase.m_proxyPool;
                     for (var i = 0; i < this.m_pairBufferCount; ++i) {
-                        var pair = this.find$int$int(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
-                        pair.clearBuffered();
-                        var proxy1 = proxies[pair.proxyId1];
-                        var proxy2 = proxies[pair.proxyId2];
-                        if (pair.isRemoved()) {
-                            if (pair.isFinal() === true) {
-                                this.m_callback.pairRemoved(proxy1.userData, proxy2.userData, pair.userData);
+                        {
+                            var pair = this.find$int$int(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
+                            pair.clearBuffered();
+                            var proxy1 = proxies[pair.proxyId1];
+                            var proxy2 = proxies[pair.proxyId2];
+                            if (pair.isRemoved()) {
+                                if (pair.isFinal() === true) {
+                                    this.m_callback.pairRemoved(proxy1.userData, proxy2.userData, pair.userData);
+                                }
+                                this.m_pairBuffer[removeCount].proxyId1 = pair.proxyId1;
+                                this.m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
+                                ++removeCount;
                             }
-                            this.m_pairBuffer[removeCount].proxyId1 = pair.proxyId1;
-                            this.m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
-                            ++removeCount;
-                        }
-                        else {
-                            if (pair.isFinal() === false) {
-                                pair.userData = this.m_callback.pairAdded(proxy1.userData, proxy2.userData);
-                                pair.setFinal();
+                            else {
+                                if (pair.isFinal() === false) {
+                                    pair.userData = this.m_callback.pairAdded(proxy1.userData, proxy2.userData);
+                                    pair.setFinal();
+                                }
                             }
                         }
+                        ;
                     }
-                    ;
                     for (var i = 0; i < removeCount; ++i) {
-                        this.removePair(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
+                        {
+                            this.removePair(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
+                        }
+                        ;
                     }
-                    ;
                     this.m_pairBufferCount = 0;
                     if (org.jbox2d.collision.BroadPhase.s_validate) {
                         this.validateTable();
@@ -9822,21 +9958,27 @@ var org;
                  */
                 PairManager.prototype.validateTable = function () {
                     for (var i = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {
-                        var index = this.m_hashTable[i];
-                        while ((index !== PairManager.NULL_PAIR_$LI$())) {
-                            var pair = this.m_pairs[index];
-                            var proxy1 = this.m_broadPhase.m_proxyPool[pair.proxyId1];
-                            var proxy2 = this.m_broadPhase.m_proxyPool[pair.proxyId2];
-                            index = pair.next;
+                        {
+                            var index = this.m_hashTable[i];
+                            while ((index !== PairManager.NULL_PAIR_$LI$())) {
+                                {
+                                    var pair = this.m_pairs[index];
+                                    var proxy1 = this.m_broadPhase.m_proxyPool[pair.proxyId1];
+                                    var proxy2 = this.m_broadPhase.m_proxyPool[pair.proxyId2];
+                                    index = pair.next;
+                                }
+                            }
+                            ;
                         }
                         ;
                     }
-                    ;
                 };
                 PairManager.prototype.find$int$int$int = function (proxyId1, proxyId2, hash) {
                     var index = this.m_hashTable[hash];
                     while ((index !== PairManager.NULL_PAIR_$LI$() && this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[index], proxyId1, proxyId2) === false)) {
-                        index = this.m_pairs[index].next;
+                        {
+                            index = this.m_pairs[index].next;
+                        }
                     }
                     ;
                     if (index === PairManager.NULL_PAIR_$LI$()) {
@@ -9961,16 +10103,20 @@ var org;
                 ;
                 MathUtils.__static_initializer_0 = function () {
                     for (var i = 0; i < org.jbox2d.common.Settings.SINCOS_LUT_LENGTH_$LI$(); i++) {
-                        MathUtils.sinLUT_$LI$()[i] = Math.fround(Math.sin(Math.fround(i * org.jbox2d.common.Settings.SINCOS_LUT_PRECISION)));
-                        MathUtils.cosLUT_$LI$()[i] = Math.fround(Math.cos(Math.fround(i * org.jbox2d.common.Settings.SINCOS_LUT_PRECISION)));
+                        {
+                            MathUtils.sinLUT_$LI$()[i] = Math.fround(Math.sin(Math.fround(i * org.jbox2d.common.Settings.SINCOS_LUT_PRECISION)));
+                            MathUtils.cosLUT_$LI$()[i] = Math.fround(Math.cos(Math.fround(i * org.jbox2d.common.Settings.SINCOS_LUT_PRECISION)));
+                        }
+                        ;
                     }
-                    ;
                 };
                 MathUtils.sin = function (x) {
                     if (org.jbox2d.common.Settings.SINCOS_LUT_ENABLED) {
                         x %= MathUtils.TWOPI_$LI$();
                         while ((x < 0)) {
-                            x += MathUtils.TWOPI_$LI$();
+                            {
+                                x += MathUtils.TWOPI_$LI$();
+                            }
                         }
                         ;
                         if (org.jbox2d.common.Settings.SINCOS_LUT_LERP) {
@@ -9998,7 +10144,9 @@ var org;
                     if (org.jbox2d.common.Settings.SINCOS_LUT_ENABLED) {
                         x %= MathUtils.TWOPI_$LI$();
                         while ((x < 0)) {
-                            x += MathUtils.TWOPI_$LI$();
+                            {
+                                x += MathUtils.TWOPI_$LI$();
+                            }
                         }
                         ;
                         if (org.jbox2d.common.Settings.SINCOS_LUT_LERP) {
@@ -10239,10 +10387,12 @@ var org;
                                 _this.y = (function (s) { var a = []; while (s-- > 0)
                                     a.push(0); return a; })(_this.nVertices);
                                 for (var i = 0; i < _this.nVertices; ++i) {
-                                    _this.x[i] = _x[i];
-                                    _this.y[i] = _y[i];
+                                    {
+                                        _this.x[i] = _x[i];
+                                        _this.y[i] = _y[i];
+                                    }
+                                    ;
                                 }
-                                ;
                                 _this.areaIsSet = false;
                             })();
                         }
@@ -10278,10 +10428,12 @@ var org;
                                     _this.y = (function (s) { var a = []; while (s-- > 0)
                                         a.push(0); return a; })(_this.nVertices);
                                     for (var i = 0; i < _this.nVertices; ++i) {
-                                        _this.x[i] = _x[i];
-                                        _this.y[i] = _y[i];
+                                        {
+                                            _this.x[i] = _x[i];
+                                            _this.y[i] = _y[i];
+                                        }
+                                        ;
                                     }
-                                    ;
                                     _this.areaIsSet = false;
                                 })();
                             }
@@ -10317,10 +10469,12 @@ var org;
                                 _this.y = (function (s) { var a = []; while (s-- > 0)
                                     a.push(0); return a; })(_this.nVertices);
                                 for (var i = 0; i < _this.nVertices; ++i) {
-                                    _this.x[i] = v_1[i].x;
-                                    _this.y[i] = v_1[i].y;
+                                    {
+                                        _this.x[i] = v_1[i].x;
+                                        _this.y[i] = v_1[i].y;
+                                    }
+                                    ;
                                 }
-                                ;
                                 _this.areaIsSet = false;
                             })();
                         }
@@ -10357,10 +10511,12 @@ var org;
                                     _this.y = (function (s) { var a = []; while (s-- > 0)
                                         a.push(0); return a; })(_this.nVertices);
                                     for (var i = 0; i < _this.nVertices; ++i) {
-                                        _this.x[i] = v_2[i].x;
-                                        _this.y[i] = v_2[i].y;
+                                        {
+                                            _this.x[i] = v_2[i].x;
+                                            _this.y[i] = v_2[i].y;
+                                        }
+                                        ;
                                     }
-                                    ;
                                     _this.areaIsSet = false;
                                 })();
                             }
@@ -10395,10 +10551,12 @@ var org;
                                 _this.y = (function (s) { var a = []; while (s-- > 0)
                                     a.push(0); return a; })(_this.nVertices);
                                 for (var i = 0; i < _this.nVertices; ++i) {
-                                    _this.x[i] = t_1.x[i];
-                                    _this.y[i] = t_1.y[i];
+                                    {
+                                        _this.x[i] = t_1.x[i];
+                                        _this.y[i] = t_1.y[i];
+                                    }
+                                    ;
                                 }
-                                ;
                             })();
                         }
                         else if (_x === undefined && _y === undefined && nVert === undefined) {
@@ -10495,9 +10653,11 @@ var org;
                         this.area = 0.0;
                         this.area += Math.fround(Math.fround(this.x[this.nVertices - 1] * this.y[0]) - Math.fround(this.x[0] * this.y[this.nVertices - 1]));
                         for (var i = 0; i < this.nVertices - 1; ++i) {
-                            this.area += Math.fround(Math.fround(this.x[i] * this.y[i + 1]) - Math.fround(this.x[i + 1] * this.y[i]));
+                            {
+                                this.area += Math.fround(Math.fround(this.x[i] * this.y[i + 1]) - Math.fround(this.x[i + 1] * this.y[i]));
+                            }
+                            ;
                         }
-                        ;
                         this.area *= 0.5;
                         this.areaIsSet = true;
                         return this.area;
@@ -10512,34 +10672,36 @@ var org;
                             a.push(false); return a; })(this.nVertices);
                         var newNVertices = this.nVertices;
                         for (var i = 0; i < this.nVertices; ++i) {
-                            var lower = (i === 0) ? (this.nVertices - 1) : (i - 1);
-                            var middle = i;
-                            var upper = (i === this.nVertices - 1) ? (0) : (i + 1);
-                            var dx0 = Math.fround(this.x[middle] - this.x[lower]);
-                            var dy0 = Math.fround(this.y[middle] - this.y[lower]);
-                            var dx1 = Math.fround(this.x[upper] - this.x[middle]);
-                            var dy1 = Math.fround(this.y[upper] - this.y[middle]);
-                            var norm0 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx0 * dx0) + Math.fround(dy0 * dy0))));
-                            var norm1 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx1 * dx1) + Math.fround(dy1 * dy1))));
-                            if (!(norm0 > 0.0 && norm1 > 0.0) && newNVertices > 3) {
-                                mergeMe[i] = true;
-                                --newNVertices;
+                            {
+                                var lower = (i === 0) ? (this.nVertices - 1) : (i - 1);
+                                var middle = i;
+                                var upper = (i === this.nVertices - 1) ? (0) : (i + 1);
+                                var dx0 = Math.fround(this.x[middle] - this.x[lower]);
+                                var dy0 = Math.fround(this.y[middle] - this.y[lower]);
+                                var dx1 = Math.fround(this.x[upper] - this.x[middle]);
+                                var dy1 = Math.fround(this.y[upper] - this.y[middle]);
+                                var norm0 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx0 * dx0) + Math.fround(dy0 * dy0))));
+                                var norm1 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx1 * dx1) + Math.fround(dy1 * dy1))));
+                                if (!(norm0 > 0.0 && norm1 > 0.0) && newNVertices > 3) {
+                                    mergeMe[i] = true;
+                                    --newNVertices;
+                                }
+                                dx0 /= norm0;
+                                dy0 /= norm0;
+                                dx1 /= norm1;
+                                dy1 /= norm1;
+                                var cross = Math.fround(Math.fround(dx0 * dy1) - Math.fround(dx1 * dy0));
+                                var dot = Math.fround(Math.fround(dx0 * dx1) + Math.fround(dy0 * dy1));
+                                if (org.jbox2d.common.MathUtils.abs(cross) < tolerance && dot > 0 && newNVertices > 3) {
+                                    mergeMe[i] = true;
+                                    --newNVertices;
+                                }
+                                else {
+                                    mergeMe[i] = false;
+                                }
                             }
-                            dx0 /= norm0;
-                            dy0 /= norm0;
-                            dx1 /= norm1;
-                            dy1 /= norm1;
-                            var cross = Math.fround(Math.fround(dx0 * dy1) - Math.fround(dx1 * dy0));
-                            var dot = Math.fround(Math.fround(dx0 * dx1) + Math.fround(dy0 * dy1));
-                            if (org.jbox2d.common.MathUtils.abs(cross) < tolerance && dot > 0 && newNVertices > 3) {
-                                mergeMe[i] = true;
-                                --newNVertices;
-                            }
-                            else {
-                                mergeMe[i] = false;
-                            }
+                            ;
                         }
-                        ;
                         if (newNVertices === this.nVertices || newNVertices === 0) {
                             return;
                         }
@@ -10549,13 +10711,15 @@ var org;
                             a.push(0); return a; })(newNVertices);
                         var currIndex = 0;
                         for (var i = 0; i < this.nVertices; ++i) {
-                            if (mergeMe[i] || newNVertices === 0 || currIndex === newNVertices)
-                                continue;
-                            newx[currIndex] = this.x[i];
-                            newy[currIndex] = this.y[i];
-                            ++currIndex;
+                            {
+                                if (mergeMe[i] || newNVertices === 0 || currIndex === newNVertices)
+                                    continue;
+                                newx[currIndex] = this.x[i];
+                                newy[currIndex] = this.y[i];
+                                ++currIndex;
+                            }
+                            ;
                         }
-                        ;
                         this.x = newx;
                         this.y = newy;
                         this.nVertices = newNVertices;
@@ -10564,9 +10728,11 @@ var org;
                         var out = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(this.nVertices);
                         for (var i = 0; i < this.nVertices; ++i) {
-                            out[i] = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
+                            {
+                                out[i] = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
+                            }
+                            ;
                         }
-                        ;
                         return out;
                     };
                     Polygon.prototype.set = function (p) {
@@ -10578,10 +10744,12 @@ var org;
                                 a.push(0); return a; })(this.nVertices);
                         }
                         for (var i = 0; i < this.nVertices; ++i) {
-                            this.x[i] = p.x[i];
-                            this.y[i] = p.y[i];
+                            {
+                                this.x[i] = p.x[i];
+                                this.y[i] = p.y[i];
+                            }
+                            ;
                         }
-                        ;
                         this.areaIsSet = false;
                     };
                     /**
@@ -10591,23 +10759,25 @@ var org;
                     Polygon.prototype.isConvex = function () {
                         var isPositive = false;
                         for (var i = 0; i < this.nVertices; ++i) {
-                            var lower = (i === 0) ? (this.nVertices - 1) : (i - 1);
-                            var middle = i;
-                            var upper = (i === this.nVertices - 1) ? (0) : (i + 1);
-                            var dx0 = Math.fround(this.x[middle] - this.x[lower]);
-                            var dy0 = Math.fround(this.y[middle] - this.y[lower]);
-                            var dx1 = Math.fround(this.x[upper] - this.x[middle]);
-                            var dy1 = Math.fround(this.y[upper] - this.y[middle]);
-                            var cross = Math.fround(Math.fround(dx0 * dy1) - Math.fround(dx1 * dy0));
-                            var newIsP = (cross >= 0) ? true : false;
-                            if (i === 0) {
-                                isPositive = newIsP;
+                            {
+                                var lower = (i === 0) ? (this.nVertices - 1) : (i - 1);
+                                var middle = i;
+                                var upper = (i === this.nVertices - 1) ? (0) : (i + 1);
+                                var dx0 = Math.fround(this.x[middle] - this.x[lower]);
+                                var dy0 = Math.fround(this.y[middle] - this.y[lower]);
+                                var dx1 = Math.fround(this.x[upper] - this.x[middle]);
+                                var dy1 = Math.fround(this.y[upper] - this.y[middle]);
+                                var cross = Math.fround(Math.fround(dx0 * dy1) - Math.fround(dx1 * dy0));
+                                var newIsP = (cross >= 0) ? true : false;
+                                if (i === 0) {
+                                    isPositive = newIsP;
+                                }
+                                else if (isPositive !== newIsP) {
+                                    return false;
+                                }
                             }
-                            else if (isPositive !== newIsP) {
-                                return false;
-                            }
+                            ;
                         }
-                        ;
                         return true;
                     };
                     Polygon.polyCentroid = function (vs, count) {
@@ -10616,18 +10786,20 @@ var org;
                         var inv3 = Math.fround(1.0 / 3.0);
                         var pRef = new org.jbox2d.common.Vec2(0.0, 0.0);
                         for (var i = 0; i < count; ++i) {
-                            var p1 = pRef;
-                            var p2 = vs[i];
-                            var p3 = i + 1 < count ? vs[i + 1] : vs[0];
-                            var e1 = p2.sub(p1);
-                            var e2 = p3.sub(p1);
-                            var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
-                            var triangleArea = Math.fround(0.5 * D);
-                            area += triangleArea;
-                            c.x += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.x + p2.x) + p3.x)));
-                            c.y += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.y + p2.y) + p3.y)));
+                            {
+                                var p1 = pRef;
+                                var p2 = vs[i];
+                                var p3 = i + 1 < count ? vs[i + 1] : vs[0];
+                                var e1 = p2.sub(p1);
+                                var e2 = p3.sub(p1);
+                                var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
+                                var triangleArea = Math.fround(0.5 * D);
+                                area += triangleArea;
+                                c.x += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.x + p2.x) + p3.x)));
+                                c.y += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.y + p2.y) + p3.y)));
+                            }
+                            ;
                         }
-                        ;
                         c.x *= Math.fround(1.0 / area);
                         c.y *= Math.fround(1.0 / area);
                         return c;
@@ -10656,48 +10828,54 @@ var org;
                         var vertices = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(this.nVertices);
                         for (var i = 0; i < this.nVertices; ++i) {
-                            vertices[i] = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
-                            var i1 = i;
-                            var i2 = i + 1 < this.nVertices ? i + 1 : 0;
-                            var edge = new org.jbox2d.common.Vec2(Math.fround(this.x[i2] - this.x[i1]), Math.fround(this.y[i2] - this.y[i1]));
-                            normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
-                            normals[i].normalize();
-                        }
-                        ;
-                        for (var i = 0; i < this.nVertices; ++i) {
-                            var iminus = (i === 0) ? this.nVertices - 1 : i - 1;
-                            var cross = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(normals[iminus], normals[i]);
-                            cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
-                            var angle = Math.fround(Math.asin(cross));
-                            if (angle <= org.jbox2d.common.Settings.angularSlop_$LI$()) {
-                                noError = false;
-                                error = 4;
-                                break;
+                            {
+                                vertices[i] = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
+                                var i1 = i;
+                                var i2 = i + 1 < this.nVertices ? i + 1 : 0;
+                                var edge = new org.jbox2d.common.Vec2(Math.fround(this.x[i2] - this.x[i1]), Math.fround(this.y[i2] - this.y[i1]));
+                                normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
+                                normals[i].normalize();
                             }
-                            for (var j = 0; j < this.nVertices; ++j) {
-                                if (j === i || j === (i + 1) % this.nVertices) {
-                                    continue;
-                                }
-                                var s = org.jbox2d.common.Vec2.dot(normals[i], vertices[j].sub(vertices[i]));
-                                if (s >= -org.jbox2d.common.Settings.linearSlop_$LI$()) {
+                            ;
+                        }
+                        for (var i = 0; i < this.nVertices; ++i) {
+                            {
+                                var iminus = (i === 0) ? this.nVertices - 1 : i - 1;
+                                var cross = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(normals[iminus], normals[i]);
+                                cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
+                                var angle = Math.fround(Math.asin(cross));
+                                if (angle <= org.jbox2d.common.Settings.angularSlop_$LI$()) {
                                     noError = false;
-                                    error = 5;
+                                    error = 4;
+                                    break;
+                                }
+                                for (var j = 0; j < this.nVertices; ++j) {
+                                    {
+                                        if (j === i || j === (i + 1) % this.nVertices) {
+                                            continue;
+                                        }
+                                        var s = org.jbox2d.common.Vec2.dot(normals[i], vertices[j].sub(vertices[i]));
+                                        if (s >= -org.jbox2d.common.Settings.linearSlop_$LI$()) {
+                                            noError = false;
+                                            error = 5;
+                                        }
+                                    }
+                                    ;
+                                }
+                                var centroid = Polygon.polyCentroid(vertices, this.nVertices);
+                                var n1 = normals[iminus];
+                                var n2 = normals[i];
+                                var v = vertices[i].sub(centroid);
+                                var d = new org.jbox2d.common.Vec2();
+                                d.x = Math.fround(org.jbox2d.common.Vec2.dot(n1, v) - Polygon.toiSlop_$LI$());
+                                d.y = Math.fround(org.jbox2d.common.Vec2.dot(n2, v) - Polygon.toiSlop_$LI$());
+                                if ((d.x < 0.0) || (d.y < 0.0)) {
+                                    noError = false;
+                                    error = 6;
                                 }
                             }
                             ;
-                            var centroid = Polygon.polyCentroid(vertices, this.nVertices);
-                            var n1 = normals[iminus];
-                            var n2 = normals[i];
-                            var v = vertices[i].sub(centroid);
-                            var d = new org.jbox2d.common.Vec2();
-                            d.x = Math.fround(org.jbox2d.common.Vec2.dot(n1, v) - Polygon.toiSlop_$LI$());
-                            d.y = Math.fround(org.jbox2d.common.Vec2.dot(n2, v) - Polygon.toiSlop_$LI$());
-                            if ((d.x < 0.0) || (d.y < 0.0)) {
-                                noError = false;
-                                error = 6;
-                            }
                         }
-                        ;
                         if (!noError && printErrors) {
                             console.info("Found invalid polygon, ");
                             switch ((error)) {
@@ -10756,20 +10934,24 @@ var org;
                     };
                     Polygon.prototype.isSimple = function () {
                         for (var i = 0; i < this.nVertices; ++i) {
-                            var iplus = (i + 1 > this.nVertices - 1) ? 0 : i + 1;
-                            var a1 = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
-                            var a2 = new org.jbox2d.common.Vec2(this.x[iplus], this.y[iplus]);
-                            for (var j = i + 1; j < this.nVertices; ++j) {
-                                var jplus = (j + 1 > this.nVertices - 1) ? 0 : j + 1;
-                                var b1 = new org.jbox2d.common.Vec2(this.x[j], this.y[j]);
-                                var b2 = new org.jbox2d.common.Vec2(this.x[jplus], this.y[jplus]);
-                                if (this.intersect(a1, a2, b1, b2)) {
-                                    return false;
+                            {
+                                var iplus = (i + 1 > this.nVertices - 1) ? 0 : i + 1;
+                                var a1 = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
+                                var a2 = new org.jbox2d.common.Vec2(this.x[iplus], this.y[iplus]);
+                                for (var j = i + 1; j < this.nVertices; ++j) {
+                                    {
+                                        var jplus = (j + 1 > this.nVertices - 1) ? 0 : j + 1;
+                                        var b1 = new org.jbox2d.common.Vec2(this.x[j], this.y[j]);
+                                        var b2 = new org.jbox2d.common.Vec2(this.x[jplus], this.y[jplus]);
+                                        if (this.intersect(a1, a2, b1, b2)) {
+                                            return false;
+                                        }
+                                    }
+                                    ;
                                 }
                             }
                             ;
                         }
-                        ;
                         return true;
                     };
                     /**
@@ -10791,40 +10973,42 @@ var org;
                         var secondP = -1;
                         var secondT = -1;
                         for (var i = 0; i < this.nVertices; i++) {
-                            if (t.x[0] === this.x[i] && t.y[0] === this.y[i]) {
-                                if (firstP === -1) {
-                                    firstP = i;
-                                    firstT = 0;
+                            {
+                                if (t.x[0] === this.x[i] && t.y[0] === this.y[i]) {
+                                    if (firstP === -1) {
+                                        firstP = i;
+                                        firstT = 0;
+                                    }
+                                    else {
+                                        secondP = i;
+                                        secondT = 0;
+                                    }
+                                }
+                                else if (t.x[1] === this.x[i] && t.y[1] === this.y[i]) {
+                                    if (firstP === -1) {
+                                        firstP = i;
+                                        firstT = 1;
+                                    }
+                                    else {
+                                        secondP = i;
+                                        secondT = 1;
+                                    }
+                                }
+                                else if (t.x[2] === this.x[i] && t.y[2] === this.y[i]) {
+                                    if (firstP === -1) {
+                                        firstP = i;
+                                        firstT = 2;
+                                    }
+                                    else {
+                                        secondP = i;
+                                        secondT = 2;
+                                    }
                                 }
                                 else {
-                                    secondP = i;
-                                    secondT = 0;
                                 }
                             }
-                            else if (t.x[1] === this.x[i] && t.y[1] === this.y[i]) {
-                                if (firstP === -1) {
-                                    firstP = i;
-                                    firstT = 1;
-                                }
-                                else {
-                                    secondP = i;
-                                    secondT = 1;
-                                }
-                            }
-                            else if (t.x[2] === this.x[i] && t.y[2] === this.y[i]) {
-                                if (firstP === -1) {
-                                    firstP = i;
-                                    firstT = 2;
-                                }
-                                else {
-                                    secondP = i;
-                                    secondT = 2;
-                                }
-                            }
-                            else {
-                            }
+                            ;
                         }
-                        ;
                         if (firstP === 0 && secondP === this.nVertices - 1) {
                             firstP = this.nVertices - 1;
                             secondP = 0;
@@ -10843,16 +11027,18 @@ var org;
                             a.push(0); return a; })(this.nVertices + 1);
                         var currOut = 0;
                         for (var i = 0; i < this.nVertices; i++) {
-                            newx[currOut] = this.x[i];
-                            newy[currOut] = this.y[i];
-                            if (i === firstP) {
+                            {
+                                newx[currOut] = this.x[i];
+                                newy[currOut] = this.y[i];
+                                if (i === firstP) {
+                                    ++currOut;
+                                    newx[currOut] = t.x[tipT];
+                                    newy[currOut] = t.y[tipT];
+                                }
                                 ++currOut;
-                                newx[currOut] = t.x[tipT];
-                                newy[currOut] = t.y[tipT];
                             }
-                            ++currOut;
+                            ;
                         }
-                        ;
                         var result = new Polygon(newx, newy, this.nVertices + 1);
                         return result;
                     };
@@ -10866,13 +11052,15 @@ var org;
                         var vecs = this.getVertexVecs();
                         var offset = 0;
                         for (var i = 0; i < this.nVertices; ++i) {
-                            if (vecs[i].x === vecs[Polygon.remainder(i + 1, this.nVertices)].x && vecs[i].y === vecs[Polygon.remainder(i + 1, this.nVertices)].y) {
-                                offset++;
-                                continue;
+                            {
+                                if (vecs[i].x === vecs[Polygon.remainder(i + 1, this.nVertices)].x && vecs[i].y === vecs[Polygon.remainder(i + 1, this.nVertices)].y) {
+                                    offset++;
+                                    continue;
+                                }
+                                /* add */ (pd.vertices.push(vecs[i]) > 0);
                             }
-                            /* add */ (pd.vertices.push(vecs[i]) > 0);
+                            ;
                         }
-                        ;
                     };
                     /**
                      * Finds and fixes "pinch points," points where two polygon
@@ -10898,19 +11086,23 @@ var org;
                         var pinchIndexA = -1;
                         var pinchIndexB = -1;
                         for (var i = 0; i < pin.nVertices; ++i) {
-                            for (var j = i + 1; j < pin.nVertices; ++j) {
-                                if (org.jbox2d.common.MathUtils.abs(Math.fround(pin.x[i] - pin.x[j])) < tol && org.jbox2d.common.MathUtils.abs(Math.fround(pin.y[i] - pin.y[j])) < tol && j !== i + 1) {
-                                    pinchIndexA = i;
-                                    pinchIndexB = j;
-                                    hasPinchPoint = true;
-                                    break;
+                            {
+                                for (var j = i + 1; j < pin.nVertices; ++j) {
+                                    {
+                                        if (org.jbox2d.common.MathUtils.abs(Math.fround(pin.x[i] - pin.x[j])) < tol && org.jbox2d.common.MathUtils.abs(Math.fround(pin.y[i] - pin.y[j])) < tol && j !== i + 1) {
+                                            pinchIndexA = i;
+                                            pinchIndexB = j;
+                                            hasPinchPoint = true;
+                                            break;
+                                        }
+                                    }
+                                    ;
                                 }
+                                if (hasPinchPoint)
+                                    break;
                             }
                             ;
-                            if (hasPinchPoint)
-                                break;
                         }
-                        ;
                         if (hasPinchPoint) {
                             var sizeA = pinchIndexB - pinchIndexA;
                             if (sizeA === pin.nVertices)
@@ -10920,11 +11112,13 @@ var org;
                             var yA = (function (s) { var a = []; while (s-- > 0)
                                 a.push(0); return a; })(sizeA);
                             for (var i = 0; i < sizeA; ++i) {
-                                var ind = Polygon.remainder(pinchIndexA + i, pin.nVertices);
-                                xA[i] = pin.x[ind];
-                                yA[i] = pin.y[ind];
+                                {
+                                    var ind = Polygon.remainder(pinchIndexA + i, pin.nVertices);
+                                    xA[i] = pin.x[ind];
+                                    yA[i] = pin.y[ind];
+                                }
+                                ;
                             }
-                            ;
                             var tempA = new Polygon(xA, yA, sizeA);
                             poutA.set(tempA);
                             var sizeB = pin.nVertices - sizeA;
@@ -10933,11 +11127,13 @@ var org;
                             var yB = (function (s) { var a = []; while (s-- > 0)
                                 a.push(0); return a; })(sizeB);
                             for (var i = 0; i < sizeB; ++i) {
-                                var ind = Polygon.remainder(pinchIndexB + i, pin.nVertices);
-                                xB[i] = pin.x[ind];
-                                yB[i] = pin.y[ind];
+                                {
+                                    var ind = Polygon.remainder(pinchIndexB + i, pin.nVertices);
+                                    xB[i] = pin.x[ind];
+                                    yB[i] = pin.y[ind];
+                                }
+                                ;
                             }
-                            ;
                             var tempB = new Polygon(xB, yB, sizeB);
                             poutB.set(tempB);
                         }
@@ -10984,115 +11180,137 @@ var org;
                             var mergeB = (function (s) { var a = []; while (s-- > 0)
                                 a.push(null); return a; })(pB.nVertices);
                             for (var i = 0; i < pA.nVertices; ++i) {
-                                mergeA[i] = new org.jbox2d.util.nonconvex.Triangle();
+                                {
+                                    mergeA[i] = new org.jbox2d.util.nonconvex.Triangle();
+                                }
+                                ;
                             }
-                            ;
                             for (var i = 0; i < pB.nVertices; ++i) {
-                                mergeB[i] = new org.jbox2d.util.nonconvex.Triangle();
+                                {
+                                    mergeB[i] = new org.jbox2d.util.nonconvex.Triangle();
+                                }
+                                ;
                             }
-                            ;
                             var nA = Polygon.triangulatePolygon(pA.x, pA.y, pA.nVertices, mergeA);
                             var nB = Polygon.triangulatePolygon(pB.x, pB.y, pB.nVertices, mergeB);
                             if (nA === -1 || nB === -1) {
                                 return -1;
                             }
                             for (var i = 0; i < nA; ++i) {
-                                results[i].set(mergeA[i]);
+                                {
+                                    results[i].set(mergeA[i]);
+                                }
+                                ;
                             }
-                            ;
                             for (var i = 0; i < nB; ++i) {
-                                results[nA + i].set(mergeB[i]);
+                                {
+                                    results[nA + i].set(mergeB[i]);
+                                }
+                                ;
                             }
-                            ;
                             return (nA + nB);
                         }
                         var buffer = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(vNum - 2);
                         for (var i = 0; i < buffer.length; ++i) {
-                            buffer[i] = new org.jbox2d.util.nonconvex.Triangle();
+                            {
+                                buffer[i] = new org.jbox2d.util.nonconvex.Triangle();
+                            }
+                            ;
                         }
-                        ;
                         var bufferSize = 0;
                         var xrem = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(vNum);
                         var yrem = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(vNum);
                         for (var i = 0; i < vNum; ++i) {
-                            xrem[i] = xv[i];
-                            yrem[i] = yv[i];
+                            {
+                                xrem[i] = xv[i];
+                                yrem[i] = yv[i];
+                            }
+                            ;
                         }
-                        ;
                         var xremLength = vNum;
                         while ((vNum > 3)) {
-                            var earIndex = -1;
-                            var earMaxMinCross = -1000.0;
-                            for (var i = 0; i < vNum; ++i) {
-                                if (Polygon.isEar(i, xrem, yrem, vNum)) {
-                                    var lower = Polygon.remainder(i - 1, vNum);
-                                    var upper = Polygon.remainder(i + 1, vNum);
-                                    var d1 = new org.jbox2d.common.Vec2(Math.fround(xrem[upper] - xrem[i]), Math.fround(yrem[upper] - yrem[i]));
-                                    var d2 = new org.jbox2d.common.Vec2(Math.fround(xrem[i] - xrem[lower]), Math.fround(yrem[i] - yrem[lower]));
-                                    var d3 = new org.jbox2d.common.Vec2(Math.fround(xrem[lower] - xrem[upper]), Math.fround(yrem[lower] - yrem[upper]));
-                                    d1.normalize();
-                                    d2.normalize();
-                                    d3.normalize();
-                                    var cross12 = org.jbox2d.common.MathUtils.abs(org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(d1, d2));
-                                    var cross23 = org.jbox2d.common.MathUtils.abs(org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(d2, d3));
-                                    var cross31 = org.jbox2d.common.MathUtils.abs(org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(d3, d1));
-                                    var minCross = org.jbox2d.common.MathUtils.min(cross12, org.jbox2d.common.MathUtils.min(cross23, cross31));
-                                    if (minCross > earMaxMinCross) {
-                                        earIndex = i;
-                                        earMaxMinCross = minCross;
+                            {
+                                var earIndex = -1;
+                                var earMaxMinCross = -1000.0;
+                                for (var i = 0; i < vNum; ++i) {
+                                    {
+                                        if (Polygon.isEar(i, xrem, yrem, vNum)) {
+                                            var lower = Polygon.remainder(i - 1, vNum);
+                                            var upper = Polygon.remainder(i + 1, vNum);
+                                            var d1 = new org.jbox2d.common.Vec2(Math.fround(xrem[upper] - xrem[i]), Math.fround(yrem[upper] - yrem[i]));
+                                            var d2 = new org.jbox2d.common.Vec2(Math.fround(xrem[i] - xrem[lower]), Math.fround(yrem[i] - yrem[lower]));
+                                            var d3 = new org.jbox2d.common.Vec2(Math.fround(xrem[lower] - xrem[upper]), Math.fround(yrem[lower] - yrem[upper]));
+                                            d1.normalize();
+                                            d2.normalize();
+                                            d3.normalize();
+                                            var cross12 = org.jbox2d.common.MathUtils.abs(org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(d1, d2));
+                                            var cross23 = org.jbox2d.common.MathUtils.abs(org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(d2, d3));
+                                            var cross31 = org.jbox2d.common.MathUtils.abs(org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(d3, d1));
+                                            var minCross = org.jbox2d.common.MathUtils.min(cross12, org.jbox2d.common.MathUtils.min(cross23, cross31));
+                                            if (minCross > earMaxMinCross) {
+                                                earIndex = i;
+                                                earMaxMinCross = minCross;
+                                            }
+                                        }
                                     }
+                                    ;
                                 }
-                            }
-                            ;
-                            if (earIndex === -1) {
-                                if (Polygon.B2_POLYGON_REPORT_ERRORS) {
-                                    var dump = new Polygon(xrem, yrem, vNum);
-                                    console.info("Couldn\'t find an ear, dumping remaining poly:\n");
-                                    dump.printFormatted();
-                                    console.info("Please submit this dump to ewjordan at Box2d forums\n");
+                                if (earIndex === -1) {
+                                    if (Polygon.B2_POLYGON_REPORT_ERRORS) {
+                                        var dump = new Polygon(xrem, yrem, vNum);
+                                        console.info("Couldn\'t find an ear, dumping remaining poly:\n");
+                                        dump.printFormatted();
+                                        console.info("Please submit this dump to ewjordan at Box2d forums\n");
+                                    }
+                                    for (var i = 0; i < bufferSize; i++) {
+                                        {
+                                            results[i].set(buffer[i]);
+                                        }
+                                        ;
+                                    }
+                                    if (bufferSize > 0)
+                                        return bufferSize;
+                                    else
+                                        return -1;
                                 }
-                                for (var i = 0; i < bufferSize; i++) {
-                                    results[i].set(buffer[i]);
+                                --vNum;
+                                var newx = (function (s) { var a = []; while (s-- > 0)
+                                    a.push(0); return a; })(vNum);
+                                var newy = (function (s) { var a = []; while (s-- > 0)
+                                    a.push(0); return a; })(vNum);
+                                var currDest = 0;
+                                for (var i = 0; i < vNum; ++i) {
+                                    {
+                                        if (currDest === earIndex)
+                                            ++currDest;
+                                        newx[i] = xrem[currDest];
+                                        newy[i] = yrem[currDest];
+                                        ++currDest;
+                                    }
+                                    ;
                                 }
-                                ;
-                                if (bufferSize > 0)
-                                    return bufferSize;
-                                else
-                                    return -1;
+                                var under = (earIndex === 0) ? (vNum) : (earIndex - 1);
+                                var over = (earIndex === vNum) ? 0 : (earIndex + 1);
+                                var toAdd_1 = new org.jbox2d.util.nonconvex.Triangle(xrem[earIndex], yrem[earIndex], xrem[over], yrem[over], xrem[under], yrem[under]);
+                                buffer[bufferSize] = toAdd_1;
+                                ++bufferSize;
+                                xrem = newx;
+                                yrem = newy;
                             }
-                            --vNum;
-                            var newx = (function (s) { var a = []; while (s-- > 0)
-                                a.push(0); return a; })(vNum);
-                            var newy = (function (s) { var a = []; while (s-- > 0)
-                                a.push(0); return a; })(vNum);
-                            var currDest = 0;
-                            for (var i = 0; i < vNum; ++i) {
-                                if (currDest === earIndex)
-                                    ++currDest;
-                                newx[i] = xrem[currDest];
-                                newy[i] = yrem[currDest];
-                                ++currDest;
-                            }
-                            ;
-                            var under = (earIndex === 0) ? (vNum) : (earIndex - 1);
-                            var over = (earIndex === vNum) ? 0 : (earIndex + 1);
-                            var toAdd_1 = new org.jbox2d.util.nonconvex.Triangle(xrem[earIndex], yrem[earIndex], xrem[over], yrem[over], xrem[under], yrem[under]);
-                            buffer[bufferSize] = toAdd_1;
-                            ++bufferSize;
-                            xrem = newx;
-                            yrem = newy;
                         }
                         ;
                         var toAdd = new org.jbox2d.util.nonconvex.Triangle(xrem[1], yrem[1], xrem[2], yrem[2], xrem[0], yrem[0]);
                         buffer[bufferSize] = toAdd;
                         ++bufferSize;
                         for (var i = 0; i < bufferSize; i++) {
-                            results[i].set(buffer[i]);
+                            {
+                                results[i].set(buffer[i]);
+                            }
+                            ;
                         }
-                        ;
                         return bufferSize;
                     };
                     /**
@@ -11124,60 +11342,70 @@ var org;
                             var covered = (function (s) { var a = []; while (s-- > 0)
                                 a.push(0); return a; })(triangulatedLength);
                             for (var i = 0; i < triangulatedLength; ++i) {
-                                covered[i] = 0;
-                                if (((triangulated[i].x[0] === triangulated[i].x[1]) && (triangulated[i].y[0] === triangulated[i].y[1])) || ((triangulated[i].x[1] === triangulated[i].x[2]) && (triangulated[i].y[1] === triangulated[i].y[2])) || ((triangulated[i].x[0] === triangulated[i].x[2]) && (triangulated[i].y[0] === triangulated[i].y[2]))) {
-                                    covered[i] = 1;
-                                }
-                            }
-                            ;
-                            var notDone = true;
-                            while ((notDone)) {
-                                var currTri = -1;
-                                for (var i = 0; i < triangulatedLength; ++i) {
-                                    if (covered[i] !== 0)
-                                        continue;
-                                    currTri = i;
-                                    break;
+                                {
+                                    covered[i] = 0;
+                                    if (((triangulated[i].x[0] === triangulated[i].x[1]) && (triangulated[i].y[0] === triangulated[i].y[1])) || ((triangulated[i].x[1] === triangulated[i].x[2]) && (triangulated[i].y[1] === triangulated[i].y[2])) || ((triangulated[i].x[0] === triangulated[i].x[2]) && (triangulated[i].y[0] === triangulated[i].y[2]))) {
+                                        covered[i] = 1;
+                                    }
                                 }
                                 ;
-                                if (currTri === -1) {
-                                    notDone = false;
-                                }
-                                else {
-                                    var poly = new Polygon(triangulated[currTri]);
-                                    covered[currTri] = 1;
-                                    var index = 0;
-                                    for (var i = 0; i < 2 * triangulatedLength; ++i, ++index) {
-                                        while ((index >= triangulatedLength))
-                                            index -= triangulatedLength;
-                                        if (covered[index] !== 0) {
-                                            continue;
+                            }
+                            var notDone = true;
+                            while ((notDone)) {
+                                {
+                                    var currTri = -1;
+                                    for (var i = 0; i < triangulatedLength; ++i) {
+                                        {
+                                            if (covered[i] !== 0)
+                                                continue;
+                                            currTri = i;
+                                            break;
                                         }
-                                        var newP = poly.add(triangulated[index]);
-                                        if (newP == null) {
-                                            continue;
-                                        }
-                                        if (newP.nVertices > Polygon.maxPolygonVertices_$LI$()) {
-                                            newP = null;
-                                            continue;
-                                        }
-                                        if (newP.isConvex()) {
-                                            poly.set(newP);
-                                            newP = null;
-                                            covered[index] = 1;
-                                        }
-                                        else {
-                                            newP = null;
-                                        }
+                                        ;
                                     }
-                                    ;
-                                    if (polyIndex < polysLength) {
-                                        poly.mergeParallelEdges(org.jbox2d.common.Settings.angularSlop_$LI$());
+                                    if (currTri === -1) {
+                                        notDone = false;
+                                    }
+                                    else {
+                                        var poly = new Polygon(triangulated[currTri]);
+                                        covered[currTri] = 1;
+                                        var index = 0;
+                                        for (var i = 0; i < 2 * triangulatedLength; ++i, ++index) {
+                                            {
+                                                while ((index >= triangulatedLength)) {
+                                                    index -= triangulatedLength;
+                                                }
+                                                ;
+                                                if (covered[index] !== 0) {
+                                                    continue;
+                                                }
+                                                var newP = poly.add(triangulated[index]);
+                                                if (newP == null) {
+                                                    continue;
+                                                }
+                                                if (newP.nVertices > Polygon.maxPolygonVertices_$LI$()) {
+                                                    newP = null;
+                                                    continue;
+                                                }
+                                                if (newP.isConvex()) {
+                                                    poly.set(newP);
+                                                    newP = null;
+                                                    covered[index] = 1;
+                                                }
+                                                else {
+                                                    newP = null;
+                                                }
+                                            }
+                                            ;
+                                        }
+                                        if (polyIndex < polysLength) {
+                                            poly.mergeParallelEdges(org.jbox2d.common.Settings.angularSlop_$LI$());
+                                            if (poly.nVertices >= 3)
+                                                polys[polyIndex].set(poly);
+                                        }
                                         if (poly.nVertices >= 3)
-                                            polys[polyIndex].set(poly);
+                                            polyIndex++;
                                     }
-                                    if (poly.nVertices >= 3)
-                                        polyIndex++;
                                 }
                             }
                             ;
@@ -11232,12 +11460,14 @@ var org;
                             return false;
                         var myTri = new org.jbox2d.util.nonconvex.Triangle(xv[i], yv[i], xv[upper], yv[upper], xv[lower], yv[lower]);
                         for (var j = 0; j < xvLength; ++j) {
-                            if (j === i || j === lower || j === upper)
-                                continue;
-                            if (myTri.containsPoint(xv[j], yv[j]))
-                                return false;
+                            {
+                                if (j === i || j === lower || j === upper)
+                                    continue;
+                                if (myTri.containsPoint(xv[j], yv[j]))
+                                    return false;
+                            }
+                            ;
                         }
-                        ;
                         return true;
                     };
                     Polygon.reversePolygon$org_jbox2d_util_nonconvex_Polygon = function (p) {
@@ -11251,14 +11481,16 @@ var org;
                         var low = 0;
                         var high = n - 1;
                         while ((low < high)) {
-                            var buffer = x[low];
-                            x[low] = x[high];
-                            x[high] = buffer;
-                            buffer = y[low];
-                            y[low] = y[high];
-                            y[high] = buffer;
-                            ++low;
-                            --high;
+                            {
+                                var buffer = x[low];
+                                x[low] = x[high];
+                                x[high] = buffer;
+                                buffer = y[low];
+                                y[low] = y[high];
+                                y[high] = buffer;
+                                ++low;
+                                --high;
+                            }
                         }
                         ;
                     };
@@ -11294,9 +11526,11 @@ var org;
                         var triangulated = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(p.nVertices - 2);
                         for (var i = 0; i < triangulated.length; ++i) {
-                            triangulated[i] = new org.jbox2d.util.nonconvex.Triangle();
+                            {
+                                triangulated[i] = new org.jbox2d.util.nonconvex.Triangle();
+                            }
+                            ;
                         }
-                        ;
                         var nTri;
                         if (p.isCCW()) {
                             var tempP = new Polygon();
@@ -11331,93 +11565,101 @@ var org;
                         var decomposed = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(p.nVertices - 2);
                         for (var i = 0; i < decomposed.length; ++i) {
-                            decomposed[i] = new Polygon();
+                            {
+                                decomposed[i] = new Polygon();
+                            }
+                            ;
                         }
-                        ;
                         var nPolys = Polygon.decomposeConvex(p, decomposed, p.nVertices - 2);
                         var pdarray = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(2 * p.nVertices);
                         for (var i = 0; i < pdarray.length; ++i) {
-                            pdarray[i] = new org.jbox2d.collision.shapes.PolygonDef();
+                            {
+                                pdarray[i] = new org.jbox2d.collision.shapes.PolygonDef();
+                            }
+                            ;
                         }
-                        ;
                         var extra = 0;
                         for (var i = 0; i < nPolys; ++i) {
-                            var toAdd = pdarray[i + extra];
-                            toAdd.set(prototype);
-                            var curr = decomposed[i];
-                            if (curr.nVertices === 3) {
-                                for (var j = 0; j < 3; ++j) {
-                                    var lower = (j === 0) ? (curr.nVertices - 1) : (j - 1);
-                                    var middle = j;
-                                    var upper = (j === curr.nVertices - 1) ? (0) : (j + 1);
-                                    var dx0 = Math.fround(curr.x[middle] - curr.x[lower]);
-                                    var dy0 = Math.fround(curr.y[middle] - curr.y[lower]);
-                                    var dx1 = Math.fround(curr.x[upper] - curr.x[middle]);
-                                    var dy1 = Math.fround(curr.y[upper] - curr.y[middle]);
-                                    var norm0 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx0 * dx0) + Math.fround(dy0 * dy0))));
-                                    var norm1 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx1 * dx1) + Math.fround(dy1 * dy1))));
-                                    if (!(norm0 > 0.0 && norm1 > 0.0)) {
-                                        continue;
-                                    }
-                                    dx0 /= norm0;
-                                    dy0 /= norm0;
-                                    dx1 /= norm1;
-                                    dy1 /= norm1;
-                                    var cross = Math.fround(Math.fround(dx0 * dy1) - Math.fround(dx1 * dy0));
-                                    var dot = Math.fround(Math.fround(dx0 * dx1) + Math.fround(dy0 * dy1));
-                                    if (org.jbox2d.common.MathUtils.abs(cross) < org.jbox2d.common.Settings.angularSlop_$LI$() && dot > 0) {
-                                        var dx2 = Math.fround(curr.x[lower] - curr.x[upper]);
-                                        var dy2 = Math.fround(curr.y[lower] - curr.y[upper]);
-                                        var norm2 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx2 * dx2) + Math.fround(dy2 * dy2))));
-                                        if (norm2 === 0.0) {
-                                            continue;
+                            {
+                                var toAdd = pdarray[i + extra];
+                                toAdd.set(prototype);
+                                var curr = decomposed[i];
+                                if (curr.nVertices === 3) {
+                                    for (var j = 0; j < 3; ++j) {
+                                        {
+                                            var lower = (j === 0) ? (curr.nVertices - 1) : (j - 1);
+                                            var middle = j;
+                                            var upper = (j === curr.nVertices - 1) ? (0) : (j + 1);
+                                            var dx0 = Math.fround(curr.x[middle] - curr.x[lower]);
+                                            var dy0 = Math.fround(curr.y[middle] - curr.y[lower]);
+                                            var dx1 = Math.fround(curr.x[upper] - curr.x[middle]);
+                                            var dy1 = Math.fround(curr.y[upper] - curr.y[middle]);
+                                            var norm0 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx0 * dx0) + Math.fround(dy0 * dy0))));
+                                            var norm1 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx1 * dx1) + Math.fround(dy1 * dy1))));
+                                            if (!(norm0 > 0.0 && norm1 > 0.0)) {
+                                                continue;
+                                            }
+                                            dx0 /= norm0;
+                                            dy0 /= norm0;
+                                            dx1 /= norm1;
+                                            dy1 /= norm1;
+                                            var cross = Math.fround(Math.fround(dx0 * dy1) - Math.fround(dx1 * dy0));
+                                            var dot = Math.fround(Math.fround(dx0 * dx1) + Math.fround(dy0 * dy1));
+                                            if (org.jbox2d.common.MathUtils.abs(cross) < org.jbox2d.common.Settings.angularSlop_$LI$() && dot > 0) {
+                                                var dx2 = Math.fround(curr.x[lower] - curr.x[upper]);
+                                                var dy2 = Math.fround(curr.y[lower] - curr.y[upper]);
+                                                var norm2 = Math.fround(Math.sqrt(Math.fround(Math.fround(dx2 * dx2) + Math.fround(dy2 * dy2))));
+                                                if (norm2 === 0.0) {
+                                                    continue;
+                                                }
+                                                dx2 /= norm2;
+                                                dy2 /= norm2;
+                                                var thisArea = curr.getArea();
+                                                var thisHeight = Math.fround(Math.fround(2.0 * thisArea) / norm2);
+                                                var buffer2 = dx2;
+                                                dx2 = dy2;
+                                                dy2 = -buffer2;
+                                                var newX1 = [Math.fround(curr.x[middle] + Math.fround(dx2 * thisHeight)), curr.x[lower], curr.x[middle]];
+                                                var newY1 = [Math.fround(curr.y[middle] + Math.fround(dy2 * thisHeight)), curr.y[lower], curr.y[middle]];
+                                                var newX2 = [newX1[0], curr.x[middle], curr.x[upper]];
+                                                var newY2 = [newY1[0], curr.y[middle], curr.y[upper]];
+                                                var p1 = new Polygon(newX1, newY1, 3);
+                                                var p2 = new Polygon(newX2, newY2, 3);
+                                                if (p1.isUsable()) {
+                                                    p1.addTo(toAdd);
+                                                    bd.createShape(toAdd);
+                                                    ++extra;
+                                                }
+                                                else if (Polygon.B2_POLYGON_REPORT_ERRORS) {
+                                                    console.error("Didn\'t add unusable polygon.  Dumping vertices:\n");
+                                                    p1.print();
+                                                }
+                                                if (p2.isUsable()) {
+                                                    p2.addTo(pdarray[i + extra]);
+                                                    bd.createShape(pdarray[i + extra]);
+                                                }
+                                                else if (Polygon.B2_POLYGON_REPORT_ERRORS) {
+                                                    console.error("Didn\'t add unusable polygon.  Dumping vertices:\n");
+                                                    p2.print();
+                                                }
+                                                continue;
+                                            }
                                         }
-                                        dx2 /= norm2;
-                                        dy2 /= norm2;
-                                        var thisArea = curr.getArea();
-                                        var thisHeight = Math.fround(Math.fround(2.0 * thisArea) / norm2);
-                                        var buffer2 = dx2;
-                                        dx2 = dy2;
-                                        dy2 = -buffer2;
-                                        var newX1 = [Math.fround(curr.x[middle] + Math.fround(dx2 * thisHeight)), curr.x[lower], curr.x[middle]];
-                                        var newY1 = [Math.fround(curr.y[middle] + Math.fround(dy2 * thisHeight)), curr.y[lower], curr.y[middle]];
-                                        var newX2 = [newX1[0], curr.x[middle], curr.x[upper]];
-                                        var newY2 = [newY1[0], curr.y[middle], curr.y[upper]];
-                                        var p1 = new Polygon(newX1, newY1, 3);
-                                        var p2 = new Polygon(newX2, newY2, 3);
-                                        if (p1.isUsable()) {
-                                            p1.addTo(toAdd);
-                                            bd.createShape(toAdd);
-                                            ++extra;
-                                        }
-                                        else if (Polygon.B2_POLYGON_REPORT_ERRORS) {
-                                            console.error("Didn\'t add unusable polygon.  Dumping vertices:\n");
-                                            p1.print();
-                                        }
-                                        if (p2.isUsable()) {
-                                            p2.addTo(pdarray[i + extra]);
-                                            bd.createShape(pdarray[i + extra]);
-                                        }
-                                        else if (Polygon.B2_POLYGON_REPORT_ERRORS) {
-                                            console.error("Didn\'t add unusable polygon.  Dumping vertices:\n");
-                                            p2.print();
-                                        }
-                                        continue;
+                                        ;
                                     }
                                 }
-                                ;
+                                if (decomposed[i].isUsable()) {
+                                    decomposed[i].addTo(toAdd);
+                                    bd.createShape(toAdd);
+                                }
+                                else if (Polygon.B2_POLYGON_REPORT_ERRORS) {
+                                    console.info("Didn\'t add unusable polygon.  Dumping vertices:\n");
+                                    decomposed[i].print();
+                                }
                             }
-                            if (decomposed[i].isUsable()) {
-                                decomposed[i].addTo(toAdd);
-                                bd.createShape(toAdd);
-                            }
-                            else if (Polygon.B2_POLYGON_REPORT_ERRORS) {
-                                console.info("Didn\'t add unusable polygon.  Dumping vertices:\n");
-                                decomposed[i].print();
-                            }
+                            ;
                         }
-                        ;
                         return;
                     };
                     Polygon.convexHull$org_jbox2d_common_Vec2_A$int = function (v, nVert) {
@@ -11426,10 +11668,12 @@ var org;
                         var cloudY = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(nVert);
                         for (var i = 0; i < nVert; ++i) {
-                            cloudX[i] = v[i].x;
-                            cloudY[i] = v[i].y;
+                            {
+                                cloudX[i] = v[i].x;
+                                cloudY[i] = v[i].y;
+                            }
+                            ;
                         }
-                        ;
                         var result = Polygon.convexHull$float_A$float_A$int(cloudX, cloudY, nVert);
                         return result;
                     };
@@ -11437,47 +11681,53 @@ var org;
                         var edgeList = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(nVert);
                         var numEdges = 0;
-                        var minY = Number.MAX_VALUE;
+                        var minY = 3.4028235E38;
                         var minYIndex = nVert;
                         for (var i = 0; i < nVert; ++i) {
-                            if (cloudY[i] < minY) {
-                                minY = cloudY[i];
-                                minYIndex = i;
+                            {
+                                if (cloudY[i] < minY) {
+                                    minY = cloudY[i];
+                                    minYIndex = i;
+                                }
                             }
+                            ;
                         }
-                        ;
                         var startIndex = minYIndex;
                         var winIndex = -1;
                         var dx = -1.0;
                         var dy = 0.0;
                         while ((winIndex !== minYIndex)) {
-                            var newdx = 0.0;
-                            var newdy = 0.0;
-                            var maxDot = -2.0;
-                            for (var i = 0; i < nVert; ++i) {
-                                if (i === startIndex)
-                                    continue;
-                                newdx = Math.fround(cloudX[i] - cloudX[startIndex]);
-                                newdy = Math.fround(cloudY[i] - cloudY[startIndex]);
-                                var nrm_1 = Math.fround(Math.sqrt(Math.fround(Math.fround(newdx * newdx) + Math.fround(newdy * newdy))));
-                                nrm_1 = (nrm_1 === 0.0) ? 1.0 : nrm_1;
-                                newdx /= nrm_1;
-                                newdy /= nrm_1;
-                                var newDot = Math.fround(Math.fround(newdx * dx) + Math.fround(newdy * dy));
-                                if (newDot > maxDot) {
-                                    maxDot = newDot;
-                                    winIndex = i;
+                            {
+                                var newdx = 0.0;
+                                var newdy = 0.0;
+                                var maxDot = -2.0;
+                                for (var i = 0; i < nVert; ++i) {
+                                    {
+                                        if (i === startIndex)
+                                            continue;
+                                        newdx = Math.fround(cloudX[i] - cloudX[startIndex]);
+                                        newdy = Math.fround(cloudY[i] - cloudY[startIndex]);
+                                        var nrm_1 = Math.fround(Math.sqrt(Math.fround(Math.fround(newdx * newdx) + Math.fround(newdy * newdy))));
+                                        nrm_1 = (nrm_1 === 0.0) ? 1.0 : nrm_1;
+                                        newdx /= nrm_1;
+                                        newdy /= nrm_1;
+                                        var newDot = Math.fround(Math.fround(newdx * dx) + Math.fround(newdy * dy));
+                                        if (newDot > maxDot) {
+                                            maxDot = newDot;
+                                            winIndex = i;
+                                        }
+                                    }
+                                    ;
                                 }
+                                edgeList[numEdges++] = winIndex;
+                                dx = Math.fround(cloudX[winIndex] - cloudX[startIndex]);
+                                dy = Math.fround(cloudY[winIndex] - cloudY[startIndex]);
+                                var nrm = Math.fround(Math.sqrt(Math.fround(Math.fround(dx * dx) + Math.fround(dy * dy))));
+                                nrm = (nrm === 0.0) ? 1.0 : nrm;
+                                dx /= nrm;
+                                dy /= nrm;
+                                startIndex = winIndex;
                             }
-                            ;
-                            edgeList[numEdges++] = winIndex;
-                            dx = Math.fround(cloudX[winIndex] - cloudX[startIndex]);
-                            dy = Math.fround(cloudY[winIndex] - cloudY[startIndex]);
-                            var nrm = Math.fround(Math.sqrt(Math.fround(Math.fround(dx * dx) + Math.fround(dy * dy))));
-                            nrm = (nrm === 0.0) ? 1.0 : nrm;
-                            dx /= nrm;
-                            dy /= nrm;
-                            startIndex = winIndex;
                         }
                         ;
                         var xres = (function (s) { var a = []; while (s-- > 0)
@@ -11485,10 +11735,12 @@ var org;
                         var yres = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(numEdges);
                         for (var i = 0; i < numEdges; i++) {
-                            xres[i] = cloudX[edgeList[i]];
-                            yres[i] = cloudY[edgeList[i]];
+                            {
+                                xres[i] = cloudX[edgeList[i]];
+                                yres[i] = cloudY[edgeList[i]];
+                            }
+                            ;
                         }
-                        ;
                         var returnVal = new Polygon(xres, yres, numEdges);
                         returnVal.mergeParallelEdges(org.jbox2d.common.Settings.angularSlop_$LI$());
                         return returnVal;
@@ -11520,7 +11772,9 @@ var org;
                     /*private*/ Polygon.remainder = function (x, modulus) {
                         var rem = x % modulus;
                         while ((rem < 0)) {
-                            rem += modulus;
+                            {
+                                rem += modulus;
+                            }
                         }
                         ;
                         return rem;
@@ -11530,133 +11784,157 @@ var org;
                             a.push(null); return a; })(p.nVertices * p.nVertices);
                         var nNodes = 0;
                         for (var i = 0; i < nodes.length; ++i) {
-                            nodes[i] = new org.jbox2d.util.nonconvex.PolyNode();
-                        }
-                        ;
-                        for (var i = 0; i < p.nVertices; ++i) {
-                            var pos = new org.jbox2d.common.Vec2(p.x[i], p.y[i]);
-                            nodes[i].position = (function (o) { if (o.clone != undefined) {
-                                return o.clone();
+                            {
+                                nodes[i] = new org.jbox2d.util.nonconvex.PolyNode();
                             }
-                            else {
-                                var clone = Object.create(o);
-                                for (var p_5 in o) {
-                                    if (o.hasOwnProperty(p_5))
-                                        clone[p_5] = o[p_5];
-                                }
-                                return clone;
-                            } })(pos);
-                            ++nNodes;
-                            var iplus = (i === p.nVertices - 1) ? 0 : i + 1;
-                            var iminus = (i === 0) ? p.nVertices - 1 : i - 1;
-                            nodes[i].addConnection(nodes[iplus]);
-                            nodes[i].addConnection(nodes[iminus]);
+                            ;
                         }
-                        ;
+                        for (var i = 0; i < p.nVertices; ++i) {
+                            {
+                                var pos = new org.jbox2d.common.Vec2(p.x[i], p.y[i]);
+                                nodes[i].position = (function (o) { if (o.clone != undefined) {
+                                    return o.clone();
+                                }
+                                else {
+                                    var clone = Object.create(o);
+                                    for (var p_5 in o) {
+                                        if (o.hasOwnProperty(p_5))
+                                            clone[p_5] = o[p_5];
+                                    }
+                                    return clone;
+                                } })(pos);
+                                ++nNodes;
+                                var iplus = (i === p.nVertices - 1) ? 0 : i + 1;
+                                var iminus = (i === 0) ? p.nVertices - 1 : i - 1;
+                                nodes[i].addConnection(nodes[iplus]);
+                                nodes[i].addConnection(nodes[iminus]);
+                            }
+                            ;
+                        }
                         var dirty = true;
                         var counter = 0;
                         while ((dirty)) {
-                            dirty = false;
-                            for (var i = 0; i < nNodes; ++i) {
-                                for (var j = 0; j < nodes[i].nConnected; ++j) {
-                                    for (var k = 0; k < nNodes; ++k) {
-                                        if (k === i || nodes[k] === nodes[i].connected[j])
-                                            continue;
-                                        for (var l = 0; l < nodes[k].nConnected; ++l) {
-                                            if (nodes[k].connected[l] === nodes[i].connected[j] || nodes[k].connected[l] === nodes[i])
-                                                continue;
-                                            var intersectPt = new org.jbox2d.common.Vec2();
-                                            var crosses = Polygon.intersect(nodes[i].position, nodes[i].connected[j].position, nodes[k].position, nodes[k].connected[l].position, intersectPt);
-                                            if (crosses) {
-                                                dirty = true;
-                                                var connj = nodes[i].connected[j];
-                                                var connl = nodes[k].connected[l];
-                                                nodes[i].connected[j].removeConnection(nodes[i]);
-                                                nodes[i].removeConnection(connj);
-                                                nodes[k].connected[l].removeConnection(nodes[k]);
-                                                nodes[k].removeConnection(connl);
-                                                nodes[nNodes] = new org.jbox2d.util.nonconvex.PolyNode(intersectPt);
-                                                nodes[nNodes].addConnection(nodes[i]);
-                                                nodes[i].addConnection(nodes[nNodes]);
-                                                nodes[nNodes].addConnection(nodes[k]);
-                                                nodes[k].addConnection(nodes[nNodes]);
-                                                nodes[nNodes].addConnection(connj);
-                                                connj.addConnection(nodes[nNodes]);
-                                                nodes[nNodes].addConnection(connl);
-                                                connl.addConnection(nodes[nNodes]);
-                                                ++nNodes;
-                                                break;
+                            {
+                                dirty = false;
+                                for (var i = 0; i < nNodes; ++i) {
+                                    {
+                                        for (var j = 0; j < nodes[i].nConnected; ++j) {
+                                            {
+                                                for (var k = 0; k < nNodes; ++k) {
+                                                    {
+                                                        if (k === i || nodes[k] === nodes[i].connected[j])
+                                                            continue;
+                                                        for (var l = 0; l < nodes[k].nConnected; ++l) {
+                                                            {
+                                                                if (nodes[k].connected[l] === nodes[i].connected[j] || nodes[k].connected[l] === nodes[i])
+                                                                    continue;
+                                                                var intersectPt = new org.jbox2d.common.Vec2();
+                                                                var crosses = Polygon.intersect(nodes[i].position, nodes[i].connected[j].position, nodes[k].position, nodes[k].connected[l].position, intersectPt);
+                                                                if (crosses) {
+                                                                    dirty = true;
+                                                                    var connj = nodes[i].connected[j];
+                                                                    var connl = nodes[k].connected[l];
+                                                                    nodes[i].connected[j].removeConnection(nodes[i]);
+                                                                    nodes[i].removeConnection(connj);
+                                                                    nodes[k].connected[l].removeConnection(nodes[k]);
+                                                                    nodes[k].removeConnection(connl);
+                                                                    nodes[nNodes] = new org.jbox2d.util.nonconvex.PolyNode(intersectPt);
+                                                                    nodes[nNodes].addConnection(nodes[i]);
+                                                                    nodes[i].addConnection(nodes[nNodes]);
+                                                                    nodes[nNodes].addConnection(nodes[k]);
+                                                                    nodes[k].addConnection(nodes[nNodes]);
+                                                                    nodes[nNodes].addConnection(connj);
+                                                                    connj.addConnection(nodes[nNodes]);
+                                                                    nodes[nNodes].addConnection(connl);
+                                                                    connl.addConnection(nodes[nNodes]);
+                                                                    ++nNodes;
+                                                                    break;
+                                                                }
+                                                                if (dirty)
+                                                                    break;
+                                                            }
+                                                            ;
+                                                        }
+                                                        if (dirty)
+                                                            break;
+                                                    }
+                                                    ;
+                                                }
+                                                if (dirty)
+                                                    break;
                                             }
-                                            if (dirty)
-                                                break;
+                                            ;
                                         }
-                                        ;
                                         if (dirty)
                                             break;
                                     }
                                     ;
-                                    if (dirty)
-                                        break;
                                 }
-                                ;
-                                if (dirty)
-                                    break;
+                                ++counter;
                             }
-                            ;
-                            ++counter;
                         }
                         ;
                         var foundDupe = true;
                         var nActive = nNodes;
                         while ((foundDupe)) {
-                            foundDupe = false;
-                            for (var i = 0; i < nNodes; ++i) {
-                                if (nodes[i].nConnected === 0)
-                                    continue;
-                                for (var j = i + 1; j < nNodes; ++j) {
-                                    if (nodes[j].nConnected === 0)
-                                        continue;
-                                    var diff = nodes[i].position.sub(nodes[j].position);
-                                    if (diff.lengthSquared() <= Polygon.COLLAPSE_DIST_SQR_$LI$()) {
-                                        if (nActive <= 3)
-                                            return new Polygon();
-                                        --nActive;
-                                        foundDupe = true;
-                                        var inode = nodes[i];
-                                        var jnode = nodes[j];
-                                        var njConn = jnode.nConnected;
-                                        for (var k = 0; k < njConn; ++k) {
-                                            var knode = jnode.connected[k];
-                                            if (knode !== inode) {
-                                                inode.addConnection(knode);
-                                                knode.addConnection(inode);
+                            {
+                                foundDupe = false;
+                                for (var i = 0; i < nNodes; ++i) {
+                                    {
+                                        if (nodes[i].nConnected === 0)
+                                            continue;
+                                        for (var j = i + 1; j < nNodes; ++j) {
+                                            {
+                                                if (nodes[j].nConnected === 0)
+                                                    continue;
+                                                var diff = nodes[i].position.sub(nodes[j].position);
+                                                if (diff.lengthSquared() <= Polygon.COLLAPSE_DIST_SQR_$LI$()) {
+                                                    if (nActive <= 3)
+                                                        return new Polygon();
+                                                    --nActive;
+                                                    foundDupe = true;
+                                                    var inode = nodes[i];
+                                                    var jnode = nodes[j];
+                                                    var njConn = jnode.nConnected;
+                                                    for (var k = 0; k < njConn; ++k) {
+                                                        {
+                                                            var knode = jnode.connected[k];
+                                                            if (knode !== inode) {
+                                                                inode.addConnection(knode);
+                                                                knode.addConnection(inode);
+                                                            }
+                                                            knode.removeConnection(jnode);
+                                                        }
+                                                        ;
+                                                    }
+                                                    jnode.nConnected = 0;
+                                                }
                                             }
-                                            knode.removeConnection(jnode);
+                                            ;
                                         }
-                                        ;
-                                        jnode.nConnected = 0;
                                     }
+                                    ;
                                 }
-                                ;
+                            }
+                        }
+                        ;
+                        var minY = 3.4028235E38;
+                        var maxX = -3.4028235E38;
+                        var minYIndex = -1;
+                        for (var i = 0; i < nNodes; ++i) {
+                            {
+                                if (nodes[i].position.y < minY && nodes[i].nConnected > 1) {
+                                    minY = nodes[i].position.y;
+                                    minYIndex = i;
+                                    maxX = nodes[i].position.x;
+                                }
+                                else if (nodes[i].position.y === minY && nodes[i].position.x > maxX && nodes[i].nConnected > 1) {
+                                    minYIndex = i;
+                                    maxX = nodes[i].position.x;
+                                }
                             }
                             ;
                         }
-                        ;
-                        var minY = Number.MAX_VALUE;
-                        var maxX = -Number.MAX_VALUE;
-                        var minYIndex = -1;
-                        for (var i = 0; i < nNodes; ++i) {
-                            if (nodes[i].position.y < minY && nodes[i].nConnected > 1) {
-                                minY = nodes[i].position.y;
-                                minYIndex = i;
-                                maxX = nodes[i].position.x;
-                            }
-                            else if (nodes[i].position.y === minY && nodes[i].position.x > maxX && nodes[i].nConnected > 1) {
-                                minYIndex = i;
-                                maxX = nodes[i].position.x;
-                            }
-                        }
-                        ;
                         var origDir = new org.jbox2d.common.Vec2(1.0, 0.0);
                         var resultVecs = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(4 * nNodes);
@@ -11670,14 +11948,16 @@ var org;
                         resultVecs[0] = startNode.position;
                         ++nResultVecs;
                         while ((nextNode !== startNode)) {
-                            if (nResultVecs > 4 * nNodes) {
+                            {
+                                if (nResultVecs > 4 * nNodes) {
+                                }
+                                resultVecs[nResultVecs++] = nextNode.position;
+                                var oldNode = currentNode;
+                                currentNode = nextNode;
+                                nextNode = currentNode.getRightestConnection$org_jbox2d_util_nonconvex_PolyNode(oldNode);
+                                if (nextNode == null)
+                                    break;
                             }
-                            resultVecs[nResultVecs++] = nextNode.position;
-                            var oldNode = currentNode;
-                            currentNode = nextNode;
-                            nextNode = currentNode.getRightestConnection$org_jbox2d_util_nonconvex_PolyNode(oldNode);
-                            if (nextNode == null)
-                                break;
                         }
                         ;
                         var xres = (function (s) { var a = []; while (s-- > 0)
@@ -11685,10 +11965,12 @@ var org;
                         var yres = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(nResultVecs);
                         for (var i = 0; i < nResultVecs; ++i) {
-                            xres[i] = resultVecs[i].x;
-                            yres[i] = resultVecs[i].y;
+                            {
+                                xres[i] = resultVecs[i].x;
+                                yres[i] = resultVecs[i].y;
+                            }
+                            ;
                         }
-                        ;
                         var retval = new Polygon(xres, yres, nResultVecs);
                         return retval;
                     };
@@ -11698,14 +11980,18 @@ var org;
                     Polygon.prototype.printFormatted = function () {
                         console.info("float xv[] = {");
                         for (var i = 0; i < this.nVertices; ++i) {
-                            console.info("%ff,");
+                            {
+                                console.info("%ff,");
+                            }
+                            ;
                         }
-                        ;
                         console.info("};\nfloat yv[] = {");
                         for (var i = 0; i < this.nVertices; ++i) {
-                            console.info("%ff,");
+                            {
+                                console.info("%ff,");
+                            }
+                            ;
                         }
-                        ;
                         console.info("};\n");
                     };
                     return Polygon;
@@ -11766,10 +12052,12 @@ var org;
                     }
                     PolyNode.prototype.addConnection = function (toMe) {
                         for (var i = 0; i < this.nConnected; ++i) {
-                            if (this.connected[i] === toMe)
-                                return;
+                            {
+                                if (this.connected[i] === toMe)
+                                    return;
+                            }
+                            ;
                         }
-                        ;
                         this.connected[this.nConnected] = toMe;
                         ++this.nConnected;
                     };
@@ -11777,35 +12065,43 @@ var org;
                         var isFound = false;
                         var foundIndex = -1;
                         for (var i = 0; i < this.nConnected; ++i) {
-                            if (fromMe === this.connected[i]) {
-                                isFound = true;
-                                foundIndex = i;
-                                break;
+                            {
+                                if (fromMe === this.connected[i]) {
+                                    isFound = true;
+                                    foundIndex = i;
+                                    break;
+                                }
                             }
+                            ;
                         }
-                        ;
                         --this.nConnected;
                         for (var i = foundIndex; i < this.nConnected; ++i) {
-                            this.connected[i] = this.connected[i + 1];
+                            {
+                                this.connected[i] = this.connected[i + 1];
+                            }
+                            ;
                         }
-                        ;
                     };
                     PolyNode.prototype.removeConnectionByIndex = function (index) {
                         --this.nConnected;
                         for (var i = index; i < this.nConnected; ++i) {
-                            this.connected[i] = this.connected[i + 1];
+                            {
+                                this.connected[i] = this.connected[i + 1];
+                            }
+                            ;
                         }
-                        ;
                     };
                     PolyNode.prototype.isConnectedTo = function (me) {
                         var isFound = false;
                         for (var i = 0; i < this.nConnected; ++i) {
-                            if (me === this.connected[i]) {
-                                isFound = true;
-                                break;
+                            {
+                                if (me === this.connected[i]) {
+                                    isFound = true;
+                                    break;
+                                }
                             }
+                            ;
                         }
-                        ;
                         return isFound;
                     };
                     PolyNode.prototype.getRightestConnection$org_jbox2d_util_nonconvex_PolyNode = function (incoming) {
@@ -11819,27 +12115,29 @@ var org;
                         var inLength = inDir.normalize();
                         var result = null;
                         for (var i = 0; i < this.nConnected; ++i) {
-                            if (this.connected[i] === incoming)
-                                continue;
-                            var testDir = this.connected[i].position.sub(this.position);
-                            var testLengthSqr = testDir.lengthSquared();
-                            testDir.normalize();
-                            var myCos = org.jbox2d.common.Vec2.dot(inDir, testDir);
-                            var mySin = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(inDir, testDir);
-                            if (result != null) {
-                                var resultDir = result.position.sub(this.position);
-                                resultDir.normalize();
-                                var resCos = org.jbox2d.common.Vec2.dot(inDir, resultDir);
-                                var resSin = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(inDir, resultDir);
-                                if (org.jbox2d.util.nonconvex.Polygon.isRighter(mySin, myCos, resSin, resCos)) {
+                            {
+                                if (this.connected[i] === incoming)
+                                    continue;
+                                var testDir = this.connected[i].position.sub(this.position);
+                                var testLengthSqr = testDir.lengthSquared();
+                                testDir.normalize();
+                                var myCos = org.jbox2d.common.Vec2.dot(inDir, testDir);
+                                var mySin = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(inDir, testDir);
+                                if (result != null) {
+                                    var resultDir = result.position.sub(this.position);
+                                    resultDir.normalize();
+                                    var resCos = org.jbox2d.common.Vec2.dot(inDir, resultDir);
+                                    var resSin = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(inDir, resultDir);
+                                    if (org.jbox2d.util.nonconvex.Polygon.isRighter(mySin, myCos, resSin, resCos)) {
+                                        result = this.connected[i];
+                                    }
+                                }
+                                else {
                                     result = this.connected[i];
                                 }
                             }
-                            else {
-                                result = this.connected[i];
-                            }
+                            ;
                         }
-                        ;
                         return result;
                     };
                     PolyNode.prototype.getRightestConnection = function (incoming) {
@@ -12000,46 +12298,50 @@ var org;
                             this.gravity = this.m_world.getGravity();
                         }
                         for (var i = this.m_bodyList; i != null; i = i.nextBody) {
-                            var body = i.body;
-                            if (body.isSleeping()) {
-                                continue;
-                            }
-                            var areac = new org.jbox2d.common.Vec2(0, 0);
-                            var massc = new org.jbox2d.common.Vec2(0, 0);
-                            var area = 0;
-                            var mass = 0;
-                            for (var shape = body.getShapeList(); shape != null; shape = shape.getNext()) {
-                                var sc = new org.jbox2d.common.Vec2(0, 0);
-                                var sarea = shape.computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_Vec2(this.normal, this.offset, sc);
-                                area += sarea;
-                                areac.x += Math.fround(sarea * sc.x);
-                                areac.y += Math.fround(sarea * sc.y);
-                                var shapeDensity = 0;
-                                if (this.useDensity) {
-                                    shapeDensity = shape.getDensity();
+                            {
+                                var body = i.body;
+                                if (body.isSleeping()) {
+                                    continue;
                                 }
-                                else {
-                                    shapeDensity = 1;
+                                var areac = new org.jbox2d.common.Vec2(0, 0);
+                                var massc = new org.jbox2d.common.Vec2(0, 0);
+                                var area = 0;
+                                var mass = 0;
+                                for (var shape = body.getShapeList(); shape != null; shape = shape.getNext()) {
+                                    {
+                                        var sc = new org.jbox2d.common.Vec2(0, 0);
+                                        var sarea = shape.computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_Vec2(this.normal, this.offset, sc);
+                                        area += sarea;
+                                        areac.x += Math.fround(sarea * sc.x);
+                                        areac.y += Math.fround(sarea * sc.y);
+                                        var shapeDensity = 0;
+                                        if (this.useDensity) {
+                                            shapeDensity = shape.getDensity();
+                                        }
+                                        else {
+                                            shapeDensity = 1;
+                                        }
+                                        mass += Math.fround(sarea * shapeDensity);
+                                        massc.x += Math.fround(Math.fround(sarea * sc.x) * shapeDensity);
+                                        massc.y += Math.fround(Math.fround(sarea * sc.y) * shapeDensity);
+                                    }
+                                    ;
                                 }
-                                mass += Math.fround(sarea * shapeDensity);
-                                massc.x += Math.fround(Math.fround(sarea * sc.x) * shapeDensity);
-                                massc.y += Math.fround(Math.fround(sarea * sc.y) * shapeDensity);
+                                areac.x /= area;
+                                areac.y /= area;
+                                massc.x /= mass;
+                                massc.y /= mass;
+                                if (area < org.jbox2d.common.Settings.EPSILON)
+                                    continue;
+                                var buoyancyForce = this.gravity.mul(Math.fround(-this.density * area));
+                                body.applyForce(buoyancyForce, massc);
+                                var dragForce = body.getLinearVelocityFromWorldPoint(areac).sub(this.velocity);
+                                dragForce.mulLocal(Math.fround(-this.linearDrag * area));
+                                body.applyForce(dragForce, areac);
+                                body.applyTorque(Math.fround(Math.fround(Math.fround(Math.fround(-body.getInertia() / body.getMass()) * area) * body.getAngularVelocity()) * this.angularDrag));
                             }
                             ;
-                            areac.x /= area;
-                            areac.y /= area;
-                            massc.x /= mass;
-                            massc.y /= mass;
-                            if (area < org.jbox2d.common.Settings.EPSILON)
-                                continue;
-                            var buoyancyForce = this.gravity.mul(Math.fround(-this.density * area));
-                            body.applyForce(buoyancyForce, massc);
-                            var dragForce = body.getLinearVelocityFromWorldPoint(areac).sub(this.velocity);
-                            dragForce.mulLocal(Math.fround(-this.linearDrag * area));
-                            body.applyForce(dragForce, areac);
-                            body.applyTorque(Math.fround(Math.fround(Math.fround(Math.fround(-body.getInertia() / body.getMass()) * area) * body.getAngularVelocity()) * this.angularDrag));
                         }
-                        ;
                     };
                     /**
                      *
@@ -12179,15 +12481,17 @@ var org;
                     this.g.noFill();
                     this.g.beginShape(PConstants.POLYGON);
                     for (var i = 0; i < k_segments; ++i) {
-                        var vx = Math.fround(radius * org.jbox2d.common.MathUtils.cos(theta));
-                        var vy = Math.fround(radius * org.jbox2d.common.MathUtils.sin(theta));
-                        ProcessingDebugDraw.circlePt_$LI$().set$float$float(vx, vy);
-                        this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
-                        ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
-                        this.g.vertex(ProcessingDebugDraw.circlePt_$LI$().x, ProcessingDebugDraw.circlePt_$LI$().y);
-                        theta += k_increment;
+                        {
+                            var vx = Math.fround(radius * org.jbox2d.common.MathUtils.cos(theta));
+                            var vy = Math.fround(radius * org.jbox2d.common.MathUtils.sin(theta));
+                            ProcessingDebugDraw.circlePt_$LI$().set$float$float(vx, vy);
+                            this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
+                            ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
+                            this.g.vertex(ProcessingDebugDraw.circlePt_$LI$().x, ProcessingDebugDraw.circlePt_$LI$().y);
+                            theta += k_increment;
+                        }
+                        ;
                     }
-                    ;
                     ProcessingDebugDraw.circlePt_$LI$().set$float$float(radius, 0);
                     this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
                     ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
@@ -12216,15 +12520,17 @@ var org;
                     this.g.stroke(color.x, color.y, color.z, 255.0);
                     this.g.beginShape(PConstants.POLYGON);
                     for (var i = 0; i < k_segments; ++i) {
-                        var vx = Math.fround(radius * org.jbox2d.common.MathUtils.cos(theta));
-                        var vy = Math.fround(radius * org.jbox2d.common.MathUtils.sin(theta));
-                        ProcessingDebugDraw.circlePt_$LI$().set$float$float(vx, vy);
-                        this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
-                        ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
-                        this.g.vertex(ProcessingDebugDraw.circlePt_$LI$().x, ProcessingDebugDraw.circlePt_$LI$().y);
-                        theta += k_increment;
+                        {
+                            var vx = Math.fround(radius * org.jbox2d.common.MathUtils.cos(theta));
+                            var vy = Math.fround(radius * org.jbox2d.common.MathUtils.sin(theta));
+                            ProcessingDebugDraw.circlePt_$LI$().set$float$float(vx, vy);
+                            this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
+                            ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
+                            this.g.vertex(ProcessingDebugDraw.circlePt_$LI$().x, ProcessingDebugDraw.circlePt_$LI$().y);
+                            theta += k_increment;
+                        }
+                        ;
                     }
-                    ;
                     ProcessingDebugDraw.circlePt_$LI$().set$float$float(radius, 0);
                     this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
                     ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
@@ -12252,12 +12558,14 @@ var org;
                     this.g.stroke(color.x, color.y, color.z);
                     this.g.noFill();
                     for (var i = 0; i < vertexCount; ++i) {
-                        var ind = (i + 1 < vertexCount) ? i + 1 : (i + 1 - vertexCount);
-                        this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v1_$LI$());
-                        this.viewportTransform.getWorldToScreen(vertices[ind], ProcessingDebugDraw.v2_$LI$());
-                        this.g.line(ProcessingDebugDraw.v1_$LI$().x, ProcessingDebugDraw.v1_$LI$().y, ProcessingDebugDraw.v2_$LI$().x, ProcessingDebugDraw.v2_$LI$().y);
+                        {
+                            var ind = (i + 1 < vertexCount) ? i + 1 : (i + 1 - vertexCount);
+                            this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v1_$LI$());
+                            this.viewportTransform.getWorldToScreen(vertices[ind], ProcessingDebugDraw.v2_$LI$());
+                            this.g.line(ProcessingDebugDraw.v1_$LI$().x, ProcessingDebugDraw.v1_$LI$().y, ProcessingDebugDraw.v2_$LI$().x, ProcessingDebugDraw.v2_$LI$().y);
+                        }
+                        ;
                     }
-                    ;
                 };
                 ProcessingDebugDraw.v_$LI$ = function () { if (ProcessingDebugDraw.v == null)
                     ProcessingDebugDraw.v = new org.jbox2d.common.Vec2(); return ProcessingDebugDraw.v; };
@@ -12273,19 +12581,23 @@ var org;
                     this.g.fill(Math.fround(0.5 * color.x), Math.fround(0.5 * color.y), Math.fround(0.5 * color.z), Math.fround(0.5 * 255.0));
                     this.g.beginShape(PConstants.POLYGON);
                     for (var i = 0; i < vertexCount; ++i) {
-                        this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v_$LI$());
-                        this.g.vertex(ProcessingDebugDraw.v_$LI$().x, ProcessingDebugDraw.v_$LI$().y);
+                        {
+                            this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v_$LI$());
+                            this.g.vertex(ProcessingDebugDraw.v_$LI$().x, ProcessingDebugDraw.v_$LI$().y);
+                        }
+                        ;
                     }
-                    ;
                     this.g.endShape();
                     this.g.stroke(color.x, color.y, color.z, 255.0);
                     for (var i = 0; i < vertexCount; ++i) {
-                        var ind = (i + 1 < vertexCount) ? i + 1 : (i + 1 - vertexCount);
-                        this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v1_$LI$());
-                        this.viewportTransform.getWorldToScreen(vertices[ind], ProcessingDebugDraw.v2_$LI$());
-                        this.g.line(ProcessingDebugDraw.v1_$LI$().x, ProcessingDebugDraw.v1_$LI$().y, ProcessingDebugDraw.v2_$LI$().x, ProcessingDebugDraw.v2_$LI$().y);
+                        {
+                            var ind = (i + 1 < vertexCount) ? i + 1 : (i + 1 - vertexCount);
+                            this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v1_$LI$());
+                            this.viewportTransform.getWorldToScreen(vertices[ind], ProcessingDebugDraw.v2_$LI$());
+                            this.g.line(ProcessingDebugDraw.v1_$LI$().x, ProcessingDebugDraw.v1_$LI$().y, ProcessingDebugDraw.v2_$LI$().x, ProcessingDebugDraw.v2_$LI$().y);
+                        }
+                        ;
                     }
-                    ;
                 };
                 /**
                  *
@@ -12374,12 +12686,14 @@ var org;
                     this.g.noStroke();
                     this.g.beginShape(PConstants.POLYGON);
                     for (var i = 0; i < k_segments; ++i) {
-                        var vx = Math.fround(ProcessingDebugDraw.position_$LI$().x + Math.fround(k_radius * org.jbox2d.common.MathUtils.cos(theta)));
-                        var vy = Math.fround(ProcessingDebugDraw.position_$LI$().y + Math.fround(k_radius * org.jbox2d.common.MathUtils.sin(theta)));
-                        this.g.vertex(vx, vy);
-                        theta += k_increment;
+                        {
+                            var vx = Math.fround(ProcessingDebugDraw.position_$LI$().x + Math.fround(k_radius * org.jbox2d.common.MathUtils.cos(theta)));
+                            var vy = Math.fround(ProcessingDebugDraw.position_$LI$().y + Math.fround(k_radius * org.jbox2d.common.MathUtils.sin(theta)));
+                            this.g.vertex(vx, vy);
+                            theta += k_increment;
+                        }
+                        ;
                     }
-                    ;
                     this.g.endShape();
                 };
                 ProcessingDebugDraw.localOffset_$LI$ = function () { if (ProcessingDebugDraw.localOffset == null)
@@ -13149,9 +13463,11 @@ var org;
                         var ray = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(argLength);
                         for (var i = 0; i < argLength; i++) {
-                            ray[i] = false;
+                            {
+                                ray[i] = false;
+                            }
+                            ;
                         }
-                        ;
                         return ray;
                     };
                     return BooleanArray;
@@ -13212,9 +13528,11 @@ var org;
                         var ray = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(argLength);
                         for (var i = 0; i < ray.length; i++) {
-                            ray[i] = new org.jbox2d.common.Vec2();
+                            {
+                                ray[i] = new org.jbox2d.common.Vec2();
+                            }
+                            ;
                         }
-                        ;
                         return ray;
                     };
                     return Vec2Array;
@@ -13599,25 +13917,27 @@ var org;
                         var curr = this.m_body.getContactList();
                         var touching = ([]);
                         while ((curr != null)) {
-                            if (curr.contact.m_shape1 === this) {
-                                /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
-                                    s.push(e);
-                                    return true;
+                            {
+                                if (curr.contact.m_shape1 === this) {
+                                    /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
+                                        s.push(e);
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    } })(touching, curr.contact.m_shape2);
                                 }
-                                else {
-                                    return false;
-                                } })(touching, curr.contact.m_shape2);
-                            }
-                            else if (curr.contact.m_shape2 === this) {
-                                /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
-                                    s.push(e);
-                                    return true;
+                                else if (curr.contact.m_shape2 === this) {
+                                    /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
+                                        s.push(e);
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    } })(touching, curr.contact.m_shape1);
                                 }
-                                else {
-                                    return false;
-                                } })(touching, curr.contact.m_shape1);
+                                curr = curr.next;
                             }
-                            curr = curr.next;
                         }
                         ;
                         return touching;
@@ -13629,27 +13949,29 @@ var org;
                         var curr = this.m_body.getContactList();
                         var contacts = ([]);
                         while ((curr != null)) {
-                            if (curr.contact.getManifoldCount() > 0) {
-                                if (curr.contact.m_shape1 === this) {
-                                    /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
-                                        s.push(e);
-                                        return true;
+                            {
+                                if (curr.contact.getManifoldCount() > 0) {
+                                    if (curr.contact.m_shape1 === this) {
+                                        /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
+                                            s.push(e);
+                                            return true;
+                                        }
+                                        else {
+                                            return false;
+                                        } })(contacts, curr.contact);
                                     }
-                                    else {
-                                        return false;
-                                    } })(contacts, curr.contact);
-                                }
-                                else if (curr.contact.m_shape2 === this) {
-                                    /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
-                                        s.push(e);
-                                        return true;
+                                    else if (curr.contact.m_shape2 === this) {
+                                        /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
+                                            s.push(e);
+                                            return true;
+                                        }
+                                        else {
+                                            return false;
+                                        } })(contacts, curr.contact);
                                     }
-                                    else {
-                                        return false;
-                                    } })(contacts, curr.contact);
                                 }
+                                curr = curr.next;
                             }
-                            curr = curr.next;
                         }
                         ;
                         return contacts;
@@ -14033,21 +14355,25 @@ var org;
                         cp.friction = c.m_friction;
                         cp.restitution = c.m_restitution;
                         for (var i = 0; i < manifoldCount; ++i) {
-                            var manifold = manifolds[i];
-                            cp.normal.set$org_jbox2d_common_Vec2(manifold.normal);
-                            for (var j = 0; j < manifold.pointCount; ++j) {
-                                var mp = manifold.points[j];
-                                b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                cp.velocity.subLocal(v1);
-                                cp.separation = mp.separation;
-                                cp.id.set(mp.id);
-                                this.m_world.m_contactListener.remove(cp);
+                            {
+                                var manifold = manifolds[i];
+                                cp.normal.set$org_jbox2d_common_Vec2(manifold.normal);
+                                for (var j = 0; j < manifold.pointCount; ++j) {
+                                    {
+                                        var mp = manifold.points[j];
+                                        b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                        b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                        b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                        cp.velocity.subLocal(v1);
+                                        cp.separation = mp.separation;
+                                        cp.id.set(mp.id);
+                                        this.m_world.m_contactListener.remove(cp);
+                                    }
+                                    ;
+                                }
                             }
                             ;
                         }
-                        ;
                     }
                     if (c.m_prev != null) {
                         c.m_prev.m_next = c.m_next;
@@ -14083,14 +14409,16 @@ var org;
                 };
                 ContactManager.prototype.collide = function () {
                     for (var c = this.m_world.m_contactList; c != null; c = c.getNext()) {
-                        var body1 = c.getShape1().getBody();
-                        var body2 = c.getShape2().getBody();
-                        if (body1.isSleeping() && body2.isSleeping()) {
-                            continue;
+                        {
+                            var body1 = c.getShape1().getBody();
+                            var body2 = c.getShape2().getBody();
+                            if (body1.isSleeping() && body2.isSleeping()) {
+                                continue;
+                            }
+                            c.update(this.m_world.m_contactListener);
                         }
-                        c.update(this.m_world.m_contactListener);
+                        ;
                     }
-                    ;
                 };
                 return ContactManager;
             }());
@@ -14625,10 +14953,12 @@ var org;
                     };
                     PolyContact.prototype.dumpManifoldPoints = function () {
                         for (var i = 0; i < this.m_manifold.pointCount; ++i) {
-                            var mp = this.m_manifold.points[i];
-                            console.info("Manifold point dump: " + mp.normalImpulse + " " + mp.tangentImpulse);
+                            {
+                                var mp = this.m_manifold.points[i];
+                                console.info("Manifold point dump: " + mp.normalImpulse + " " + mp.tangentImpulse);
+                            }
+                            ;
                         }
-                        ;
                     };
                     PolyContact.tlm0_$LI$ = function () { if (PolyContact.tlm0 == null)
                         PolyContact.tlm0 = (function () { var __o = new org.jbox2d.pooling.TLManifold(); __o.__delegate = new org.jbox2d.pooling.TLManifold(); return __o; })(); return PolyContact.tlm0; };
@@ -14658,47 +14988,51 @@ var org;
                         cp.restitution = this.m_restitution;
                         if (this.m_manifold.pointCount > 0) {
                             for (var i = 0; i < this.m_manifold.pointCount; ++i) {
-                                var mp = this.m_manifold.points[i];
-                                mp.normalImpulse = 0.0;
-                                mp.tangentImpulse = 0.0;
-                                var found = false;
-                                var id = mp.id;
-                                for (var j = 0; j < m0.pointCount; ++j) {
-                                    if (persisted[j] === true) {
-                                        continue;
-                                    }
-                                    var mp0 = m0.points[j];
-                                    if (mp0.id.isEqual(id)) {
-                                        persisted[j] = true;
-                                        mp.normalImpulse = mp0.normalImpulse;
-                                        mp.tangentImpulse = mp0.tangentImpulse;
-                                        found = true;
-                                        if (listener != null) {
-                                            b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                            b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                            b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                            cp.velocity.subLocal(v1);
-                                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                            cp.separation = mp.separation;
-                                            cp.id.set(id);
-                                            listener.persist(cp);
+                                {
+                                    var mp = this.m_manifold.points[i];
+                                    mp.normalImpulse = 0.0;
+                                    mp.tangentImpulse = 0.0;
+                                    var found = false;
+                                    var id = mp.id;
+                                    for (var j = 0; j < m0.pointCount; ++j) {
+                                        {
+                                            if (persisted[j] === true) {
+                                                continue;
+                                            }
+                                            var mp0 = m0.points[j];
+                                            if (mp0.id.isEqual(id)) {
+                                                persisted[j] = true;
+                                                mp.normalImpulse = mp0.normalImpulse;
+                                                mp.tangentImpulse = mp0.tangentImpulse;
+                                                found = true;
+                                                if (listener != null) {
+                                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                                    cp.velocity.subLocal(v1);
+                                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                                    cp.separation = mp.separation;
+                                                    cp.id.set(id);
+                                                    listener.persist(cp);
+                                                }
+                                                break;
+                                            }
                                         }
-                                        break;
+                                        ;
+                                    }
+                                    if (found === false && listener != null) {
+                                        b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                        b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                        b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                        cp.velocity.subLocal(v1);
+                                        cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                        cp.separation = mp.separation;
+                                        cp.id.set(id);
+                                        listener.add(cp);
                                     }
                                 }
                                 ;
-                                if (found === false && listener != null) {
-                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                    cp.velocity.subLocal(v1);
-                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                    cp.separation = mp.separation;
-                                    cp.id.set(id);
-                                    listener.add(cp);
-                                }
                             }
-                            ;
                             this.m_manifoldCount = 1;
                         }
                         else {
@@ -14708,20 +15042,22 @@ var org;
                             return;
                         }
                         for (var i = 0; i < m0.pointCount; ++i) {
-                            if (persisted[i]) {
-                                continue;
+                            {
+                                if (persisted[i]) {
+                                    continue;
+                                }
+                                var mp0 = m0.points[i];
+                                b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
+                                b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
+                                b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
+                                cp.velocity.subLocal(v1);
+                                cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                cp.separation = mp0.separation;
+                                cp.id.set(mp0.id);
+                                listener.remove(cp);
                             }
-                            var mp0 = m0.points[i];
-                            b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
-                            b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
-                            b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
-                            cp.velocity.subLocal(v1);
-                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                            cp.separation = mp0.separation;
-                            cp.id.set(mp0.id);
-                            listener.remove(cp);
+                            ;
                         }
-                        ;
                     };
                     return PolyContact;
                 }(org.jbox2d.dynamics.contacts.Contact));
@@ -16755,46 +17091,48 @@ var org;
                     var distance = 0.0;
                     var targetDistance = 0.0;
                     while ((true)) {
-                        var t = Math.fround(Math.fround((Math.fround(1.0 - alpha)) * t0) + alpha);
-                        sweep1.getXForm(xf1, t);
-                        sweep2.getXForm(xf2, t);
-                        distance = org.jbox2d.pooling.SingletonPool.getDistance().distance(p1, p2, shape1, xf1, shape2, xf2);
-                        if (iter === 0) {
-                            if (distance > Math.fround(2.0 * org.jbox2d.common.Settings.toiSlop_$LI$())) {
-                                targetDistance = Math.fround(1.5 * org.jbox2d.common.Settings.toiSlop_$LI$());
+                        {
+                            var t = Math.fround(Math.fround((Math.fround(1.0 - alpha)) * t0) + alpha);
+                            sweep1.getXForm(xf1, t);
+                            sweep2.getXForm(xf2, t);
+                            distance = org.jbox2d.pooling.SingletonPool.getDistance().distance(p1, p2, shape1, xf1, shape2, xf2);
+                            if (iter === 0) {
+                                if (distance > Math.fround(2.0 * org.jbox2d.common.Settings.toiSlop_$LI$())) {
+                                    targetDistance = Math.fround(1.5 * org.jbox2d.common.Settings.toiSlop_$LI$());
+                                }
+                                else {
+                                    targetDistance = org.jbox2d.common.MathUtils.max$float$float(Math.fround(0.05 * org.jbox2d.common.Settings.toiSlop_$LI$()), Math.fround(distance - Math.fround(0.5 * org.jbox2d.common.Settings.toiSlop_$LI$())));
+                                }
                             }
-                            else {
-                                targetDistance = org.jbox2d.common.MathUtils.max$float$float(Math.fround(0.05 * org.jbox2d.common.Settings.toiSlop_$LI$()), Math.fround(distance - Math.fround(0.5 * org.jbox2d.common.Settings.toiSlop_$LI$())));
+                            if (Math.fround(distance - targetDistance) < Math.fround(0.05 * org.jbox2d.common.Settings.toiSlop_$LI$()) || iter === k_maxIterations) {
+                                break;
                             }
+                            var normalx = Math.fround(p2.x - p1.x);
+                            var normaly = Math.fround(p2.y - p1.y);
+                            var lenSqrd = Math.fround(Math.fround(normalx * normalx) + Math.fround(normaly * normaly));
+                            if (lenSqrd >= Math.fround(org.jbox2d.common.Settings.EPSILON * org.jbox2d.common.Settings.EPSILON)) {
+                                var length_3 = org.jbox2d.common.MathUtils.sqrt(lenSqrd);
+                                var invLength = Math.fround(1.0 / length_3);
+                                normalx *= invLength;
+                                normaly *= invLength;
+                            }
+                            var approachVelocityBound = Math.fround(Math.fround((Math.fround(Math.fround(normalx * vx) + Math.fround(normaly * vy))) + Math.fround(org.jbox2d.common.MathUtils.abs(omega1) * r1)) + Math.fround(org.jbox2d.common.MathUtils.abs(omega2) * r2));
+                            if (org.jbox2d.common.MathUtils.abs(approachVelocityBound) < org.jbox2d.common.Settings.EPSILON) {
+                                alpha = 1.0;
+                                break;
+                            }
+                            var dAlpha = Math.fround((Math.fround(distance - targetDistance)) / approachVelocityBound);
+                            var newAlpha = Math.fround(alpha + dAlpha);
+                            if (newAlpha < 0.0 || 1.0 < newAlpha) {
+                                alpha = 1.0;
+                                break;
+                            }
+                            if (newAlpha < Math.fround((Math.fround(1.0 + Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON))) * alpha)) {
+                                break;
+                            }
+                            alpha = newAlpha;
+                            ++iter;
                         }
-                        if (Math.fround(distance - targetDistance) < Math.fround(0.05 * org.jbox2d.common.Settings.toiSlop_$LI$()) || iter === k_maxIterations) {
-                            break;
-                        }
-                        var normalx = Math.fround(p2.x - p1.x);
-                        var normaly = Math.fround(p2.y - p1.y);
-                        var lenSqrd = Math.fround(Math.fround(normalx * normalx) + Math.fround(normaly * normaly));
-                        if (lenSqrd >= Math.fround(org.jbox2d.common.Settings.EPSILON * org.jbox2d.common.Settings.EPSILON)) {
-                            var length_3 = org.jbox2d.common.MathUtils.sqrt(lenSqrd);
-                            var invLength = Math.fround(1.0 / length_3);
-                            normalx *= invLength;
-                            normaly *= invLength;
-                        }
-                        var approachVelocityBound = Math.fround(Math.fround((Math.fround(Math.fround(normalx * vx) + Math.fround(normaly * vy))) + Math.fround(org.jbox2d.common.MathUtils.abs(omega1) * r1)) + Math.fround(org.jbox2d.common.MathUtils.abs(omega2) * r2));
-                        if (org.jbox2d.common.MathUtils.abs(approachVelocityBound) < org.jbox2d.common.Settings.EPSILON) {
-                            alpha = 1.0;
-                            break;
-                        }
-                        var dAlpha = Math.fround((Math.fround(distance - targetDistance)) / approachVelocityBound);
-                        var newAlpha = Math.fround(alpha + dAlpha);
-                        if (newAlpha < 0.0 || 1.0 < newAlpha) {
-                            alpha = 1.0;
-                            break;
-                        }
-                        if (newAlpha < Math.fround((Math.fround(1.0 + Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON))) * alpha)) {
-                            break;
-                        }
-                        alpha = newAlpha;
-                        ++iter;
                     }
                     ;
                     return alpha;
@@ -17204,25 +17542,27 @@ var org;
                         var s2 = null;
                         var angle = 0.0;
                         for (; i < edgeDef.getVertexCount(); i++) {
-                            v2 = edgeDef.getVertices()[i];
-                            s2 = new org.jbox2d.collision.shapes.EdgeShape(v1, v2, def);
-                            s2.m_next = this.m_shapeList;
-                            this.m_shapeList = s2;
-                            ++this.m_shapeCount;
-                            s2.m_body = this;
-                            s2.createProxy(this.m_world.m_broadPhase, this.m_xf);
-                            s2.updateSweepRadius(this.m_sweep.localCenter);
-                            if (s1 == null) {
-                                s0 = s2;
-                                angle = Math.fround(Math.atan2(s2.getDirectionVector().y, s2.getDirectionVector().x));
+                            {
+                                v2 = edgeDef.getVertices()[i];
+                                s2 = new org.jbox2d.collision.shapes.EdgeShape(v1, v2, def);
+                                s2.m_next = this.m_shapeList;
+                                this.m_shapeList = s2;
+                                ++this.m_shapeCount;
+                                s2.m_body = this;
+                                s2.createProxy(this.m_world.m_broadPhase, this.m_xf);
+                                s2.updateSweepRadius(this.m_sweep.localCenter);
+                                if (s1 == null) {
+                                    s0 = s2;
+                                    angle = Math.fround(Math.atan2(s2.getDirectionVector().y, s2.getDirectionVector().x));
+                                }
+                                else {
+                                    angle = this.connectEdges(s1, s2, angle);
+                                }
+                                s1 = s2;
+                                v1 = v2;
                             }
-                            else {
-                                angle = this.connectEdges(s1, s2, angle);
-                            }
-                            s1 = s2;
-                            v1 = v2;
+                            ;
                         }
-                        ;
                         if (edgeDef.isLoop()) {
                             this.connectEdges(s1, s0, angle);
                         }
@@ -17253,20 +17593,22 @@ var org;
                     var prevNode = null;
                     var found = false;
                     while ((node != null)) {
-                        if (node === s) {
-                            if (prevNode == null) {
-                                this.m_shapeList = s.m_next;
-                                found = true;
-                                break;
+                        {
+                            if (node === s) {
+                                if (prevNode == null) {
+                                    this.m_shapeList = s.m_next;
+                                    found = true;
+                                    break;
+                                }
+                                else {
+                                    prevNode.m_next = s.m_next;
+                                    found = true;
+                                    break;
+                                }
                             }
-                            else {
-                                prevNode.m_next = s.m_next;
-                                found = true;
-                                break;
-                            }
+                            prevNode = node;
+                            node = node.m_next;
                         }
-                        prevNode = node;
-                        node = node.m_next;
                     }
                     ;
                     s.m_body = null;
@@ -17301,9 +17643,11 @@ var org;
                     org.jbox2d.common.XForm.mulToOut(this.m_xf, this.m_sweep.localCenter, this.m_sweep.c);
                     this.m_sweep.c0.set$org_jbox2d_common_Vec2(this.m_sweep.c);
                     for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                        s.updateSweepRadius(this.m_sweep.localCenter);
+                        {
+                            s.updateSweepRadius(this.m_sweep.localCenter);
+                        }
+                        ;
                     }
-                    ;
                     var oldType = this.m_type;
                     if (this.m_invMass === 0.0 && this.m_invI === 0.0) {
                         this.m_type = Body.e_staticType;
@@ -17313,9 +17657,11 @@ var org;
                     }
                     if (oldType !== this.m_type) {
                         for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                            s.refilterProxy(this.m_world.m_broadPhase, this.m_xf);
+                            {
+                                s.refilterProxy(this.m_world.m_broadPhase, this.m_xf);
+                            }
+                            ;
                         }
-                        ;
                     }
                 };
                 Body.tlCenter_$LI$ = function () { if (Body.tlCenter == null)
@@ -17337,14 +17683,16 @@ var org;
                     var center = Body.tlCenter_$LI$().initialValue();
                     center.setZero();
                     for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                        var massData = new org.jbox2d.collision.MassData();
-                        s.computeMass(massData);
-                        this.m_mass += massData.mass;
-                        center.x += Math.fround(massData.mass * massData.center.x);
-                        center.y += Math.fround(massData.mass * massData.center.y);
-                        this.m_I += massData.I;
+                        {
+                            var massData = new org.jbox2d.collision.MassData();
+                            s.computeMass(massData);
+                            this.m_mass += massData.mass;
+                            center.x += Math.fround(massData.mass * massData.center.x);
+                            center.y += Math.fround(massData.mass * massData.center.y);
+                            this.m_I += massData.I;
+                        }
+                        ;
                     }
-                    ;
                     if (this.m_mass > 0.0) {
                         this.m_invMass = Math.fround(1.0 / this.m_mass);
                         center.x *= this.m_invMass;
@@ -17362,9 +17710,11 @@ var org;
                     org.jbox2d.common.XForm.mulToOut(this.m_xf, this.m_sweep.localCenter, this.m_sweep.c);
                     this.m_sweep.c0.set$org_jbox2d_common_Vec2(this.m_sweep.c);
                     for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                        s.updateSweepRadius(this.m_sweep.localCenter);
+                        {
+                            s.updateSweepRadius(this.m_sweep.localCenter);
+                        }
+                        ;
                     }
-                    ;
                     var oldType = this.m_type;
                     if (this.m_invMass === 0.0 && this.m_invI === 0.0) {
                         this.m_type = Body.e_staticType;
@@ -17374,9 +17724,11 @@ var org;
                     }
                     if (oldType !== this.m_type) {
                         for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                            s.refilterProxy(this.m_world.m_broadPhase, this.m_xf);
+                            {
+                                s.refilterProxy(this.m_world.m_broadPhase, this.m_xf);
+                            }
+                            ;
                         }
-                        ;
                     }
                 };
                 /**
@@ -17402,21 +17754,25 @@ var org;
                     this.m_sweep.a0 = this.m_sweep.a = angle;
                     var freeze = false;
                     for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                        var inRange = s.synchronize(this.m_world.m_broadPhase, this.m_xf, this.m_xf);
-                        if (inRange === false) {
-                            freeze = true;
-                            break;
+                        {
+                            var inRange = s.synchronize(this.m_world.m_broadPhase, this.m_xf, this.m_xf);
+                            if (inRange === false) {
+                                freeze = true;
+                                break;
+                            }
                         }
+                        ;
                     }
-                    ;
                     if (freeze === true) {
                         this.m_flags |= Body.e_frozenFlag;
                         this.m_linearVelocity.setZero();
                         this.m_angularVelocity = 0.0;
                         for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                            s.destroyProxy(this.m_world.m_broadPhase);
+                            {
+                                s.destroyProxy(this.m_world.m_broadPhase);
+                            }
+                            ;
                         }
-                        ;
                         return false;
                     }
                     this.m_world.m_broadPhase.commit();
@@ -17823,20 +18179,24 @@ var org;
                     xf1.position.set$float$float(Math.fround(this.m_sweep.c0.x - (Math.fround(Math.fround(R.col1.x * v.x) + Math.fround(R.col2.x * v.y)))), Math.fround(this.m_sweep.c0.y - (Math.fround(Math.fround(R.col1.y * v.x) + Math.fround(R.col2.y * v.y)))));
                     var inRange = true;
                     for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                        inRange = s.synchronize(this.m_world.m_broadPhase, xf1, this.m_xf);
-                        if (inRange === false) {
-                            break;
+                        {
+                            inRange = s.synchronize(this.m_world.m_broadPhase, xf1, this.m_xf);
+                            if (inRange === false) {
+                                break;
+                            }
                         }
+                        ;
                     }
-                    ;
                     if (inRange === false) {
                         this.m_flags |= Body.e_frozenFlag;
                         this.m_linearVelocity.setZero();
                         this.m_angularVelocity = 0.0;
                         for (var s = this.m_shapeList; s != null; s = s.m_next) {
-                            s.destroyProxy(this.m_world.m_broadPhase);
+                            {
+                                s.destroyProxy(this.m_world.m_broadPhase);
+                            }
+                            ;
                         }
-                        ;
                         return false;
                     }
                     return true;
@@ -17859,11 +18219,13 @@ var org;
                  */
                 Body.prototype.isConnected = function (other) {
                     for (var jn = this.m_jointList; jn != null; jn = jn.next) {
-                        if (jn.other === other) {
-                            return (jn.joint.m_collideConnected === false);
+                        {
+                            if (jn.other === other) {
+                                return (jn.joint.m_collideConnected === false);
+                            }
                         }
+                        ;
                     }
-                    ;
                     return false;
                 };
                 /**
@@ -17966,16 +18328,18 @@ var org;
                     var mySet = ([]);
                     var edge = this.getContactList();
                     while ((edge != null)) {
-                        if (edge.contact.getManifoldCount() > 0) {
-                            /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
-                                s.push(e);
-                                return true;
+                        {
+                            if (edge.contact.getManifoldCount() > 0) {
+                                /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
+                                    s.push(e);
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                } })(mySet, edge.other);
                             }
-                            else {
-                                return false;
-                            } })(mySet, edge.other);
+                            edge = edge.next;
                         }
-                        edge = edge.next;
                     }
                     ;
                     return mySet;
@@ -17990,14 +18354,16 @@ var org;
                     var mySet = ([]);
                     var edge = this.getJointList();
                     while ((edge != null)) {
-                        /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
-                            s.push(e);
-                            return true;
+                        {
+                            /* add */ (function (s, e) { if (s.indexOf(e) == -1) {
+                                s.push(e);
+                                return true;
+                            }
+                            else {
+                                return false;
+                            } })(mySet, edge.other);
+                            edge = edge.next;
                         }
-                        else {
-                            return false;
-                        } })(mySet, edge.other);
-                        edge = edge.next;
                     }
                     ;
                     return mySet;
@@ -18012,15 +18378,17 @@ var org;
                     var mySet = ([]);
                     var edge = this.getJointList();
                     while ((edge != null)) {
-                        if (edge.other.isDynamic())
-                            (function (s, e) { if (s.indexOf(e) == -1) {
-                                s.push(e);
-                                return true;
-                            }
-                            else {
-                                return false;
-                            } })(mySet, edge.other);
-                        edge = edge.next;
+                        {
+                            if (edge.other.isDynamic())
+                                (function (s, e) { if (s.indexOf(e) == -1) {
+                                    s.push(e);
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                } })(mySet, edge.other);
+                            edge = edge.next;
+                        }
                     }
                     ;
                     return mySet;
@@ -18179,9 +18547,11 @@ var org;
                 Body.prototype.isTouching = function (other) {
                     var edge = this.getContactList();
                     while ((edge != null)) {
-                        if (edge.other === other && edge.contact.getManifoldCount() > 0)
-                            return true;
-                        edge = edge.next;
+                        {
+                            if (edge.other === other && edge.contact.getManifoldCount() > 0)
+                                return true;
+                            edge = edge.next;
+                        }
                     }
                     ;
                     return false;
@@ -18812,45 +19182,49 @@ var org;
                         cp.restitution = this.m_restitution;
                         if (this.m_manifold.pointCount > 0) {
                             for (var i = 0; i < this.m_manifold.pointCount; ++i) {
-                                var mp = this.m_manifold.points[i];
-                                mp.normalImpulse = 0.0;
-                                mp.tangentImpulse = 0.0;
-                                var found = false;
-                                cp.id.set(mp.id);
-                                for (var j = 0; j < m0.pointCount; ++j) {
-                                    if (persisted[j] === true) {
-                                        continue;
-                                    }
-                                    var mp0 = m0.points[j];
-                                    if (mp0.id.isEqual(cp.id)) {
-                                        persisted[j] = true;
-                                        mp.normalImpulse = mp0.normalImpulse;
-                                        mp.tangentImpulse = mp0.tangentImpulse;
-                                        found = true;
-                                        if (listener != null) {
-                                            b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                            b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                            b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                            cp.velocity.subLocal(v1);
-                                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                            cp.separation = mp.separation;
-                                            listener.persist(cp);
+                                {
+                                    var mp = this.m_manifold.points[i];
+                                    mp.normalImpulse = 0.0;
+                                    mp.tangentImpulse = 0.0;
+                                    var found = false;
+                                    cp.id.set(mp.id);
+                                    for (var j = 0; j < m0.pointCount; ++j) {
+                                        {
+                                            if (persisted[j] === true) {
+                                                continue;
+                                            }
+                                            var mp0 = m0.points[j];
+                                            if (mp0.id.isEqual(cp.id)) {
+                                                persisted[j] = true;
+                                                mp.normalImpulse = mp0.normalImpulse;
+                                                mp.tangentImpulse = mp0.tangentImpulse;
+                                                found = true;
+                                                if (listener != null) {
+                                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                                    cp.velocity.subLocal(v1);
+                                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                                    cp.separation = mp.separation;
+                                                    listener.persist(cp);
+                                                }
+                                                break;
+                                            }
                                         }
-                                        break;
+                                        ;
+                                    }
+                                    if (found === false && listener != null) {
+                                        b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                        b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                        b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                        cp.velocity.subLocal(v1);
+                                        cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                        cp.separation = mp.separation;
+                                        listener.add(cp);
                                     }
                                 }
                                 ;
-                                if (found === false && listener != null) {
-                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                    cp.velocity.subLocal(v1);
-                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                    cp.separation = mp.separation;
-                                    listener.add(cp);
-                                }
                             }
-                            ;
                             this.m_manifoldCount = 1;
                         }
                         else {
@@ -18860,20 +19234,22 @@ var org;
                             return;
                         }
                         for (var i = 0; i < m0.pointCount; ++i) {
-                            if (persisted[i]) {
-                                continue;
+                            {
+                                if (persisted[i]) {
+                                    continue;
+                                }
+                                var mp0 = m0.points[i];
+                                b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
+                                b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
+                                b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
+                                cp.velocity.subLocal(v1);
+                                cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                cp.separation = mp0.separation;
+                                cp.id.set(mp0.id);
+                                listener.remove(cp);
                             }
-                            var mp0 = m0.points[i];
-                            b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
-                            b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
-                            b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
-                            cp.velocity.subLocal(v1);
-                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                            cp.separation = mp0.separation;
-                            cp.id.set(mp0.id);
-                            listener.remove(cp);
+                            ;
                         }
-                        ;
                     };
                     return PointAndPolyContact;
                 }(org.jbox2d.dynamics.contacts.Contact));
@@ -18987,47 +19363,51 @@ var org;
                         cp.restitution = this.m_restitution;
                         if (this.m_manifold.pointCount > 0) {
                             for (var i = 0; i < this.m_manifold.pointCount; ++i) {
-                                var mp = this.m_manifold.points[i];
-                                mp.normalImpulse = 0.0;
-                                mp.tangentImpulse = 0.0;
-                                var found = false;
-                                var id = mp.id;
-                                for (var j = 0; j < m0.pointCount; ++j) {
-                                    if (persisted[j] === true) {
-                                        continue;
-                                    }
-                                    var mp0 = m0.points[j];
-                                    if (mp0.id.isEqual(id)) {
-                                        persisted[j] = true;
-                                        mp.normalImpulse = mp0.normalImpulse;
-                                        mp.tangentImpulse = mp0.tangentImpulse;
-                                        found = true;
-                                        if (listener != null) {
-                                            b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                            b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                            b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                            cp.velocity.subLocal(v1);
-                                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                            cp.separation = mp.separation;
-                                            cp.id.set(id);
-                                            listener.persist(cp);
+                                {
+                                    var mp = this.m_manifold.points[i];
+                                    mp.normalImpulse = 0.0;
+                                    mp.tangentImpulse = 0.0;
+                                    var found = false;
+                                    var id = mp.id;
+                                    for (var j = 0; j < m0.pointCount; ++j) {
+                                        {
+                                            if (persisted[j] === true) {
+                                                continue;
+                                            }
+                                            var mp0 = m0.points[j];
+                                            if (mp0.id.isEqual(id)) {
+                                                persisted[j] = true;
+                                                mp.normalImpulse = mp0.normalImpulse;
+                                                mp.tangentImpulse = mp0.tangentImpulse;
+                                                found = true;
+                                                if (listener != null) {
+                                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                                    cp.velocity.subLocal(v1);
+                                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                                    cp.separation = mp.separation;
+                                                    cp.id.set(id);
+                                                    listener.persist(cp);
+                                                }
+                                                break;
+                                            }
                                         }
-                                        break;
+                                        ;
+                                    }
+                                    if (found === false && listener != null) {
+                                        b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                        b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                        b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                        cp.velocity.subLocal(v1);
+                                        cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                        cp.separation = mp.separation;
+                                        cp.id.set(id);
+                                        listener.add(cp);
                                     }
                                 }
                                 ;
-                                if (found === false && listener != null) {
-                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                    cp.velocity.subLocal(v1);
-                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                    cp.separation = mp.separation;
-                                    cp.id.set(id);
-                                    listener.add(cp);
-                                }
                             }
-                            ;
                             this.m_manifoldCount = 1;
                         }
                         else {
@@ -19037,20 +19417,22 @@ var org;
                             return;
                         }
                         for (var i = 0; i < m0.pointCount; ++i) {
-                            if (persisted[i]) {
-                                continue;
+                            {
+                                if (persisted[i]) {
+                                    continue;
+                                }
+                                var mp0 = m0.points[i];
+                                b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
+                                b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
+                                b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
+                                cp.velocity.subLocal(v1);
+                                cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                cp.separation = mp0.separation;
+                                cp.id.set(mp0.id);
+                                listener.remove(cp);
                             }
-                            var mp0 = m0.points[i];
-                            b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
-                            b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
-                            b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
-                            cp.velocity.subLocal(v1);
-                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                            cp.separation = mp0.separation;
-                            cp.id.set(mp0.id);
-                            listener.remove(cp);
+                            ;
                         }
-                        ;
                     };
                     return PolyAndCircleContact;
                 }(org.jbox2d.dynamics.contacts.Contact));
@@ -19152,47 +19534,51 @@ var org;
                         cp.restitution = this.m_restitution;
                         if (this.m_manifold.pointCount > 0) {
                             for (var i = 0; i < this.m_manifold.pointCount; ++i) {
-                                var mp = this.m_manifold.points[i];
-                                mp.normalImpulse = 0.0;
-                                mp.tangentImpulse = 0.0;
-                                var found = false;
-                                var id = mp.id;
-                                for (var j = 0; j < m0.pointCount; ++j) {
-                                    if (persisted[j] === true) {
-                                        continue;
-                                    }
-                                    var mp0 = m0.points[j];
-                                    if (mp0.id.isEqual(id)) {
-                                        persisted[j] = true;
-                                        mp.normalImpulse = mp0.normalImpulse;
-                                        mp.tangentImpulse = mp0.tangentImpulse;
-                                        found = true;
-                                        if (listener != null) {
-                                            b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                            b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                            b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                            cp.velocity.subLocal(v1);
-                                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                            cp.separation = mp.separation;
-                                            cp.id.set(id);
-                                            listener.persist(cp);
+                                {
+                                    var mp = this.m_manifold.points[i];
+                                    mp.normalImpulse = 0.0;
+                                    mp.tangentImpulse = 0.0;
+                                    var found = false;
+                                    var id = mp.id;
+                                    for (var j = 0; j < m0.pointCount; ++j) {
+                                        {
+                                            if (persisted[j] === true) {
+                                                continue;
+                                            }
+                                            var mp0 = m0.points[j];
+                                            if (mp0.id.isEqual(id)) {
+                                                persisted[j] = true;
+                                                mp.normalImpulse = mp0.normalImpulse;
+                                                mp.tangentImpulse = mp0.tangentImpulse;
+                                                found = true;
+                                                if (listener != null) {
+                                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                                    cp.velocity.subLocal(v1);
+                                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                                    cp.separation = mp.separation;
+                                                    cp.id.set(id);
+                                                    listener.persist(cp);
+                                                }
+                                                break;
+                                            }
                                         }
-                                        break;
+                                        ;
+                                    }
+                                    if (found === false && listener != null) {
+                                        b1.getWorldLocationToOut(mp.localPoint1, cp.position);
+                                        b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
+                                        b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
+                                        cp.velocity.subLocal(v1);
+                                        cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                        cp.separation = mp.separation;
+                                        cp.id.set(id);
+                                        listener.add(cp);
                                     }
                                 }
                                 ;
-                                if (found === false && listener != null) {
-                                    b1.getWorldLocationToOut(mp.localPoint1, cp.position);
-                                    b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
-                                    b2.getLinearVelocityFromLocalPointToOut(mp.localPoint2, cp.velocity);
-                                    cp.velocity.subLocal(v1);
-                                    cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                                    cp.separation = mp.separation;
-                                    cp.id.set(id);
-                                    listener.add(cp);
-                                }
                             }
-                            ;
                             this.m_manifoldCount = 1;
                         }
                         else {
@@ -19202,20 +19588,22 @@ var org;
                             return;
                         }
                         for (var i = 0; i < m0.pointCount; ++i) {
-                            if (persisted[i]) {
-                                continue;
+                            {
+                                if (persisted[i]) {
+                                    continue;
+                                }
+                                var mp0 = m0.points[i];
+                                b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
+                                b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
+                                b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
+                                cp.velocity.subLocal(v1);
+                                cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
+                                cp.separation = mp0.separation;
+                                cp.id.set(mp0.id);
+                                listener.remove(cp);
                             }
-                            var mp0 = m0.points[i];
-                            b1.getWorldLocationToOut(mp0.localPoint1, cp.position);
-                            b1.getLinearVelocityFromLocalPointToOut(mp0.localPoint1, v1);
-                            b2.getLinearVelocityFromLocalPointToOut(mp0.localPoint2, cp.velocity);
-                            cp.velocity.subLocal(v1);
-                            cp.normal.set$org_jbox2d_common_Vec2(this.m_manifold.normal);
-                            cp.separation = mp0.separation;
-                            cp.id.set(mp0.id);
-                            listener.remove(cp);
+                            ;
                         }
-                        ;
                     };
                     /**
                      *
@@ -19310,28 +19698,34 @@ var org;
                     this.m_queryResults = (function (s) { var a = []; while (s-- > 0)
                         a.push(0); return a; })(org.jbox2d.common.Settings.maxProxies);
                     for (var i = 0; i < 2 * org.jbox2d.common.Settings.maxProxies; i++) {
-                        this.m_bounds[0][i] = new org.jbox2d.collision.Bound();
-                        this.m_bounds[1][i] = new org.jbox2d.collision.Bound();
+                        {
+                            this.m_bounds[0][i] = new org.jbox2d.collision.Bound();
+                            this.m_bounds[1][i] = new org.jbox2d.collision.Bound();
+                        }
+                        ;
                     }
-                    ;
                     for (var i = 0; i < org.jbox2d.common.Settings.maxProxies; i++) {
-                        this.pairBuffer[i] = new org.jbox2d.collision.BufferedPair();
+                        {
+                            this.pairBuffer[i] = new org.jbox2d.collision.BufferedPair();
+                        }
+                        ;
                     }
-                    ;
                     this.m_pairManager = new org.jbox2d.collision.PairManager();
                     this.m_pairManager.initialize(this, callback);
                     this.m_worldAABB = new org.jbox2d.collision.AABB(worldAABB);
                     this.m_proxyCount = 0;
                     var d = worldAABB.upperBound.sub(worldAABB.lowerBound);
-                    this.m_quantizationFactor = new org.jbox2d.common.Vec2(Math.fround(Number.MAX_VALUE / d.x), Math.fround(Number.MAX_VALUE / d.y));
+                    this.m_quantizationFactor = new org.jbox2d.common.Vec2(Math.fround(2147483647 / d.x), Math.fround(2147483647 / d.y));
                     for (var i = 0; i < org.jbox2d.common.Settings.maxProxies - 1; ++i) {
-                        this.m_proxyPool[i] = new org.jbox2d.collision.Proxy();
-                        this.m_proxyPool[i].setNext(i + 1);
-                        this.m_proxyPool[i].timeStamp = 0;
-                        this.m_proxyPool[i].overlapCount = BroadPhase.INVALID_$LI$();
-                        this.m_proxyPool[i].userData = null;
+                        {
+                            this.m_proxyPool[i] = new org.jbox2d.collision.Proxy();
+                            this.m_proxyPool[i].setNext(i + 1);
+                            this.m_proxyPool[i].timeStamp = 0;
+                            this.m_proxyPool[i].overlapCount = BroadPhase.INVALID_$LI$();
+                            this.m_proxyPool[i].userData = null;
+                        }
+                        ;
                     }
-                    ;
                     this.m_proxyPool[org.jbox2d.common.Settings.maxProxies - 1] = new org.jbox2d.collision.Proxy();
                     this.m_proxyPool[org.jbox2d.common.Settings.maxProxies - 1].setNext(org.jbox2d.collision.PairManager.NULL_PROXY_$LI$());
                     this.m_proxyPool[org.jbox2d.common.Settings.maxProxies - 1].timeStamp = 0;
@@ -19342,28 +19736,32 @@ var org;
                     this.m_queryResultCount = 0;
                 }
                 BroadPhase.INVALID_$LI$ = function () { if (BroadPhase.INVALID == null)
-                    BroadPhase.INVALID = Number.MAX_VALUE; return BroadPhase.INVALID; };
+                    BroadPhase.INVALID = 2147483647; return BroadPhase.INVALID; };
                 ;
                 BroadPhase.NULL_EDGE_$LI$ = function () { if (BroadPhase.NULL_EDGE == null)
-                    BroadPhase.NULL_EDGE = Number.MAX_VALUE; return BroadPhase.NULL_EDGE; };
+                    BroadPhase.NULL_EDGE = 2147483647; return BroadPhase.NULL_EDGE; };
                 ;
                 /*private*/ BroadPhase.prototype.dump = function () {
                     for (var i = 0; i < 10; i++) {
-                        console.info("bounds[ %d ] = %d, %d \n");
+                        {
+                            console.info("bounds[ %d ] = %d, %d \n");
+                        }
+                        ;
                     }
-                    ;
                 };
                 BroadPhase.prototype.testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy = function (p1, p2) {
                     for (var axis = 0; axis < 2; ++axis) {
-                        var bounds = this.m_bounds[axis];
-                        if (bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) {
-                            return false;
+                        {
+                            var bounds = this.m_bounds[axis];
+                            if (bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) {
+                                return false;
+                            }
+                            if (bounds[p1.upperBounds[axis]].value < bounds[p2.lowerBounds[axis]].value) {
+                                return false;
+                            }
                         }
-                        if (bounds[p1.upperBounds[axis]].value < bounds[p2.lowerBounds[axis]].value) {
-                            return false;
-                        }
+                        ;
                     }
-                    ;
                     return true;
                 };
                 BroadPhase.prototype.testOverlap = function (p1, p2) {
@@ -19378,15 +19776,17 @@ var org;
                 };
                 /*private*/ BroadPhase.prototype.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy = function (b, p) {
                     for (var axis = 0; axis < 2; ++axis) {
-                        var bounds = this.m_bounds[axis];
-                        if (b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) {
-                            return false;
+                        {
+                            var bounds = this.m_bounds[axis];
+                            if (b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) {
+                                return false;
+                            }
+                            if (b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) {
+                                return false;
+                            }
                         }
-                        if (b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) {
-                            return false;
-                        }
+                        ;
                     }
-                    ;
                     return true;
                 };
                 BroadPhase.prototype.getProxy = function (proxyId) {
@@ -19427,64 +19827,76 @@ var org;
                     var indexes = BroadPhase.tlIndexes_$LI$().get(2);
                     this.computeBounds(lowerValues, upperValues, aabb);
                     for (var axis = 0; axis < 2; ++axis) {
-                        var bounds = this.m_bounds[axis];
-                        this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[axis], upperValues[axis], bounds, boundCount, axis);
-                        var lowerIndex = indexes[0];
-                        var upperIndex = indexes[1];
-                        /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
-                            while (--size >= 0)
-                                dstPts[dstOff++] = srcPts[srcOff++];
-                        }
-                        else {
-                            var tmp = srcPts.slice(srcOff, srcOff + size);
-                            for (var i = 0; i < size; i++)
-                                dstPts[dstOff++] = tmp[i];
-                        } })(this.m_bounds[axis], upperIndex, this.m_bounds[axis], upperIndex + 2, boundCount - upperIndex);
-                        for (var i = 0; i < boundCount - upperIndex; i++) {
-                            this.m_bounds[axis][upperIndex + 2 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][upperIndex + 2 + i]);
-                        }
-                        ;
-                        /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
-                            while (--size >= 0)
-                                dstPts[dstOff++] = srcPts[srcOff++];
-                        }
-                        else {
-                            var tmp = srcPts.slice(srcOff, srcOff + size);
-                            for (var i = 0; i < size; i++)
-                                dstPts[dstOff++] = tmp[i];
-                        } })(this.m_bounds[axis], lowerIndex, this.m_bounds[axis], lowerIndex + 1, upperIndex - lowerIndex);
-                        for (var i = 0; i < upperIndex - lowerIndex; i++) {
-                            this.m_bounds[axis][lowerIndex + 1 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][lowerIndex + 1 + i]);
-                        }
-                        ;
-                        ++upperIndex;
-                        bounds[lowerIndex].value = lowerValues[axis];
-                        bounds[lowerIndex].proxyId = proxyId;
-                        bounds[upperIndex].value = upperValues[axis];
-                        bounds[upperIndex].proxyId = proxyId;
-                        bounds[lowerIndex].stabbingCount = lowerIndex === 0 ? 0 : bounds[lowerIndex - 1].stabbingCount;
-                        bounds[upperIndex].stabbingCount = bounds[upperIndex - 1].stabbingCount;
-                        for (var index = lowerIndex; index < upperIndex; ++index) {
-                            ++bounds[index].stabbingCount;
-                        }
-                        ;
-                        for (var index = lowerIndex; index < boundCount + 2; ++index) {
-                            var proxyn = this.m_proxyPool[bounds[index].proxyId];
-                            if (bounds[index].isLower()) {
-                                proxyn.lowerBounds[axis] = index;
+                        {
+                            var bounds = this.m_bounds[axis];
+                            this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[axis], upperValues[axis], bounds, boundCount, axis);
+                            var lowerIndex = indexes[0];
+                            var upperIndex = indexes[1];
+                            /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
+                                while (--size >= 0)
+                                    dstPts[dstOff++] = srcPts[srcOff++];
                             }
                             else {
-                                proxyn.upperBounds[axis] = index;
+                                var tmp = srcPts.slice(srcOff, srcOff + size);
+                                for (var i = 0; i < size; i++)
+                                    dstPts[dstOff++] = tmp[i];
+                            } })(this.m_bounds[axis], upperIndex, this.m_bounds[axis], upperIndex + 2, boundCount - upperIndex);
+                            for (var i = 0; i < boundCount - upperIndex; i++) {
+                                {
+                                    this.m_bounds[axis][upperIndex + 2 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][upperIndex + 2 + i]);
+                                }
+                                ;
+                            }
+                            /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
+                                while (--size >= 0)
+                                    dstPts[dstOff++] = srcPts[srcOff++];
+                            }
+                            else {
+                                var tmp = srcPts.slice(srcOff, srcOff + size);
+                                for (var i = 0; i < size; i++)
+                                    dstPts[dstOff++] = tmp[i];
+                            } })(this.m_bounds[axis], lowerIndex, this.m_bounds[axis], lowerIndex + 1, upperIndex - lowerIndex);
+                            for (var i = 0; i < upperIndex - lowerIndex; i++) {
+                                {
+                                    this.m_bounds[axis][lowerIndex + 1 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][lowerIndex + 1 + i]);
+                                }
+                                ;
+                            }
+                            ++upperIndex;
+                            bounds[lowerIndex].value = lowerValues[axis];
+                            bounds[lowerIndex].proxyId = proxyId;
+                            bounds[upperIndex].value = upperValues[axis];
+                            bounds[upperIndex].proxyId = proxyId;
+                            bounds[lowerIndex].stabbingCount = lowerIndex === 0 ? 0 : bounds[lowerIndex - 1].stabbingCount;
+                            bounds[upperIndex].stabbingCount = bounds[upperIndex - 1].stabbingCount;
+                            for (var index = lowerIndex; index < upperIndex; ++index) {
+                                {
+                                    ++bounds[index].stabbingCount;
+                                }
+                                ;
+                            }
+                            for (var index = lowerIndex; index < boundCount + 2; ++index) {
+                                {
+                                    var proxyn = this.m_proxyPool[bounds[index].proxyId];
+                                    if (bounds[index].isLower()) {
+                                        proxyn.lowerBounds[axis] = index;
+                                    }
+                                    else {
+                                        proxyn.upperBounds[axis] = index;
+                                    }
+                                }
+                                ;
                             }
                         }
                         ;
                     }
-                    ;
                     ++this.m_proxyCount;
                     for (var i = 0; i < this.m_queryResultCount; ++i) {
-                        this.m_pairManager.addBufferedPair(proxyId, this.m_queryResults[i]);
+                        {
+                            this.m_pairManager.addBufferedPair(proxyId, this.m_queryResults[i]);
+                        }
+                        ;
                     }
-                    ;
                     this.m_pairManager.commit();
                     if (BroadPhase.s_validate) {
                         this.validate();
@@ -19501,58 +19913,70 @@ var org;
                     var boundCount = 2 * this.m_proxyCount;
                     var ignored = BroadPhase.tlIgnored_$LI$().get(2);
                     for (var axis = 0; axis < 2; ++axis) {
-                        var bounds = this.m_bounds[axis];
-                        var lowerIndex = proxy.lowerBounds[axis];
-                        var upperIndex = proxy.upperBounds[axis];
-                        var lowerValue = bounds[lowerIndex].value;
-                        var upperValue = bounds[upperIndex].value;
-                        /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
-                            while (--size >= 0)
-                                dstPts[dstOff++] = srcPts[srcOff++];
-                        }
-                        else {
-                            var tmp = srcPts.slice(srcOff, srcOff + size);
-                            for (var i = 0; i < size; i++)
-                                dstPts[dstOff++] = tmp[i];
-                        } })(this.m_bounds[axis], lowerIndex + 1, this.m_bounds[axis], lowerIndex, upperIndex - lowerIndex - 1);
-                        for (var i = 0; i < upperIndex - lowerIndex - 1; i++) {
-                            this.m_bounds[axis][lowerIndex + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][lowerIndex + i]);
-                        }
-                        ;
-                        /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
-                            while (--size >= 0)
-                                dstPts[dstOff++] = srcPts[srcOff++];
-                        }
-                        else {
-                            var tmp = srcPts.slice(srcOff, srcOff + size);
-                            for (var i = 0; i < size; i++)
-                                dstPts[dstOff++] = tmp[i];
-                        } })(this.m_bounds[axis], upperIndex + 1, this.m_bounds[axis], upperIndex - 1, boundCount - upperIndex - 1);
-                        for (var i = 0; i < boundCount - upperIndex - 1; i++) {
-                            this.m_bounds[axis][upperIndex - 1 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][upperIndex - 1 + i]);
-                        }
-                        ;
-                        for (var index = lowerIndex; index < boundCount - 2; ++index) {
-                            var proxyn = this.m_proxyPool[bounds[index].proxyId];
-                            if (bounds[index].isLower()) {
-                                proxyn.lowerBounds[axis] = index;
+                        {
+                            var bounds = this.m_bounds[axis];
+                            var lowerIndex = proxy.lowerBounds[axis];
+                            var upperIndex = proxy.upperBounds[axis];
+                            var lowerValue = bounds[lowerIndex].value;
+                            var upperValue = bounds[upperIndex].value;
+                            /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
+                                while (--size >= 0)
+                                    dstPts[dstOff++] = srcPts[srcOff++];
                             }
                             else {
-                                proxyn.upperBounds[axis] = index;
+                                var tmp = srcPts.slice(srcOff, srcOff + size);
+                                for (var i = 0; i < size; i++)
+                                    dstPts[dstOff++] = tmp[i];
+                            } })(this.m_bounds[axis], lowerIndex + 1, this.m_bounds[axis], lowerIndex, upperIndex - lowerIndex - 1);
+                            for (var i = 0; i < upperIndex - lowerIndex - 1; i++) {
+                                {
+                                    this.m_bounds[axis][lowerIndex + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][lowerIndex + i]);
+                                }
+                                ;
                             }
+                            /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
+                                while (--size >= 0)
+                                    dstPts[dstOff++] = srcPts[srcOff++];
+                            }
+                            else {
+                                var tmp = srcPts.slice(srcOff, srcOff + size);
+                                for (var i = 0; i < size; i++)
+                                    dstPts[dstOff++] = tmp[i];
+                            } })(this.m_bounds[axis], upperIndex + 1, this.m_bounds[axis], upperIndex - 1, boundCount - upperIndex - 1);
+                            for (var i = 0; i < boundCount - upperIndex - 1; i++) {
+                                {
+                                    this.m_bounds[axis][upperIndex - 1 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][upperIndex - 1 + i]);
+                                }
+                                ;
+                            }
+                            for (var index = lowerIndex; index < boundCount - 2; ++index) {
+                                {
+                                    var proxyn = this.m_proxyPool[bounds[index].proxyId];
+                                    if (bounds[index].isLower()) {
+                                        proxyn.lowerBounds[axis] = index;
+                                    }
+                                    else {
+                                        proxyn.upperBounds[axis] = index;
+                                    }
+                                }
+                                ;
+                            }
+                            for (var index = lowerIndex; index < upperIndex - 1; ++index) {
+                                {
+                                    --bounds[index].stabbingCount;
+                                }
+                                ;
+                            }
+                            this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(ignored, lowerValue, upperValue, bounds, boundCount - 2, axis);
                         }
                         ;
-                        for (var index = lowerIndex; index < upperIndex - 1; ++index) {
-                            --bounds[index].stabbingCount;
-                        }
-                        ;
-                        this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(ignored, lowerValue, upperValue, bounds, boundCount - 2, axis);
                     }
-                    ;
                     for (var i = 0; i < this.m_queryResultCount; ++i) {
-                        this.m_pairManager.removeBufferedPair(proxyId, this.m_queryResults[i]);
+                        {
+                            this.m_pairManager.removeBufferedPair(proxyId, this.m_queryResults[i]);
+                        }
+                        ;
                     }
-                    ;
                     this.m_pairManager.commit();
                     this.m_queryResultCount = 0;
                     this.incrementTimeStamp();
@@ -19593,122 +20017,134 @@ var org;
                     var proxy = this.m_proxyPool[proxyId];
                     this.computeBounds(newValues.lowerValues, newValues.upperValues, aabb);
                     for (var axis = 0; axis < 2; ++axis) {
-                        oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
-                        oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+                        {
+                            oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
+                            oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+                        }
+                        ;
                     }
-                    ;
                     for (var axis = 0; axis < 2; ++axis) {
-                        var bounds = this.m_bounds[axis];
-                        var lowerIndex = proxy.lowerBounds[axis];
-                        var upperIndex = proxy.upperBounds[axis];
-                        var lowerValue = newValues.lowerValues[axis];
-                        var upperValue = newValues.upperValues[axis];
-                        var deltaLower = lowerValue - bounds[lowerIndex].value;
-                        var deltaUpper = upperValue - bounds[upperIndex].value;
-                        bounds[lowerIndex].value = lowerValue;
-                        bounds[upperIndex].value = upperValue;
-                        if (deltaLower < 0) {
-                            var index = lowerIndex;
-                            while ((index > 0 && lowerValue < bounds[index - 1].value)) {
-                                var bound = bounds[index];
-                                var prevBound = bounds[index - 1];
-                                var prevProxyId = prevBound.proxyId;
-                                var prevProxy = this.m_proxyPool[prevBound.proxyId];
-                                ++prevBound.stabbingCount;
-                                if (prevBound.isUpper() === true) {
-                                    if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, prevProxy)) {
-                                        this.m_pairManager.addBufferedPair(proxyId, prevProxyId);
+                        {
+                            var bounds = this.m_bounds[axis];
+                            var lowerIndex = proxy.lowerBounds[axis];
+                            var upperIndex = proxy.upperBounds[axis];
+                            var lowerValue = newValues.lowerValues[axis];
+                            var upperValue = newValues.upperValues[axis];
+                            var deltaLower = lowerValue - bounds[lowerIndex].value;
+                            var deltaUpper = upperValue - bounds[upperIndex].value;
+                            bounds[lowerIndex].value = lowerValue;
+                            bounds[upperIndex].value = upperValue;
+                            if (deltaLower < 0) {
+                                var index = lowerIndex;
+                                while ((index > 0 && lowerValue < bounds[index - 1].value)) {
+                                    {
+                                        var bound = bounds[index];
+                                        var prevBound = bounds[index - 1];
+                                        var prevProxyId = prevBound.proxyId;
+                                        var prevProxy = this.m_proxyPool[prevBound.proxyId];
+                                        ++prevBound.stabbingCount;
+                                        if (prevBound.isUpper() === true) {
+                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, prevProxy)) {
+                                                this.m_pairManager.addBufferedPair(proxyId, prevProxyId);
+                                            }
+                                            ++prevProxy.upperBounds[axis];
+                                            ++bound.stabbingCount;
+                                        }
+                                        else {
+                                            ++prevProxy.lowerBounds[axis];
+                                            --bound.stabbingCount;
+                                        }
+                                        --proxy.lowerBounds[axis];
+                                        bound.swap(prevBound);
+                                        --index;
                                     }
-                                    ++prevProxy.upperBounds[axis];
-                                    ++bound.stabbingCount;
                                 }
-                                else {
-                                    ++prevProxy.lowerBounds[axis];
-                                    --bound.stabbingCount;
-                                }
-                                --proxy.lowerBounds[axis];
-                                bound.swap(prevBound);
-                                --index;
+                                ;
                             }
-                            ;
-                        }
-                        if (deltaUpper > 0) {
-                            var index = upperIndex;
-                            while ((index < boundCount - 1 && bounds[index + 1].value <= upperValue)) {
-                                var bound = bounds[index];
-                                var nextBound = bounds[index + 1];
-                                var nextProxyId = nextBound.proxyId;
-                                var nextProxy = this.m_proxyPool[nextProxyId];
-                                ++nextBound.stabbingCount;
-                                if (nextBound.isLower() === true) {
-                                    if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, nextProxy)) {
-                                        this.m_pairManager.addBufferedPair(proxyId, nextProxyId);
+                            if (deltaUpper > 0) {
+                                var index = upperIndex;
+                                while ((index < boundCount - 1 && bounds[index + 1].value <= upperValue)) {
+                                    {
+                                        var bound = bounds[index];
+                                        var nextBound = bounds[index + 1];
+                                        var nextProxyId = nextBound.proxyId;
+                                        var nextProxy = this.m_proxyPool[nextProxyId];
+                                        ++nextBound.stabbingCount;
+                                        if (nextBound.isLower() === true) {
+                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, nextProxy)) {
+                                                this.m_pairManager.addBufferedPair(proxyId, nextProxyId);
+                                            }
+                                            --nextProxy.lowerBounds[axis];
+                                            ++bound.stabbingCount;
+                                        }
+                                        else {
+                                            --nextProxy.upperBounds[axis];
+                                            --bound.stabbingCount;
+                                        }
+                                        ++proxy.upperBounds[axis];
+                                        bound.swap(nextBound);
+                                        ++index;
                                     }
-                                    --nextProxy.lowerBounds[axis];
-                                    ++bound.stabbingCount;
                                 }
-                                else {
-                                    --nextProxy.upperBounds[axis];
-                                    --bound.stabbingCount;
-                                }
-                                ++proxy.upperBounds[axis];
-                                bound.swap(nextBound);
-                                ++index;
+                                ;
                             }
-                            ;
-                        }
-                        if (deltaLower > 0) {
-                            var index = lowerIndex;
-                            while ((index < boundCount - 1 && bounds[index + 1].value <= lowerValue)) {
-                                var bound = bounds[index];
-                                var nextBound = bounds[index + 1];
-                                var nextProxyId = nextBound.proxyId;
-                                var nextProxy = this.m_proxyPool[nextProxyId];
-                                --nextBound.stabbingCount;
-                                if (nextBound.isUpper()) {
-                                    if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, nextProxy)) {
-                                        this.m_pairManager.removeBufferedPair(proxyId, nextProxyId);
+                            if (deltaLower > 0) {
+                                var index = lowerIndex;
+                                while ((index < boundCount - 1 && bounds[index + 1].value <= lowerValue)) {
+                                    {
+                                        var bound = bounds[index];
+                                        var nextBound = bounds[index + 1];
+                                        var nextProxyId = nextBound.proxyId;
+                                        var nextProxy = this.m_proxyPool[nextProxyId];
+                                        --nextBound.stabbingCount;
+                                        if (nextBound.isUpper()) {
+                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, nextProxy)) {
+                                                this.m_pairManager.removeBufferedPair(proxyId, nextProxyId);
+                                            }
+                                            --nextProxy.upperBounds[axis];
+                                            --bound.stabbingCount;
+                                        }
+                                        else {
+                                            --nextProxy.lowerBounds[axis];
+                                            ++bound.stabbingCount;
+                                        }
+                                        ++proxy.lowerBounds[axis];
+                                        bound.swap(nextBound);
+                                        ++index;
                                     }
-                                    --nextProxy.upperBounds[axis];
-                                    --bound.stabbingCount;
                                 }
-                                else {
-                                    --nextProxy.lowerBounds[axis];
-                                    ++bound.stabbingCount;
-                                }
-                                ++proxy.lowerBounds[axis];
-                                bound.swap(nextBound);
-                                ++index;
+                                ;
                             }
-                            ;
-                        }
-                        if (deltaUpper < 0) {
-                            var index = upperIndex;
-                            while ((index > 0 && upperValue < bounds[index - 1].value)) {
-                                var bound = bounds[index];
-                                var prevBound = bounds[index - 1];
-                                var prevProxyId = prevBound.proxyId;
-                                var prevProxy = this.m_proxyPool[prevProxyId];
-                                --prevBound.stabbingCount;
-                                if (prevBound.isLower() === true) {
-                                    if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, prevProxy)) {
-                                        this.m_pairManager.removeBufferedPair(proxyId, prevProxyId);
+                            if (deltaUpper < 0) {
+                                var index = upperIndex;
+                                while ((index > 0 && upperValue < bounds[index - 1].value)) {
+                                    {
+                                        var bound = bounds[index];
+                                        var prevBound = bounds[index - 1];
+                                        var prevProxyId = prevBound.proxyId;
+                                        var prevProxy = this.m_proxyPool[prevProxyId];
+                                        --prevBound.stabbingCount;
+                                        if (prevBound.isLower() === true) {
+                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, prevProxy)) {
+                                                this.m_pairManager.removeBufferedPair(proxyId, prevProxyId);
+                                            }
+                                            ++prevProxy.lowerBounds[axis];
+                                            --bound.stabbingCount;
+                                        }
+                                        else {
+                                            ++prevProxy.upperBounds[axis];
+                                            ++bound.stabbingCount;
+                                        }
+                                        --proxy.upperBounds[axis];
+                                        bound.swap(prevBound);
+                                        --index;
                                     }
-                                    ++prevProxy.lowerBounds[axis];
-                                    --bound.stabbingCount;
                                 }
-                                else {
-                                    ++prevProxy.upperBounds[axis];
-                                    ++bound.stabbingCount;
-                                }
-                                --proxy.upperBounds[axis];
-                                bound.swap(prevBound);
-                                --index;
+                                ;
                             }
-                            ;
                         }
+                        ;
                     }
-                    ;
                     if (BroadPhase.s_validate) {
                         this.validate();
                     }
@@ -19730,11 +20166,13 @@ var org;
                         a.push(null); return a; })(maxCount);
                     var count = 0;
                     for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
-                        var proxy = this.m_proxyPool[this.m_queryResults[i]];
-                        proxy.isValid();
-                        results[i] = proxy.userData;
+                        {
+                            var proxy = this.m_proxyPool[this.m_queryResults[i]];
+                            proxy.isValid();
+                            results[i] = proxy.userData;
+                        }
+                        ;
                     }
-                    ;
                     var copy = (function (s) { var a = []; while (s-- > 0)
                         a.push(null); return a; })(count);
                     /* arraycopy */ (function (srcPts, srcOff, dstPts, dstOff, size) { if (srcPts !== dstPts || dstOff >= srcOff + size) {
@@ -19755,21 +20193,25 @@ var org;
                         console.info("Validate()");
                     }
                     for (var axis = 0; axis < 2; ++axis) {
-                        var bounds = this.m_bounds[axis];
-                        var boundCount = 2 * this.m_proxyCount;
-                        var stabbingCount = 0;
-                        for (var i = 0; i < boundCount; ++i) {
-                            var bound = bounds[i];
-                            if (bound.isLower() === true) {
-                                ++stabbingCount;
-                            }
-                            else {
-                                --stabbingCount;
+                        {
+                            var bounds = this.m_bounds[axis];
+                            var boundCount = 2 * this.m_proxyCount;
+                            var stabbingCount = 0;
+                            for (var i = 0; i < boundCount; ++i) {
+                                {
+                                    var bound = bounds[i];
+                                    if (bound.isLower() === true) {
+                                        ++stabbingCount;
+                                    }
+                                    else {
+                                        --stabbingCount;
+                                    }
+                                }
+                                ;
                             }
                         }
                         ;
                     }
-                    ;
                 };
                 /*private*/ BroadPhase.prototype.computeBounds = function (lowerValues, upperValues, aabb) {
                     if (BroadPhase.debugPrint) {
@@ -19783,9 +20225,9 @@ var org;
                     var b1y = aabb.upperBound.y < this.m_worldAABB.upperBound.y ? aabb.upperBound.y : this.m_worldAABB.upperBound.y;
                     var maxVertexX = this.m_worldAABB.lowerBound.x > b1x ? this.m_worldAABB.lowerBound.x : b1x;
                     var maxVertexY = this.m_worldAABB.lowerBound.y > b1y ? this.m_worldAABB.lowerBound.y : b1y;
-                    lowerValues[0] = ((Math.fround(this.m_quantizationFactor.x * (Math.fround(minVertexX - this.m_worldAABB.lowerBound.x)))) | 0) & (Number.MAX_VALUE - 1);
+                    lowerValues[0] = ((Math.fround(this.m_quantizationFactor.x * (Math.fround(minVertexX - this.m_worldAABB.lowerBound.x)))) | 0) & (2147483647 - 1);
                     upperValues[0] = ((Math.fround(this.m_quantizationFactor.x * (Math.fround(maxVertexX - this.m_worldAABB.lowerBound.x)))) | 0) | 1;
-                    lowerValues[1] = ((Math.fround(this.m_quantizationFactor.y * (Math.fround(minVertexY - this.m_worldAABB.lowerBound.y)))) | 0) & (Number.MAX_VALUE - 1);
+                    lowerValues[1] = ((Math.fround(this.m_quantizationFactor.y * (Math.fround(minVertexY - this.m_worldAABB.lowerBound.y)))) | 0) & (2147483647 - 1);
                     upperValues[1] = ((Math.fround(this.m_quantizationFactor.y * (Math.fround(maxVertexY - this.m_worldAABB.lowerBound.y)))) | 0) | 1;
                 };
                 BroadPhase.prototype.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int = function (indexes, lowerValue, upperValue, bounds, boundCount, axis) {
@@ -19795,23 +20237,27 @@ var org;
                     var lowerQuery = BroadPhase.binarySearch(bounds, boundCount, lowerValue);
                     var upperQuery = BroadPhase.binarySearch(bounds, boundCount, upperValue);
                     for (var i = lowerQuery; i < upperQuery; ++i) {
-                        if (bounds[i].isLower()) {
-                            this.incrementOverlapCount(bounds[i].proxyId);
+                        {
+                            if (bounds[i].isLower()) {
+                                this.incrementOverlapCount(bounds[i].proxyId);
+                            }
                         }
+                        ;
                     }
-                    ;
                     if (lowerQuery > 0) {
                         var i = lowerQuery - 1;
                         var s = bounds[i].stabbingCount;
                         while ((s !== 0)) {
-                            if (bounds[i].isLower()) {
-                                var proxy = this.m_proxyPool[bounds[i].proxyId];
-                                if (lowerQuery <= proxy.upperBounds[axis]) {
-                                    this.incrementOverlapCount(bounds[i].proxyId);
-                                    --s;
+                            {
+                                if (bounds[i].isLower()) {
+                                    var proxy = this.m_proxyPool[bounds[i].proxyId];
+                                    if (lowerQuery <= proxy.upperBounds[axis]) {
+                                        this.incrementOverlapCount(bounds[i].proxyId);
+                                        --s;
+                                    }
                                 }
+                                --i;
                             }
-                            --i;
                         }
                         ;
                     }
@@ -19857,11 +20303,13 @@ var org;
                     if (BroadPhase.debugPrint) {
                         console.info("IncrementTimeStamp()");
                     }
-                    if (this.m_timeStamp === Number.MAX_VALUE) {
+                    if (this.m_timeStamp === 2147483647) {
                         for (var i = 0; i < org.jbox2d.common.Settings.maxProxies; ++i) {
-                            this.m_proxyPool[i].timeStamp = 0;
+                            {
+                                this.m_proxyPool[i].timeStamp = 0;
+                            }
+                            ;
                         }
-                        ;
                         this.m_timeStamp = 1;
                     }
                     else {
@@ -19875,15 +20323,17 @@ var org;
                     var low = 0;
                     var high = count - 1;
                     while ((low <= high)) {
-                        var mid = (low + high) >> 1;
-                        if (bounds[mid].value > value) {
-                            high = mid - 1;
-                        }
-                        else if (bounds[mid].value < value) {
-                            low = mid + 1;
-                        }
-                        else {
-                            return mid;
+                        {
+                            var mid = (low + high) >> 1;
+                            if (bounds[mid].value > value) {
+                                high = mid - 1;
+                            }
+                            else if (bounds[mid].value < value) {
+                                low = mid + 1;
+                            }
+                            else {
+                                return mid;
+                            }
                         }
                     }
                     ;
@@ -19915,9 +20365,9 @@ var org;
                     var yIndex;
                     var proxyId;
                     var proxy = null;
-                    startValues[0] = ((p1x) | 0) & (Number.MAX_VALUE - 1);
+                    startValues[0] = ((p1x) | 0) & (2147483647 - 1);
                     startValues2[0] = ((p1x) | 0) | 1;
-                    startValues[1] = ((p1y) | 0) & (Number.MAX_VALUE - 1);
+                    startValues[1] = ((p1y) | 0) & (2147483647 - 1);
                     startValues2[1] = ((p1y) | 0) | 1;
                     var results = BroadPhase.tlResults_$LI$().get(2);
                     this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(results, startValues[0], startValues2[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
@@ -19932,142 +20382,154 @@ var org;
                         yIndex = results[0];
                     if (sortKey != null) {
                         for (var i_1 = 0; i_1 < this.m_queryResultCount; i_1++) {
-                            this.m_querySortKeys[i_1] = sortKey.apply(this.m_proxyPool[this.m_queryResults[i_1]].userData);
+                            {
+                                this.m_querySortKeys[i_1] = sortKey.apply(this.m_proxyPool[this.m_queryResults[i_1]].userData);
+                            }
+                            ;
                         }
-                        ;
                         var i = 0;
                         while ((i < this.m_queryResultCount - 1)) {
-                            var a = this.m_querySortKeys[i];
-                            var b = this.m_querySortKeys[i + 1];
-                            if ((a < 0) ? (b >= 0) : (a > b && b >= 0)) {
-                                this.m_querySortKeys[i + 1] = a;
-                                this.m_querySortKeys[i] = b;
-                                var tempValue = this.m_queryResults[i + 1];
-                                this.m_queryResults[i + 1] = this.m_queryResults[i];
-                                this.m_queryResults[i] = tempValue;
-                                i--;
-                                if (i === -1)
-                                    i = 1;
-                            }
-                            else {
-                                i++;
+                            {
+                                var a = this.m_querySortKeys[i];
+                                var b = this.m_querySortKeys[i + 1];
+                                if ((a < 0) ? (b >= 0) : (a > b && b >= 0)) {
+                                    this.m_querySortKeys[i + 1] = a;
+                                    this.m_querySortKeys[i] = b;
+                                    var tempValue = this.m_queryResults[i + 1];
+                                    this.m_queryResults[i + 1] = this.m_queryResults[i];
+                                    this.m_queryResults[i] = tempValue;
+                                    i--;
+                                    if (i === -1)
+                                        i = 1;
+                                }
+                                else {
+                                    i++;
+                                }
                             }
                         }
                         ;
-                        while ((this.m_queryResultCount > 0 && this.m_querySortKeys[this.m_queryResultCount - 1] < 0))
+                        while ((this.m_queryResultCount > 0 && this.m_querySortKeys[this.m_queryResultCount - 1] < 0)) {
                             this.m_queryResultCount--;
+                        }
+                        ;
                     }
                     for (;;) {
-                        var xProgress = 0;
-                        var yProgress = 0;
-                        xIndex += sx >= 0 ? 1 : -1;
-                        if (xIndex < 0 || xIndex >= this.m_proxyCount * 2)
-                            break;
-                        if (sx !== 0)
-                            xProgress = Math.fround((Math.fround(this.m_bounds[0][xIndex].value - p1x)) / dx);
-                        yIndex += sy >= 0 ? 1 : -1;
-                        if (yIndex < 0 || yIndex >= this.m_proxyCount * 2)
-                            break;
-                        if (sy !== 0)
-                            yProgress = Math.fround((Math.fround(this.m_bounds[1][yIndex].value - p1y)) / dy);
-                        for (;;) {
-                            if (sy === 0 || (sx !== 0 && xProgress < yProgress)) {
-                                if (xProgress > maxLambda)
-                                    break;
-                                if (sx > 0 ? this.m_bounds[0][xIndex].isLower() : this.m_bounds[0][xIndex].isUpper()) {
-                                    proxyId = this.m_bounds[0][xIndex].proxyId;
-                                    proxy = this.m_proxyPool[proxyId];
-                                    if (sy >= 0) {
-                                        if (proxy.lowerBounds[1] <= yIndex - 1 && proxy.upperBounds[1] >= yIndex) {
-                                            if (sortKey != null) {
-                                                this.addProxyResult(proxyId, proxy, maxCount, sortKey);
-                                            }
-                                            else {
-                                                this.m_queryResults[this.m_queryResultCount] = proxyId;
-                                                ++this.m_queryResultCount;
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        if (proxy.lowerBounds[1] <= yIndex && proxy.upperBounds[1] >= yIndex + 1) {
-                                            if (sortKey != null) {
-                                                this.addProxyResult(proxyId, proxy, maxCount, sortKey);
-                                            }
-                                            else {
-                                                this.m_queryResults[this.m_queryResultCount] = proxyId;
-                                                ++this.m_queryResultCount;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (sortKey != null && this.m_queryResultCount === maxCount && this.m_queryResultCount > 0 && xProgress > this.m_querySortKeys[this.m_queryResultCount - 1])
-                                    break;
-                                if (sx > 0) {
-                                    xIndex++;
-                                    if (xIndex === this.m_proxyCount * 2)
-                                        break;
-                                }
-                                else {
-                                    xIndex--;
-                                    if (xIndex < 0)
-                                        break;
-                                }
+                        {
+                            var xProgress = 0;
+                            var yProgress = 0;
+                            xIndex += sx >= 0 ? 1 : -1;
+                            if (xIndex < 0 || xIndex >= this.m_proxyCount * 2)
+                                break;
+                            if (sx !== 0)
                                 xProgress = Math.fround((Math.fround(this.m_bounds[0][xIndex].value - p1x)) / dx);
-                            }
-                            else {
-                                if (yProgress > maxLambda)
-                                    break;
-                                if (sy > 0 ? this.m_bounds[1][yIndex].isLower() : this.m_bounds[1][yIndex].isUpper()) {
-                                    proxyId = this.m_bounds[1][yIndex].proxyId;
-                                    proxy = this.m_proxyPool[proxyId];
-                                    if (sx >= 0) {
-                                        if (proxy.lowerBounds[0] <= xIndex - 1 && proxy.upperBounds[0] >= xIndex) {
-                                            if (sortKey != null) {
-                                                this.addProxyResult(proxyId, proxy, maxCount, sortKey);
+                            yIndex += sy >= 0 ? 1 : -1;
+                            if (yIndex < 0 || yIndex >= this.m_proxyCount * 2)
+                                break;
+                            if (sy !== 0)
+                                yProgress = Math.fround((Math.fround(this.m_bounds[1][yIndex].value - p1y)) / dy);
+                            for (;;) {
+                                {
+                                    if (sy === 0 || (sx !== 0 && xProgress < yProgress)) {
+                                        if (xProgress > maxLambda)
+                                            break;
+                                        if (sx > 0 ? this.m_bounds[0][xIndex].isLower() : this.m_bounds[0][xIndex].isUpper()) {
+                                            proxyId = this.m_bounds[0][xIndex].proxyId;
+                                            proxy = this.m_proxyPool[proxyId];
+                                            if (sy >= 0) {
+                                                if (proxy.lowerBounds[1] <= yIndex - 1 && proxy.upperBounds[1] >= yIndex) {
+                                                    if (sortKey != null) {
+                                                        this.addProxyResult(proxyId, proxy, maxCount, sortKey);
+                                                    }
+                                                    else {
+                                                        this.m_queryResults[this.m_queryResultCount] = proxyId;
+                                                        ++this.m_queryResultCount;
+                                                    }
+                                                }
                                             }
                                             else {
-                                                this.m_queryResults[this.m_queryResultCount] = proxyId;
-                                                ++this.m_queryResultCount;
+                                                if (proxy.lowerBounds[1] <= yIndex && proxy.upperBounds[1] >= yIndex + 1) {
+                                                    if (sortKey != null) {
+                                                        this.addProxyResult(proxyId, proxy, maxCount, sortKey);
+                                                    }
+                                                    else {
+                                                        this.m_queryResults[this.m_queryResultCount] = proxyId;
+                                                        ++this.m_queryResultCount;
+                                                    }
+                                                }
                                             }
                                         }
+                                        if (sortKey != null && this.m_queryResultCount === maxCount && this.m_queryResultCount > 0 && xProgress > this.m_querySortKeys[this.m_queryResultCount - 1])
+                                            break;
+                                        if (sx > 0) {
+                                            xIndex++;
+                                            if (xIndex === this.m_proxyCount * 2)
+                                                break;
+                                        }
+                                        else {
+                                            xIndex--;
+                                            if (xIndex < 0)
+                                                break;
+                                        }
+                                        xProgress = Math.fround((Math.fround(this.m_bounds[0][xIndex].value - p1x)) / dx);
                                     }
                                     else {
-                                        if (proxy.lowerBounds[0] <= xIndex && proxy.upperBounds[0] >= xIndex + 1) {
-                                            if (sortKey != null) {
-                                                this.addProxyResult(proxyId, proxy, maxCount, sortKey);
+                                        if (yProgress > maxLambda)
+                                            break;
+                                        if (sy > 0 ? this.m_bounds[1][yIndex].isLower() : this.m_bounds[1][yIndex].isUpper()) {
+                                            proxyId = this.m_bounds[1][yIndex].proxyId;
+                                            proxy = this.m_proxyPool[proxyId];
+                                            if (sx >= 0) {
+                                                if (proxy.lowerBounds[0] <= xIndex - 1 && proxy.upperBounds[0] >= xIndex) {
+                                                    if (sortKey != null) {
+                                                        this.addProxyResult(proxyId, proxy, maxCount, sortKey);
+                                                    }
+                                                    else {
+                                                        this.m_queryResults[this.m_queryResultCount] = proxyId;
+                                                        ++this.m_queryResultCount;
+                                                    }
+                                                }
                                             }
                                             else {
-                                                this.m_queryResults[this.m_queryResultCount] = proxyId;
-                                                ++this.m_queryResultCount;
+                                                if (proxy.lowerBounds[0] <= xIndex && proxy.upperBounds[0] >= xIndex + 1) {
+                                                    if (sortKey != null) {
+                                                        this.addProxyResult(proxyId, proxy, maxCount, sortKey);
+                                                    }
+                                                    else {
+                                                        this.m_queryResults[this.m_queryResultCount] = proxyId;
+                                                        ++this.m_queryResultCount;
+                                                    }
+                                                }
                                             }
                                         }
+                                        if (sortKey != null && this.m_queryResultCount === maxCount && this.m_queryResultCount > 0 && yProgress > this.m_querySortKeys[this.m_queryResultCount - 1])
+                                            break;
+                                        if (sy > 0) {
+                                            yIndex++;
+                                            if (yIndex === this.m_proxyCount * 2)
+                                                break;
+                                        }
+                                        else {
+                                            yIndex--;
+                                            if (yIndex < 0)
+                                                break;
+                                        }
+                                        yProgress = Math.fround((Math.fround(this.m_bounds[1][yIndex].value - p1y)) / dy);
                                     }
                                 }
-                                if (sortKey != null && this.m_queryResultCount === maxCount && this.m_queryResultCount > 0 && yProgress > this.m_querySortKeys[this.m_queryResultCount - 1])
-                                    break;
-                                if (sy > 0) {
-                                    yIndex++;
-                                    if (yIndex === this.m_proxyCount * 2)
-                                        break;
-                                }
-                                else {
-                                    yIndex--;
-                                    if (yIndex < 0)
-                                        break;
-                                }
-                                yProgress = Math.fround((Math.fround(this.m_bounds[1][yIndex].value - p1y)) / dy);
+                                ;
                             }
+                            break;
                         }
                         ;
-                        break;
                     }
-                    ;
                     var count = 0;
                     for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
-                        var proxya = this.m_proxyPool[this.m_queryResults[i]];
-                        userData[i] = proxya.userData;
+                        {
+                            var proxya = this.m_proxyPool[this.m_queryResults[i]];
+                            userData[i] = proxya.userData;
+                        }
+                        ;
                     }
-                    ;
                     this.m_queryResultCount = 0;
                     this.incrementTimeStamp();
                     return count;
@@ -20077,17 +20539,21 @@ var org;
                     if (key < 0)
                         return;
                     var i = 0;
-                    while ((i < this.m_queryResultCount && this.m_querySortKeys[i] < key))
+                    while ((i < this.m_queryResultCount && this.m_querySortKeys[i] < key)) {
                         ++i;
+                    }
+                    ;
                     if (maxCount === this.m_queryResultCount && i === this.m_queryResultCount)
                         return;
                     if (maxCount === this.m_queryResultCount)
                         this.m_queryResultCount--;
                     for (var j = this.m_queryResultCount + 1; j > i; --j) {
-                        this.m_querySortKeys[j] = this.m_querySortKeys[j - 1];
-                        this.m_queryResults[j] = this.m_queryResults[j - 1];
+                        {
+                            this.m_querySortKeys[j] = this.m_querySortKeys[j - 1];
+                            this.m_queryResults[j] = this.m_queryResults[j - 1];
+                        }
+                        ;
                     }
-                    ;
                     this.m_querySortKeys[i] = key;
                     this.m_queryResults[i] = proxyId;
                     this.m_queryResultCount++;
@@ -20135,29 +20601,35 @@ var org;
                         _this.targetLengths = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(_this.bodies.length);
                         for (var i = 0; i < _this.targetLengths.length; ++i) {
-                            var next = (i === _this.targetLengths.length - 1) ? 0 : i + 1;
-                            var dist = _this.bodies[i].getMemberWorldCenter().sub(_this.bodies[next].getMemberWorldCenter()).length();
-                            _this.targetLengths[i] = dist;
+                            {
+                                var next = (i === _this.targetLengths.length - 1) ? 0 : i + 1;
+                                var dist = _this.bodies[i].getMemberWorldCenter().sub(_this.bodies[next].getMemberWorldCenter()).length();
+                                _this.targetLengths[i] = dist;
+                            }
+                            ;
                         }
-                        ;
                         _this.targetVolume = _this.getArea();
                         _this.distanceJoints = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(_this.bodies.length);
                         for (var i = 0; i < _this.targetLengths.length; ++i) {
-                            var next = (i === _this.targetLengths.length - 1) ? 0 : i + 1;
-                            var djd = new org.jbox2d.dynamics.joints.DistanceJointDef();
-                            djd.frequencyHz = def.frequencyHz;
-                            djd.dampingRatio = def.dampingRatio;
-                            djd.initialize(_this.bodies[i], _this.bodies[next], _this.bodies[i].getMemberWorldCenter(), _this.bodies[next].getMemberWorldCenter());
-                            _this.distanceJoints[i] = _this.world.createJoint(djd);
+                            {
+                                var next = (i === _this.targetLengths.length - 1) ? 0 : i + 1;
+                                var djd = new org.jbox2d.dynamics.joints.DistanceJointDef();
+                                djd.frequencyHz = def.frequencyHz;
+                                djd.dampingRatio = def.dampingRatio;
+                                djd.initialize(_this.bodies[i], _this.bodies[next], _this.bodies[i].getMemberWorldCenter(), _this.bodies[next].getMemberWorldCenter());
+                                _this.distanceJoints[i] = _this.world.createJoint(djd);
+                            }
+                            ;
                         }
-                        ;
                         _this.normals = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(_this.bodies.length);
                         for (var i = 0; i < _this.normals.length; ++i) {
-                            _this.normals[i] = new org.jbox2d.common.Vec2();
+                            {
+                                _this.normals[i] = new org.jbox2d.common.Vec2();
+                            }
+                            ;
                         }
-                        ;
                         _this.m_body1 = _this.bodies[0];
                         _this.m_body2 = _this.bodies[1];
                         _this.m_collideConnected = false;
@@ -20174,17 +20646,21 @@ var org;
                      */
                     ConstantVolumeJoint.prototype.destructor = function () {
                         for (var i = 0; i < this.distanceJoints.length; ++i) {
-                            this.world.destroyJoint(this.distanceJoints[i]);
+                            {
+                                this.world.destroyJoint(this.distanceJoints[i]);
+                            }
+                            ;
                         }
-                        ;
                     };
                     /*private*/ ConstantVolumeJoint.prototype.getArea = function () {
                         var area = 0.0;
                         area += Math.fround(Math.fround(this.bodies[this.bodies.length - 1].getMemberWorldCenter().x * this.bodies[0].getMemberWorldCenter().y) - Math.fround(this.bodies[0].getMemberWorldCenter().x * this.bodies[this.bodies.length - 1].getMemberWorldCenter().y));
                         for (var i = 0; i < this.bodies.length - 1; ++i) {
-                            area += Math.fround(Math.fround(this.bodies[i].getMemberWorldCenter().x * this.bodies[i + 1].getMemberWorldCenter().y) - Math.fround(this.bodies[i + 1].getMemberWorldCenter().x * this.bodies[i].getMemberWorldCenter().y));
+                            {
+                                area += Math.fround(Math.fround(this.bodies[i].getMemberWorldCenter().x * this.bodies[i + 1].getMemberWorldCenter().y) - Math.fround(this.bodies[i + 1].getMemberWorldCenter().x * this.bodies[i].getMemberWorldCenter().y));
+                            }
+                            ;
                         }
-                        ;
                         area *= 0.5;
                         return area;
                     };
@@ -20196,36 +20672,40 @@ var org;
                     ConstantVolumeJoint.prototype.constrainEdges = function (step) {
                         var perimeter = 0.0;
                         for (var i = 0; i < this.bodies.length; ++i) {
-                            var next = (i === this.bodies.length - 1) ? 0 : i + 1;
-                            var dx = Math.fround(this.bodies[next].getMemberWorldCenter().x - this.bodies[i].getMemberWorldCenter().x);
-                            var dy = Math.fround(this.bodies[next].getMemberWorldCenter().y - this.bodies[i].getMemberWorldCenter().y);
-                            var dist = org.jbox2d.common.MathUtils.sqrt(Math.fround(Math.fround(dx * dx) + Math.fround(dy * dy)));
-                            if (dist < org.jbox2d.common.Settings.EPSILON) {
-                                dist = 1.0;
+                            {
+                                var next = (i === this.bodies.length - 1) ? 0 : i + 1;
+                                var dx = Math.fround(this.bodies[next].getMemberWorldCenter().x - this.bodies[i].getMemberWorldCenter().x);
+                                var dy = Math.fround(this.bodies[next].getMemberWorldCenter().y - this.bodies[i].getMemberWorldCenter().y);
+                                var dist = org.jbox2d.common.MathUtils.sqrt(Math.fround(Math.fround(dx * dx) + Math.fround(dy * dy)));
+                                if (dist < org.jbox2d.common.Settings.EPSILON) {
+                                    dist = 1.0;
+                                }
+                                this.normals[i].x = Math.fround(dy / dist);
+                                this.normals[i].y = Math.fround(-dx / dist);
+                                perimeter += dist;
                             }
-                            this.normals[i].x = Math.fround(dy / dist);
-                            this.normals[i].y = Math.fround(-dx / dist);
-                            perimeter += dist;
+                            ;
                         }
-                        ;
                         var deltaArea = Math.fround(this.targetVolume - this.getArea());
                         var toExtrude = Math.fround(Math.fround(0.5 * deltaArea) / perimeter);
                         var done = true;
                         for (var i = 0; i < this.bodies.length; ++i) {
-                            var next = (i === this.bodies.length - 1) ? 0 : i + 1;
-                            var delta = new org.jbox2d.common.Vec2(Math.fround(toExtrude * (Math.fround(this.normals[i].x + this.normals[next].x))), Math.fround(toExtrude * (Math.fround(this.normals[i].y + this.normals[next].y))));
-                            var norm = delta.length();
-                            if (norm > org.jbox2d.common.Settings.maxLinearCorrection_$LI$()) {
-                                delta.mulLocal(Math.fround(org.jbox2d.common.Settings.maxLinearCorrection_$LI$() / norm));
+                            {
+                                var next = (i === this.bodies.length - 1) ? 0 : i + 1;
+                                var delta = new org.jbox2d.common.Vec2(Math.fround(toExtrude * (Math.fround(this.normals[i].x + this.normals[next].x))), Math.fround(toExtrude * (Math.fround(this.normals[i].y + this.normals[next].y))));
+                                var norm = delta.length();
+                                if (norm > org.jbox2d.common.Settings.maxLinearCorrection_$LI$()) {
+                                    delta.mulLocal(Math.fround(org.jbox2d.common.Settings.maxLinearCorrection_$LI$() / norm));
+                                }
+                                if (norm > org.jbox2d.common.Settings.linearSlop_$LI$()) {
+                                    done = false;
+                                }
+                                this.bodies[next].m_sweep.c.x += delta.x;
+                                this.bodies[next].m_sweep.c.y += delta.y;
+                                this.bodies[next].synchronizeTransform();
                             }
-                            if (norm > org.jbox2d.common.Settings.linearSlop_$LI$()) {
-                                done = false;
-                            }
-                            this.bodies[next].m_sweep.c.x += delta.x;
-                            this.bodies[next].m_sweep.c.y += delta.y;
-                            this.bodies[next].synchronizeTransform();
+                            ;
                         }
-                        ;
                         return done;
                     };
                     ConstantVolumeJoint.tlD_$LI$ = function () { if (ConstantVolumeJoint.tlD == null)
@@ -20239,19 +20719,23 @@ var org;
                         this.m_step = step;
                         var d = ConstantVolumeJoint.tlD_$LI$().get(this.bodies.length);
                         for (var i = 0; i < this.bodies.length; ++i) {
-                            var prev = (i === 0) ? this.bodies.length - 1 : i - 1;
-                            var next = (i === this.bodies.length - 1) ? 0 : i + 1;
-                            d[i].set$org_jbox2d_common_Vec2(this.bodies[next].getMemberWorldCenter());
-                            d[i].subLocal(this.bodies[prev].getMemberWorldCenter());
+                            {
+                                var prev = (i === 0) ? this.bodies.length - 1 : i - 1;
+                                var next = (i === this.bodies.length - 1) ? 0 : i + 1;
+                                d[i].set$org_jbox2d_common_Vec2(this.bodies[next].getMemberWorldCenter());
+                                d[i].subLocal(this.bodies[prev].getMemberWorldCenter());
+                            }
+                            ;
                         }
-                        ;
                         if (step.warmStarting) {
                             this.m_impulse *= step.dtRatio;
                             for (var i = 0; i < this.bodies.length; ++i) {
-                                this.bodies[i].m_linearVelocity.x += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * d[i].y) * 0.5) * this.m_impulse);
-                                this.bodies[i].m_linearVelocity.y += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * -d[i].x) * 0.5) * this.m_impulse);
+                                {
+                                    this.bodies[i].m_linearVelocity.x += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * d[i].y) * 0.5) * this.m_impulse);
+                                    this.bodies[i].m_linearVelocity.y += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * -d[i].x) * 0.5) * this.m_impulse);
+                                }
+                                ;
                             }
-                            ;
                         }
                         else {
                             this.m_impulse = 0.0;
@@ -20273,21 +20757,25 @@ var org;
                         var dotMassSum = 0.0;
                         var d = ConstantVolumeJoint.tlD_$LI$().get(this.bodies.length);
                         for (var i = 0; i < this.bodies.length; ++i) {
-                            var prev = (i === 0) ? this.bodies.length - 1 : i - 1;
-                            var next = (i === this.bodies.length - 1) ? 0 : i + 1;
-                            d[i].set$org_jbox2d_common_Vec2(this.bodies[next].getMemberWorldCenter());
-                            d[i].subLocal(this.bodies[prev].getMemberWorldCenter());
-                            dotMassSum += Math.fround((d[i].lengthSquared()) / this.bodies[i].getMass());
-                            crossMassSum += org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.bodies[i].getLinearVelocity(), d[i]);
+                            {
+                                var prev = (i === 0) ? this.bodies.length - 1 : i - 1;
+                                var next = (i === this.bodies.length - 1) ? 0 : i + 1;
+                                d[i].set$org_jbox2d_common_Vec2(this.bodies[next].getMemberWorldCenter());
+                                d[i].subLocal(this.bodies[prev].getMemberWorldCenter());
+                                dotMassSum += Math.fround((d[i].lengthSquared()) / this.bodies[i].getMass());
+                                crossMassSum += org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.bodies[i].getLinearVelocity(), d[i]);
+                            }
+                            ;
                         }
-                        ;
                         var lambda = Math.fround(Math.fround(-2.0 * crossMassSum) / dotMassSum);
                         this.m_impulse += lambda;
                         for (var i = 0; i < this.bodies.length; ++i) {
-                            this.bodies[i].m_linearVelocity.x += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * d[i].y) * 0.5) * lambda);
-                            this.bodies[i].m_linearVelocity.y += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * -d[i].x) * 0.5) * lambda);
+                            {
+                                this.bodies[i].m_linearVelocity.x += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * d[i].y) * 0.5) * lambda);
+                                this.bodies[i].m_linearVelocity.y += Math.fround(Math.fround(Math.fround(this.bodies[i].m_invMass * -d[i].x) * 0.5) * lambda);
+                            }
+                            ;
                         }
-                        ;
                     };
                     /**
                      *
@@ -20407,107 +20895,127 @@ var org;
                 ;
                 Island.prototype.solve = function (step, gravity, correctPositions, allowSleep) {
                     for (var i = 0; i < this.m_bodyCount; ++i) {
-                        var b = this.m_bodies[i];
-                        if (b.isStatic()) {
-                            continue;
-                        }
-                        b.m_linearVelocity.x += Math.fround(step.dt * (Math.fround(gravity.x + Math.fround(b.m_invMass * b.m_force.x))));
-                        b.m_linearVelocity.y += Math.fround(step.dt * (Math.fround(gravity.y + Math.fround(b.m_invMass * b.m_force.y))));
-                        b.m_angularVelocity += Math.fround(Math.fround(step.dt * b.m_invI) * b.m_torque);
-                        b.m_force.set$float$float(0.0, 0.0);
-                        b.m_torque = 0.0;
-                        b.m_linearVelocity.mulLocal(org.jbox2d.common.MathUtils.clamp$float$float$float(Math.fround(1.0 - Math.fround(step.dt * b.m_linearDamping)), 0.0, 1.0));
-                        b.m_angularVelocity *= org.jbox2d.common.MathUtils.clamp$float$float$float(Math.fround(1.0 - Math.fround(step.dt * b.m_angularDamping)), 0.0, 1.0);
-                        if (org.jbox2d.common.Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > org.jbox2d.common.Settings.maxLinearVelocitySquared_$LI$()) {
-                            b.m_linearVelocity.normalize();
-                            b.m_linearVelocity.mulLocal(org.jbox2d.common.Settings.maxLinearVelocity);
-                        }
-                        if (Math.fround(b.m_angularVelocity * b.m_angularVelocity) > org.jbox2d.common.Settings.maxAngularVelocitySquared_$LI$()) {
-                            if (b.m_angularVelocity < 0.0) {
-                                b.m_angularVelocity = -org.jbox2d.common.Settings.maxAngularVelocity;
+                        {
+                            var b = this.m_bodies[i];
+                            if (b.isStatic()) {
+                                continue;
                             }
-                            else {
-                                b.m_angularVelocity = org.jbox2d.common.Settings.maxAngularVelocity;
+                            b.m_linearVelocity.x += Math.fround(step.dt * (Math.fround(gravity.x + Math.fround(b.m_invMass * b.m_force.x))));
+                            b.m_linearVelocity.y += Math.fround(step.dt * (Math.fround(gravity.y + Math.fround(b.m_invMass * b.m_force.y))));
+                            b.m_angularVelocity += Math.fround(Math.fround(step.dt * b.m_invI) * b.m_torque);
+                            b.m_force.set$float$float(0.0, 0.0);
+                            b.m_torque = 0.0;
+                            b.m_linearVelocity.mulLocal(org.jbox2d.common.MathUtils.clamp$float$float$float(Math.fround(1.0 - Math.fround(step.dt * b.m_linearDamping)), 0.0, 1.0));
+                            b.m_angularVelocity *= org.jbox2d.common.MathUtils.clamp$float$float$float(Math.fround(1.0 - Math.fround(step.dt * b.m_angularDamping)), 0.0, 1.0);
+                            if (org.jbox2d.common.Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > org.jbox2d.common.Settings.maxLinearVelocitySquared_$LI$()) {
+                                b.m_linearVelocity.normalize();
+                                b.m_linearVelocity.mulLocal(org.jbox2d.common.Settings.maxLinearVelocity);
+                            }
+                            if (Math.fround(b.m_angularVelocity * b.m_angularVelocity) > org.jbox2d.common.Settings.maxAngularVelocitySquared_$LI$()) {
+                                if (b.m_angularVelocity < 0.0) {
+                                    b.m_angularVelocity = -org.jbox2d.common.Settings.maxAngularVelocity;
+                                }
+                                else {
+                                    b.m_angularVelocity = org.jbox2d.common.Settings.maxAngularVelocity;
+                                }
                             }
                         }
+                        ;
                     }
-                    ;
                     var contactSolver = Island.contactSolvers_$LI$().get();
                     contactSolver.init(step, this.m_contacts, this.m_contactCount);
                     contactSolver.initVelocityConstraints(step);
                     for (var i = 0; i < this.m_jointCount; ++i) {
-                        this.m_joints[i].initVelocityConstraints(step);
-                    }
-                    ;
-                    for (var i = 0; i < step.maxIterations; ++i) {
-                        contactSolver.solveVelocityConstraints();
-                        for (var j = 0; j < this.m_jointCount; ++j) {
-                            this.m_joints[j].solveVelocityConstraints(step);
+                        {
+                            this.m_joints[i].initVelocityConstraints(step);
                         }
                         ;
                     }
-                    ;
+                    for (var i = 0; i < step.maxIterations; ++i) {
+                        {
+                            contactSolver.solveVelocityConstraints();
+                            for (var j = 0; j < this.m_jointCount; ++j) {
+                                {
+                                    this.m_joints[j].solveVelocityConstraints(step);
+                                }
+                                ;
+                            }
+                        }
+                        ;
+                    }
                     contactSolver.finalizeVelocityConstraints();
                     for (var i = 0; i < this.m_bodyCount; ++i) {
-                        var b = this.m_bodies[i];
-                        if (b.isStatic()) {
-                            continue;
+                        {
+                            var b = this.m_bodies[i];
+                            if (b.isStatic()) {
+                                continue;
+                            }
+                            b.m_sweep.c0.set$org_jbox2d_common_Vec2(b.m_sweep.c);
+                            b.m_sweep.a0 = b.m_sweep.a;
+                            b.m_sweep.c.x += Math.fround(step.dt * b.m_linearVelocity.x);
+                            b.m_sweep.c.y += Math.fround(step.dt * b.m_linearVelocity.y);
+                            b.m_sweep.a += Math.fround(step.dt * b.m_angularVelocity);
+                            b.synchronizeTransform();
                         }
-                        b.m_sweep.c0.set$org_jbox2d_common_Vec2(b.m_sweep.c);
-                        b.m_sweep.a0 = b.m_sweep.a;
-                        b.m_sweep.c.x += Math.fround(step.dt * b.m_linearVelocity.x);
-                        b.m_sweep.c.y += Math.fround(step.dt * b.m_linearVelocity.y);
-                        b.m_sweep.a += Math.fround(step.dt * b.m_angularVelocity);
-                        b.synchronizeTransform();
+                        ;
                     }
-                    ;
                     if (correctPositions) {
                         for (var i = 0; i < this.m_jointCount; ++i) {
-                            this.m_joints[i].initPositionConstraints();
-                        }
-                        ;
-                        for (Island.m_positionIterationCount = 0; Island.m_positionIterationCount < step.maxIterations; ++Island.m_positionIterationCount) {
-                            var contactsOkay = contactSolver.solvePositionConstraints(org.jbox2d.common.Settings.contactBaumgarte);
-                            var jointsOkay = true;
-                            for (var i = 0; i < this.m_jointCount; ++i) {
-                                var jointOkay = this.m_joints[i].solvePositionConstraints();
-                                jointsOkay = jointsOkay && jointOkay;
+                            {
+                                this.m_joints[i].initPositionConstraints();
                             }
                             ;
-                            if (contactsOkay && jointsOkay) {
-                                break;
-                            }
                         }
-                        ;
+                        for (Island.m_positionIterationCount = 0; Island.m_positionIterationCount < step.maxIterations; ++Island.m_positionIterationCount) {
+                            {
+                                var contactsOkay = contactSolver.solvePositionConstraints(org.jbox2d.common.Settings.contactBaumgarte);
+                                var jointsOkay = true;
+                                for (var i = 0; i < this.m_jointCount; ++i) {
+                                    {
+                                        var jointOkay = this.m_joints[i].solvePositionConstraints();
+                                        jointsOkay = jointsOkay && jointOkay;
+                                    }
+                                    ;
+                                }
+                                if (contactsOkay && jointsOkay) {
+                                    break;
+                                }
+                            }
+                            ;
+                        }
                     }
                     this.report$org_jbox2d_dynamics_contacts_ContactConstraint_A(contactSolver.m_constraints);
                     if (allowSleep) {
-                        var minSleepTime = Number.MAX_VALUE;
+                        var minSleepTime = 3.4028235E38;
                         var linTolSqr = Math.fround(org.jbox2d.common.Settings.linearSleepTolerance_$LI$() * org.jbox2d.common.Settings.linearSleepTolerance_$LI$());
                         var angTolSqr = Math.fround(org.jbox2d.common.Settings.angularSleepTolerance_$LI$() * org.jbox2d.common.Settings.angularSleepTolerance_$LI$());
                         for (var i = 0; i < this.m_bodyCount; ++i) {
-                            var b = this.m_bodies[i];
-                            if (b.m_invMass === 0.0) {
-                                continue;
-                            }
-                            if ((b.m_flags & org.jbox2d.dynamics.Body.e_allowSleepFlag) === 0 || Math.fround(b.m_angularVelocity * b.m_angularVelocity) > angTolSqr || org.jbox2d.common.Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
-                                b.m_sleepTime = 0.0;
-                                minSleepTime = 0.0;
-                            }
-                            else {
-                                b.m_sleepTime += step.dt;
-                                minSleepTime = org.jbox2d.common.MathUtils.min(minSleepTime, b.m_sleepTime);
-                            }
-                        }
-                        ;
-                        if (minSleepTime >= org.jbox2d.common.Settings.timeToSleep_$LI$()) {
-                            for (var i = 0; i < this.m_bodyCount; ++i) {
+                            {
                                 var b = this.m_bodies[i];
-                                b.m_flags |= org.jbox2d.dynamics.Body.e_sleepFlag;
-                                b.m_linearVelocity.setZero();
-                                b.m_angularVelocity = 0.0;
+                                if (b.m_invMass === 0.0) {
+                                    continue;
+                                }
+                                if ((b.m_flags & org.jbox2d.dynamics.Body.e_allowSleepFlag) === 0 || Math.fround(b.m_angularVelocity * b.m_angularVelocity) > angTolSqr || org.jbox2d.common.Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
+                                    b.m_sleepTime = 0.0;
+                                    minSleepTime = 0.0;
+                                }
+                                else {
+                                    b.m_sleepTime += step.dt;
+                                    minSleepTime = org.jbox2d.common.MathUtils.min(minSleepTime, b.m_sleepTime);
+                                }
                             }
                             ;
+                        }
+                        if (minSleepTime >= org.jbox2d.common.Settings.timeToSleep_$LI$()) {
+                            for (var i = 0; i < this.m_bodyCount; ++i) {
+                                {
+                                    var b = this.m_bodies[i];
+                                    b.m_flags |= org.jbox2d.dynamics.Body.e_sleepFlag;
+                                    b.m_linearVelocity.setZero();
+                                    b.m_angularVelocity = 0.0;
+                                }
+                                ;
+                            }
                         }
                     }
                     Island.contactSolvers_$LI$().recycle(contactSolver);
@@ -20518,46 +21026,58 @@ var org;
                     if (org.jbox2d.common.Settings.maxTOIJointsPerIsland > 0) {
                         subStep.warmStarting = true;
                         for (var i = this.m_jointCount - 1; i >= 0; --i) {
-                            this.m_joints[i].initVelocityConstraints(subStep);
+                            {
+                                this.m_joints[i].initVelocityConstraints(subStep);
+                            }
+                            ;
                         }
-                        ;
                         subStep.warmStarting = false;
                     }
                     for (var i = 0; i < subStep.maxIterations; ++i) {
-                        contactSolver.solveVelocityConstraints();
-                        for (var j = this.m_jointCount - 1; j >= 0; --j) {
-                            this.m_joints[j].solveVelocityConstraints(subStep);
+                        {
+                            contactSolver.solveVelocityConstraints();
+                            for (var j = this.m_jointCount - 1; j >= 0; --j) {
+                                {
+                                    this.m_joints[j].solveVelocityConstraints(subStep);
+                                }
+                                ;
+                            }
                         }
                         ;
                     }
-                    ;
                     for (var i = 0; i < this.m_bodyCount; ++i) {
-                        var b = this.m_bodies[i];
-                        if (b.isStatic()) {
-                            continue;
+                        {
+                            var b = this.m_bodies[i];
+                            if (b.isStatic()) {
+                                continue;
+                            }
+                            b.m_sweep.c0.set$org_jbox2d_common_Vec2(b.m_sweep.c);
+                            b.m_sweep.a0 = b.m_sweep.a;
+                            b.m_sweep.c.x += Math.fround(subStep.dt * b.m_linearVelocity.x);
+                            b.m_sweep.c.y += Math.fround(subStep.dt * b.m_linearVelocity.y);
+                            b.m_sweep.a += Math.fround(subStep.dt * b.m_angularVelocity);
+                            b.synchronizeTransform();
                         }
-                        b.m_sweep.c0.set$org_jbox2d_common_Vec2(b.m_sweep.c);
-                        b.m_sweep.a0 = b.m_sweep.a;
-                        b.m_sweep.c.x += Math.fround(subStep.dt * b.m_linearVelocity.x);
-                        b.m_sweep.c.y += Math.fround(subStep.dt * b.m_linearVelocity.y);
-                        b.m_sweep.a += Math.fround(subStep.dt * b.m_angularVelocity);
-                        b.synchronizeTransform();
+                        ;
                     }
-                    ;
                     var k_toiBaumgarte = 0.75;
                     for (var i = 0; i < subStep.maxIterations; ++i) {
-                        var contactsOkay = contactSolver.solvePositionConstraints(k_toiBaumgarte);
-                        var jointsOkay = true;
-                        for (var j = this.m_jointCount - 1; j >= 0; --j) {
-                            var jointOkay = this.m_joints[j].solvePositionConstraints();
-                            jointsOkay = jointsOkay && jointOkay;
+                        {
+                            var contactsOkay = contactSolver.solvePositionConstraints(k_toiBaumgarte);
+                            var jointsOkay = true;
+                            for (var j = this.m_jointCount - 1; j >= 0; --j) {
+                                {
+                                    var jointOkay = this.m_joints[j].solvePositionConstraints();
+                                    jointsOkay = jointsOkay && jointOkay;
+                                }
+                                ;
+                            }
+                            if (contactsOkay && jointsOkay) {
+                                break;
+                            }
                         }
                         ;
-                        if (contactsOkay && jointsOkay) {
-                            break;
-                        }
                     }
-                    ;
                     this.report$org_jbox2d_dynamics_contacts_ContactConstraint_A(contactSolver.m_constraints);
                     Island.contactSolvers_$LI$().recycle(contactSolver);
                 };
@@ -20565,9 +21085,11 @@ var org;
                     var cc = (function (s) { var a = []; while (s-- > 0)
                         a.push(null); return a; })(/* size */ constraints.length);
                     for (var i = 0; i < cc.length; ++i) {
-                        cc[i] = constraints[i];
+                        {
+                            cc[i] = constraints[i];
+                        }
+                        ;
                     }
-                    ;
                     this.report$org_jbox2d_dynamics_contacts_ContactConstraint_A(cc);
                 };
                 Island.prototype.report = function (constraints) {
@@ -20585,31 +21107,37 @@ var org;
                         return;
                     }
                     for (var i = 0; i < this.m_contactCount; ++i) {
-                        var c = this.m_contacts[i];
-                        var cc = constraints[i];
-                        var cr = new org.jbox2d.dynamics.contacts.ContactResult();
-                        cr.shape1 = c.getShape1();
-                        cr.shape2 = c.getShape2();
-                        var b1 = cr.shape1.getBody();
-                        var manifoldCount = c.getManifoldCount();
-                        var manifolds = c.getManifolds();
-                        for (var j = 0; j < manifoldCount; ++j) {
-                            var manifold = manifolds[j];
-                            cr.normal.set$org_jbox2d_common_Vec2(manifold.normal);
-                            for (var k = 0; k < manifold.pointCount; ++k) {
-                                var point = manifold.points[k];
-                                var ccp = cc.points[k];
-                                org.jbox2d.common.XForm.mulToOut(b1.getMemberXForm(), point.localPoint1, cr.position);
-                                cr.normalImpulse = ccp.normalImpulse;
-                                cr.tangentImpulse = ccp.tangentImpulse;
-                                cr.id.set(point.id);
-                                this.m_listener.result(cr);
+                        {
+                            var c = this.m_contacts[i];
+                            var cc = constraints[i];
+                            var cr = new org.jbox2d.dynamics.contacts.ContactResult();
+                            cr.shape1 = c.getShape1();
+                            cr.shape2 = c.getShape2();
+                            var b1 = cr.shape1.getBody();
+                            var manifoldCount = c.getManifoldCount();
+                            var manifolds = c.getManifolds();
+                            for (var j = 0; j < manifoldCount; ++j) {
+                                {
+                                    var manifold = manifolds[j];
+                                    cr.normal.set$org_jbox2d_common_Vec2(manifold.normal);
+                                    for (var k = 0; k < manifold.pointCount; ++k) {
+                                        {
+                                            var point = manifold.points[k];
+                                            var ccp = cc.points[k];
+                                            org.jbox2d.common.XForm.mulToOut(b1.getMemberXForm(), point.localPoint1, cr.position);
+                                            cr.normalImpulse = ccp.normalImpulse;
+                                            cr.tangentImpulse = ccp.tangentImpulse;
+                                            cr.id.set(point.id);
+                                            this.m_listener.result(cr);
+                                        }
+                                        ;
+                                    }
+                                }
+                                ;
                             }
-                            ;
                         }
                         ;
                     }
-                    ;
                 };
                 return Island;
             }());
@@ -20908,30 +21436,36 @@ var org;
                     }
                     var jn = b.m_jointList;
                     while ((jn != null)) {
-                        var jn0 = jn;
-                        jn = jn.next;
-                        if (this.m_destructionListener != null) {
-                            this.m_destructionListener['sayGoodbye$org_jbox2d_dynamics_joints_Joint'](jn0.joint);
+                        {
+                            var jn0 = jn;
+                            jn = jn.next;
+                            if (this.m_destructionListener != null) {
+                                this.m_destructionListener['sayGoodbye$org_jbox2d_dynamics_joints_Joint'](jn0.joint);
+                            }
+                            this.destroyJoint(jn0.joint);
                         }
-                        this.destroyJoint(jn0.joint);
                     }
                     ;
                     var ce = b.m_controllerList;
                     while ((ce != null)) {
-                        var ce0 = ce;
-                        ce = ce.nextController;
-                        ce0.controller.removeBody(b);
+                        {
+                            var ce0 = ce;
+                            ce = ce.nextController;
+                            ce0.controller.removeBody(b);
+                        }
                     }
                     ;
                     var s = b.m_shapeList;
                     while ((s != null)) {
-                        var s0 = s;
-                        s = s.m_next;
-                        if (this.m_destructionListener != null) {
-                            this.m_destructionListener['sayGoodbye$org_jbox2d_collision_shapes_Shape'](s0);
+                        {
+                            var s0 = s;
+                            s = s.m_next;
+                            if (this.m_destructionListener != null) {
+                                this.m_destructionListener['sayGoodbye$org_jbox2d_collision_shapes_Shape'](s0);
+                            }
+                            s0.destroyProxy(this.m_broadPhase);
+                            org.jbox2d.collision.shapes.Shape.destroy(s0);
                         }
-                        s0.destroyProxy(this.m_broadPhase);
-                        org.jbox2d.collision.shapes.Shape.destroy(s0);
                     }
                     ;
                     if (b.m_prev != null) {
@@ -20980,9 +21514,11 @@ var org;
                     if (def.collideConnected === false) {
                         var b = def.body1.m_shapeCount < def.body2.m_shapeCount ? def.body1 : def.body2;
                         for (var s = b.m_shapeList; s != null; s = s.m_next) {
-                            s.refilterProxy(this.m_broadPhase, b.getMemberXForm());
+                            {
+                                s.refilterProxy(this.m_broadPhase, b.getMemberXForm());
+                            }
+                            ;
                         }
-                        ;
                     }
                     return j;
                 };
@@ -21033,9 +21569,11 @@ var org;
                     if (collideConnected === false) {
                         var b = body1.m_shapeCount < body2.m_shapeCount ? body1 : body2;
                         for (var s = b.m_shapeList; s != null; s = s.m_next) {
-                            s.refilterProxy(this.m_broadPhase, b.getMemberXForm());
+                            {
+                                s.refilterProxy(this.m_broadPhase, b.getMemberXForm());
+                            }
+                            ;
                         }
-                        ;
                     }
                 };
                 World.prototype.createController = function (def) {
@@ -21178,101 +21716,121 @@ var org;
                 World.prototype.solve = function (step) {
                     this.m_positionIterationCount = 0;
                     for (var controller = this.m_controllerList; controller != null; controller = controller.m_next) {
-                        controller.step(step);
+                        {
+                            controller.step(step);
+                        }
+                        ;
                     }
-                    ;
                     var island = World.islands_$LI$().get();
                     island.init(this.m_bodyCount, this.m_contactCount, this.m_jointCount, this.m_contactListener);
                     for (var b = this.m_bodyList; b != null; b = b.m_next) {
-                        b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
+                        {
+                            b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
+                        }
+                        ;
                     }
-                    ;
                     for (var c = this.m_contactList; c != null; c = c.m_next) {
-                        c.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_islandFlag;
+                        {
+                            c.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_islandFlag;
+                        }
+                        ;
                     }
-                    ;
                     for (var j = this.m_jointList; j != null; j = j.m_next) {
-                        j.m_islandFlag = false;
+                        {
+                            j.m_islandFlag = false;
+                        }
+                        ;
                     }
-                    ;
                     var stackSize = this.m_bodyCount;
                     var stack = (function (s) { var a = []; while (s-- > 0)
                         a.push(null); return a; })(stackSize);
                     for (var seed = this.m_bodyList; seed != null; seed = seed.m_next) {
-                        if ((seed.m_flags & (org.jbox2d.dynamics.Body.e_islandFlag | org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) > 0) {
-                            continue;
+                        {
+                            if ((seed.m_flags & (org.jbox2d.dynamics.Body.e_islandFlag | org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) > 0) {
+                                continue;
+                            }
+                            if (seed.isStatic()) {
+                                continue;
+                            }
+                            island.clear();
+                            var stackCount = 0;
+                            stack[stackCount++] = seed;
+                            seed.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
+                            while ((stackCount > 0)) {
+                                {
+                                    var b = stack[--stackCount];
+                                    island.add$org_jbox2d_dynamics_Body(b);
+                                    b.m_flags &= ~org.jbox2d.dynamics.Body.e_sleepFlag;
+                                    if (b.isStatic()) {
+                                        continue;
+                                    }
+                                    for (var cn = b.m_contactList; cn != null; cn = cn.next) {
+                                        {
+                                            if ((cn.contact.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_islandFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) > 0) {
+                                                continue;
+                                            }
+                                            if (cn.contact.getManifoldCount() === 0) {
+                                                continue;
+                                            }
+                                            island.add$org_jbox2d_dynamics_contacts_Contact(cn.contact);
+                                            cn.contact.m_flags |= org.jbox2d.dynamics.contacts.Contact.e_islandFlag;
+                                            var other = cn.other;
+                                            if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
+                                                continue;
+                                            }
+                                            stack[stackCount++] = other;
+                                            other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
+                                        }
+                                        ;
+                                    }
+                                    for (var jn = b.m_jointList; jn != null; jn = jn.next) {
+                                        {
+                                            if (jn.joint.m_islandFlag === true) {
+                                                continue;
+                                            }
+                                            island.add$org_jbox2d_dynamics_joints_Joint(jn.joint);
+                                            jn.joint.m_islandFlag = true;
+                                            var other = jn.other;
+                                            if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
+                                                continue;
+                                            }
+                                            stack[stackCount++] = other;
+                                            other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
+                                        }
+                                        ;
+                                    }
+                                }
+                            }
+                            ;
+                            island.solve(step, this.m_gravity, this.m_positionCorrection, this.m_allowSleep);
+                            this.m_positionIterationCount = org.jbox2d.common.MathUtils.max$int$int(this.m_positionIterationCount, org.jbox2d.dynamics.Island.m_positionIterationCount);
+                            for (var i = 0; i < island.m_bodyCount; ++i) {
+                                {
+                                    var b = island.m_bodies[i];
+                                    if (b.isStatic()) {
+                                        b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
+                                    }
+                                }
+                                ;
+                            }
                         }
-                        if (seed.isStatic()) {
-                            continue;
-                        }
-                        island.clear();
-                        var stackCount = 0;
-                        stack[stackCount++] = seed;
-                        seed.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                        while ((stackCount > 0)) {
-                            var b = stack[--stackCount];
-                            island.add$org_jbox2d_dynamics_Body(b);
-                            b.m_flags &= ~org.jbox2d.dynamics.Body.e_sleepFlag;
+                        ;
+                    }
+                    for (var b = this.m_bodyList; b != null; b = b.getNext()) {
+                        {
+                            if ((b.m_flags & (org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) !== 0) {
+                                continue;
+                            }
                             if (b.isStatic()) {
                                 continue;
                             }
-                            for (var cn = b.m_contactList; cn != null; cn = cn.next) {
-                                if ((cn.contact.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_islandFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) > 0) {
-                                    continue;
-                                }
-                                if (cn.contact.getManifoldCount() === 0) {
-                                    continue;
-                                }
-                                island.add$org_jbox2d_dynamics_contacts_Contact(cn.contact);
-                                cn.contact.m_flags |= org.jbox2d.dynamics.contacts.Contact.e_islandFlag;
-                                var other = cn.other;
-                                if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
-                                    continue;
-                                }
-                                stack[stackCount++] = other;
-                                other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                            }
-                            ;
-                            for (var jn = b.m_jointList; jn != null; jn = jn.next) {
-                                if (jn.joint.m_islandFlag === true) {
-                                    continue;
-                                }
-                                island.add$org_jbox2d_dynamics_joints_Joint(jn.joint);
-                                jn.joint.m_islandFlag = true;
-                                var other = jn.other;
-                                if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
-                                    continue;
-                                }
-                                stack[stackCount++] = other;
-                                other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                            }
-                            ;
-                        }
-                        ;
-                        island.solve(step, this.m_gravity, this.m_positionCorrection, this.m_allowSleep);
-                        this.m_positionIterationCount = org.jbox2d.common.MathUtils.max$int$int(this.m_positionIterationCount, org.jbox2d.dynamics.Island.m_positionIterationCount);
-                        for (var i = 0; i < island.m_bodyCount; ++i) {
-                            var b = island.m_bodies[i];
-                            if (b.isStatic()) {
-                                b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
+                            var inRange = b.synchronizeShapes();
+                            if (inRange === false && this.m_boundaryListener != null) {
+                                this.m_boundaryListener.violation(b);
                             }
                         }
                         ;
                     }
-                    ;
-                    for (var b = this.m_bodyList; b != null; b = b.getNext()) {
-                        if ((b.m_flags & (org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) !== 0) {
-                            continue;
-                        }
-                        if (b.isStatic()) {
-                            continue;
-                        }
-                        var inRange = b.synchronizeShapes();
-                        if (inRange === false && this.m_boundaryListener != null) {
-                            this.m_boundaryListener.violation(b);
-                        }
-                    }
-                    ;
                     this.m_broadPhase.commit();
                     World.islands_$LI$().recycle(island);
                 };
@@ -21290,174 +21848,198 @@ var org;
                     var queue = (function (s) { var a = []; while (s-- > 0)
                         a.push(null); return a; })(queueCapacity);
                     for (var b = this.m_bodyList; b != null; b = b.m_next) {
-                        b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
-                        b.m_sweep.t0 = 0.0;
-                    }
-                    ;
-                    for (var c = this.m_contactList; c != null; c = c.m_next) {
-                        c.m_flags &= ~(org.jbox2d.dynamics.contacts.Contact.e_toiFlag | org.jbox2d.dynamics.contacts.Contact.e_islandFlag);
-                    }
-                    ;
-                    for (var j = this.m_jointList; j != null; j = j.m_next) {
-                        j.m_islandFlag = false;
-                    }
-                    ;
-                    while ((true)) {
-                        var minContact = null;
-                        var minTOI = 1.0;
-                        for (var c = this.m_contactList; c != null; c = c.m_next) {
-                            if ((c.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_slowFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) !== 0) {
-                                continue;
-                            }
-                            var toi = 1.0;
-                            if ((c.m_flags & org.jbox2d.dynamics.contacts.Contact.e_toiFlag) !== 0) {
-                                toi = c.m_toi;
-                            }
-                            else {
-                                var s1_1 = c.getShape1();
-                                var s2_1 = c.getShape2();
-                                var b1_1 = s1_1.getBody();
-                                var b2_1 = s2_1.getBody();
-                                if ((b1_1.isStatic() || b1_1.isSleeping()) && (b2_1.isStatic() || b2_1.isSleeping())) {
-                                    continue;
-                                }
-                                var t0 = b1_1.m_sweep.t0;
-                                if (b1_1.m_sweep.t0 < b2_1.m_sweep.t0) {
-                                    t0 = b2_1.m_sweep.t0;
-                                    b1_1.m_sweep.advance(t0);
-                                }
-                                else if (b2_1.m_sweep.t0 < b1_1.m_sweep.t0) {
-                                    t0 = b1_1.m_sweep.t0;
-                                    b2_1.m_sweep.advance(t0);
-                                }
-                                toi = org.jbox2d.collision.TOI.timeOfImpact(c.m_shape1, b1_1.m_sweep, c.m_shape2, b2_1.m_sweep);
-                                if (toi > 0.0 && toi < 1.0) {
-                                    toi = org.jbox2d.common.MathUtils.min(Math.fround(Math.fround((Math.fround(1.0 - toi)) * t0) + toi), 1.0);
-                                }
-                                c.m_toi = toi;
-                                c.m_flags |= org.jbox2d.dynamics.contacts.Contact.e_toiFlag;
-                            }
-                            if (org.jbox2d.common.Settings.EPSILON < toi && toi < minTOI) {
-                                minContact = c;
-                                minTOI = toi;
-                            }
-                        }
-                        ;
-                        if (minContact == null || Math.fround(1.0 - Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON)) < minTOI) {
-                            break;
-                        }
-                        var s1 = minContact.getShape1();
-                        var s2 = minContact.getShape2();
-                        var b1 = s1.getBody();
-                        var b2 = s2.getBody();
-                        b1.advance(minTOI);
-                        b2.advance(minTOI);
-                        minContact.update(this.m_contactListener);
-                        minContact.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_toiFlag;
-                        if (minContact.getManifoldCount() === 0) {
-                            continue;
-                        }
-                        var seed = b1;
-                        if (seed.isStatic()) {
-                            seed = b2;
-                        }
-                        island.clear();
-                        var queueStart = 0;
-                        var queueSize = 0;
-                        queue[queueStart + queueSize++] = seed;
-                        seed.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                        while ((queueSize > 0)) {
-                            var b = queue[queueStart++];
-                            --queueSize;
-                            island.add$org_jbox2d_dynamics_Body(b);
-                            b.m_flags &= ~org.jbox2d.dynamics.Body.e_sleepFlag;
-                            if (b.isStatic()) {
-                                continue;
-                            }
-                            for (var cn = b.m_contactList; cn != null; cn = cn.next) {
-                                if (island.m_contactCount === island.m_contactCapacity) {
-                                    continue;
-                                }
-                                if ((cn.contact.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_islandFlag | org.jbox2d.dynamics.contacts.Contact.e_slowFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) !== 0) {
-                                    continue;
-                                }
-                                if (cn.contact.getManifoldCount() === 0) {
-                                    continue;
-                                }
-                                island.add$org_jbox2d_dynamics_contacts_Contact(cn.contact);
-                                cn.contact.m_flags |= org.jbox2d.dynamics.contacts.Contact.e_islandFlag;
-                                var other = cn.other;
-                                if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) !== 0) {
-                                    continue;
-                                }
-                                if (other.isStatic() === false) {
-                                    other.advance(minTOI);
-                                    other.wakeUp();
-                                }
-                                queue[queueStart + queueSize++] = other;
-                                other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                            }
-                            ;
-                            for (var jn = b.m_jointList; jn != null; jn = jn.next) {
-                                if (island.m_jointCount === island.m_jointCapacity) {
-                                    continue;
-                                }
-                                if (jn.joint.m_islandFlag === true) {
-                                    continue;
-                                }
-                                island.add$org_jbox2d_dynamics_joints_Joint(jn.joint);
-                                jn.joint.m_islandFlag = true;
-                                var other = jn.other;
-                                if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
-                                    continue;
-                                }
-                                if (other.isStatic() === false) {
-                                    other.advance(minTOI);
-                                    other.wakeUp();
-                                }
-                                queue[queueStart + queueSize++] = other;
-                                other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                            }
-                            ;
-                        }
-                        ;
-                        var subStep = World.steps_$LI$().get();
-                        subStep.warmStarting = false;
-                        subStep.dt = Math.fround((Math.fround(1.0 - minTOI)) * step.dt);
-                        subStep.inv_dt = Math.fround(1.0 / subStep.dt);
-                        subStep.maxIterations = step.maxIterations;
-                        island.solveTOI(subStep);
-                        World.steps_$LI$().recycle(subStep);
-                        for (var i = 0; i < island.m_bodyCount; ++i) {
-                            var b = island.m_bodies[i];
+                        {
                             b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
-                            if ((b.m_flags & (org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) !== 0) {
-                                continue;
-                            }
-                            if (b.isStatic()) {
-                                continue;
-                            }
-                            var inRange = b.synchronizeShapes();
-                            if (inRange === false && this.m_boundaryListener != null) {
-                                this.m_boundaryListener.violation(b);
-                            }
-                            for (var cn = b.m_contactList; cn != null; cn = cn.next) {
-                                cn.contact.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_toiFlag;
-                            }
-                            ;
+                            b.m_sweep.t0 = 0.0;
                         }
                         ;
-                        for (var i = 0; i < island.m_contactCount; ++i) {
-                            var c = island.m_contacts[i];
+                    }
+                    for (var c = this.m_contactList; c != null; c = c.m_next) {
+                        {
                             c.m_flags &= ~(org.jbox2d.dynamics.contacts.Contact.e_toiFlag | org.jbox2d.dynamics.contacts.Contact.e_islandFlag);
                         }
                         ;
-                        for (var i = 0; i < island.m_jointCount; ++i) {
-                            var j = island.m_joints[i];
+                    }
+                    for (var j = this.m_jointList; j != null; j = j.m_next) {
+                        {
                             j.m_islandFlag = false;
                         }
                         ;
-                        this.m_broadPhase.commit();
+                    }
+                    while ((true)) {
+                        {
+                            var minContact = null;
+                            var minTOI = 1.0;
+                            for (var c = this.m_contactList; c != null; c = c.m_next) {
+                                {
+                                    if ((c.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_slowFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) !== 0) {
+                                        continue;
+                                    }
+                                    var toi = 1.0;
+                                    if ((c.m_flags & org.jbox2d.dynamics.contacts.Contact.e_toiFlag) !== 0) {
+                                        toi = c.m_toi;
+                                    }
+                                    else {
+                                        var s1_1 = c.getShape1();
+                                        var s2_1 = c.getShape2();
+                                        var b1_1 = s1_1.getBody();
+                                        var b2_1 = s2_1.getBody();
+                                        if ((b1_1.isStatic() || b1_1.isSleeping()) && (b2_1.isStatic() || b2_1.isSleeping())) {
+                                            continue;
+                                        }
+                                        var t0 = b1_1.m_sweep.t0;
+                                        if (b1_1.m_sweep.t0 < b2_1.m_sweep.t0) {
+                                            t0 = b2_1.m_sweep.t0;
+                                            b1_1.m_sweep.advance(t0);
+                                        }
+                                        else if (b2_1.m_sweep.t0 < b1_1.m_sweep.t0) {
+                                            t0 = b1_1.m_sweep.t0;
+                                            b2_1.m_sweep.advance(t0);
+                                        }
+                                        toi = org.jbox2d.collision.TOI.timeOfImpact(c.m_shape1, b1_1.m_sweep, c.m_shape2, b2_1.m_sweep);
+                                        if (toi > 0.0 && toi < 1.0) {
+                                            toi = org.jbox2d.common.MathUtils.min(Math.fround(Math.fround((Math.fround(1.0 - toi)) * t0) + toi), 1.0);
+                                        }
+                                        c.m_toi = toi;
+                                        c.m_flags |= org.jbox2d.dynamics.contacts.Contact.e_toiFlag;
+                                    }
+                                    if (org.jbox2d.common.Settings.EPSILON < toi && toi < minTOI) {
+                                        minContact = c;
+                                        minTOI = toi;
+                                    }
+                                }
+                                ;
+                            }
+                            if (minContact == null || Math.fround(1.0 - Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON)) < minTOI) {
+                                break;
+                            }
+                            var s1 = minContact.getShape1();
+                            var s2 = minContact.getShape2();
+                            var b1 = s1.getBody();
+                            var b2 = s2.getBody();
+                            b1.advance(minTOI);
+                            b2.advance(minTOI);
+                            minContact.update(this.m_contactListener);
+                            minContact.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_toiFlag;
+                            if (minContact.getManifoldCount() === 0) {
+                                continue;
+                            }
+                            var seed = b1;
+                            if (seed.isStatic()) {
+                                seed = b2;
+                            }
+                            island.clear();
+                            var queueStart = 0;
+                            var queueSize = 0;
+                            queue[queueStart + queueSize++] = seed;
+                            seed.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
+                            while ((queueSize > 0)) {
+                                {
+                                    var b = queue[queueStart++];
+                                    --queueSize;
+                                    island.add$org_jbox2d_dynamics_Body(b);
+                                    b.m_flags &= ~org.jbox2d.dynamics.Body.e_sleepFlag;
+                                    if (b.isStatic()) {
+                                        continue;
+                                    }
+                                    for (var cn = b.m_contactList; cn != null; cn = cn.next) {
+                                        {
+                                            if (island.m_contactCount === island.m_contactCapacity) {
+                                                continue;
+                                            }
+                                            if ((cn.contact.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_islandFlag | org.jbox2d.dynamics.contacts.Contact.e_slowFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) !== 0) {
+                                                continue;
+                                            }
+                                            if (cn.contact.getManifoldCount() === 0) {
+                                                continue;
+                                            }
+                                            island.add$org_jbox2d_dynamics_contacts_Contact(cn.contact);
+                                            cn.contact.m_flags |= org.jbox2d.dynamics.contacts.Contact.e_islandFlag;
+                                            var other = cn.other;
+                                            if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) !== 0) {
+                                                continue;
+                                            }
+                                            if (other.isStatic() === false) {
+                                                other.advance(minTOI);
+                                                other.wakeUp();
+                                            }
+                                            queue[queueStart + queueSize++] = other;
+                                            other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
+                                        }
+                                        ;
+                                    }
+                                    for (var jn = b.m_jointList; jn != null; jn = jn.next) {
+                                        {
+                                            if (island.m_jointCount === island.m_jointCapacity) {
+                                                continue;
+                                            }
+                                            if (jn.joint.m_islandFlag === true) {
+                                                continue;
+                                            }
+                                            island.add$org_jbox2d_dynamics_joints_Joint(jn.joint);
+                                            jn.joint.m_islandFlag = true;
+                                            var other = jn.other;
+                                            if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
+                                                continue;
+                                            }
+                                            if (other.isStatic() === false) {
+                                                other.advance(minTOI);
+                                                other.wakeUp();
+                                            }
+                                            queue[queueStart + queueSize++] = other;
+                                            other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
+                                        }
+                                        ;
+                                    }
+                                }
+                            }
+                            ;
+                            var subStep = World.steps_$LI$().get();
+                            subStep.warmStarting = false;
+                            subStep.dt = Math.fround((Math.fround(1.0 - minTOI)) * step.dt);
+                            subStep.inv_dt = Math.fround(1.0 / subStep.dt);
+                            subStep.maxIterations = step.maxIterations;
+                            island.solveTOI(subStep);
+                            World.steps_$LI$().recycle(subStep);
+                            for (var i = 0; i < island.m_bodyCount; ++i) {
+                                {
+                                    var b = island.m_bodies[i];
+                                    b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
+                                    if ((b.m_flags & (org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) !== 0) {
+                                        continue;
+                                    }
+                                    if (b.isStatic()) {
+                                        continue;
+                                    }
+                                    var inRange = b.synchronizeShapes();
+                                    if (inRange === false && this.m_boundaryListener != null) {
+                                        this.m_boundaryListener.violation(b);
+                                    }
+                                    for (var cn = b.m_contactList; cn != null; cn = cn.next) {
+                                        {
+                                            cn.contact.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_toiFlag;
+                                        }
+                                        ;
+                                    }
+                                }
+                                ;
+                            }
+                            for (var i = 0; i < island.m_contactCount; ++i) {
+                                {
+                                    var c = island.m_contacts[i];
+                                    c.m_flags &= ~(org.jbox2d.dynamics.contacts.Contact.e_toiFlag | org.jbox2d.dynamics.contacts.Contact.e_islandFlag);
+                                }
+                                ;
+                            }
+                            for (var i = 0; i < island.m_jointCount; ++i) {
+                                {
+                                    var j = island.m_joints[i];
+                                    j.m_islandFlag = false;
+                                }
+                                ;
+                            }
+                            this.m_broadPhase.commit();
+                        }
                     }
                     ;
                     World.islands_$LI$().recycle(island);
@@ -21516,16 +22098,20 @@ var org;
                         var vertices = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(vertexCount);
                         for (var i = 0; i < vertexCount; ++i) {
-                            vertices[i] = org.jbox2d.common.XForm.mul(xf, localVertices[i]);
+                            {
+                                vertices[i] = org.jbox2d.common.XForm.mul(xf, localVertices[i]);
+                            }
+                            ;
                         }
-                        ;
                         this.m_debugDraw.drawSolidPolygon(vertices, vertexCount, color);
                         if (core) {
                             var localCoreVertices = poly.getCoreVertices();
                             for (var i = 0; i < vertexCount; ++i) {
-                                vertices[i] = org.jbox2d.common.XForm.mul(xf, localCoreVertices[i]);
+                                {
+                                    vertices[i] = org.jbox2d.common.XForm.mul(xf, localCoreVertices[i]);
+                                }
+                                ;
                             }
-                            ;
                             this.m_debugDraw.drawPolygon(vertices, vertexCount, this.coreColor);
                         }
                     }
@@ -21572,12 +22158,14 @@ var org;
                         var cvj = joint;
                         var bodies = cvj.getBodies();
                         for (var i = 0; i < bodies.length; ++i) {
-                            var next = (i === bodies.length - 1) ? 0 : i + 1;
-                            var first = bodies[i].getMemberWorldCenter();
-                            var nextV = bodies[next].getMemberWorldCenter();
-                            this.m_debugDraw.drawSegment(first, nextV, this.jointColor);
+                            {
+                                var next = (i === bodies.length - 1) ? 0 : i + 1;
+                                var first = bodies[i].getMemberWorldCenter();
+                                var nextV = bodies[next].getMemberWorldCenter();
+                                this.m_debugDraw.drawSegment(first, nextV, this.jointColor);
+                            }
+                            ;
                         }
-                        ;
                     }
                     else {
                         this.m_debugDraw.drawSegment(x1, p1, this.jointColor);
@@ -21596,64 +22184,76 @@ var org;
                     if ((flags & org.jbox2d.dynamics.DebugDraw.e_shapeBit) !== 0) {
                         var core = (flags & org.jbox2d.dynamics.DebugDraw.e_coreShapeBit) === org.jbox2d.dynamics.DebugDraw.e_coreShapeBit;
                         for (var b = this.m_bodyList; b != null; b = b.getNext()) {
-                            var xf = b.getMemberXForm();
-                            for (var s = b.getShapeList(); s != null; s = s.getNext()) {
-                                if (b.isStatic()) {
-                                    this.drawShape(s, xf, this.staticColor, core);
-                                }
-                                else if (b.isSleeping()) {
-                                    this.drawShape(s, xf, this.sleepingColor, core);
-                                }
-                                else {
-                                    this.drawShape(s, xf, this.activeColor, core);
+                            {
+                                var xf = b.getMemberXForm();
+                                for (var s = b.getShapeList(); s != null; s = s.getNext()) {
+                                    {
+                                        if (b.isStatic()) {
+                                            this.drawShape(s, xf, this.staticColor, core);
+                                        }
+                                        else if (b.isSleeping()) {
+                                            this.drawShape(s, xf, this.sleepingColor, core);
+                                        }
+                                        else {
+                                            this.drawShape(s, xf, this.activeColor, core);
+                                        }
+                                    }
+                                    ;
                                 }
                             }
                             ;
                         }
-                        ;
                     }
                     if ((flags & org.jbox2d.dynamics.DebugDraw.e_jointBit) !== 0) {
                         for (var j = this.m_jointList; j != null; j = j.getNext()) {
-                            if (j.getType() !== org.jbox2d.dynamics.joints.JointType.MOUSE_JOINT) {
-                                this.drawJoint(j);
+                            {
+                                if (j.getType() !== org.jbox2d.dynamics.joints.JointType.MOUSE_JOINT) {
+                                    this.drawJoint(j);
+                                }
                             }
+                            ;
                         }
-                        ;
                     }
                     if ((flags & org.jbox2d.dynamics.DebugDraw.e_pairBit) !== 0) {
                         var bp_1 = this.m_broadPhase;
                         var invQ = new org.jbox2d.common.Vec2(0.0, 0.0);
                         invQ.set$float$float(Math.fround(1.0 / bp_1.m_quantizationFactor.x), Math.fround(1.0 / bp_1.m_quantizationFactor.y));
                         for (var i = 0; i < org.jbox2d.collision.PairManager.TABLE_CAPACITY_$LI$(); ++i) {
-                            var index = bp_1.m_pairManager.m_hashTable[i];
-                            while ((index !== org.jbox2d.collision.PairManager.NULL_PAIR_$LI$())) {
-                                var pair = bp_1.m_pairManager.m_pairs[index];
-                                var p1 = bp_1.m_proxyPool[pair.proxyId1];
-                                var p2 = bp_1.m_proxyPool[pair.proxyId2];
-                                this.pairB1.lowerBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p1.lowerBounds[0]].value));
-                                this.pairB1.lowerBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p1.lowerBounds[1]].value));
-                                this.pairB1.upperBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p1.upperBounds[0]].value));
-                                this.pairB1.upperBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p1.upperBounds[1]].value));
-                                this.pairB2.lowerBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p2.lowerBounds[0]].value));
-                                this.pairB2.lowerBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p2.lowerBounds[1]].value));
-                                this.pairB2.upperBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p2.upperBounds[0]].value));
-                                this.pairB2.upperBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p2.upperBounds[1]].value));
-                                this.pairX1.x = Math.fround(0.5 * (Math.fround(this.pairB1.lowerBound.x + this.pairB1.upperBound.x)));
-                                this.pairX1.y = Math.fround(0.5 * (Math.fround(this.pairB1.lowerBound.y + this.pairB1.upperBound.y)));
-                                this.pairX2.x = Math.fround(0.5 * (Math.fround(this.pairB2.lowerBound.x + this.pairB2.upperBound.x)));
-                                this.pairX2.y = Math.fround(0.5 * (Math.fround(this.pairB2.lowerBound.y + this.pairB2.upperBound.y)));
-                                this.m_debugDraw.drawSegment(this.pairX1, this.pairX1, this.pairColor);
-                                index = pair.next;
+                            {
+                                var index = bp_1.m_pairManager.m_hashTable[i];
+                                while ((index !== org.jbox2d.collision.PairManager.NULL_PAIR_$LI$())) {
+                                    {
+                                        var pair = bp_1.m_pairManager.m_pairs[index];
+                                        var p1 = bp_1.m_proxyPool[pair.proxyId1];
+                                        var p2 = bp_1.m_proxyPool[pair.proxyId2];
+                                        this.pairB1.lowerBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p1.lowerBounds[0]].value));
+                                        this.pairB1.lowerBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p1.lowerBounds[1]].value));
+                                        this.pairB1.upperBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p1.upperBounds[0]].value));
+                                        this.pairB1.upperBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p1.upperBounds[1]].value));
+                                        this.pairB2.lowerBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p2.lowerBounds[0]].value));
+                                        this.pairB2.lowerBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p2.lowerBounds[1]].value));
+                                        this.pairB2.upperBound.x = Math.fround(bp_1.m_worldAABB.lowerBound.x + Math.fround(invQ.x * bp_1.m_bounds[0][p2.upperBounds[0]].value));
+                                        this.pairB2.upperBound.y = Math.fround(bp_1.m_worldAABB.lowerBound.y + Math.fround(invQ.y * bp_1.m_bounds[1][p2.upperBounds[1]].value));
+                                        this.pairX1.x = Math.fround(0.5 * (Math.fround(this.pairB1.lowerBound.x + this.pairB1.upperBound.x)));
+                                        this.pairX1.y = Math.fround(0.5 * (Math.fround(this.pairB1.lowerBound.y + this.pairB1.upperBound.y)));
+                                        this.pairX2.x = Math.fround(0.5 * (Math.fround(this.pairB2.lowerBound.x + this.pairB2.upperBound.x)));
+                                        this.pairX2.y = Math.fround(0.5 * (Math.fround(this.pairB2.lowerBound.y + this.pairB2.upperBound.y)));
+                                        this.m_debugDraw.drawSegment(this.pairX1, this.pairX1, this.pairColor);
+                                        index = pair.next;
+                                    }
+                                }
+                                ;
                             }
                             ;
                         }
-                        ;
                     }
                     if ((flags & org.jbox2d.dynamics.DebugDraw.e_controllerBit) !== 0) {
                         for (var c = this.m_controllerList; c != null; c = c.getNext()) {
-                            c.draw(this.m_debugDraw);
+                            {
+                                c.draw(this.m_debugDraw);
+                            }
+                            ;
                         }
-                        ;
                     }
                     var bp = this.m_broadPhase;
                     var worldLower = bp.m_worldAABB.lowerBound;
@@ -21662,21 +22262,23 @@ var org;
                         var invQ = new org.jbox2d.common.Vec2();
                         invQ.set$float$float(Math.fround(1.0 / bp.m_quantizationFactor.x), Math.fround(1.0 / bp.m_quantizationFactor.y));
                         for (var i = 0; i < org.jbox2d.common.Settings.maxProxies; ++i) {
-                            var p = bp.m_proxyPool[i];
-                            if (p.isValid() === false) {
-                                continue;
+                            {
+                                var p = bp.m_proxyPool[i];
+                                if (p.isValid() === false) {
+                                    continue;
+                                }
+                                this.aabbB.lowerBound.x = Math.fround(worldLower.x + Math.fround(invQ.x * bp.m_bounds[0][p.lowerBounds[0]].value));
+                                this.aabbB.lowerBound.y = Math.fround(worldLower.y + Math.fround(invQ.y * bp.m_bounds[1][p.lowerBounds[1]].value));
+                                this.aabbB.upperBound.x = Math.fround(worldLower.x + Math.fround(invQ.x * bp.m_bounds[0][p.upperBounds[0]].value));
+                                this.aabbB.upperBound.y = Math.fround(worldLower.y + Math.fround(invQ.y * bp.m_bounds[1][p.upperBounds[1]].value));
+                                this.cornerVecs[0].set$float$float(this.aabbB.lowerBound.x, this.aabbB.lowerBound.y);
+                                this.cornerVecs[1].set$float$float(this.aabbB.upperBound.x, this.aabbB.lowerBound.y);
+                                this.cornerVecs[2].set$float$float(this.aabbB.upperBound.x, this.aabbB.upperBound.y);
+                                this.cornerVecs[3].set$float$float(this.aabbB.lowerBound.x, this.aabbB.upperBound.y);
+                                this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.aabbColor);
                             }
-                            this.aabbB.lowerBound.x = Math.fround(worldLower.x + Math.fround(invQ.x * bp.m_bounds[0][p.lowerBounds[0]].value));
-                            this.aabbB.lowerBound.y = Math.fround(worldLower.y + Math.fround(invQ.y * bp.m_bounds[1][p.lowerBounds[1]].value));
-                            this.aabbB.upperBound.x = Math.fround(worldLower.x + Math.fround(invQ.x * bp.m_bounds[0][p.upperBounds[0]].value));
-                            this.aabbB.upperBound.y = Math.fround(worldLower.y + Math.fround(invQ.y * bp.m_bounds[1][p.upperBounds[1]].value));
-                            this.cornerVecs[0].set$float$float(this.aabbB.lowerBound.x, this.aabbB.lowerBound.y);
-                            this.cornerVecs[1].set$float$float(this.aabbB.upperBound.x, this.aabbB.lowerBound.y);
-                            this.cornerVecs[2].set$float$float(this.aabbB.upperBound.x, this.aabbB.upperBound.y);
-                            this.cornerVecs[3].set$float$float(this.aabbB.lowerBound.x, this.aabbB.upperBound.y);
-                            this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.aabbColor);
+                            ;
                         }
-                        ;
                     }
                     this.cornerVecs[0].set$float$float(worldLower.x, worldLower.y);
                     this.cornerVecs[1].set$float$float(worldUpper.x, worldLower.y);
@@ -21685,36 +22287,44 @@ var org;
                     this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.worldColor);
                     if ((flags & org.jbox2d.dynamics.DebugDraw.e_obbBit) !== 0) {
                         for (var b = this.m_bodyList; b != null; b = b.getNext()) {
-                            var xf = b.getMemberXForm();
-                            for (var s = b.getShapeList(); s != null; s = s.getNext()) {
-                                if (s.getType() !== org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE) {
-                                    continue;
+                            {
+                                var xf = b.getMemberXForm();
+                                for (var s = b.getShapeList(); s != null; s = s.getNext()) {
+                                    {
+                                        if (s.getType() !== org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE) {
+                                            continue;
+                                        }
+                                        var poly = s;
+                                        var obb = poly.getOBB();
+                                        var h = obb.extents;
+                                        this.cornerVecs[0].set$float$float(-h.x, -h.y);
+                                        this.cornerVecs[1].set$float$float(h.x, -h.y);
+                                        this.cornerVecs[2].set$float$float(h.x, h.y);
+                                        this.cornerVecs[3].set$float$float(-h.x, h.y);
+                                        for (var i = 0; i < this.cornerVecs.length; ++i) {
+                                            {
+                                                org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(obb.R, this.cornerVecs[i], this.cornerVecs[i]);
+                                                org.jbox2d.common.XForm.mulToOut(xf, this.cornerVecs[i], this.cornerVecs[i]);
+                                            }
+                                            ;
+                                        }
+                                        this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.obbColor);
+                                    }
+                                    ;
                                 }
-                                var poly = s;
-                                var obb = poly.getOBB();
-                                var h = obb.extents;
-                                this.cornerVecs[0].set$float$float(-h.x, -h.y);
-                                this.cornerVecs[1].set$float$float(h.x, -h.y);
-                                this.cornerVecs[2].set$float$float(h.x, h.y);
-                                this.cornerVecs[3].set$float$float(-h.x, h.y);
-                                for (var i = 0; i < this.cornerVecs.length; ++i) {
-                                    org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(obb.R, this.cornerVecs[i], this.cornerVecs[i]);
-                                    org.jbox2d.common.XForm.mulToOut(xf, this.cornerVecs[i], this.cornerVecs[i]);
-                                }
-                                ;
-                                this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.obbColor);
                             }
                             ;
                         }
-                        ;
                     }
                     if ((flags & org.jbox2d.dynamics.DebugDraw.e_centerOfMassBit) !== 0) {
                         for (var b = this.m_bodyList; b != null; b = b.getNext()) {
-                            var xf = b.getMemberXForm();
-                            xf.position = b.getMemberWorldCenter();
-                            this.m_debugDraw.drawXForm(xf);
+                            {
+                                var xf = b.getMemberXForm();
+                                xf.position = b.getMemberWorldCenter();
+                                this.m_debugDraw.drawXForm(xf);
+                            }
+                            ;
                         }
-                        ;
                     }
                 };
                 /**
@@ -21793,9 +22403,11 @@ var org;
                         a.push(null); return a; })(maxCount);
                     var count = this.m_broadPhase.querySegment(segment, results, maxCount, this.raycastSortKey);
                     for (var i = 0; i < count; ++i) {
-                        shapes[i] = results[i];
+                        {
+                            shapes[i] = results[i];
+                        }
+                        ;
                     }
-                    ;
                     return count;
                 };
                 /**
@@ -22710,44 +23322,54 @@ var org;
                             a.push(null); return a; })(_this.m_vertexCount);
                         _this.m_obb = new org.jbox2d.collision.OBB();
                         for (var i = 0; i < _this.m_vertexCount; ++i) {
-                            _this.m_vertices[i] = (function (o) { if (o.clone != undefined) {
-                                return o.clone();
-                            }
-                            else {
-                                var clone = Object.create(o);
-                                for (var p in o) {
-                                    if (o.hasOwnProperty(p))
-                                        clone[p] = o[p];
+                            {
+                                _this.m_vertices[i] = (function (o) { if (o.clone != undefined) {
+                                    return o.clone();
                                 }
-                                return clone;
-                            } })(/* get */ poly.vertices[i]);
+                                else {
+                                    var clone = Object.create(o);
+                                    for (var p in o) {
+                                        if (o.hasOwnProperty(p))
+                                            clone[p] = o[p];
+                                    }
+                                    return clone;
+                                } })(/* get */ poly.vertices[i]);
+                            }
+                            ;
                         }
-                        ;
                         var edge = PolygonShape.tlEdge_$LI$().initialValue();
                         for (var i = 0; i < _this.m_vertexCount; ++i) {
-                            var i1 = i;
-                            var i2 = i + 1 < _this.m_vertexCount ? i + 1 : 0;
-                            edge.set$org_jbox2d_common_Vec2(_this.m_vertices[i2]).subLocal(_this.m_vertices[i1]);
-                            _this.m_normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
-                            _this.m_normals[i].normalize();
+                            {
+                                var i1 = i;
+                                var i2 = i + 1 < _this.m_vertexCount ? i + 1 : 0;
+                                edge.set$org_jbox2d_common_Vec2(_this.m_vertices[i2]).subLocal(_this.m_vertices[i1]);
+                                _this.m_normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
+                                _this.m_normals[i].normalize();
+                            }
+                            ;
                         }
-                        ;
                         if (PolygonShape.m_debug) {
                             for (var i = 0; i < _this.m_vertexCount; ++i) {
-                                for (var j = 0; j < _this.m_vertexCount; ++j) {
-                                    if (j === i || j === (i + 1) % _this.m_vertexCount) {
-                                        continue;
+                                {
+                                    for (var j = 0; j < _this.m_vertexCount; ++j) {
+                                        {
+                                            if (j === i || j === (i + 1) % _this.m_vertexCount) {
+                                                continue;
+                                            }
+                                        }
+                                        ;
                                     }
                                 }
                                 ;
                             }
-                            ;
                             for (var i = 1; i < _this.m_vertexCount; ++i) {
-                                var cross = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(_this.m_normals[i - 1], _this.m_normals[i]);
-                                cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
-                                var angle = Math.fround(Math.asin(cross));
+                                {
+                                    var cross = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(_this.m_normals[i - 1], _this.m_normals[i]);
+                                    cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
+                                    var angle = Math.fround(Math.asin(cross));
+                                }
+                                ;
                             }
-                            ;
                         }
                         _this.m_centroid = PolygonShape.computeCentroid(poly.vertices);
                         PolygonShape.computeOBB(_this.m_obb, _this.m_vertices);
@@ -22755,43 +23377,51 @@ var org;
                         var d = PolygonShape.tlD_$LI$().initialValue();
                         var A = PolygonShape.tlA_$LI$().initialValue();
                         for (var i = 0; i < _this.m_vertexCount; ++i) {
-                            var i1 = i - 1 >= 0 ? i - 1 : _this.m_vertexCount - 1;
-                            var i2 = i;
-                            var n1 = _this.m_normals[i1];
-                            var n2 = _this.m_normals[i2];
-                            v.set$org_jbox2d_common_Vec2(_this.m_vertices[i]).subLocal(_this.m_centroid);
-                            d.x = Math.fround(org.jbox2d.common.Vec2.dot(n1, v) - org.jbox2d.common.Settings.toiSlop_$LI$());
-                            d.y = Math.fround(org.jbox2d.common.Vec2.dot(n2, v) - org.jbox2d.common.Settings.toiSlop_$LI$());
-                            if ((d.x < 0.0 || d.y < 0.0)) {
-                                console.info("Error, polygon extents less than b2_toiSlop, dumping details: ");
-                                console.info("d.x: " + d.x + "d.y: " + d.y);
-                                console.info("n1: " + n1 + "; n2: " + n2);
-                                console.info("v: " + v);
+                            {
+                                var i1 = i - 1 >= 0 ? i - 1 : _this.m_vertexCount - 1;
+                                var i2 = i;
+                                var n1 = _this.m_normals[i1];
+                                var n2 = _this.m_normals[i2];
+                                v.set$org_jbox2d_common_Vec2(_this.m_vertices[i]).subLocal(_this.m_centroid);
+                                d.x = Math.fround(org.jbox2d.common.Vec2.dot(n1, v) - org.jbox2d.common.Settings.toiSlop_$LI$());
+                                d.y = Math.fround(org.jbox2d.common.Vec2.dot(n2, v) - org.jbox2d.common.Settings.toiSlop_$LI$());
+                                if ((d.x < 0.0 || d.y < 0.0)) {
+                                    console.info("Error, polygon extents less than b2_toiSlop, dumping details: ");
+                                    console.info("d.x: " + d.x + "d.y: " + d.y);
+                                    console.info("n1: " + n1 + "; n2: " + n2);
+                                    console.info("v: " + v);
+                                }
+                                A.col1.x = n1.x;
+                                A.col2.x = n1.y;
+                                A.col1.y = n2.x;
+                                A.col2.y = n2.y;
+                                _this.m_coreVertices[i] = A.solve(d).addLocal$org_jbox2d_common_Vec2(_this.m_centroid);
                             }
-                            A.col1.x = n1.x;
-                            A.col2.x = n1.y;
-                            A.col1.y = n2.x;
-                            A.col2.y = n2.y;
-                            _this.m_coreVertices[i] = A.solve(d).addLocal$org_jbox2d_common_Vec2(_this.m_centroid);
+                            ;
                         }
-                        ;
                         if (PolygonShape.m_debug) {
                             console.info("\nDumping polygon shape...");
                             console.info("Vertices: ");
                             for (var i = 0; i < _this.m_vertexCount; ++i) {
-                                console.info(_this.m_vertices[i]);
+                                {
+                                    console.info(_this.m_vertices[i]);
+                                }
+                                ;
                             }
-                            ;
                             console.info("Core Vertices: ");
                             for (var i = 0; i < _this.m_vertexCount; ++i) {
-                                console.info(_this.m_coreVertices[i]);
+                                {
+                                    console.info(_this.m_coreVertices[i]);
+                                }
+                                ;
                             }
-                            ;
                             console.info("Normals: ");
                             for (var i = 0; i < _this.m_vertexCount; ++i) {
-                                console.info(_this.m_normals[i]);
+                                {
+                                    console.info(_this.m_normals[i]);
+                                }
+                                ;
                             }
-                            ;
                             console.info("Centroid: " + _this.m_centroid);
                         }
                         return _this;
@@ -22816,11 +23446,13 @@ var org;
                         var d = PolygonShape.tlD_$LI$().initialValue();
                         this.m_sweepRadius = 0.0;
                         for (var i = 0; i < this.m_vertexCount; ++i) {
-                            d.set$org_jbox2d_common_Vec2(this.m_coreVertices[i]);
-                            d.subLocal(center);
-                            this.m_sweepRadius = org.jbox2d.common.MathUtils.max$float$float(this.m_sweepRadius, d.length());
+                            {
+                                d.set$org_jbox2d_common_Vec2(this.m_coreVertices[i]);
+                                d.subLocal(center);
+                                this.m_sweepRadius = org.jbox2d.common.MathUtils.max$float$float(this.m_sweepRadius, d.length());
+                            }
+                            ;
                         }
-                        ;
                     };
                     PolygonShape.tlTemp_$LI$ = function () { if (PolygonShape.tlTemp == null)
                         PolygonShape.tlTemp = (function () { var __o = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return PolygonShape.tlTemp; };
@@ -22844,20 +23476,24 @@ var org;
                             console.info("--testPoint debug--");
                             console.info("Vertices: ");
                             for (var i = 0; i < this.m_vertexCount; ++i) {
-                                console.info(this.m_vertices[i]);
+                                {
+                                    console.info(this.m_vertices[i]);
+                                }
+                                ;
                             }
-                            ;
                             console.info("pLocal: " + pLocal);
                         }
                         for (var i = 0; i < this.m_vertexCount; ++i) {
-                            temp.set$org_jbox2d_common_Vec2(pLocal);
-                            temp.subLocal(this.m_vertices[i]);
-                            var dot = org.jbox2d.common.Vec2.dot(this.m_normals[i], temp);
-                            if (dot > 0.0) {
-                                return false;
+                            {
+                                temp.set$org_jbox2d_common_Vec2(pLocal);
+                                temp.subLocal(this.m_vertices[i]);
+                                var dot = org.jbox2d.common.Vec2.dot(this.m_normals[i], temp);
+                                if (dot > 0.0) {
+                                    return false;
+                                }
                             }
+                            ;
                         }
-                        ;
                         return true;
                     };
                     PolygonShape.tlP1_$LI$ = function () { if (PolygonShape.tlP1 == null)
@@ -22888,26 +23524,28 @@ var org;
                         d.set$org_jbox2d_common_Vec2(p2).subLocal(p1);
                         var index = -1;
                         for (var i = 0; i < this.m_vertexCount; ++i) {
-                            temp.set$org_jbox2d_common_Vec2(this.m_vertices[i]).subLocal(p1);
-                            var numerator = org.jbox2d.common.Vec2.dot(this.m_normals[i], temp);
-                            var denominator = org.jbox2d.common.Vec2.dot(this.m_normals[i], d);
-                            if (denominator === 0.0) {
-                                if (numerator < 0.0) {
+                            {
+                                temp.set$org_jbox2d_common_Vec2(this.m_vertices[i]).subLocal(p1);
+                                var numerator = org.jbox2d.common.Vec2.dot(this.m_normals[i], temp);
+                                var denominator = org.jbox2d.common.Vec2.dot(this.m_normals[i], d);
+                                if (denominator === 0.0) {
+                                    if (numerator < 0.0) {
+                                        return org.jbox2d.collision.SegmentCollide.MISS_COLLIDE;
+                                    }
+                                }
+                                if (denominator < 0.0 && numerator < Math.fround(lower * denominator)) {
+                                    lower = Math.fround(numerator / denominator);
+                                    index = i;
+                                }
+                                else if (denominator > 0.0 && numerator < Math.fround(upper * denominator)) {
+                                    upper = Math.fround(numerator / denominator);
+                                }
+                                if (upper < lower) {
                                     return org.jbox2d.collision.SegmentCollide.MISS_COLLIDE;
                                 }
                             }
-                            if (denominator < 0.0 && numerator < Math.fround(lower * denominator)) {
-                                lower = Math.fround(numerator / denominator);
-                                index = i;
-                            }
-                            else if (denominator > 0.0 && numerator < Math.fround(upper * denominator)) {
-                                upper = Math.fround(numerator / denominator);
-                            }
-                            if (upper < lower) {
-                                return org.jbox2d.collision.SegmentCollide.MISS_COLLIDE;
-                            }
+                            ;
                         }
-                        ;
                         if (index >= 0) {
                             out.lambda = lower;
                             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_normals[index], out.normal);
@@ -22933,13 +23571,15 @@ var org;
                         var bestIndex = 0;
                         var bestValue = org.jbox2d.common.Vec2.dot(this.m_coreVertices[0], supportDLocal);
                         for (var i = 1; i < this.m_vertexCount; ++i) {
-                            var value = org.jbox2d.common.Vec2.dot(this.m_coreVertices[i], supportDLocal);
-                            if (value > bestValue) {
-                                bestIndex = i;
-                                bestValue = value;
+                            {
+                                var value = org.jbox2d.common.Vec2.dot(this.m_coreVertices[i], supportDLocal);
+                                if (value > bestValue) {
+                                    bestIndex = i;
+                                    bestValue = value;
+                                }
                             }
+                            ;
                         }
-                        ;
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_coreVertices[bestIndex], dest);
                     };
                     PolygonShape.tlPRef_$LI$ = function () { if (PolygonShape.tlPRef == null)
@@ -22962,18 +23602,20 @@ var org;
                         var e2 = PolygonShape.tlE2_$LI$().initialValue();
                         var p1 = PolygonShape.tlP1_$LI$().initialValue();
                         for (var i = 0; i < count; ++i) {
-                            p1.set$org_jbox2d_common_Vec2(pRef);
-                            var p2 = vs[i];
-                            var p3 = i + 1 < count ? vs[i + 1] : vs[0];
-                            e1.set$org_jbox2d_common_Vec2(p2).subLocal(p1);
-                            e2.set$org_jbox2d_common_Vec2(p3).subLocal(p1);
-                            var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
-                            var triangleArea = Math.fround(0.5 * D);
-                            area += triangleArea;
-                            c.x += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.x + p2.x) + p3.x)));
-                            c.y += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.y + p2.y) + p3.y)));
+                            {
+                                p1.set$org_jbox2d_common_Vec2(pRef);
+                                var p2 = vs[i];
+                                var p3 = i + 1 < count ? vs[i + 1] : vs[0];
+                                e1.set$org_jbox2d_common_Vec2(p2).subLocal(p1);
+                                e2.set$org_jbox2d_common_Vec2(p3).subLocal(p1);
+                                var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
+                                var triangleArea = Math.fround(0.5 * D);
+                                area += triangleArea;
+                                c.x += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.x + p2.x) + p3.x)));
+                                c.y += Math.fround(Math.fround(triangleArea * inv3) * (Math.fround(Math.fround(p1.y + p2.y) + p3.y)));
+                            }
+                            ;
                         }
-                        ;
                         c.mulLocal(Math.fround(1.0 / area));
                         return c;
                     };
@@ -23007,44 +23649,50 @@ var org;
                         var pRay = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(org.jbox2d.common.Settings.maxPolygonVertices + 1);
                         for (var i = 0; i < count; ++i) {
-                            pRay[i] = vs[i];
-                        }
-                        ;
-                        pRay[count] = pRay[0];
-                        var minArea = Number.MAX_VALUE;
-                        for (var i = 1; i <= count; ++i) {
-                            var root = pRay[i - 1];
-                            ux.set$org_jbox2d_common_Vec2(pRay[i]);
-                            ux.subLocal(root);
-                            var length_4 = ux.normalize();
-                            uy.x = -ux.y;
-                            uy.y = ux.x;
-                            lower.x = Number.MAX_VALUE;
-                            lower.y = Number.MAX_VALUE;
-                            upper.x = -Number.MAX_VALUE;
-                            upper.y = -Number.MAX_VALUE;
-                            for (var j = 0; j < count; ++j) {
-                                d.set$org_jbox2d_common_Vec2(pRay[j]);
-                                d.subLocal(root);
-                                r.x = org.jbox2d.common.Vec2.dot(ux, d);
-                                r.y = org.jbox2d.common.Vec2.dot(uy, d);
-                                org.jbox2d.common.Vec2.minToOut(lower, r, lower);
-                                org.jbox2d.common.Vec2.maxToOut(upper, r, upper);
+                            {
+                                pRay[i] = vs[i];
                             }
                             ;
-                            var area = Math.fround((Math.fround(upper.x - lower.x)) * (Math.fround(upper.y - lower.y)));
-                            if (area < Math.fround(0.95 * minArea)) {
-                                minArea = area;
-                                obb.R.col1.set$org_jbox2d_common_Vec2(ux);
-                                obb.R.col2.set$org_jbox2d_common_Vec2(uy);
-                                center.set$float$float(Math.fround(0.5 * (Math.fround(lower.x + upper.x))), Math.fround(0.5 * (Math.fround(lower.y + upper.y))));
-                                org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(obb.R, center, obb.center);
-                                obb.center.addLocal$org_jbox2d_common_Vec2(root);
-                                obb.extents.x = Math.fround(0.5 * (Math.fround(upper.x - lower.x)));
-                                obb.extents.y = Math.fround(0.5 * (Math.fround(upper.y - lower.y)));
-                            }
                         }
-                        ;
+                        pRay[count] = pRay[0];
+                        var minArea = 3.4028235E38;
+                        for (var i = 1; i <= count; ++i) {
+                            {
+                                var root = pRay[i - 1];
+                                ux.set$org_jbox2d_common_Vec2(pRay[i]);
+                                ux.subLocal(root);
+                                var length_4 = ux.normalize();
+                                uy.x = -ux.y;
+                                uy.y = ux.x;
+                                lower.x = 3.4028235E38;
+                                lower.y = 3.4028235E38;
+                                upper.x = -3.4028235E38;
+                                upper.y = -3.4028235E38;
+                                for (var j = 0; j < count; ++j) {
+                                    {
+                                        d.set$org_jbox2d_common_Vec2(pRay[j]);
+                                        d.subLocal(root);
+                                        r.x = org.jbox2d.common.Vec2.dot(ux, d);
+                                        r.y = org.jbox2d.common.Vec2.dot(uy, d);
+                                        org.jbox2d.common.Vec2.minToOut(lower, r, lower);
+                                        org.jbox2d.common.Vec2.maxToOut(upper, r, upper);
+                                    }
+                                    ;
+                                }
+                                var area = Math.fround((Math.fround(upper.x - lower.x)) * (Math.fround(upper.y - lower.y)));
+                                if (area < Math.fround(0.95 * minArea)) {
+                                    minArea = area;
+                                    obb.R.col1.set$org_jbox2d_common_Vec2(ux);
+                                    obb.R.col2.set$org_jbox2d_common_Vec2(uy);
+                                    center.set$float$float(Math.fround(0.5 * (Math.fround(lower.x + upper.x))), Math.fround(0.5 * (Math.fround(lower.y + upper.y))));
+                                    org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(obb.R, center, obb.center);
+                                    obb.center.addLocal$org_jbox2d_common_Vec2(root);
+                                    obb.extents.x = Math.fround(0.5 * (Math.fround(upper.x - lower.x)));
+                                    obb.extents.y = Math.fround(0.5 * (Math.fround(upper.y - lower.y)));
+                                }
+                            }
+                            ;
+                        }
                     };
                     PolygonShape.tlCaabbR_$LI$ = function () { if (PolygonShape.tlCaabbR == null)
                         PolygonShape.tlCaabbR = (function () { var __o = new org.jbox2d.pooling.TLMat22(); __o.__delegate = new org.jbox2d.pooling.TLMat22(); return __o; })(); return PolygonShape.tlCaabbR; };
@@ -23103,29 +23751,31 @@ var org;
                         var e1 = PolygonShape.tlE1_$LI$().initialValue();
                         var e2 = PolygonShape.tlE2_$LI$().initialValue();
                         for (var i = 0; i < this.m_vertexCount; ++i) {
-                            var p1 = pRef;
-                            var p2 = this.m_vertices[i];
-                            var p3 = i + 1 < this.m_vertexCount ? this.m_vertices[i + 1] : this.m_vertices[0];
-                            e1.set$org_jbox2d_common_Vec2(p2);
-                            e1.subLocal(p1);
-                            e2.set$org_jbox2d_common_Vec2(p3);
-                            e2.subLocal(p1);
-                            var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
-                            var triangleArea = Math.fround(0.5 * D);
-                            area += triangleArea;
-                            center.x += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(p1.x + p2.x) + p3.x)));
-                            center.y += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(p1.y + p2.y) + p3.y)));
-                            var px = p1.x;
-                            var py = p1.y;
-                            var ex1 = e1.x;
-                            var ey1 = e1.y;
-                            var ex2 = e2.x;
-                            var ey2 = e2.y;
-                            var intx2 = Math.fround(Math.fround(k_inv3 * (Math.fround(Math.fround(0.25 * (Math.fround(Math.fround(Math.fround(ex1 * ex1) + Math.fround(ex2 * ex1)) + Math.fround(ex2 * ex2)))) + (Math.fround(Math.fround(px * ex1) + Math.fround(px * ex2)))))) + Math.fround(Math.fround(0.5 * px) * px));
-                            var inty2 = Math.fround(Math.fround(k_inv3 * (Math.fround(Math.fround(0.25 * (Math.fround(Math.fround(Math.fround(ey1 * ey1) + Math.fround(ey2 * ey1)) + Math.fround(ey2 * ey2)))) + (Math.fround(Math.fround(py * ey1) + Math.fround(py * ey2)))))) + Math.fround(Math.fround(0.5 * py) * py));
-                            I += Math.fround(D * (Math.fround(intx2 + inty2)));
+                            {
+                                var p1 = pRef;
+                                var p2 = this.m_vertices[i];
+                                var p3 = i + 1 < this.m_vertexCount ? this.m_vertices[i + 1] : this.m_vertices[0];
+                                e1.set$org_jbox2d_common_Vec2(p2);
+                                e1.subLocal(p1);
+                                e2.set$org_jbox2d_common_Vec2(p3);
+                                e2.subLocal(p1);
+                                var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
+                                var triangleArea = Math.fround(0.5 * D);
+                                area += triangleArea;
+                                center.x += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(p1.x + p2.x) + p3.x)));
+                                center.y += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(p1.y + p2.y) + p3.y)));
+                                var px = p1.x;
+                                var py = p1.y;
+                                var ex1 = e1.x;
+                                var ey1 = e1.y;
+                                var ex2 = e2.x;
+                                var ey2 = e2.y;
+                                var intx2 = Math.fround(Math.fround(k_inv3 * (Math.fround(Math.fround(0.25 * (Math.fround(Math.fround(Math.fround(ex1 * ex1) + Math.fround(ex2 * ex1)) + Math.fround(ex2 * ex2)))) + (Math.fround(Math.fround(px * ex1) + Math.fround(px * ex2)))))) + Math.fround(Math.fround(0.5 * px) * px));
+                                var inty2 = Math.fround(Math.fround(k_inv3 * (Math.fround(Math.fround(0.25 * (Math.fround(Math.fround(Math.fround(ey1 * ey1) + Math.fround(ey2 * ey1)) + Math.fround(ey2 * ey2)))) + (Math.fround(Math.fround(py * ey1) + Math.fround(py * ey2)))))) + Math.fround(Math.fround(0.5 * py) * py));
+                                I += Math.fround(D * (Math.fround(intx2 + inty2)));
+                            }
+                            ;
                         }
-                        ;
                         massData.mass = Math.fround(density * area);
                         center.mulLocal(Math.fround(1.0 / area));
                         massData.center.set$org_jbox2d_common_Vec2(center);
@@ -23257,25 +23907,27 @@ var org;
                         var lastSubmerged = false;
                         var i = 0;
                         for (i = 0; i < this.m_vertexCount; ++i) {
-                            depths[i] = Math.fround(org.jbox2d.common.Vec2.dot(normalL, this.m_vertices[i]) - offsetL);
-                            var isSubmerged = depths[i] < -org.jbox2d.common.Settings.EPSILON;
-                            if (i > 0) {
-                                if (isSubmerged) {
-                                    if (!lastSubmerged) {
-                                        intoIndex = i - 1;
-                                        diveCount++;
+                            {
+                                depths[i] = Math.fround(org.jbox2d.common.Vec2.dot(normalL, this.m_vertices[i]) - offsetL);
+                                var isSubmerged = depths[i] < -org.jbox2d.common.Settings.EPSILON;
+                                if (i > 0) {
+                                    if (isSubmerged) {
+                                        if (!lastSubmerged) {
+                                            intoIndex = i - 1;
+                                            diveCount++;
+                                        }
+                                    }
+                                    else {
+                                        if (lastSubmerged) {
+                                            outoIndex = i - 1;
+                                            diveCount++;
+                                        }
                                     }
                                 }
-                                else {
-                                    if (lastSubmerged) {
-                                        outoIndex = i - 1;
-                                        diveCount++;
-                                    }
-                                }
+                                lastSubmerged = isSubmerged;
                             }
-                            lastSubmerged = isSubmerged;
+                            ;
                         }
-                        ;
                         switch ((diveCount)) {
                             case 0:
                                 if (lastSubmerged) {
@@ -23314,24 +23966,26 @@ var org;
                         var k_inv3 = Math.fround(1.0 / 3.0);
                         i = intoIndex2;
                         while ((i !== outoIndex2)) {
-                            i = (i + 1) % this.m_vertexCount;
-                            if (i === outoIndex2) {
-                                p3.set$org_jbox2d_common_Vec2(outoVec);
-                            }
-                            else {
-                                p3.set$org_jbox2d_common_Vec2(this.m_vertices[i]);
-                            }
                             {
-                                e1.set$org_jbox2d_common_Vec2(p2b).subLocal(intoVec);
-                                e2.set$org_jbox2d_common_Vec2(p3).subLocal(intoVec);
-                                var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
-                                var triangleArea = Math.fround(0.5 * D);
-                                area += triangleArea;
-                                center.x += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(intoVec.x + p2b.x) + p3.x)));
-                                center.y += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(intoVec.y + p2b.y) + p3.y)));
+                                i = (i + 1) % this.m_vertexCount;
+                                if (i === outoIndex2) {
+                                    p3.set$org_jbox2d_common_Vec2(outoVec);
+                                }
+                                else {
+                                    p3.set$org_jbox2d_common_Vec2(this.m_vertices[i]);
+                                }
+                                {
+                                    e1.set$org_jbox2d_common_Vec2(p2b).subLocal(intoVec);
+                                    e2.set$org_jbox2d_common_Vec2(p3).subLocal(intoVec);
+                                    var D = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e1, e2);
+                                    var triangleArea = Math.fround(0.5 * D);
+                                    area += triangleArea;
+                                    center.x += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(intoVec.x + p2b.x) + p3.x)));
+                                    center.y += Math.fround(Math.fround(triangleArea * k_inv3) * (Math.fround(Math.fround(intoVec.y + p2b.y) + p3.y)));
+                                }
+                                ;
+                                p2b.set$org_jbox2d_common_Vec2(p3);
                             }
-                            ;
-                            p2b.set$org_jbox2d_common_Vec2(p3);
                         }
                         ;
                         center.x *= Math.fround(1.0 / area);

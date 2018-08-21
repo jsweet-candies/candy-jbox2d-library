@@ -263,7 +263,7 @@ namespace org.jbox2d.collision {
      * @class
      */
     export class Collision {
-        public static NULL_FEATURE : number; public static NULL_FEATURE_$LI$() : number { if(Collision.NULL_FEATURE == null) Collision.NULL_FEATURE = Number.MAX_VALUE; return Collision.NULL_FEATURE; };
+        public static NULL_FEATURE : number; public static NULL_FEATURE_$LI$() : number { if(Collision.NULL_FEATURE == null) Collision.NULL_FEATURE = 2147483647; return Collision.NULL_FEATURE; };
     }
     Collision["__class"] = "org.jbox2d.collision.Collision";
 
@@ -446,11 +446,11 @@ namespace org.jbox2d.collision {
         /*private*/ w2 : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2();
 
         public constructor() {
-            for(let i : number = 0; i < 3; ++i) {
+            for(let i : number = 0; i < 3; ++i) {{
                 this.p1s[i] = new org.jbox2d.common.Vec2();
                 this.p2s[i] = new org.jbox2d.common.Vec2();
                 this.points[i] = new org.jbox2d.common.Vec2();
-            };
+            };}
         }
 
         /*private*/ p2r : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2();
@@ -536,7 +536,7 @@ namespace org.jbox2d.collision {
 
         public InPoints(w : org.jbox2d.common.Vec2, points : org.jbox2d.common.Vec2[], pointCount : number) : boolean {
             let k_tolerance : number = (<any>Math).fround(100.0 * org.jbox2d.common.Settings.EPSILON);
-            for(let i : number = 0; i < pointCount; ++i) {
+            for(let i : number = 0; i < pointCount; ++i) {{
                 let v : org.jbox2d.common.Vec2 = points[i];
                 let dx : number = org.jbox2d.common.MathUtils.abs((<any>Math).fround(w.x - v.x));
                 let dy : number = org.jbox2d.common.MathUtils.abs((<any>Math).fround(w.y - v.y));
@@ -545,7 +545,7 @@ namespace org.jbox2d.collision {
                 if(dx < (<any>Math).fround(k_tolerance * ((<any>Math).fround(mx + 1.0))) && dy < (<any>Math).fround(k_tolerance * ((<any>Math).fround(my + 1.0)))) {
                     return true;
                 }
-            };
+            };}
             return false;
         }
 
@@ -574,7 +574,7 @@ namespace org.jbox2d.collision {
             shape2.getFirstVertexToOut(xf2, x2);
             let vSqr : number = 0.0;
             let maxIterations : number = 20;
-            for(let iter : number = 0; iter < maxIterations; ++iter) {
+            for(let iter : number = 0; iter < maxIterations; ++iter) {{
                 this.v.set$float$float((<any>Math).fround(x2.x - x1.x), (<any>Math).fround(x2.y - x1.y));
                 shape1.support(this.w1, xf1, this.v);
                 this.vNeg.set$float$float(-this.v.x, -this.v.y);
@@ -616,10 +616,10 @@ namespace org.jbox2d.collision {
                     this.g_GJK_Iterations = iter;
                     return 0.0;
                 }
-                let maxSqr : number = -Number.MAX_VALUE;
-                for(let i : number = 0; i < pointCount; ++i) {
+                let maxSqr : number = -3.4028235E38;
+                for(let i : number = 0; i < pointCount; ++i) {{
                     maxSqr = org.jbox2d.common.MathUtils.max$float$float(maxSqr, org.jbox2d.common.Vec2.dot(this.points[i], this.points[i]));
-                };
+                };}
                 if(pointCount === 3 || vSqr <= (<any>Math).fround((<any>Math).fround(100.0 * org.jbox2d.common.Settings.EPSILON) * maxSqr)) {
                     this.g_GJK_Iterations = iter;
                     let vx : number = (<any>Math).fround(x2.x - x1.x);
@@ -627,7 +627,7 @@ namespace org.jbox2d.collision {
                     vSqr = (<any>Math).fround((<any>Math).fround(vx * vx) + (<any>Math).fround(vy * vy));
                     return org.jbox2d.common.MathUtils.sqrt(vSqr);
                 }
-            };
+            };}
             this.g_GJK_Iterations = maxIterations;
             return org.jbox2d.common.MathUtils.sqrt(vSqr);
         }
@@ -924,7 +924,7 @@ namespace org.jbox2d.collision {
             } else if(type1 === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE && type2 === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE) {
                 return this.DistanceGeneric(x1, x2, <org.jbox2d.collision.shapes.EdgeShape>shape1, xf1, <org.jbox2d.collision.shapes.PolygonShape>shape2, xf2);
             } else if(type1 === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE && type2 === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE) {
-                return Number.MAX_VALUE;
+                return 3.4028235E38;
             } else if(type1 === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE && type2 === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE) {
                 return this.DistanceCirclePoint(x2, x1, <org.jbox2d.collision.shapes.CircleShape>shape2, xf2, <org.jbox2d.collision.shapes.PointShape>shape1, xf1);
             } else if(type1 === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE && type2 === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE) {
@@ -1048,9 +1048,9 @@ namespace org.jbox2d.collision {
                     this.points = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxManifoldPoints);
                     this.normal = /* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(other.normal);
                     this.pointCount = other.pointCount;
-                    for(let i : number = 0; i < other.points.length; i++) {
+                    for(let i : number = 0; i < other.points.length; i++) {{
                         this.points[i] = new org.jbox2d.collision.ManifoldPoint(other.points[i]);
-                    };
+                    };}
                 })();
             } else if(other === undefined) {
                 let __args = arguments;
@@ -1062,9 +1062,9 @@ namespace org.jbox2d.collision {
                 if(this.pointCount===undefined) this.pointCount = 0;
                 (() => {
                     this.points = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxManifoldPoints);
-                    for(let i : number = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; i++) {
+                    for(let i : number = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; i++) {{
                         this.points[i] = new org.jbox2d.collision.ManifoldPoint();
-                    };
+                    };}
                     this.normal = new org.jbox2d.common.Vec2();
                     this.pointCount = 0;
                 })();
@@ -1077,9 +1077,9 @@ namespace org.jbox2d.collision {
          * @return {org.jbox2d.collision.Manifold}
          */
         public set(cp : Manifold) : Manifold {
-            for(let i : number = 0; i < cp.pointCount; i++) {
+            for(let i : number = 0; i < cp.pointCount; i++) {{
                 this.points[i].set(cp.points[i]);
-            };
+            };}
             this.normal.set$org_jbox2d_common_Vec2(cp.normal);
             this.pointCount = cp.pointCount;
             return this;
@@ -1639,12 +1639,12 @@ namespace org.jbox2d.collision.shapes {
             let cLocalx : number = (<any>Math).fround((<any>Math).fround(v1x * xf1.R.col1.x) + (<any>Math).fround(v1y * xf1.R.col1.y));
             let cLocaly : number = (<any>Math).fround((<any>Math).fround(v1x * xf1.R.col2.x) + (<any>Math).fround(v1y * xf1.R.col2.y));
             let normalIndex : number = 0;
-            let separation : number = -Number.MAX_VALUE;
+            let separation : number = -3.4028235E38;
             let radius : number = circle.getRadius();
             let vertexCount : number = polygon.getVertexCount();
             let vertices : org.jbox2d.common.Vec2[] = polygon.getVertices();
             let normals : org.jbox2d.common.Vec2[] = polygon.getNormals();
-            for(let i : number = 0; i < vertexCount; ++i) {
+            for(let i : number = 0; i < vertexCount; ++i) {{
                 let s : number = (<any>Math).fround((<any>Math).fround(normals[i].x * ((<any>Math).fround(cLocalx - vertices[i].x))) + (<any>Math).fround(normals[i].y * ((<any>Math).fround(cLocaly - vertices[i].y))));
                 if(s > circle.m_radius) {
                     return;
@@ -1653,7 +1653,7 @@ namespace org.jbox2d.collision.shapes {
                     normalIndex = i;
                     separation = s;
                 }
-            };
+            };}
             if(separation < org.jbox2d.common.Settings.EPSILON) {
                 manifold.pointCount = 1;
                 manifold.normal.x = (<any>Math).fround((<any>Math).fround(xf1.R.col1.x * normals[normalIndex].x) + (<any>Math).fround(xf1.R.col2.x * normals[normalIndex].y));
@@ -1863,14 +1863,14 @@ namespace org.jbox2d.collision.shapes {
             let normal1x : number = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col1);
             let normal1y : number = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col2);
             let index : number = 0;
-            let minDot : number = Number.MAX_VALUE;
-            for(let i : number = 0; i < count2; ++i) {
+            let minDot : number = 3.4028235E38;
+            for(let i : number = 0; i < count2; ++i) {{
                 let dot : number = (<any>Math).fround((<any>Math).fround(vertices2[i].x * normal1x) + (<any>Math).fround(vertices2[i].y * normal1y));
                 if(dot < minDot) {
                     minDot = dot;
                     index = i;
                 }
-            };
+            };}
             let v : org.jbox2d.common.Vec2 = vertices1[edge1];
             let v1x : number = (<any>Math).fround((<any>Math).fround(xf1.position.x + (<any>Math).fround(xf1.R.col1.x * v.x)) + (<any>Math).fround(xf1.R.col2.x * v.y));
             let v1y : number = (<any>Math).fround((<any>Math).fround(xf1.position.y + (<any>Math).fround(xf1.R.col1.y * v.x)) + (<any>Math).fround(xf1.R.col2.y * v.y));
@@ -1906,14 +1906,14 @@ namespace org.jbox2d.collision.shapes {
             this.dLocal1.x = ((<any>Math).fround((<any>Math).fround(dx * b.x) + (<any>Math).fround(dy * b.y)));
             this.dLocal1.y = ((<any>Math).fround((<any>Math).fround(dx * b1.x) + (<any>Math).fround(dy * b1.y)));
             let edge : number = 0;
-            let maxDot : number = -Number.MAX_VALUE;
-            for(let i : number = 0; i < count1; ++i) {
+            let maxDot : number = -3.4028235E38;
+            for(let i : number = 0; i < count1; ++i) {{
                 let dot : number = org.jbox2d.common.Vec2.dot(normals1[i], this.dLocal1);
                 if(dot > maxDot) {
                     maxDot = dot;
                     edge = i;
                 }
-            };
+            };}
             let s : number = this.edgeSeparation(poly1, xf1, edge, poly2, xf2);
             if(s > 0.0) {
                 separation.bestSeparation = s;
@@ -1947,7 +1947,7 @@ namespace org.jbox2d.collision.shapes {
                 separation.bestSeparation = s;
                 return separation;
             }
-            while((true)) {
+            while((true)) {{
                 if(increment === -1) {
                     edge = bestEdge - 1 >= 0?bestEdge - 1:count1 - 1;
                 } else {
@@ -1964,7 +1964,7 @@ namespace org.jbox2d.collision.shapes {
                 } else {
                     break;
                 }
-            };
+            }};
             separation.bestFaceIndex = bestEdge;
             separation.bestSeparation = bestSeparation;
             return separation;
@@ -1983,14 +1983,14 @@ namespace org.jbox2d.collision.shapes {
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals1[edge1], this.mulTemp);
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf2.R, this.mulTemp, this.normal1);
             let index : number = 0;
-            let minDot : number = Number.MAX_VALUE;
-            for(let i : number = 0; i < count2; ++i) {
+            let minDot : number = 3.4028235E38;
+            for(let i : number = 0; i < count2; ++i) {{
                 let dot : number = org.jbox2d.common.Vec2.dot(this.normal1, normals2[i]);
                 if(dot < minDot) {
                     minDot = dot;
                     index = i;
                 }
-            };
+            };}
             let i1 : number = index;
             let i2 : number = i1 + 1 < count2?i1 + 1:0;
             c[0] = new CollidePoly.ClipVertex();
@@ -2072,7 +2072,7 @@ namespace org.jbox2d.collision.shapes {
                 manif.normal.negateLocal();
             }
             let pointCount : number = 0;
-            for(let i : number = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; ++i) {
+            for(let i : number = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; ++i) {{
                 let separation : number = (<any>Math).fround(org.jbox2d.common.Vec2.dot(this.frontNormal, clipPoints2[i].v) - frontOffset);
                 if(separation <= 0.0) {
                     let cp : org.jbox2d.collision.ManifoldPoint = manif.points[pointCount];
@@ -2090,7 +2090,7 @@ namespace org.jbox2d.collision.shapes {
                     cp.id.features.flip = flip;
                     ++pointCount;
                 }
-            };
+            };}
             manif.pointCount = pointCount;
             return;
         }
@@ -2120,11 +2120,11 @@ namespace org.jbox2d.collision.shapes {
             org.jbox2d.common.XForm.mulToOut(xf2, point.getMemberLocalPosition(), this.colPPc);
             org.jbox2d.common.XForm.mulTransToOut(xf1, this.colPPc, this.colPPcLocal);
             let normalIndex : number = 0;
-            let separation : number = -Number.MAX_VALUE;
+            let separation : number = -3.4028235E38;
             let vertexCount : number = polygon.getVertexCount();
             let vertices : org.jbox2d.common.Vec2[] = polygon.getVertices();
             let normals : org.jbox2d.common.Vec2[] = polygon.getNormals();
-            for(let i : number = 0; i < vertexCount; ++i) {
+            for(let i : number = 0; i < vertexCount; ++i) {{
                 this.colPPsub.set$org_jbox2d_common_Vec2(this.colPPcLocal);
                 this.colPPsub.subLocal(vertices[i]);
                 let s : number = org.jbox2d.common.Vec2.dot(normals[i], this.colPPsub);
@@ -2135,7 +2135,7 @@ namespace org.jbox2d.collision.shapes {
                     normalIndex = i;
                     separation = s;
                 }
-            };
+            };}
             if(separation < org.jbox2d.common.Settings.EPSILON) {
                 manifold.pointCount = 1;
                 org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals[normalIndex], manifold.normal);
@@ -2224,11 +2224,11 @@ namespace org.jbox2d.collision.shapes {
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, this.PEn, this.PEnLocal);
             let separation1 : number;
             let separationIndex1 : number = -1;
-            let separationMax1 : number = -Number.MAX_VALUE;
+            let separationMax1 : number = -3.4028235E38;
             let separation2 : number;
             let separationIndex2 : number = -1;
-            let separationMax2 : number = -Number.MAX_VALUE;
-            let separationMax : number = -Number.MAX_VALUE;
+            let separationMax2 : number = -3.4028235E38;
+            let separationMax : number = -3.4028235E38;
             let separationV1 : boolean = false;
             let separationIndex : number = -1;
             let vertexCount : number = polygon.getVertexCount();
@@ -2242,11 +2242,11 @@ namespace org.jbox2d.collision.shapes {
             let nextSepN : number = 0.0;
             let enterSepN : number = 0.0;
             let exitSepN : number = 0.0;
-            let deepestSepN : number = Number.MAX_VALUE;
+            let deepestSepN : number = 3.4028235E38;
             this.temp.set$org_jbox2d_common_Vec2(vertices[vertexCount - 1]);
             this.temp.subLocal(this.PEv1Local);
             prevSepN = org.jbox2d.common.Vec2.dot(this.temp, this.PEnLocal);
-            for(let i : number = 0; i < vertexCount; i++) {
+            for(let i : number = 0; i < vertexCount; i++) {{
                 this.temp.set$org_jbox2d_common_Vec2(this.PEv1Local);
                 this.temp.subLocal(vertices[i]);
                 separation1 = org.jbox2d.common.Vec2.dot(this.temp, normals[i]);
@@ -2290,7 +2290,7 @@ namespace org.jbox2d.collision.shapes {
                     deepestSepN = nextSepN;
                 }
                 prevSepN = nextSepN;
-            };
+            };}
             if(enterStartIndex === -1) {
                 return;
             }
@@ -3849,7 +3849,7 @@ namespace org.jbox2d.common {
          * @return {boolean}
          */
         public isValid() : boolean {
-            return this.x !== NaN && this.x !== Number.NEGATIVE_INFINITY && this.x !== Number.POSITIVE_INFINITY && this.y !== NaN && this.y !== Number.NEGATIVE_INFINITY && this.y !== Number.POSITIVE_INFINITY;
+            return this.x !== NaN && this.x !== -Infinity && this.x !== Infinity && this.y !== NaN && this.y !== -Infinity && this.y !== Infinity;
         }
 
         /**
@@ -4796,10 +4796,10 @@ namespace org.jbox2d.dynamics.contacts {
                     return register.createFcn.create(shape1, shape2);
                 } else {
                     let c : Contact = register.createFcn.create(shape2, shape1);
-                    for(let i : number = 0; i < c.getManifoldCount(); ++i) {
+                    for(let i : number = 0; i < c.getManifoldCount(); ++i) {{
                         let m : org.jbox2d.collision.Manifold = /* get */c.getManifolds()[i];
                         m.normal.negateLocal();
-                    };
+                    };}
                     return c;
                 }
             } else {
@@ -4808,12 +4808,12 @@ namespace org.jbox2d.dynamics.contacts {
         }
 
         /*private*/ static getContactRegister(type1 : org.jbox2d.collision.shapes.ShapeType, type2 : org.jbox2d.collision.shapes.ShapeType) : org.jbox2d.dynamics.contacts.ContactRegister {
-            for(let i : number = 0; i < /* size */(<number>Contact.s_registers.length); ++i) {
+            for(let i : number = 0; i < /* size */(<number>Contact.s_registers.length); ++i) {{
                 let cr : org.jbox2d.dynamics.contacts.ContactRegister = /* get */Contact.s_registers[i];
                 if(cr.s1 === type1 && cr.s2 === type2) {
                     return cr;
                 }
-            };
+            };}
             return null;
         }
 
@@ -4855,9 +4855,9 @@ namespace org.jbox2d.dynamics.contacts {
             if(this.restitution===undefined) this.restitution = 0;
             if(this.pointCount===undefined) this.pointCount = 0;
             this.points = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxManifoldPoints);
-            for(let i : number = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; i++) {
+            for(let i : number = 0; i < org.jbox2d.common.Settings.maxManifoldPoints; i++) {{
                 this.points[i] = new org.jbox2d.dynamics.contacts.ContactConstraintPoint();
-            };
+            };}
             this.pointCount = 0;
             this.normal = new org.jbox2d.common.Vec2();
             this.manifold = new org.jbox2d.collision.Manifold();
@@ -4871,9 +4871,9 @@ namespace org.jbox2d.dynamics.contacts {
             this.restitution = cp.restitution;
             this.body1 = cp.body1;
             this.body2 = cp.body2;
-            for(let i : number = 0; i < cp.pointCount; i++) {
+            for(let i : number = 0; i < cp.pointCount; i++) {{
                 this.points[i].set(cp.points[i]);
-            };
+            };}
         }
     }
     ContactConstraint["__class"] = "org.jbox2d.dynamics.contacts.ContactConstraint";
@@ -5154,15 +5154,15 @@ namespace org.jbox2d.dynamics.contacts {
         public init(step : org.jbox2d.dynamics.TimeStep, contacts : org.jbox2d.dynamics.contacts.Contact[], contactCount : number) {
             this.m_step = step;
             this.m_constraintCount = 0;
-            for(let i : number = 0; i < contactCount; i++) {
+            for(let i : number = 0; i < contactCount; i++) {{
                 this.m_constraintCount += contacts[i].getManifoldCount();
-            };
+            };}
             this.m_constraints = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.m_constraintCount);
-            for(let i : number = 0; i < this.m_constraintCount; i++) {
+            for(let i : number = 0; i < this.m_constraintCount; i++) {{
                 this.m_constraints[i] = new org.jbox2d.dynamics.contacts.ContactConstraint();
-            };
+            };}
             let count : number = 0;
-            for(let i : number = 0; i < contactCount; i++) {
+            for(let i : number = 0; i < contactCount; i++) {{
                 let contact : org.jbox2d.dynamics.contacts.Contact = contacts[i];
                 let b1 : org.jbox2d.dynamics.Body = contact.m_shape1.getBody();
                 let b2 : org.jbox2d.dynamics.Body = contact.m_shape2.getBody();
@@ -5174,7 +5174,7 @@ namespace org.jbox2d.dynamics.contacts {
                 let v2 : org.jbox2d.common.Vec2 = b2.m_linearVelocity;
                 let w1 : number = b1.m_angularVelocity;
                 let w2 : number = b2.m_angularVelocity;
-                for(let j : number = 0; j < manifoldCount; ++j) {
+                for(let j : number = 0; j < manifoldCount; ++j) {{
                     let manifold : org.jbox2d.collision.Manifold = /* get */manifolds[j];
                     let normal : org.jbox2d.common.Vec2 = manifold.normal;
                     let c : org.jbox2d.dynamics.contacts.ContactConstraint = this.m_constraints[count];
@@ -5185,7 +5185,7 @@ namespace org.jbox2d.dynamics.contacts {
                     c.pointCount = manifold.pointCount;
                     c.friction = friction;
                     c.restitution = restitution;
-                    for(let k : number = 0; k < c.pointCount; ++k) {
+                    for(let k : number = 0; k < c.pointCount; ++k) {{
                         let cp : org.jbox2d.collision.ManifoldPoint = manifold.points[k];
                         let ccp : org.jbox2d.dynamics.contacts.ContactConstraintPoint = c.points[k];
                         ccp.normalImpulse = cp.normalImpulse;
@@ -5231,14 +5231,14 @@ namespace org.jbox2d.dynamics.contacts {
                         if(vRel < -org.jbox2d.common.Settings.velocityThreshold_$LI$()) {
                             ccp.velocityBias += (<any>Math).fround(-c.restitution * vRel);
                         }
-                    };
+                    };}
                     ++count;
-                };
-            };
+                };}
+            };}
         }
 
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
-            for(let i : number = 0; i < this.m_constraintCount; ++i) {
+            for(let i : number = 0; i < this.m_constraintCount; ++i) {{
                 let c : org.jbox2d.dynamics.contacts.ContactConstraint = this.m_constraints[i];
                 let b1 : org.jbox2d.dynamics.Body = c.body1;
                 let b2 : org.jbox2d.dynamics.Body = c.body2;
@@ -5251,7 +5251,7 @@ namespace org.jbox2d.dynamics.contacts {
                 let tangentx : number = normaly;
                 let tangenty : number = -normalx;
                 if(step.warmStarting) {
-                    for(let j : number = 0; j < c.pointCount; ++j) {
+                    for(let j : number = 0; j < c.pointCount; ++j) {{
                         let ccp : org.jbox2d.dynamics.contacts.ContactConstraintPoint = c.points[j];
                         ccp.normalImpulse *= step.dtRatio;
                         ccp.tangentImpulse *= step.dtRatio;
@@ -5263,19 +5263,19 @@ namespace org.jbox2d.dynamics.contacts {
                         b2.m_angularVelocity += (<any>Math).fround(invI2 * ((<any>Math).fround((<any>Math).fround(ccp.r2.x * py) - (<any>Math).fround(ccp.r2.y * px))));
                         b2.m_linearVelocity.x += (<any>Math).fround(px * invMass2);
                         b2.m_linearVelocity.y += (<any>Math).fround(py * invMass2);
-                    };
+                    };}
                 } else {
-                    for(let j : number = 0; j < c.pointCount; ++j) {
+                    for(let j : number = 0; j < c.pointCount; ++j) {{
                         let ccp : org.jbox2d.dynamics.contacts.ContactConstraintPoint = c.points[j];
                         ccp.normalImpulse = 0.0;
                         ccp.tangentImpulse = 0.0;
-                    };
+                    };}
                 }
-            };
+            };}
         }
 
         public solveVelocityConstraints() {
-            for(let i : number = 0; i < this.m_constraintCount; ++i) {
+            for(let i : number = 0; i < this.m_constraintCount; ++i) {{
                 let c : org.jbox2d.dynamics.contacts.ContactConstraint = this.m_constraints[i];
                 let b1 : org.jbox2d.dynamics.Body = c.body1;
                 let b2 : org.jbox2d.dynamics.Body = c.body2;
@@ -5294,7 +5294,7 @@ namespace org.jbox2d.dynamics.contacts {
                 let tangentx : number = normaly;
                 let tangenty : number = -normalx;
                 let friction : number = c.friction;
-                for(let j : number = 0; j < c.pointCount; ++j) {
+                for(let j : number = 0; j < c.pointCount; ++j) {{
                     let ccp : org.jbox2d.dynamics.contacts.ContactConstraintPoint = c.points[j];
                     let dvx : number = (<any>Math).fround((<any>Math).fround((<any>Math).fround(v2x - (<any>Math).fround(w2 * ccp.r2.y)) - v1x) + (<any>Math).fround(w1 * ccp.r1.y));
                     let dvy : number = (<any>Math).fround((<any>Math).fround((<any>Math).fround(v2y + (<any>Math).fround(w2 * ccp.r2.x)) - v1y) - (<any>Math).fround(w1 * ccp.r1.x));
@@ -5311,8 +5311,8 @@ namespace org.jbox2d.dynamics.contacts {
                     v2y += (<any>Math).fround(invMass2 * Py);
                     w2 += (<any>Math).fround(invI2 * ((<any>Math).fround((<any>Math).fround(ccp.r2.x * Py) - (<any>Math).fround(ccp.r2.y * Px))));
                     ccp.normalImpulse = newImpulse;
-                };
-                for(let j : number = 0; j < c.pointCount; ++j) {
+                };}
+                for(let j : number = 0; j < c.pointCount; ++j) {{
                     let ccp : org.jbox2d.dynamics.contacts.ContactConstraintPoint = c.points[j];
                     let dvx : number = (<any>Math).fround((<any>Math).fround((<any>Math).fround(v2x - (<any>Math).fround(w2 * ccp.r2.y)) - v1x) + (<any>Math).fround(w1 * ccp.r1.y));
                     let dvy : number = (<any>Math).fround((<any>Math).fround((<any>Math).fround(v2y + (<any>Math).fround(w2 * ccp.r2.x)) - v1y) - (<any>Math).fround(w1 * ccp.r1.x));
@@ -5330,30 +5330,30 @@ namespace org.jbox2d.dynamics.contacts {
                     v2y += (<any>Math).fround(py * invMass2);
                     w2 += (<any>Math).fround(invI2 * ((<any>Math).fround((<any>Math).fround(ccp.r2.x * py) - (<any>Math).fround(ccp.r2.y * px))));
                     ccp.tangentImpulse = newImpulse;
-                };
+                };}
                 b1.m_linearVelocity.x = v1x;
                 b1.m_linearVelocity.y = v1y;
                 b1.m_angularVelocity = w1;
                 b2.m_linearVelocity.x = v2x;
                 b2.m_linearVelocity.y = v2y;
                 b2.m_angularVelocity = w2;
-            };
+            };}
         }
 
         public finalizeVelocityConstraints() {
-            for(let i : number = 0; i < this.m_constraintCount; ++i) {
+            for(let i : number = 0; i < this.m_constraintCount; ++i) {{
                 let c : org.jbox2d.dynamics.contacts.ContactConstraint = this.m_constraints[i];
                 let m : org.jbox2d.collision.Manifold = c.manifold;
-                for(let j : number = 0; j < c.pointCount; ++j) {
+                for(let j : number = 0; j < c.pointCount; ++j) {{
                     m.points[j].normalImpulse = c.points[j].normalImpulse;
                     m.points[j].tangentImpulse = c.points[j].tangentImpulse;
-                };
-            };
+                };}
+            };}
         }
 
         public solvePositionConstraints(baumgarte : number) : boolean {
             let minSeparation : number = 0.0;
-            for(let i : number = 0; i < this.m_constraintCount; ++i) {
+            for(let i : number = 0; i < this.m_constraintCount; ++i) {{
                 let c : org.jbox2d.dynamics.contacts.ContactConstraint = this.m_constraints[i];
                 let b1 : org.jbox2d.dynamics.Body = c.body1;
                 let b2 : org.jbox2d.dynamics.Body = c.body2;
@@ -5362,7 +5362,7 @@ namespace org.jbox2d.dynamics.contacts {
                 let invMass2 : number = (<any>Math).fround(b2.m_mass * b2.m_invMass);
                 let invI2 : number = (<any>Math).fround(b2.m_mass * b2.m_invI);
                 let normal : org.jbox2d.common.Vec2 = c.normal;
-                for(let j : number = 0; j < c.pointCount; ++j) {
+                for(let j : number = 0; j < c.pointCount; ++j) {{
                     let ccp : org.jbox2d.dynamics.contacts.ContactConstraintPoint = c.points[j];
                     let vx : number = (<any>Math).fround(ccp.localAnchor1.x - b1.m_sweep.localCenter.x);
                     let vy : number = (<any>Math).fround(ccp.localAnchor1.y - b1.m_sweep.localCenter.y);
@@ -5391,8 +5391,8 @@ namespace org.jbox2d.dynamics.contacts {
                     b2.m_sweep.c.y += (<any>Math).fround(invMass2 * impulsey);
                     b2.m_sweep.a += (<any>Math).fround(invI2 * ((<any>Math).fround((<any>Math).fround(r2x * impulsey) - (<any>Math).fround(r2y * impulsex))));
                     b2.synchronizeTransform();
-                };
-            };
+                };}
+            };}
             return minSeparation >= (<any>Math).fround(-1.5 * org.jbox2d.common.Settings.linearSlop_$LI$());
         }
     }
@@ -5448,9 +5448,9 @@ namespace org.jbox2d.dynamics.controllers {
          */
         public removeBody(body : org.jbox2d.dynamics.Body) {
             let edge : org.jbox2d.dynamics.controllers.ControllerEdge = this.m_bodyList;
-            while((edge != null && edge.body !== body)) {
+            while((edge != null && edge.body !== body)) {{
                 edge = edge.nextBody;
-            };
+            }};
             if(edge.prevBody != null) {
                 edge.prevBody.nextBody = edge.nextBody;
             }
@@ -5470,13 +5470,13 @@ namespace org.jbox2d.dynamics.controllers {
          * Removes all bodies from the controller list.
          */
         public clear() {
-            while((this.m_bodyList != null)) {
+            while((this.m_bodyList != null)) {{
                 let edge : org.jbox2d.dynamics.controllers.ControllerEdge = this.m_bodyList;
                 this.m_bodyList = edge.nextBody;
                 if(edge.prevController != null) edge.prevController.nextController = edge.nextController;
                 if(edge.nextController != null) edge.nextController.prevController = edge.prevController;
                 if(edge === edge.body.m_controllerList) edge.body.m_controllerList = edge.nextController;
-            };
+            }};
             this.m_bodyCount = 0;
         }
 
@@ -6354,18 +6354,18 @@ namespace org.jbox2d.p5 {
             let j : number = 0;
             let body1 : org.jbox2d.dynamics.Body = null;
             let body2 : org.jbox2d.dynamics.Body = null;
-            while((!found)) {
+            while((!found)) {{
                 if(i >= shapes1.length || shapes1[i] == null) return null;
                 if(shapes1[i].testPoint(shapes1[i].getBody().getMemberXForm(), pA)) body1 = shapes1[i++].getBody();
-                for(j = 0; j < shapes2.length; ++j) {
+                for(j = 0; j < shapes2.length; ++j) {{
                     if(shapes2[j] == null) break;
                     if(shapes2[j].testPoint(shapes2[j].getBody().getMemberXForm(), pB)) body2 = shapes2[j].getBody();
                     if(body2 !== body1) {
                         found = true;
                         break;
                     }
-                };
-            };
+                };}
+            }};
             if(body1 == null || body2 == null) return null;
             let bodies : org.jbox2d.dynamics.Body[] = [body1, body2];
             return bodies;
@@ -6804,10 +6804,10 @@ namespace org.jbox2d.p5 {
             if(vertices.length % 2 !== 0) throw Object.defineProperty(new Error("Vertices must be given as pairs of x,y coordinates, but number of passed parameters was odd."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
             let nVertices : number = (vertices.length / 2|0);
             let pd : org.jbox2d.collision.shapes.PolygonDef = new org.jbox2d.collision.shapes.PolygonDef();
-            for(let i : number = 0; i < nVertices; ++i) {
+            for(let i : number = 0; i < nVertices; ++i) {{
                 let v : org.jbox2d.common.Vec2 = this.screenToWorld$float$float(vertices[2 * i], vertices[2 * i + 1]);
                 pd.addVertex(v);
-            };
+            };}
             this.setShapeDefProperties(pd);
             let bd : org.jbox2d.dynamics.BodyDef = new org.jbox2d.dynamics.BodyDef();
             this.setBodyDefProperties(bd);
@@ -7119,9 +7119,9 @@ namespace org.jbox2d.p5 {
          */
         public removeBorder() {
             if(this.m_border == null) return;
-            for(let i : number = 0; i < this.m_border.length; ++i) {
+            for(let i : number = 0; i < this.m_border.length; ++i) {{
                 this.removeBody(this.m_border[i]);
-            };
+            };}
             this.m_border = null;
         }
 
@@ -7680,9 +7680,9 @@ namespace org.jbox2d.testbed.mathtests {
             this.precision = argPrecision;
             this.tableLength = (<number>Math.ceil((<any>Math).fround(SinCosTable.TWOPI_$LI$() / this.precision))|0);
             this.sinLUT = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.tableLength);
-            for(let i : number = 0; i < this.tableLength; i++) {
+            for(let i : number = 0; i < this.tableLength; i++) {{
                 this.sinLUT[i] = (<any>Math).fround(Math.sin((<any>Math).fround(i * this.precision)));
-            };
+            };}
         }
 
         public sin(x : number) : number {
@@ -7848,7 +7848,7 @@ namespace org.jbox2d.testbed.timingTests {
                 body.setMassFromShapes();
                 rjd.initialize(prevBody, body, new org.jbox2d.common.Vec2(0.0, 5.0));
                 rjd.motorSpeed = (<any>Math).fround(1.0 * 3.1415);
-                rjd.maxMotorTorque = Number.MAX_VALUE;
+                rjd.maxMotorTorque = 3.4028235E38;
                 rjd.enableMotor = true;
                 this.m_joint1 = <org.jbox2d.dynamics.joints.RevoluteJoint>world.createJoint(rjd);
                 prevBody = body;
@@ -7872,7 +7872,7 @@ namespace org.jbox2d.testbed.timingTests {
                 pjd.initialize(world.getGroundBody(), body, new org.jbox2d.common.Vec2(0.0, 17.0), new org.jbox2d.common.Vec2(0.0, 1.0));
                 pjd.enableMotor = false;
                 this.m_joint2 = <org.jbox2d.dynamics.joints.PrismaticJoint>world.createJoint(pjd);
-                for(let i : number = 0; i < 100; ++i) {
+                for(let i : number = 0; i < 100; ++i) {{
                     sd.setAsBox$float$float(0.4, 0.3);
                     sd.density = 0.1;
                     bd.position.set$float$float(-1.0, (<any>Math).fround(23.0 + i));
@@ -7880,17 +7880,17 @@ namespace org.jbox2d.testbed.timingTests {
                     body = world.createBody(bd);
                     body.createShape(sd);
                     body.setMassFromShapes();
-                };
+                };}
                 let cd : org.jbox2d.collision.shapes.CircleDef = new org.jbox2d.collision.shapes.CircleDef();
                 cd.density = 2.0;
                 cd.radius = 0.36;
-                for(let i : number = 0; i < 100; ++i) {
+                for(let i : number = 0; i < 100; ++i) {{
                     bd.position.set$float$float(1.0, (<any>Math).fround(23.0 + i));
                     if(PistonBenchmark.BULLETS) bd.isBullet = true; else bd.isBullet = false;
                     body = world.createBody(bd);
                     body.createShape(cd);
                     body.setMassFromShapes();
-                };
+                };}
                 sd.density = 0.0;
                 sd.friction = 0.0;
                 sd.setAsBox$float$float(1.0, 100.0);
@@ -7961,8 +7961,8 @@ namespace org.jbox2d.util.blob {
 
         public static createBlob$org_jbox2d_util_blob_BlobStructure$org_jbox2d_util_blob_BlobContainer$org_jbox2d_dynamics_World$float$float$float$float(s : org.jbox2d.util.blob.BlobStructure, c : org.jbox2d.util.blob.BlobContainer, w : org.jbox2d.dynamics.World, scaleX : number, scaleY : number, transX : number, transY : number) {
             let aabb : org.jbox2d.collision.AABB = c.getAABB();
-            while((transX > 0.0)) transX -= scaleX;
-            while((transY > 0.0)) transY -= scaleY;
+            while((transX > 0.0)) {transX -= scaleX};
+            while((transY > 0.0)) {transY -= scaleY};
             let xMin : number = (<any>Math).fround(aabb.lowerBound.x + transX);
             let yMin : number = (<any>Math).fround(aabb.lowerBound.y + transY);
             let nWidth : number = (<number>Math.ceil((<any>Math).fround(((<any>Math).fround(aabb.upperBound.x - xMin)) / scaleX))|0);
@@ -7978,11 +7978,11 @@ namespace org.jbox2d.util.blob {
             cd.density = BlobMaker.pointDensity;
             cd.friction = BlobMaker.pointFriction;
             let index : number = 0;
-            for(let j : number = 0; j < nHeight; ++j) {
+            for(let j : number = 0; j < nHeight; ++j) {{
                 let yStart : number = (<any>Math).fround((<any>Math).fround(yMin + transY) + (<any>Math).fround(j * scaleY));
-                for(let i : number = 0; i < nWidth; ++i) {
+                for(let i : number = 0; i < nWidth; ++i) {{
                     let xStart : number = (<any>Math).fround((<any>Math).fround(xMin + transX) + (<any>Math).fround(i * scaleX));
-                    for(let k : number = 0; k < nPerCell; ++k) {
+                    for(let k : number = 0; k < nPerCell; ++k) {{
                         let position : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2((<any>Math).fround(/* get */s.points[k].position.x + xStart), (<any>Math).fround(/* get */s.points[k].position.y + yStart));
                         if(!c.containsPoint(position)) {
                             bodies[index++] = null;
@@ -7996,50 +7996,50 @@ namespace org.jbox2d.util.blob {
                         bodies[index].createShape(cd);
                         bodies[index].setMassFromShapes();
                         ++index;
-                    };
-                };
-            };
-            for(let j : number = 0; j < nHeight; ++j) {
+                    };}
+                };}
+            };}
+            for(let j : number = 0; j < nHeight; ++j) {{
                 let rowStartIndex : number = j * nWidth * nPerCell;
-                for(let i : number = 0; i < nWidth; ++i) {
+                for(let i : number = 0; i < nWidth; ++i) {{
                     let boxStartIndex : number = rowStartIndex + i * nPerCell;
                     let indexUR : number = -(nWidth - 1) * nPerCell + boxStartIndex;
                     let indexR : number = nPerCell + boxStartIndex;
                     let indexDR : number = (nWidth + 1) * nPerCell + boxStartIndex;
                     let indexD : number = nWidth * nPerCell + boxStartIndex;
-                    for(let k : number = 0; k < /* size */(<number>s.connections.length); ++k) {
+                    for(let k : number = 0; k < /* size */(<number>s.connections.length); ++k) {{
                         let iiff : org.jbox2d.util.blob.BlobStructure.IntIntFloatFloat = /* get */s.connections[k];
                         let a : number = iiff.a + boxStartIndex;
                         let b : number = iiff.b + boxStartIndex;
                         let freq : number = iiff.c;
                         let damp : number = iiff.d;
                         BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                    };
-                    for(let k : number = 0; k < /* size */(<number>s.connectionsR.length); ++k) {
+                    };}
+                    for(let k : number = 0; k < /* size */(<number>s.connectionsR.length); ++k) {{
                         let iiff : org.jbox2d.util.blob.BlobStructure.IntIntFloatFloat = /* get */s.connectionsR[k];
                         let a : number = iiff.a + boxStartIndex;
                         let b : number = iiff.b + indexR;
                         let freq : number = iiff.c;
                         let damp : number = iiff.d;
                         BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                    };
-                    for(let k : number = 0; k < /* size */(<number>s.connectionsDR.length); ++k) {
+                    };}
+                    for(let k : number = 0; k < /* size */(<number>s.connectionsDR.length); ++k) {{
                         let iiff : org.jbox2d.util.blob.BlobStructure.IntIntFloatFloat = /* get */s.connectionsDR[k];
                         let a : number = iiff.a + boxStartIndex;
                         let b : number = iiff.b + indexDR;
                         let freq : number = iiff.c;
                         let damp : number = iiff.d;
                         BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                    };
-                    for(let k : number = 0; k < /* size */(<number>s.connectionsD.length); ++k) {
+                    };}
+                    for(let k : number = 0; k < /* size */(<number>s.connectionsD.length); ++k) {{
                         let iiff : org.jbox2d.util.blob.BlobStructure.IntIntFloatFloat = /* get */s.connectionsD[k];
                         let a : number = iiff.a + boxStartIndex;
                         let b : number = iiff.b + indexD;
                         let freq : number = iiff.c;
                         let damp : number = iiff.d;
                         BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                    };
-                    for(let k : number = 0; k < /* size */(<number>s.connectionsUR.length); ++k) {
+                    };}
+                    for(let k : number = 0; k < /* size */(<number>s.connectionsUR.length); ++k) {{
                         if(j === 0) break;
                         let iiff : org.jbox2d.util.blob.BlobStructure.IntIntFloatFloat = /* get */s.connectionsUR[k];
                         let a : number = iiff.a + boxStartIndex;
@@ -8047,9 +8047,9 @@ namespace org.jbox2d.util.blob {
                         let freq : number = iiff.c;
                         let damp : number = iiff.d;
                         BlobMaker.createConnection(bodies, a, b, freq, damp, w);
-                    };
-                };
-            };
+                    };}
+                };}
+            };}
         }
 
         /**
@@ -8793,7 +8793,7 @@ namespace org.jbox2d.util.sph {
             this.param.c = 1.0;
             this.param.h = 1000.0;
             this.t = (s => { let a=[]; while(s-->0) a.push(null); return a; })(nParts);
-            for(let i : number = 0; i < nParts; ++i) {
+            for(let i : number = 0; i < nParts; ++i) {{
                 let x : number = parent.random(aabb.lowerBound.x, aabb.upperBound.x);
                 let y : number = parent.random(aabb.lowerBound.y, aabb.upperBound.y);
                 this.t[i] = new org.jbox2d.util.sph.SmoothParticle();
@@ -8807,19 +8807,19 @@ namespace org.jbox2d.util.sph {
                 this.t[i].undeleteParticle();
                 this.t[i].ID = i;
                 this.t[i].setShapeID(-1);
-            };
+            };}
         }
 
         /**
          * This method calculates the pressure of each particle
          */
         public calcPressure() {
-            for(let i : number = 0; i < this.t.length; i++) {
+            for(let i : number = 0; i < this.t.length; i++) {{
                 if(!this.t[i].isEmpty()) {
                     this.t[i].setMinMaxDensity();
                     this.t[i].calcPressure(this.param);
                 }
-            };
+            };}
         }
 
         /**
@@ -8847,14 +8847,14 @@ namespace org.jbox2d.util.sph {
             let maxAccelSquared : number = 0;
             let accelSquared : number = 0;
             maxAccelSquared = 0;
-            for(i = 0; i < this.t.length; i++) {
+            for(i = 0; i < this.t.length; i++) {{
                 if(!this.t[i].isEmpty()) {
                     accelX = this.t[i].getChangeVelocityX();
                     accelY = this.t[i].getChangeVelocityY();
                     accelSquared = accelX * accelX + accelY * accelY;
                     if(accelSquared > maxAccelSquared) maxAccelSquared = accelSquared;
                 }
-            };
+            };}
             let calcDeltaT : number = 10000000;
             if(maxAccelSquared > 0.0) {
                 calcDeltaT = 0.25 * Math.sqrt(this.param.h / Math.sqrt(maxAccelSquared));
@@ -8870,15 +8870,15 @@ namespace org.jbox2d.util.sph {
          */
         public updateParticles() {
             this.calcPressure();
-            for(let i : number = 0; i < this.t.length; ++i) {
+            for(let i : number = 0; i < this.t.length; ++i) {{
                 this.t[i].zeroSPHVars();
-                for(let j : number = 0; j < this.t.length; ++j) {
+                for(let j : number = 0; j < this.t.length; ++j) {{
                     if(i === j) continue;
                     this.calcSPHEquations(this.t[i], this.t[j]);
-                };
-            };
+                };}
+            };}
             let dt : number = (<any>Math).fround(this.param.deltaT);
-            for(let i : number = 0; i < this.t.length; ++i) {
+            for(let i : number = 0; i < this.t.length; ++i) {{
                 let p : org.jbox2d.util.sph.SmoothParticle = this.t[i];
                 p.vel.x += (<any>Math).fround((<any>Math).fround(p.getChangeVelocityX()) * dt);
                 p.vel.y += (<any>Math).fround((<any>Math).fround(p.getChangeVelocityY()) * dt);
@@ -8886,7 +8886,7 @@ namespace org.jbox2d.util.sph {
                 p.pos.x += (<any>Math).fround(p.vel.x * dt);
                 p.pos.y += (<any>Math).fround(p.vel.y * dt);
                 console.info(p.getChangeVelocityY());
-            };
+            };}
         }
     }
     SPHGroup["__class"] = "org.jbox2d.util.sph.SPHGroup";
@@ -9059,9 +9059,9 @@ namespace org.jbox2d.collision.shapes {
             this.type = copyMe.type;
             this.userData = copyMe.userData;
             this.vertices = <any>([]);
-            for(let i : number = 0; i < /* size */(<number>copyMe.vertices.length); ++i) {
+            for(let i : number = 0; i < /* size */(<number>copyMe.vertices.length); ++i) {{
                 this.addVertex(/* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(/* get */copyMe.vertices[i]));
-            };
+            };}
         }
 
         public constructor() {
@@ -9115,9 +9115,9 @@ namespace org.jbox2d.collision.shapes {
             let xf : org.jbox2d.common.XForm = new org.jbox2d.common.XForm();
             xf.position.set$org_jbox2d_common_Vec2(center);
             xf.R.set$float(angle);
-            for(let i : number = 0; i < /* size */(<number>this.vertices.length); ++i) {
+            for(let i : number = 0; i < /* size */(<number>this.vertices.length); ++i) {{
                 org.jbox2d.common.XForm.mulToOut(xf, /* get */this.vertices[i], /* get */this.vertices[i]);
-            };
+            };}
         }
 
         /**
@@ -9148,9 +9148,9 @@ namespace org.jbox2d.collision.shapes {
 }
 namespace org.jbox2d.collision {
     export class PairManager {
-        public static NULL_PAIR : number; public static NULL_PAIR_$LI$() : number { if(PairManager.NULL_PAIR == null) PairManager.NULL_PAIR = Number.MAX_VALUE; return PairManager.NULL_PAIR; };
+        public static NULL_PAIR : number; public static NULL_PAIR_$LI$() : number { if(PairManager.NULL_PAIR == null) PairManager.NULL_PAIR = 2147483647; return PairManager.NULL_PAIR; };
 
-        public static NULL_PROXY : number; public static NULL_PROXY_$LI$() : number { if(PairManager.NULL_PROXY == null) PairManager.NULL_PROXY = Number.MAX_VALUE; return PairManager.NULL_PROXY; };
+        public static NULL_PROXY : number; public static NULL_PROXY_$LI$() : number { if(PairManager.NULL_PROXY == null) PairManager.NULL_PROXY = 2147483647; return PairManager.NULL_PROXY; };
 
         public static TABLE_CAPACITY : number; public static TABLE_CAPACITY_$LI$() : number { if(PairManager.TABLE_CAPACITY == null) PairManager.TABLE_CAPACITY = org.jbox2d.common.Settings.maxPairs_$LI$(); return PairManager.TABLE_CAPACITY; };
 
@@ -9184,11 +9184,11 @@ namespace org.jbox2d.collision {
             this.m_pairs = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxPairs_$LI$());
             this.m_hashTable = (s => { let a=[]; while(s-->0) a.push(0); return a; })(PairManager.TABLE_CAPACITY_$LI$());
             this.m_pairBuffer = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxPairs_$LI$());
-            for(let i : number = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {
+            for(let i : number = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {{
                 this.m_hashTable[i] = PairManager.NULL_PAIR_$LI$();
-            };
+            };}
             this.m_freePair = 0;
-            for(let i : number = 0; i < org.jbox2d.common.Settings.maxPairs_$LI$(); ++i) {
+            for(let i : number = 0; i < org.jbox2d.common.Settings.maxPairs_$LI$(); ++i) {{
                 this.m_pairs[i] = new org.jbox2d.collision.Pair();
                 this.m_pairs[i].proxyId1 = PairManager.NULL_PROXY_$LI$();
                 this.m_pairs[i].proxyId2 = PairManager.NULL_PROXY_$LI$();
@@ -9196,7 +9196,7 @@ namespace org.jbox2d.collision {
                 this.m_pairs[i].status = 0;
                 this.m_pairs[i].next = i + 1;
                 this.m_pairBuffer[i] = new org.jbox2d.collision.BufferedPair();
-            };
+            };}
             this.m_pairs[org.jbox2d.common.Settings.maxPairs_$LI$() - 1].next = PairManager.NULL_PAIR_$LI$();
             this.m_pairCount = 0;
             this.m_pairBufferCount = 0;
@@ -9241,7 +9241,7 @@ namespace org.jbox2d.collision {
             let derefnode : number = this.m_hashTable[hash];
             let isHash : boolean = true;
             let pderefnode : number = 0;
-            while((derefnode !== PairManager.NULL_PAIR_$LI$())) {
+            while((derefnode !== PairManager.NULL_PAIR_$LI$())) {{
                 if(this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[derefnode], proxyId1, proxyId2)) {
                     let index : number = derefnode;
                     if(isHash) {
@@ -9264,7 +9264,7 @@ namespace org.jbox2d.collision {
                     derefnode = this.m_pairs[derefnode].next;
                     isHash = false;
                 }
-            };
+            }};
             return null;
         }
 
@@ -9318,7 +9318,7 @@ namespace org.jbox2d.collision {
         public commit() {
             let removeCount : number = 0;
             let proxies : org.jbox2d.collision.Proxy[] = this.m_broadPhase.m_proxyPool;
-            for(let i : number = 0; i < this.m_pairBufferCount; ++i) {
+            for(let i : number = 0; i < this.m_pairBufferCount; ++i) {{
                 let pair : org.jbox2d.collision.Pair = this.find$int$int(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
                 pair.clearBuffered();
                 let proxy1 : org.jbox2d.collision.Proxy = proxies[pair.proxyId1];
@@ -9336,10 +9336,10 @@ namespace org.jbox2d.collision {
                         pair.setFinal();
                     }
                 }
-            };
-            for(let i : number = 0; i < removeCount; ++i) {
+            };}
+            for(let i : number = 0; i < removeCount; ++i) {{
                 this.removePair(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
-            };
+            };}
             this.m_pairBufferCount = 0;
             if(org.jbox2d.collision.BroadPhase.s_validate) {
                 this.validateTable();
@@ -9356,22 +9356,22 @@ namespace org.jbox2d.collision {
          * For debugging
          */
         public validateTable() {
-            for(let i : number = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {
+            for(let i : number = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {{
                 let index : number = this.m_hashTable[i];
-                while((index !== PairManager.NULL_PAIR_$LI$())) {
+                while((index !== PairManager.NULL_PAIR_$LI$())) {{
                     let pair : org.jbox2d.collision.Pair = this.m_pairs[index];
                     let proxy1 : org.jbox2d.collision.Proxy = this.m_broadPhase.m_proxyPool[pair.proxyId1];
                     let proxy2 : org.jbox2d.collision.Proxy = this.m_broadPhase.m_proxyPool[pair.proxyId2];
                     index = pair.next;
-                };
-            };
+                }};
+            };}
         }
 
         public find$int$int$int(proxyId1 : number, proxyId2 : number, hash : number) : org.jbox2d.collision.Pair {
             let index : number = this.m_hashTable[hash];
-            while((index !== PairManager.NULL_PAIR_$LI$() && this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[index], proxyId1, proxyId2) === false)) {
+            while((index !== PairManager.NULL_PAIR_$LI$() && this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[index], proxyId1, proxyId2) === false)) {{
                 index = this.m_pairs[index].next;
-            };
+            }};
             if(index === PairManager.NULL_PAIR_$LI$()) {
                 return null;
             }
@@ -9478,18 +9478,18 @@ namespace org.jbox2d.common {
         public static cosLUT : number[]; public static cosLUT_$LI$() : number[] { MathUtils.__static_initialize(); if(MathUtils.cosLUT == null) MathUtils.cosLUT = (s => { let a=[]; while(s-->0) a.push(0); return a; })(org.jbox2d.common.Settings.SINCOS_LUT_LENGTH_$LI$()); return MathUtils.cosLUT; };
 
         static __static_initializer_0() {
-            for(let i : number = 0; i < org.jbox2d.common.Settings.SINCOS_LUT_LENGTH_$LI$(); i++) {
+            for(let i : number = 0; i < org.jbox2d.common.Settings.SINCOS_LUT_LENGTH_$LI$(); i++) {{
                 MathUtils.sinLUT_$LI$()[i] = (<any>Math).fround(Math.sin((<any>Math).fround(i * org.jbox2d.common.Settings.SINCOS_LUT_PRECISION)));
                 MathUtils.cosLUT_$LI$()[i] = (<any>Math).fround(Math.cos((<any>Math).fround(i * org.jbox2d.common.Settings.SINCOS_LUT_PRECISION)));
-            };
+            };}
         }
 
         public static sin(x : number) : number {
             if(org.jbox2d.common.Settings.SINCOS_LUT_ENABLED) {
                 x %= MathUtils.TWOPI_$LI$();
-                while((x < 0)) {
+                while((x < 0)) {{
                     x += MathUtils.TWOPI_$LI$();
-                };
+                }};
                 if(org.jbox2d.common.Settings.SINCOS_LUT_LERP) {
                     x /= org.jbox2d.common.Settings.SINCOS_LUT_PRECISION;
                     let index : number = (<number>x|0);
@@ -9512,9 +9512,9 @@ namespace org.jbox2d.common {
         public static cos(x : number) : number {
             if(org.jbox2d.common.Settings.SINCOS_LUT_ENABLED) {
                 x %= MathUtils.TWOPI_$LI$();
-                while((x < 0)) {
+                while((x < 0)) {{
                     x += MathUtils.TWOPI_$LI$();
-                };
+                }};
                 if(org.jbox2d.common.Settings.SINCOS_LUT_LERP) {
                     x /= org.jbox2d.common.Settings.SINCOS_LUT_PRECISION;
                     let index : number = (<number>x|0);
@@ -9797,10 +9797,10 @@ namespace org.jbox2d.util.nonconvex {
                     this.nVertices = nVert;
                     this.x = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
                     this.y = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
-                    for(let i : number = 0; i < this.nVertices; ++i) {
+                    for(let i : number = 0; i < this.nVertices; ++i) {{
                         this.x[i] = _x[i];
                         this.y[i] = _y[i];
-                    };
+                    };}
                     this.areaIsSet = false;
                 })();
             } else if(((_x != null && _x instanceof <any>Array && (_x.length==0 || _x[0] == null ||(typeof _x[0] === 'number'))) || _x === null) && ((_y != null && _y instanceof <any>Array && (_y.length==0 || _y[0] == null ||(typeof _y[0] === 'number'))) || _y === null) && nVert === undefined) {
@@ -9822,10 +9822,10 @@ namespace org.jbox2d.util.nonconvex {
                         this.nVertices = nVert;
                         this.x = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
                         this.y = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
-                        for(let i : number = 0; i < this.nVertices; ++i) {
+                        for(let i : number = 0; i < this.nVertices; ++i) {{
                             this.x[i] = _x[i];
                             this.y[i] = _y[i];
-                        };
+                        };}
                         this.areaIsSet = false;
                     })();
                 }
@@ -9847,10 +9847,10 @@ namespace org.jbox2d.util.nonconvex {
                     this.nVertices = nVert;
                     this.x = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
                     this.y = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
-                    for(let i : number = 0; i < this.nVertices; ++i) {
+                    for(let i : number = 0; i < this.nVertices; ++i) {{
                         this.x[i] = v[i].x;
                         this.y[i] = v[i].y;
-                    };
+                    };}
                     this.areaIsSet = false;
                 })();
             } else if(((_x != null && _x instanceof <any>Array && (_x.length==0 || _x[0] == null ||(_x[0] != null && _x[0] instanceof <any>org.jbox2d.common.Vec2))) || _x === null) && _y === undefined && nVert === undefined) {
@@ -9873,10 +9873,10 @@ namespace org.jbox2d.util.nonconvex {
                         this.nVertices = nVert;
                         this.x = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
                         this.y = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
-                        for(let i : number = 0; i < this.nVertices; ++i) {
+                        for(let i : number = 0; i < this.nVertices; ++i) {{
                             this.x[i] = v[i].x;
                             this.y[i] = v[i].y;
-                        };
+                        };}
                         this.areaIsSet = false;
                     })();
                 }
@@ -9897,10 +9897,10 @@ namespace org.jbox2d.util.nonconvex {
                     this.nVertices = 3;
                     this.x = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
                     this.y = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
-                    for(let i : number = 0; i < this.nVertices; ++i) {
+                    for(let i : number = 0; i < this.nVertices; ++i) {{
                         this.x[i] = t.x[i];
                         this.y[i] = t.y[i];
-                    };
+                    };}
                 })();
             } else if(_x === undefined && _y === undefined && nVert === undefined) {
                 let __args = arguments;
@@ -9926,9 +9926,9 @@ namespace org.jbox2d.util.nonconvex {
         getArea() : number {
             this.area = 0.0;
             this.area += (<any>Math).fround((<any>Math).fround(this.x[this.nVertices - 1] * this.y[0]) - (<any>Math).fround(this.x[0] * this.y[this.nVertices - 1]));
-            for(let i : number = 0; i < this.nVertices - 1; ++i) {
+            for(let i : number = 0; i < this.nVertices - 1; ++i) {{
                 this.area += (<any>Math).fround((<any>Math).fround(this.x[i] * this.y[i + 1]) - (<any>Math).fround(this.x[i + 1] * this.y[i]));
-            };
+            };}
             this.area *= 0.5;
             this.areaIsSet = true;
             return this.area;
@@ -9942,7 +9942,7 @@ namespace org.jbox2d.util.nonconvex {
             if(this.nVertices <= 3) return;
             let mergeMe : boolean[] = (s => { let a=[]; while(s-->0) a.push(false); return a; })(this.nVertices);
             let newNVertices : number = this.nVertices;
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 let lower : number = (i === 0)?(this.nVertices - 1):(i - 1);
                 let middle : number = i;
                 let upper : number = (i === this.nVertices - 1)?(0):(i + 1);
@@ -9968,19 +9968,19 @@ namespace org.jbox2d.util.nonconvex {
                 } else {
                     mergeMe[i] = false;
                 }
-            };
+            };}
             if(newNVertices === this.nVertices || newNVertices === 0) {
                 return;
             }
             let newx : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(newNVertices);
             let newy : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(newNVertices);
             let currIndex : number = 0;
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 if(mergeMe[i] || newNVertices === 0 || currIndex === newNVertices) continue;
                 newx[currIndex] = this.x[i];
                 newy[currIndex] = this.y[i];
                 ++currIndex;
-            };
+            };}
             this.x = newx;
             this.y = newy;
             this.nVertices = newNVertices;
@@ -9988,9 +9988,9 @@ namespace org.jbox2d.util.nonconvex {
 
         public getVertexVecs() : org.jbox2d.common.Vec2[] {
             let out : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.nVertices);
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 out[i] = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
-            };
+            };}
             return out;
         }
 
@@ -10000,10 +10000,10 @@ namespace org.jbox2d.util.nonconvex {
                 this.x = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
                 this.y = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices);
             }
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 this.x[i] = p.x[i];
                 this.y[i] = p.y[i];
-            };
+            };}
             this.areaIsSet = false;
         }
 
@@ -10013,7 +10013,7 @@ namespace org.jbox2d.util.nonconvex {
          */
         public isConvex() : boolean {
             let isPositive : boolean = false;
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 let lower : number = (i === 0)?(this.nVertices - 1):(i - 1);
                 let middle : number = i;
                 let upper : number = (i === this.nVertices - 1)?(0):(i + 1);
@@ -10028,7 +10028,7 @@ namespace org.jbox2d.util.nonconvex {
                 } else if(isPositive !== newIsP) {
                     return false;
                 }
-            };
+            };}
             return true;
         }
 
@@ -10037,7 +10037,7 @@ namespace org.jbox2d.util.nonconvex {
             let area : number = 0.0;
             let inv3 : number = (<any>Math).fround(1.0 / 3.0);
             let pRef : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(0.0, 0.0);
-            for(let i : number = 0; i < count; ++i) {
+            for(let i : number = 0; i < count; ++i) {{
                 let p1 : org.jbox2d.common.Vec2 = pRef;
                 let p2 : org.jbox2d.common.Vec2 = vs[i];
                 let p3 : org.jbox2d.common.Vec2 = i + 1 < count?vs[i + 1]:vs[0];
@@ -10048,7 +10048,7 @@ namespace org.jbox2d.util.nonconvex {
                 area += triangleArea;
                 c.x += (<any>Math).fround((<any>Math).fround(triangleArea * inv3) * ((<any>Math).fround((<any>Math).fround(p1.x + p2.x) + p3.x)));
                 c.y += (<any>Math).fround((<any>Math).fround(triangleArea * inv3) * ((<any>Math).fround((<any>Math).fround(p1.y + p2.y) + p3.y)));
-            };
+            };}
             c.x *= (<any>Math).fround(1.0 / area);
             c.y *= (<any>Math).fround(1.0 / area);
             return c;
@@ -10075,15 +10075,15 @@ namespace org.jbox2d.util.nonconvex {
             }
             let normals : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.nVertices);
             let vertices : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.nVertices);
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 vertices[i] = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
                 let i1 : number = i;
                 let i2 : number = i + 1 < this.nVertices?i + 1:0;
                 let edge : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2((<any>Math).fround(this.x[i2] - this.x[i1]), (<any>Math).fround(this.y[i2] - this.y[i1]));
                 normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
                 normals[i].normalize();
-            };
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            };}
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 let iminus : number = (i === 0)?this.nVertices - 1:i - 1;
                 let cross : number = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(normals[iminus], normals[i]);
                 cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
@@ -10093,7 +10093,7 @@ namespace org.jbox2d.util.nonconvex {
                     error = 4;
                     break;
                 }
-                for(let j : number = 0; j < this.nVertices; ++j) {
+                for(let j : number = 0; j < this.nVertices; ++j) {{
                     if(j === i || j === (i + 1) % this.nVertices) {
                         continue;
                     }
@@ -10102,7 +10102,7 @@ namespace org.jbox2d.util.nonconvex {
                         noError = false;
                         error = 5;
                     }
-                };
+                };}
                 let centroid : org.jbox2d.common.Vec2 = Polygon.polyCentroid(vertices, this.nVertices);
                 let n1 : org.jbox2d.common.Vec2 = normals[iminus];
                 let n2 : org.jbox2d.common.Vec2 = normals[i];
@@ -10114,7 +10114,7 @@ namespace org.jbox2d.util.nonconvex {
                     noError = false;
                     error = 6;
                 }
-            };
+            };}
             if(!noError && printErrors) {
                 console.info("Found invalid polygon, ");
                 switch((error)) {
@@ -10172,19 +10172,19 @@ namespace org.jbox2d.util.nonconvex {
         }
 
         public isSimple() : boolean {
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 let iplus : number = (i + 1 > this.nVertices - 1)?0:i + 1;
                 let a1 : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(this.x[i], this.y[i]);
                 let a2 : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(this.x[iplus], this.y[iplus]);
-                for(let j : number = i + 1; j < this.nVertices; ++j) {
+                for(let j : number = i + 1; j < this.nVertices; ++j) {{
                     let jplus : number = (j + 1 > this.nVertices - 1)?0:j + 1;
                     let b1 : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(this.x[j], this.y[j]);
                     let b2 : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(this.x[jplus], this.y[jplus]);
                     if(this.intersect(a1, a2, b1, b2)) {
                         return false;
                     }
-                };
-            };
+                };}
+            };}
             return true;
         }
 
@@ -10206,7 +10206,7 @@ namespace org.jbox2d.util.nonconvex {
             let firstT : number = -1;
             let secondP : number = -1;
             let secondT : number = -1;
-            for(let i : number = 0; i < this.nVertices; i++) {
+            for(let i : number = 0; i < this.nVertices; i++) {{
                 if(t.x[0] === this.x[i] && t.y[0] === this.y[i]) {
                     if(firstP === -1) {
                         firstP = i;
@@ -10233,7 +10233,7 @@ namespace org.jbox2d.util.nonconvex {
                     }
                 } else {
                 }
-            };
+            };}
             if(firstP === 0 && secondP === this.nVertices - 1) {
                 firstP = this.nVertices - 1;
                 secondP = 0;
@@ -10247,7 +10247,7 @@ namespace org.jbox2d.util.nonconvex {
             let newx : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices + 1);
             let newy : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.nVertices + 1);
             let currOut : number = 0;
-            for(let i : number = 0; i < this.nVertices; i++) {
+            for(let i : number = 0; i < this.nVertices; i++) {{
                 newx[currOut] = this.x[i];
                 newy[currOut] = this.y[i];
                 if(i === firstP) {
@@ -10256,7 +10256,7 @@ namespace org.jbox2d.util.nonconvex {
                     newy[currOut] = t.y[tipT];
                 }
                 ++currOut;
-            };
+            };}
             let result : Polygon = new Polygon(newx, newy, this.nVertices + 1);
             return result;
         }
@@ -10269,13 +10269,13 @@ namespace org.jbox2d.util.nonconvex {
             if(this.nVertices < 3) return;
             let vecs : org.jbox2d.common.Vec2[] = this.getVertexVecs();
             let offset : number = 0;
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 if(vecs[i].x === vecs[Polygon.remainder(i + 1, this.nVertices)].x && vecs[i].y === vecs[Polygon.remainder(i + 1, this.nVertices)].y) {
                     offset++;
                     continue;
                 }
                 /* add */(pd.vertices.push(vecs[i])>0);
-            };
+            };}
         }
 
         /**
@@ -10300,37 +10300,37 @@ namespace org.jbox2d.util.nonconvex {
             let hasPinchPoint : boolean = false;
             let pinchIndexA : number = -1;
             let pinchIndexB : number = -1;
-            for(let i : number = 0; i < pin.nVertices; ++i) {
-                for(let j : number = i + 1; j < pin.nVertices; ++j) {
+            for(let i : number = 0; i < pin.nVertices; ++i) {{
+                for(let j : number = i + 1; j < pin.nVertices; ++j) {{
                     if(org.jbox2d.common.MathUtils.abs((<any>Math).fround(pin.x[i] - pin.x[j])) < tol && org.jbox2d.common.MathUtils.abs((<any>Math).fround(pin.y[i] - pin.y[j])) < tol && j !== i + 1) {
                         pinchIndexA = i;
                         pinchIndexB = j;
                         hasPinchPoint = true;
                         break;
                     }
-                };
+                };}
                 if(hasPinchPoint) break;
-            };
+            };}
             if(hasPinchPoint) {
                 let sizeA : number = pinchIndexB - pinchIndexA;
                 if(sizeA === pin.nVertices) return false;
                 let xA : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(sizeA);
                 let yA : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(sizeA);
-                for(let i : number = 0; i < sizeA; ++i) {
+                for(let i : number = 0; i < sizeA; ++i) {{
                     let ind : number = Polygon.remainder(pinchIndexA + i, pin.nVertices);
                     xA[i] = pin.x[ind];
                     yA[i] = pin.y[ind];
-                };
+                };}
                 let tempA : Polygon = new Polygon(xA, yA, sizeA);
                 poutA.set(tempA);
                 let sizeB : number = pin.nVertices - sizeA;
                 let xB : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(sizeB);
                 let yB : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(sizeB);
-                for(let i : number = 0; i < sizeB; ++i) {
+                for(let i : number = 0; i < sizeB; ++i) {{
                     let ind : number = Polygon.remainder(pinchIndexB + i, pin.nVertices);
                     xB[i] = pin.x[ind];
                     yB[i] = pin.y[ind];
-                };
+                };}
                 let tempB : Polygon = new Polygon(xB, yB, sizeB);
                 poutB.set(tempB);
             }
@@ -10374,41 +10374,41 @@ namespace org.jbox2d.util.nonconvex {
             if(Polygon.resolvePinchPoint(pin, pA, pB)) {
                 let mergeA : org.jbox2d.util.nonconvex.Triangle[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(pA.nVertices);
                 let mergeB : org.jbox2d.util.nonconvex.Triangle[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(pB.nVertices);
-                for(let i : number = 0; i < pA.nVertices; ++i) {
+                for(let i : number = 0; i < pA.nVertices; ++i) {{
                     mergeA[i] = new org.jbox2d.util.nonconvex.Triangle();
-                };
-                for(let i : number = 0; i < pB.nVertices; ++i) {
+                };}
+                for(let i : number = 0; i < pB.nVertices; ++i) {{
                     mergeB[i] = new org.jbox2d.util.nonconvex.Triangle();
-                };
+                };}
                 let nA : number = Polygon.triangulatePolygon(pA.x, pA.y, pA.nVertices, mergeA);
                 let nB : number = Polygon.triangulatePolygon(pB.x, pB.y, pB.nVertices, mergeB);
                 if(nA === -1 || nB === -1) {
                     return -1;
                 }
-                for(let i : number = 0; i < nA; ++i) {
+                for(let i : number = 0; i < nA; ++i) {{
                     results[i].set(mergeA[i]);
-                };
-                for(let i : number = 0; i < nB; ++i) {
+                };}
+                for(let i : number = 0; i < nB; ++i) {{
                     results[nA + i].set(mergeB[i]);
-                };
+                };}
                 return (nA + nB);
             }
             let buffer : org.jbox2d.util.nonconvex.Triangle[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(vNum - 2);
-            for(let i : number = 0; i < buffer.length; ++i) {
+            for(let i : number = 0; i < buffer.length; ++i) {{
                 buffer[i] = new org.jbox2d.util.nonconvex.Triangle();
-            };
+            };}
             let bufferSize : number = 0;
             let xrem : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(vNum);
             let yrem : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(vNum);
-            for(let i : number = 0; i < vNum; ++i) {
+            for(let i : number = 0; i < vNum; ++i) {{
                 xrem[i] = xv[i];
                 yrem[i] = yv[i];
-            };
+            };}
             let xremLength : number = vNum;
-            while((vNum > 3)) {
+            while((vNum > 3)) {{
                 let earIndex : number = -1;
                 let earMaxMinCross : number = -1000.0;
-                for(let i : number = 0; i < vNum; ++i) {
+                for(let i : number = 0; i < vNum; ++i) {{
                     if(Polygon.isEar(i, xrem, yrem, vNum)) {
                         let lower : number = Polygon.remainder(i - 1, vNum);
                         let upper : number = Polygon.remainder(i + 1, vNum);
@@ -10427,7 +10427,7 @@ namespace org.jbox2d.util.nonconvex {
                             earMaxMinCross = minCross;
                         }
                     }
-                };
+                };}
                 if(earIndex === -1) {
                     if(Polygon.B2_POLYGON_REPORT_ERRORS) {
                         let dump : Polygon = new Polygon(xrem, yrem, vNum);
@@ -10435,21 +10435,21 @@ namespace org.jbox2d.util.nonconvex {
                         dump.printFormatted();
                         console.info("Please submit this dump to ewjordan at Box2d forums\n");
                     }
-                    for(let i : number = 0; i < bufferSize; i++) {
+                    for(let i : number = 0; i < bufferSize; i++) {{
                         results[i].set(buffer[i]);
-                    };
+                    };}
                     if(bufferSize > 0) return bufferSize; else return -1;
                 }
                 --vNum;
                 let newx : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(vNum);
                 let newy : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(vNum);
                 let currDest : number = 0;
-                for(let i : number = 0; i < vNum; ++i) {
+                for(let i : number = 0; i < vNum; ++i) {{
                     if(currDest === earIndex) ++currDest;
                     newx[i] = xrem[currDest];
                     newy[i] = yrem[currDest];
                     ++currDest;
-                };
+                };}
                 let under : number = (earIndex === 0)?(vNum):(earIndex - 1);
                 let over : number = (earIndex === vNum)?0:(earIndex + 1);
                 let toAdd : org.jbox2d.util.nonconvex.Triangle = new org.jbox2d.util.nonconvex.Triangle(xrem[earIndex], yrem[earIndex], xrem[over], yrem[over], xrem[under], yrem[under]);
@@ -10457,13 +10457,13 @@ namespace org.jbox2d.util.nonconvex {
                 ++bufferSize;
                 xrem = newx;
                 yrem = newy;
-            };
+            }};
             let toAdd : org.jbox2d.util.nonconvex.Triangle = new org.jbox2d.util.nonconvex.Triangle(xrem[1], yrem[1], xrem[2], yrem[2], xrem[0], yrem[0]);
             buffer[bufferSize] = toAdd;
             ++bufferSize;
-            for(let i : number = 0; i < bufferSize; i++) {
+            for(let i : number = 0; i < bufferSize; i++) {{
                 results[i].set(buffer[i]);
-            };
+            };}
             return bufferSize;
         }
 
@@ -10493,28 +10493,28 @@ namespace org.jbox2d.util.nonconvex {
                 return 0;
             } else {
                 let covered : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(triangulatedLength);
-                for(let i : number = 0; i < triangulatedLength; ++i) {
+                for(let i : number = 0; i < triangulatedLength; ++i) {{
                     covered[i] = 0;
                     if(((triangulated[i].x[0] === triangulated[i].x[1]) && (triangulated[i].y[0] === triangulated[i].y[1])) || ((triangulated[i].x[1] === triangulated[i].x[2]) && (triangulated[i].y[1] === triangulated[i].y[2])) || ((triangulated[i].x[0] === triangulated[i].x[2]) && (triangulated[i].y[0] === triangulated[i].y[2]))) {
                         covered[i] = 1;
                     }
-                };
+                };}
                 let notDone : boolean = true;
-                while((notDone)) {
+                while((notDone)) {{
                     let currTri : number = -1;
-                    for(let i : number = 0; i < triangulatedLength; ++i) {
+                    for(let i : number = 0; i < triangulatedLength; ++i) {{
                         if(covered[i] !== 0) continue;
                         currTri = i;
                         break;
-                    };
+                    };}
                     if(currTri === -1) {
                         notDone = false;
                     } else {
                         let poly : Polygon = new Polygon(triangulated[currTri]);
                         covered[currTri] = 1;
                         let index : number = 0;
-                        for(let i : number = 0; i < 2 * triangulatedLength; ++i, ++index) {
-                            while((index >= triangulatedLength)) index -= triangulatedLength;
+                        for(let i : number = 0; i < 2 * triangulatedLength; ++i, ++index) {{
+                            while((index >= triangulatedLength)) {index -= triangulatedLength};
                             if(covered[index] !== 0) {
                                 continue;
                             }
@@ -10533,14 +10533,14 @@ namespace org.jbox2d.util.nonconvex {
                             } else {
                                 newP = null;
                             }
-                        };
+                        };}
                         if(polyIndex < polysLength) {
                             poly.mergeParallelEdges(org.jbox2d.common.Settings.angularSlop_$LI$());
                             if(poly.nVertices >= 3) polys[polyIndex].set(poly);
                         }
                         if(poly.nVertices >= 3) polyIndex++;
                     }
-                };
+                }};
             }
             return polyIndex;
         }
@@ -10589,10 +10589,10 @@ namespace org.jbox2d.util.nonconvex {
             let cross : number = (<any>Math).fround((<any>Math).fround(dx0 * dy1) - (<any>Math).fround(dx1 * dy0));
             if(cross > 0) return false;
             let myTri : org.jbox2d.util.nonconvex.Triangle = new org.jbox2d.util.nonconvex.Triangle(xv[i], yv[i], xv[upper], yv[upper], xv[lower], yv[lower]);
-            for(let j : number = 0; j < xvLength; ++j) {
+            for(let j : number = 0; j < xvLength; ++j) {{
                 if(j === i || j === lower || j === upper) continue;
                 if(myTri.containsPoint(xv[j], yv[j])) return false;
-            };
+            };}
             return true;
         }
 
@@ -10605,7 +10605,7 @@ namespace org.jbox2d.util.nonconvex {
             if(n === 1) return;
             let low : number = 0;
             let high : number = n - 1;
-            while((low < high)) {
+            while((low < high)) {{
                 let buffer : number = x[low];
                 x[low] = x[high];
                 x[high] = buffer;
@@ -10614,7 +10614,7 @@ namespace org.jbox2d.util.nonconvex {
                 y[high] = buffer;
                 ++low;
                 --high;
-            };
+            }};
         }
 
         public static reversePolygon(x? : any, y? : any, n? : any) : any {
@@ -10644,9 +10644,9 @@ namespace org.jbox2d.util.nonconvex {
         public static decomposeConvex(p : Polygon, results : Polygon[], maxPolys : number) : number {
             if(p.nVertices < 3) return 0;
             let triangulated : org.jbox2d.util.nonconvex.Triangle[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(p.nVertices - 2);
-            for(let i : number = 0; i < triangulated.length; ++i) {
+            for(let i : number = 0; i < triangulated.length; ++i) {{
                 triangulated[i] = new org.jbox2d.util.nonconvex.Triangle();
-            };
+            };}
             let nTri : number;
             if(p.isCCW()) {
                 let tempP : Polygon = new Polygon();
@@ -10678,21 +10678,21 @@ namespace org.jbox2d.util.nonconvex {
         public static decomposeConvexAndAddTo(p : Polygon, bd : org.jbox2d.dynamics.Body, prototype : org.jbox2d.collision.shapes.PolygonDef) {
             if(p.nVertices < 3) return;
             let decomposed : Polygon[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(p.nVertices - 2);
-            for(let i : number = 0; i < decomposed.length; ++i) {
+            for(let i : number = 0; i < decomposed.length; ++i) {{
                 decomposed[i] = new Polygon();
-            };
+            };}
             let nPolys : number = Polygon.decomposeConvex(p, decomposed, p.nVertices - 2);
             let pdarray : org.jbox2d.collision.shapes.PolygonDef[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(2 * p.nVertices);
-            for(let i : number = 0; i < pdarray.length; ++i) {
+            for(let i : number = 0; i < pdarray.length; ++i) {{
                 pdarray[i] = new org.jbox2d.collision.shapes.PolygonDef();
-            };
+            };}
             let extra : number = 0;
-            for(let i : number = 0; i < nPolys; ++i) {
+            for(let i : number = 0; i < nPolys; ++i) {{
                 let toAdd : org.jbox2d.collision.shapes.PolygonDef = pdarray[i + extra];
                 toAdd.set(prototype);
                 let curr : Polygon = decomposed[i];
                 if(curr.nVertices === 3) {
-                    for(let j : number = 0; j < 3; ++j) {
+                    for(let j : number = 0; j < 3; ++j) {{
                         let lower : number = (j === 0)?(curr.nVertices - 1):(j - 1);
                         let middle : number = j;
                         let upper : number = (j === curr.nVertices - 1)?(0):(j + 1);
@@ -10748,7 +10748,7 @@ namespace org.jbox2d.util.nonconvex {
                             }
                             continue;
                         }
-                    };
+                    };}
                 }
                 if(decomposed[i].isUsable()) {
                     decomposed[i].addTo(toAdd);
@@ -10757,17 +10757,17 @@ namespace org.jbox2d.util.nonconvex {
                     console.info("Didn\'t add unusable polygon.  Dumping vertices:\n");
                     decomposed[i].print();
                 }
-            };
+            };}
             return;
         }
 
         public static convexHull$org_jbox2d_common_Vec2_A$int(v : org.jbox2d.common.Vec2[], nVert : number) : Polygon {
             let cloudX : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(nVert);
             let cloudY : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(nVert);
-            for(let i : number = 0; i < nVert; ++i) {
+            for(let i : number = 0; i < nVert; ++i) {{
                 cloudX[i] = v[i].x;
                 cloudY[i] = v[i].y;
-            };
+            };}
             let result : Polygon = Polygon.convexHull$float_A$float_A$int(cloudX, cloudY, nVert);
             return result;
         }
@@ -10775,23 +10775,23 @@ namespace org.jbox2d.util.nonconvex {
         public static convexHull$float_A$float_A$int(cloudX : number[], cloudY : number[], nVert : number) : Polygon {
             let edgeList : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(nVert);
             let numEdges : number = 0;
-            let minY : number = Number.MAX_VALUE;
+            let minY : number = 3.4028235E38;
             let minYIndex : number = nVert;
-            for(let i : number = 0; i < nVert; ++i) {
+            for(let i : number = 0; i < nVert; ++i) {{
                 if(cloudY[i] < minY) {
                     minY = cloudY[i];
                     minYIndex = i;
                 }
-            };
+            };}
             let startIndex : number = minYIndex;
             let winIndex : number = -1;
             let dx : number = -1.0;
             let dy : number = 0.0;
-            while((winIndex !== minYIndex)) {
+            while((winIndex !== minYIndex)) {{
                 let newdx : number = 0.0;
                 let newdy : number = 0.0;
                 let maxDot : number = -2.0;
-                for(let i : number = 0; i < nVert; ++i) {
+                for(let i : number = 0; i < nVert; ++i) {{
                     if(i === startIndex) continue;
                     newdx = (<any>Math).fround(cloudX[i] - cloudX[startIndex]);
                     newdy = (<any>Math).fround(cloudY[i] - cloudY[startIndex]);
@@ -10804,7 +10804,7 @@ namespace org.jbox2d.util.nonconvex {
                         maxDot = newDot;
                         winIndex = i;
                     }
-                };
+                };}
                 edgeList[numEdges++] = winIndex;
                 dx = (<any>Math).fround(cloudX[winIndex] - cloudX[startIndex]);
                 dy = (<any>Math).fround(cloudY[winIndex] - cloudY[startIndex]);
@@ -10813,13 +10813,13 @@ namespace org.jbox2d.util.nonconvex {
                 dx /= nrm;
                 dy /= nrm;
                 startIndex = winIndex;
-            };
+            }};
             let xres : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(numEdges);
             let yres : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(numEdges);
-            for(let i : number = 0; i < numEdges; i++) {
+            for(let i : number = 0; i < numEdges; i++) {{
                 xres[i] = cloudX[edgeList[i]];
                 yres[i] = cloudY[edgeList[i]];
-            };
+            };}
             let returnVal : Polygon = new Polygon(xres, yres, numEdges);
             returnVal.mergeParallelEdges(org.jbox2d.common.Settings.angularSlop_$LI$());
             return returnVal;
@@ -10843,19 +10843,19 @@ namespace org.jbox2d.util.nonconvex {
 
         /*private*/ static remainder(x : number, modulus : number) : number {
             let rem : number = x % modulus;
-            while((rem < 0)) {
+            while((rem < 0)) {{
                 rem += modulus;
-            };
+            }};
             return rem;
         }
 
         public static traceEdge(p : Polygon) : Polygon {
             let nodes : org.jbox2d.util.nonconvex.PolyNode[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(p.nVertices * p.nVertices);
             let nNodes : number = 0;
-            for(let i : number = 0; i < nodes.length; ++i) {
+            for(let i : number = 0; i < nodes.length; ++i) {{
                 nodes[i] = new org.jbox2d.util.nonconvex.PolyNode();
-            };
-            for(let i : number = 0; i < p.nVertices; ++i) {
+            };}
+            for(let i : number = 0; i < p.nVertices; ++i) {{
                 let pos : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(p.x[i], p.y[i]);
                 nodes[i].position = /* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(pos);
                 ++nNodes;
@@ -10863,16 +10863,16 @@ namespace org.jbox2d.util.nonconvex {
                 let iminus : number = (i === 0)?p.nVertices - 1:i - 1;
                 nodes[i].addConnection(nodes[iplus]);
                 nodes[i].addConnection(nodes[iminus]);
-            };
+            };}
             let dirty : boolean = true;
             let counter : number = 0;
-            while((dirty)) {
+            while((dirty)) {{
                 dirty = false;
-                for(let i : number = 0; i < nNodes; ++i) {
-                    for(let j : number = 0; j < nodes[i].nConnected; ++j) {
-                        for(let k : number = 0; k < nNodes; ++k) {
+                for(let i : number = 0; i < nNodes; ++i) {{
+                    for(let j : number = 0; j < nodes[i].nConnected; ++j) {{
+                        for(let k : number = 0; k < nNodes; ++k) {{
                             if(k === i || nodes[k] === nodes[i].connected[j]) continue;
-                            for(let l : number = 0; l < nodes[k].nConnected; ++l) {
+                            for(let l : number = 0; l < nodes[k].nConnected; ++l) {{
                                 if(nodes[k].connected[l] === nodes[i].connected[j] || nodes[k].connected[l] === nodes[i]) continue;
                                 let intersectPt : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2();
                                 let crosses : boolean = Polygon.intersect(nodes[i].position, nodes[i].connected[j].position, nodes[k].position, nodes[k].connected[l].position, intersectPt);
@@ -10897,22 +10897,22 @@ namespace org.jbox2d.util.nonconvex {
                                     break;
                                 }
                                 if(dirty) break;
-                            };
+                            };}
                             if(dirty) break;
-                        };
+                        };}
                         if(dirty) break;
-                    };
+                    };}
                     if(dirty) break;
-                };
+                };}
                 ++counter;
-            };
+            }};
             let foundDupe : boolean = true;
             let nActive : number = nNodes;
-            while((foundDupe)) {
+            while((foundDupe)) {{
                 foundDupe = false;
-                for(let i : number = 0; i < nNodes; ++i) {
+                for(let i : number = 0; i < nNodes; ++i) {{
                     if(nodes[i].nConnected === 0) continue;
-                    for(let j : number = i + 1; j < nNodes; ++j) {
+                    for(let j : number = i + 1; j < nNodes; ++j) {{
                         if(nodes[j].nConnected === 0) continue;
                         let diff : org.jbox2d.common.Vec2 = nodes[i].position.sub(nodes[j].position);
                         if(diff.lengthSquared() <= Polygon.COLLAPSE_DIST_SQR_$LI$()) {
@@ -10922,23 +10922,23 @@ namespace org.jbox2d.util.nonconvex {
                             let inode : org.jbox2d.util.nonconvex.PolyNode = nodes[i];
                             let jnode : org.jbox2d.util.nonconvex.PolyNode = nodes[j];
                             let njConn : number = jnode.nConnected;
-                            for(let k : number = 0; k < njConn; ++k) {
+                            for(let k : number = 0; k < njConn; ++k) {{
                                 let knode : org.jbox2d.util.nonconvex.PolyNode = jnode.connected[k];
                                 if(knode !== inode) {
                                     inode.addConnection(knode);
                                     knode.addConnection(inode);
                                 }
                                 knode.removeConnection(jnode);
-                            };
+                            };}
                             jnode.nConnected = 0;
                         }
-                    };
-                };
-            };
-            let minY : number = Number.MAX_VALUE;
-            let maxX : number = -Number.MAX_VALUE;
+                    };}
+                };}
+            }};
+            let minY : number = 3.4028235E38;
+            let maxX : number = -3.4028235E38;
             let minYIndex : number = -1;
-            for(let i : number = 0; i < nNodes; ++i) {
+            for(let i : number = 0; i < nNodes; ++i) {{
                 if(nodes[i].position.y < minY && nodes[i].nConnected > 1) {
                     minY = nodes[i].position.y;
                     minYIndex = i;
@@ -10947,7 +10947,7 @@ namespace org.jbox2d.util.nonconvex {
                     minYIndex = i;
                     maxX = nodes[i].position.x;
                 }
-            };
+            };}
             let origDir : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(1.0, 0.0);
             let resultVecs : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(4 * nNodes);
             let nResultVecs : number = 0;
@@ -10959,7 +10959,7 @@ namespace org.jbox2d.util.nonconvex {
             }
             resultVecs[0] = startNode.position;
             ++nResultVecs;
-            while((nextNode !== startNode)) {
+            while((nextNode !== startNode)) {{
                 if(nResultVecs > 4 * nNodes) {
                 }
                 resultVecs[nResultVecs++] = nextNode.position;
@@ -10967,13 +10967,13 @@ namespace org.jbox2d.util.nonconvex {
                 currentNode = nextNode;
                 nextNode = currentNode.getRightestConnection$org_jbox2d_util_nonconvex_PolyNode(oldNode);
                 if(nextNode == null) break;
-            };
+            }};
             let xres : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(nResultVecs);
             let yres : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(nResultVecs);
-            for(let i : number = 0; i < nResultVecs; ++i) {
+            for(let i : number = 0; i < nResultVecs; ++i) {{
                 xres[i] = resultVecs[i].x;
                 yres[i] = resultVecs[i].y;
-            };
+            };}
             let retval : Polygon = new Polygon(xres, yres, nResultVecs);
             return retval;
         }
@@ -10984,13 +10984,13 @@ namespace org.jbox2d.util.nonconvex {
 
         printFormatted() {
             console.info("float xv[] = {");
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 console.info("%ff,");
-            };
+            };}
             console.info("};\nfloat yv[] = {");
-            for(let i : number = 0; i < this.nVertices; ++i) {
+            for(let i : number = 0; i < this.nVertices; ++i) {{
                 console.info("%ff,");
-            };
+            };}
             console.info("};\n");
         }
     }
@@ -11040,9 +11040,9 @@ namespace org.jbox2d.util.nonconvex {
         }
 
         addConnection(toMe : PolyNode) {
-            for(let i : number = 0; i < this.nConnected; ++i) {
+            for(let i : number = 0; i < this.nConnected; ++i) {{
                 if(this.connected[i] === toMe) return;
-            };
+            };}
             this.connected[this.nConnected] = toMe;
             ++this.nConnected;
         }
@@ -11050,34 +11050,34 @@ namespace org.jbox2d.util.nonconvex {
         removeConnection(fromMe : PolyNode) {
             let isFound : boolean = false;
             let foundIndex : number = -1;
-            for(let i : number = 0; i < this.nConnected; ++i) {
+            for(let i : number = 0; i < this.nConnected; ++i) {{
                 if(fromMe === this.connected[i]) {
                     isFound = true;
                     foundIndex = i;
                     break;
                 }
-            };
+            };}
             --this.nConnected;
-            for(let i : number = foundIndex; i < this.nConnected; ++i) {
+            for(let i : number = foundIndex; i < this.nConnected; ++i) {{
                 this.connected[i] = this.connected[i + 1];
-            };
+            };}
         }
 
         removeConnectionByIndex(index : number) {
             --this.nConnected;
-            for(let i : number = index; i < this.nConnected; ++i) {
+            for(let i : number = index; i < this.nConnected; ++i) {{
                 this.connected[i] = this.connected[i + 1];
-            };
+            };}
         }
 
         isConnectedTo(me : PolyNode) : boolean {
             let isFound : boolean = false;
-            for(let i : number = 0; i < this.nConnected; ++i) {
+            for(let i : number = 0; i < this.nConnected; ++i) {{
                 if(me === this.connected[i]) {
                     isFound = true;
                     break;
                 }
-            };
+            };}
             return isFound;
         }
 
@@ -11091,7 +11091,7 @@ namespace org.jbox2d.util.nonconvex {
             let inDir : org.jbox2d.common.Vec2 = this.position.sub(incoming.position);
             let inLength : number = inDir.normalize();
             let result : PolyNode = null;
-            for(let i : number = 0; i < this.nConnected; ++i) {
+            for(let i : number = 0; i < this.nConnected; ++i) {{
                 if(this.connected[i] === incoming) continue;
                 let testDir : org.jbox2d.common.Vec2 = this.connected[i].position.sub(this.position);
                 let testLengthSqr : number = testDir.lengthSquared();
@@ -11109,7 +11109,7 @@ namespace org.jbox2d.util.nonconvex {
                 } else {
                     result = this.connected[i];
                 }
-            };
+            };}
             return result;
         }
 
@@ -11245,7 +11245,7 @@ namespace org.jbox2d.dynamics.controllers {
             if(this.useWorldGravity) {
                 this.gravity = this.m_world.getGravity();
             }
-            for(let i : org.jbox2d.dynamics.controllers.ControllerEdge = this.m_bodyList; i != null; i = i.nextBody) {
+            for(let i : org.jbox2d.dynamics.controllers.ControllerEdge = this.m_bodyList; i != null; i = i.nextBody) {{
                 let body : org.jbox2d.dynamics.Body = i.body;
                 if(body.isSleeping()) {
                     continue;
@@ -11254,7 +11254,7 @@ namespace org.jbox2d.dynamics.controllers {
                 let massc : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(0, 0);
                 let area : number = 0;
                 let mass : number = 0;
-                for(let shape : org.jbox2d.collision.shapes.Shape = body.getShapeList(); shape != null; shape = shape.getNext()) {
+                for(let shape : org.jbox2d.collision.shapes.Shape = body.getShapeList(); shape != null; shape = shape.getNext()) {{
                     let sc : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(0, 0);
                     let sarea : number = shape.computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_Vec2(this.normal, this.offset, sc);
                     area += sarea;
@@ -11269,7 +11269,7 @@ namespace org.jbox2d.dynamics.controllers {
                     mass += (<any>Math).fround(sarea * shapeDensity);
                     massc.x += (<any>Math).fround((<any>Math).fround(sarea * sc.x) * shapeDensity);
                     massc.y += (<any>Math).fround((<any>Math).fround(sarea * sc.y) * shapeDensity);
-                };
+                };}
                 areac.x /= area;
                 areac.y /= area;
                 massc.x /= mass;
@@ -11281,7 +11281,7 @@ namespace org.jbox2d.dynamics.controllers {
                 dragForce.mulLocal((<any>Math).fround(-this.linearDrag * area));
                 body.applyForce(dragForce, areac);
                 body.applyTorque((<any>Math).fround((<any>Math).fround((<any>Math).fround((<any>Math).fround(-body.getInertia() / body.getMass()) * area) * body.getAngularVelocity()) * this.angularDrag));
-            };
+            };}
         }
 
         /**
@@ -11417,7 +11417,7 @@ namespace org.jbox2d.testbed {
             this.g.stroke(color.x, color.y, color.z);
             this.g.noFill();
             this.g.beginShape(PConstants.POLYGON);
-            for(let i : number = 0; i < k_segments; ++i) {
+            for(let i : number = 0; i < k_segments; ++i) {{
                 let vx : number = (<any>Math).fround(radius * org.jbox2d.common.MathUtils.cos(theta));
                 let vy : number = (<any>Math).fround(radius * org.jbox2d.common.MathUtils.sin(theta));
                 ProcessingDebugDraw.circlePt_$LI$().set$float$float(vx, vy);
@@ -11425,7 +11425,7 @@ namespace org.jbox2d.testbed {
                 ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
                 this.g.vertex(ProcessingDebugDraw.circlePt_$LI$().x, ProcessingDebugDraw.circlePt_$LI$().y);
                 theta += k_increment;
-            };
+            };}
             ProcessingDebugDraw.circlePt_$LI$().set$float$float(radius, 0);
             this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
             ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
@@ -11452,7 +11452,7 @@ namespace org.jbox2d.testbed {
             this.g.fill((<any>Math).fround(0.5 * color.x), (<any>Math).fround(0.5 * color.y), (<any>Math).fround(0.5 * color.z), (<any>Math).fround(0.5 * 255.0));
             this.g.stroke(color.x, color.y, color.z, 255.0);
             this.g.beginShape(PConstants.POLYGON);
-            for(let i : number = 0; i < k_segments; ++i) {
+            for(let i : number = 0; i < k_segments; ++i) {{
                 let vx : number = (<any>Math).fround(radius * org.jbox2d.common.MathUtils.cos(theta));
                 let vy : number = (<any>Math).fround(radius * org.jbox2d.common.MathUtils.sin(theta));
                 ProcessingDebugDraw.circlePt_$LI$().set$float$float(vx, vy);
@@ -11460,7 +11460,7 @@ namespace org.jbox2d.testbed {
                 ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
                 this.g.vertex(ProcessingDebugDraw.circlePt_$LI$().x, ProcessingDebugDraw.circlePt_$LI$().y);
                 theta += k_increment;
-            };
+            };}
             ProcessingDebugDraw.circlePt_$LI$().set$float$float(radius, 0);
             this.viewportTransform.vectorTransform(ProcessingDebugDraw.circlePt_$LI$(), ProcessingDebugDraw.circlePt_$LI$());
             ProcessingDebugDraw.circlePt_$LI$().addLocal$org_jbox2d_common_Vec2(ProcessingDebugDraw.center_$LI$());
@@ -11486,12 +11486,12 @@ namespace org.jbox2d.testbed {
         public drawPolygon(vertices : org.jbox2d.common.Vec2[], vertexCount : number, color : org.jbox2d.common.Color3f) {
             this.g.stroke(color.x, color.y, color.z);
             this.g.noFill();
-            for(let i : number = 0; i < vertexCount; ++i) {
+            for(let i : number = 0; i < vertexCount; ++i) {{
                 let ind : number = (i + 1 < vertexCount)?i + 1:(i + 1 - vertexCount);
                 this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v1_$LI$());
                 this.viewportTransform.getWorldToScreen(vertices[ind], ProcessingDebugDraw.v2_$LI$());
                 this.g.line(ProcessingDebugDraw.v1_$LI$().x, ProcessingDebugDraw.v1_$LI$().y, ProcessingDebugDraw.v2_$LI$().x, ProcessingDebugDraw.v2_$LI$().y);
-            };
+            };}
         }
 
         static v : org.jbox2d.common.Vec2; public static v_$LI$() : org.jbox2d.common.Vec2 { if(ProcessingDebugDraw.v == null) ProcessingDebugDraw.v = new org.jbox2d.common.Vec2(); return ProcessingDebugDraw.v; };
@@ -11506,18 +11506,18 @@ namespace org.jbox2d.testbed {
             this.g.noStroke();
             this.g.fill((<any>Math).fround(0.5 * color.x), (<any>Math).fround(0.5 * color.y), (<any>Math).fround(0.5 * color.z), (<any>Math).fround(0.5 * 255.0));
             this.g.beginShape(PConstants.POLYGON);
-            for(let i : number = 0; i < vertexCount; ++i) {
+            for(let i : number = 0; i < vertexCount; ++i) {{
                 this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v_$LI$());
                 this.g.vertex(ProcessingDebugDraw.v_$LI$().x, ProcessingDebugDraw.v_$LI$().y);
-            };
+            };}
             this.g.endShape();
             this.g.stroke(color.x, color.y, color.z, 255.0);
-            for(let i : number = 0; i < vertexCount; ++i) {
+            for(let i : number = 0; i < vertexCount; ++i) {{
                 let ind : number = (i + 1 < vertexCount)?i + 1:(i + 1 - vertexCount);
                 this.viewportTransform.getWorldToScreen(vertices[i], ProcessingDebugDraw.v1_$LI$());
                 this.viewportTransform.getWorldToScreen(vertices[ind], ProcessingDebugDraw.v2_$LI$());
                 this.g.line(ProcessingDebugDraw.v1_$LI$().x, ProcessingDebugDraw.v1_$LI$().y, ProcessingDebugDraw.v2_$LI$().x, ProcessingDebugDraw.v2_$LI$().y);
-            };
+            };}
         }
 
         /**
@@ -11603,12 +11603,12 @@ namespace org.jbox2d.testbed {
             this.g.fill(color.x, color.y, color.z);
             this.g.noStroke();
             this.g.beginShape(PConstants.POLYGON);
-            for(let i : number = 0; i < k_segments; ++i) {
+            for(let i : number = 0; i < k_segments; ++i) {{
                 let vx : number = (<any>Math).fround(ProcessingDebugDraw.position_$LI$().x + (<any>Math).fround(k_radius * org.jbox2d.common.MathUtils.cos(theta)));
                 let vy : number = (<any>Math).fround(ProcessingDebugDraw.position_$LI$().y + (<any>Math).fround(k_radius * org.jbox2d.common.MathUtils.sin(theta)));
                 this.g.vertex(vx, vy);
                 theta += k_increment;
-            };
+            };}
             this.g.endShape();
         }
 
@@ -12417,9 +12417,9 @@ namespace org.jbox2d.pooling.arrays {
          */
         getInitializedArray(argLength : number) : boolean[] {
             let ray : boolean[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(argLength);
-            for(let i : number = 0; i < argLength; i++) {
+            for(let i : number = 0; i < argLength; i++) {{
                 ray[i] = false;
-            };
+            };}
             return ray;
         }
     }
@@ -12449,9 +12449,9 @@ namespace org.jbox2d.pooling.arrays {
          */
         getInitializedArray(argLength : number) : org.jbox2d.common.Vec2[] {
             let ray : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(argLength);
-            for(let i : number = 0; i < ray.length; i++) {
+            for(let i : number = 0; i < ray.length; i++) {{
                 ray[i] = new org.jbox2d.common.Vec2();
-            };
+            };}
             return ray;
         }
     }
@@ -12873,14 +12873,14 @@ namespace org.jbox2d.collision.shapes {
         public getShapesInContact() : Array<Shape> {
             let curr : org.jbox2d.dynamics.contacts.ContactEdge = this.m_body.getContactList();
             let touching : Array<Shape> = <any>([]);
-            while((curr != null)) {
+            while((curr != null)) {{
                 if(curr.contact.m_shape1 === this) {
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(touching, curr.contact.m_shape2);
                 } else if(curr.contact.m_shape2 === this) {
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(touching, curr.contact.m_shape1);
                 }
                 curr = curr.next;
-            };
+            }};
             return touching;
         }
 
@@ -12890,7 +12890,7 @@ namespace org.jbox2d.collision.shapes {
         public getContacts() : Array<org.jbox2d.dynamics.contacts.Contact> {
             let curr : org.jbox2d.dynamics.contacts.ContactEdge = this.m_body.getContactList();
             let contacts : Array<org.jbox2d.dynamics.contacts.Contact> = <any>([]);
-            while((curr != null)) {
+            while((curr != null)) {{
                 if(curr.contact.getManifoldCount() > 0) {
                     if(curr.contact.m_shape1 === this) {
                         /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(contacts, curr.contact);
@@ -12899,7 +12899,7 @@ namespace org.jbox2d.collision.shapes {
                     }
                 }
                 curr = curr.next;
-            };
+            }};
             return contacts;
         }
     }
@@ -13272,10 +13272,10 @@ namespace org.jbox2d.dynamics {
                 cp.shape2 = c.getShape2();
                 cp.friction = c.m_friction;
                 cp.restitution = c.m_restitution;
-                for(let i : number = 0; i < manifoldCount; ++i) {
+                for(let i : number = 0; i < manifoldCount; ++i) {{
                     let manifold : org.jbox2d.collision.Manifold = /* get */manifolds[i];
                     cp.normal.set$org_jbox2d_common_Vec2(manifold.normal);
-                    for(let j : number = 0; j < manifold.pointCount; ++j) {
+                    for(let j : number = 0; j < manifold.pointCount; ++j) {{
                         let mp : org.jbox2d.collision.ManifoldPoint = manifold.points[j];
                         b1.getWorldLocationToOut(mp.localPoint1, cp.position);
                         b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
@@ -13284,8 +13284,8 @@ namespace org.jbox2d.dynamics {
                         cp.separation = mp.separation;
                         cp.id.set(mp.id);
                         this.m_world.m_contactListener.remove(cp);
-                    };
-                };
+                    };}
+                };}
             }
             if(c.m_prev != null) {
                 c.m_prev.m_next = c.m_next;
@@ -13321,14 +13321,14 @@ namespace org.jbox2d.dynamics {
         }
 
         public collide() {
-            for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_world.m_contactList; c != null; c = c.getNext()) {
+            for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_world.m_contactList; c != null; c = c.getNext()) {{
                 let body1 : org.jbox2d.dynamics.Body = c.getShape1().getBody();
                 let body2 : org.jbox2d.dynamics.Body = c.getShape2().getBody();
                 if(body1.isSleeping() && body2.isSleeping()) {
                     continue;
                 }
                 c.update(this.m_world.m_contactListener);
-            };
+            };}
         }
     }
     ContactManager["__class"] = "org.jbox2d.dynamics.ContactManager";
@@ -13810,10 +13810,10 @@ namespace org.jbox2d.dynamics.contacts {
         }
 
         public dumpManifoldPoints() {
-            for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {
+            for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {{
                 let mp : org.jbox2d.collision.ManifoldPoint = this.m_manifold.points[i];
                 console.info("Manifold point dump: " + mp.normalImpulse + " " + mp.tangentImpulse);
-            };
+            };}
         }
 
         static tlm0 : org.jbox2d.pooling.TLManifold; public static tlm0_$LI$() : org.jbox2d.pooling.TLManifold { if(PolyContact.tlm0 == null) PolyContact.tlm0 = (() => { let __o : any = new org.jbox2d.pooling.TLManifold(); __o.__delegate = new org.jbox2d.pooling.TLManifold(); return __o; })(); return PolyContact.tlm0; };
@@ -13840,13 +13840,13 @@ namespace org.jbox2d.dynamics.contacts {
             cp.friction = this.m_friction;
             cp.restitution = this.m_restitution;
             if(this.m_manifold.pointCount > 0) {
-                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {
+                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {{
                     let mp : org.jbox2d.collision.ManifoldPoint = this.m_manifold.points[i];
                     mp.normalImpulse = 0.0;
                     mp.tangentImpulse = 0.0;
                     let found : boolean = false;
                     let id : org.jbox2d.collision.ContactID = mp.id;
-                    for(let j : number = 0; j < m0.pointCount; ++j) {
+                    for(let j : number = 0; j < m0.pointCount; ++j) {{
                         if(persisted[j] === true) {
                             continue;
                         }
@@ -13868,7 +13868,7 @@ namespace org.jbox2d.dynamics.contacts {
                             }
                             break;
                         }
-                    };
+                    };}
                     if(found === false && listener != null) {
                         b1.getWorldLocationToOut(mp.localPoint1, cp.position);
                         b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
@@ -13879,7 +13879,7 @@ namespace org.jbox2d.dynamics.contacts {
                         cp.id.set(id);
                         listener.add(cp);
                     }
-                };
+                };}
                 this.m_manifoldCount = 1;
             } else {
                 this.m_manifoldCount = 0;
@@ -13887,7 +13887,7 @@ namespace org.jbox2d.dynamics.contacts {
             if(listener == null) {
                 return;
             }
-            for(let i : number = 0; i < m0.pointCount; ++i) {
+            for(let i : number = 0; i < m0.pointCount; ++i) {{
                 if(persisted[i]) {
                     continue;
                 }
@@ -13900,7 +13900,7 @@ namespace org.jbox2d.dynamics.contacts {
                 cp.separation = mp0.separation;
                 cp.id.set(mp0.id);
                 listener.remove(cp);
-            };
+            };}
         }
     }
     PolyContact["__class"] = "org.jbox2d.dynamics.contacts.PolyContact";
@@ -15835,7 +15835,7 @@ namespace org.jbox2d.collision {
             let iter : number = 0;
             let distance : number = 0.0;
             let targetDistance : number = 0.0;
-            while((true)) {
+            while((true)) {{
                 let t : number = (<any>Math).fround((<any>Math).fround(((<any>Math).fround(1.0 - alpha)) * t0) + alpha);
                 sweep1.getXForm(xf1, t);
                 sweep2.getXForm(xf2, t);
@@ -15875,7 +15875,7 @@ namespace org.jbox2d.collision {
                 }
                 alpha = newAlpha;
                 ++iter;
-            };
+            }};
             return alpha;
         }
     }
@@ -16250,7 +16250,7 @@ namespace org.jbox2d.dynamics {
                 let s1 : org.jbox2d.collision.shapes.EdgeShape = null;
                 let s2 : org.jbox2d.collision.shapes.EdgeShape = null;
                 let angle : number = 0.0;
-                for(; i < edgeDef.getVertexCount(); i++) {
+                for(; i < edgeDef.getVertexCount(); i++) {{
                     v2 = /* get */edgeDef.getVertices()[i];
                     s2 = new org.jbox2d.collision.shapes.EdgeShape(v1, v2, def);
                     s2.m_next = this.m_shapeList;
@@ -16267,7 +16267,7 @@ namespace org.jbox2d.dynamics {
                     }
                     s1 = s2;
                     v1 = v2;
-                };
+                };}
                 if(edgeDef.isLoop()) {
                     this.connectEdges(s1, s0, angle);
                 }
@@ -16298,7 +16298,7 @@ namespace org.jbox2d.dynamics {
             let node : org.jbox2d.collision.shapes.Shape = this.m_shapeList;
             let prevNode : org.jbox2d.collision.shapes.Shape = null;
             let found : boolean = false;
-            while((node != null)) {
+            while((node != null)) {{
                 if(node === s) {
                     if(prevNode == null) {
                         this.m_shapeList = s.m_next;
@@ -16312,7 +16312,7 @@ namespace org.jbox2d.dynamics {
                 }
                 prevNode = node;
                 node = node.m_next;
-            };
+            }};
             s.m_body = null;
             s.m_next = null;
             --this.m_shapeCount;
@@ -16345,9 +16345,9 @@ namespace org.jbox2d.dynamics {
             this.m_sweep.localCenter.set$org_jbox2d_common_Vec2(massData.center);
             org.jbox2d.common.XForm.mulToOut(this.m_xf, this.m_sweep.localCenter, this.m_sweep.c);
             this.m_sweep.c0.set$org_jbox2d_common_Vec2(this.m_sweep.c);
-            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                 s.updateSweepRadius(this.m_sweep.localCenter);
-            };
+            };}
             let oldType : number = this.m_type;
             if(this.m_invMass === 0.0 && this.m_invI === 0.0) {
                 this.m_type = Body.e_staticType;
@@ -16355,9 +16355,9 @@ namespace org.jbox2d.dynamics {
                 this.m_type = Body.e_dynamicType;
             }
             if(oldType !== this.m_type) {
-                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                     s.refilterProxy(this.m_world.m_broadPhase, this.m_xf);
-                };
+                };}
             }
         }
 
@@ -16378,14 +16378,14 @@ namespace org.jbox2d.dynamics {
             this.m_invI = 0.0;
             let center : org.jbox2d.common.Vec2 = /* get */Body.tlCenter_$LI$().initialValue();
             center.setZero();
-            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                 let massData : org.jbox2d.collision.MassData = new org.jbox2d.collision.MassData();
                 s.computeMass(massData);
                 this.m_mass += massData.mass;
                 center.x += (<any>Math).fround(massData.mass * massData.center.x);
                 center.y += (<any>Math).fround(massData.mass * massData.center.y);
                 this.m_I += massData.I;
-            };
+            };}
             if(this.m_mass > 0.0) {
                 this.m_invMass = (<any>Math).fround(1.0 / this.m_mass);
                 center.x *= this.m_invMass;
@@ -16401,9 +16401,9 @@ namespace org.jbox2d.dynamics {
             this.m_sweep.localCenter.set$org_jbox2d_common_Vec2(center);
             org.jbox2d.common.XForm.mulToOut(this.m_xf, this.m_sweep.localCenter, this.m_sweep.c);
             this.m_sweep.c0.set$org_jbox2d_common_Vec2(this.m_sweep.c);
-            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                 s.updateSweepRadius(this.m_sweep.localCenter);
-            };
+            };}
             let oldType : number = this.m_type;
             if(this.m_invMass === 0.0 && this.m_invI === 0.0) {
                 this.m_type = Body.e_staticType;
@@ -16411,9 +16411,9 @@ namespace org.jbox2d.dynamics {
                 this.m_type = Body.e_dynamicType;
             }
             if(oldType !== this.m_type) {
-                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                     s.refilterProxy(this.m_world.m_broadPhase, this.m_xf);
-                };
+                };}
             }
         }
 
@@ -16439,20 +16439,20 @@ namespace org.jbox2d.dynamics {
             this.m_sweep.c0.set$org_jbox2d_common_Vec2(this.m_sweep.c);
             this.m_sweep.a0 = this.m_sweep.a = angle;
             let freeze : boolean = false;
-            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                 let inRange : boolean = s.synchronize(this.m_world.m_broadPhase, this.m_xf, this.m_xf);
                 if(inRange === false) {
                     freeze = true;
                     break;
                 }
-            };
+            };}
             if(freeze === true) {
                 this.m_flags |= Body.e_frozenFlag;
                 this.m_linearVelocity.setZero();
                 this.m_angularVelocity = 0.0;
-                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                     s.destroyProxy(this.m_world.m_broadPhase);
-                };
+                };}
                 return false;
             }
             this.m_world.m_broadPhase.commit();
@@ -16867,19 +16867,19 @@ namespace org.jbox2d.dynamics {
             let v : org.jbox2d.common.Vec2 = this.m_sweep.localCenter;
             xf1.position.set$float$float((<any>Math).fround(this.m_sweep.c0.x - ((<any>Math).fround((<any>Math).fround(R.col1.x * v.x) + (<any>Math).fround(R.col2.x * v.y)))), (<any>Math).fround(this.m_sweep.c0.y - ((<any>Math).fround((<any>Math).fround(R.col1.y * v.x) + (<any>Math).fround(R.col2.y * v.y)))));
             let inRange : boolean = true;
-            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+            for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                 inRange = s.synchronize(this.m_world.m_broadPhase, xf1, this.m_xf);
                 if(inRange === false) {
                     break;
                 }
-            };
+            };}
             if(inRange === false) {
                 this.m_flags |= Body.e_frozenFlag;
                 this.m_linearVelocity.setZero();
                 this.m_angularVelocity = 0.0;
-                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {
+                for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                     s.destroyProxy(this.m_world.m_broadPhase);
-                };
+                };}
                 return false;
             }
             return true;
@@ -16903,11 +16903,11 @@ namespace org.jbox2d.dynamics {
          * @return {boolean}
          */
         public isConnected(other : Body) : boolean {
-            for(let jn : org.jbox2d.dynamics.joints.JointEdge = this.m_jointList; jn != null; jn = jn.next) {
+            for(let jn : org.jbox2d.dynamics.joints.JointEdge = this.m_jointList; jn != null; jn = jn.next) {{
                 if(jn.other === other) {
                     return (jn.joint.m_collideConnected === false);
                 }
-            };
+            };}
             return false;
         }
 
@@ -17019,12 +17019,12 @@ namespace org.jbox2d.dynamics {
         public getBodiesInContact() : Array<Body> {
             let mySet : Array<Body> = <any>([]);
             let edge : org.jbox2d.dynamics.contacts.ContactEdge = this.getContactList();
-            while((edge != null)) {
+            while((edge != null)) {{
                 if(edge.contact.getManifoldCount() > 0) {
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(mySet, edge.other);
                 }
                 edge = edge.next;
-            };
+            }};
             return mySet;
         }
 
@@ -17037,10 +17037,10 @@ namespace org.jbox2d.dynamics {
         public getConnectedBodies() : Array<Body> {
             let mySet : Array<Body> = <any>([]);
             let edge : org.jbox2d.dynamics.joints.JointEdge = this.getJointList();
-            while((edge != null)) {
+            while((edge != null)) {{
                 /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(mySet, edge.other);
                 edge = edge.next;
-            };
+            }};
             return mySet;
         }
 
@@ -17053,10 +17053,10 @@ namespace org.jbox2d.dynamics {
         public getConnectedDynamicBodies() : Array<Body> {
             let mySet : Array<Body> = <any>([]);
             let edge : org.jbox2d.dynamics.joints.JointEdge = this.getJointList();
-            while((edge != null)) {
+            while((edge != null)) {{
                 if(edge.other.isDynamic()) /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(mySet, edge.other);
                 edge = edge.next;
-            };
+            }};
             return mySet;
         }
 
@@ -17168,10 +17168,10 @@ namespace org.jbox2d.dynamics {
          */
         public isTouching(other : Body) : boolean {
             let edge : org.jbox2d.dynamics.contacts.ContactEdge = this.getContactList();
-            while((edge != null)) {
+            while((edge != null)) {{
                 if(edge.other === other && edge.contact.getManifoldCount() > 0) return true;
                 edge = edge.next;
-            };
+            }};
             return false;
         }
 
@@ -17703,13 +17703,13 @@ namespace org.jbox2d.dynamics.contacts {
             cp.friction = this.m_friction;
             cp.restitution = this.m_restitution;
             if(this.m_manifold.pointCount > 0) {
-                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {
+                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {{
                     let mp : org.jbox2d.collision.ManifoldPoint = this.m_manifold.points[i];
                     mp.normalImpulse = 0.0;
                     mp.tangentImpulse = 0.0;
                     let found : boolean = false;
                     cp.id.set(mp.id);
-                    for(let j : number = 0; j < m0.pointCount; ++j) {
+                    for(let j : number = 0; j < m0.pointCount; ++j) {{
                         if(persisted[j] === true) {
                             continue;
                         }
@@ -17730,7 +17730,7 @@ namespace org.jbox2d.dynamics.contacts {
                             }
                             break;
                         }
-                    };
+                    };}
                     if(found === false && listener != null) {
                         b1.getWorldLocationToOut(mp.localPoint1, cp.position);
                         b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
@@ -17740,7 +17740,7 @@ namespace org.jbox2d.dynamics.contacts {
                         cp.separation = mp.separation;
                         listener.add(cp);
                     }
-                };
+                };}
                 this.m_manifoldCount = 1;
             } else {
                 this.m_manifoldCount = 0;
@@ -17748,7 +17748,7 @@ namespace org.jbox2d.dynamics.contacts {
             if(listener == null) {
                 return;
             }
-            for(let i : number = 0; i < m0.pointCount; ++i) {
+            for(let i : number = 0; i < m0.pointCount; ++i) {{
                 if(persisted[i]) {
                     continue;
                 }
@@ -17761,7 +17761,7 @@ namespace org.jbox2d.dynamics.contacts {
                 cp.separation = mp0.separation;
                 cp.id.set(mp0.id);
                 listener.remove(cp);
-            };
+            };}
         }
     }
     PointAndPolyContact["__class"] = "org.jbox2d.dynamics.contacts.PointAndPolyContact";
@@ -17859,13 +17859,13 @@ namespace org.jbox2d.dynamics.contacts {
             cp.friction = this.m_friction;
             cp.restitution = this.m_restitution;
             if(this.m_manifold.pointCount > 0) {
-                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {
+                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {{
                     let mp : org.jbox2d.collision.ManifoldPoint = this.m_manifold.points[i];
                     mp.normalImpulse = 0.0;
                     mp.tangentImpulse = 0.0;
                     let found : boolean = false;
                     let id : org.jbox2d.collision.ContactID = mp.id;
-                    for(let j : number = 0; j < m0.pointCount; ++j) {
+                    for(let j : number = 0; j < m0.pointCount; ++j) {{
                         if(persisted[j] === true) {
                             continue;
                         }
@@ -17887,7 +17887,7 @@ namespace org.jbox2d.dynamics.contacts {
                             }
                             break;
                         }
-                    };
+                    };}
                     if(found === false && listener != null) {
                         b1.getWorldLocationToOut(mp.localPoint1, cp.position);
                         b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
@@ -17898,7 +17898,7 @@ namespace org.jbox2d.dynamics.contacts {
                         cp.id.set(id);
                         listener.add(cp);
                     }
-                };
+                };}
                 this.m_manifoldCount = 1;
             } else {
                 this.m_manifoldCount = 0;
@@ -17906,7 +17906,7 @@ namespace org.jbox2d.dynamics.contacts {
             if(listener == null) {
                 return;
             }
-            for(let i : number = 0; i < m0.pointCount; ++i) {
+            for(let i : number = 0; i < m0.pointCount; ++i) {{
                 if(persisted[i]) {
                     continue;
                 }
@@ -17919,7 +17919,7 @@ namespace org.jbox2d.dynamics.contacts {
                 cp.separation = mp0.separation;
                 cp.id.set(mp0.id);
                 listener.remove(cp);
-            };
+            };}
         }
     }
     PolyAndCircleContact["__class"] = "org.jbox2d.dynamics.contacts.PolyAndCircleContact";
@@ -18006,13 +18006,13 @@ namespace org.jbox2d.dynamics.contacts {
             cp.friction = this.m_friction;
             cp.restitution = this.m_restitution;
             if(this.m_manifold.pointCount > 0) {
-                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {
+                for(let i : number = 0; i < this.m_manifold.pointCount; ++i) {{
                     let mp : org.jbox2d.collision.ManifoldPoint = this.m_manifold.points[i];
                     mp.normalImpulse = 0.0;
                     mp.tangentImpulse = 0.0;
                     let found : boolean = false;
                     let id : org.jbox2d.collision.ContactID = mp.id;
-                    for(let j : number = 0; j < m0.pointCount; ++j) {
+                    for(let j : number = 0; j < m0.pointCount; ++j) {{
                         if(persisted[j] === true) {
                             continue;
                         }
@@ -18034,7 +18034,7 @@ namespace org.jbox2d.dynamics.contacts {
                             }
                             break;
                         }
-                    };
+                    };}
                     if(found === false && listener != null) {
                         b1.getWorldLocationToOut(mp.localPoint1, cp.position);
                         b1.getLinearVelocityFromLocalPointToOut(mp.localPoint1, v1);
@@ -18045,7 +18045,7 @@ namespace org.jbox2d.dynamics.contacts {
                         cp.id.set(id);
                         listener.add(cp);
                     }
-                };
+                };}
                 this.m_manifoldCount = 1;
             } else {
                 this.m_manifoldCount = 0;
@@ -18053,7 +18053,7 @@ namespace org.jbox2d.dynamics.contacts {
             if(listener == null) {
                 return;
             }
-            for(let i : number = 0; i < m0.pointCount; ++i) {
+            for(let i : number = 0; i < m0.pointCount; ++i) {{
                 if(persisted[i]) {
                     continue;
                 }
@@ -18066,7 +18066,7 @@ namespace org.jbox2d.dynamics.contacts {
                 cp.separation = mp0.separation;
                 cp.id.set(mp0.id);
                 listener.remove(cp);
-            };
+            };}
         }
 
         /**
@@ -18106,9 +18106,9 @@ namespace org.jbox2d.collision {
      * @class
      */
     export class BroadPhase {
-        public static INVALID : number; public static INVALID_$LI$() : number { if(BroadPhase.INVALID == null) BroadPhase.INVALID = Number.MAX_VALUE; return BroadPhase.INVALID; };
+        public static INVALID : number; public static INVALID_$LI$() : number { if(BroadPhase.INVALID == null) BroadPhase.INVALID = 2147483647; return BroadPhase.INVALID; };
 
-        public static NULL_EDGE : number; public static NULL_EDGE_$LI$() : number { if(BroadPhase.NULL_EDGE == null) BroadPhase.NULL_EDGE = Number.MAX_VALUE; return BroadPhase.NULL_EDGE; };
+        public static NULL_EDGE : number; public static NULL_EDGE_$LI$() : number { if(BroadPhase.NULL_EDGE == null) BroadPhase.NULL_EDGE = 2147483647; return BroadPhase.NULL_EDGE; };
 
         public m_pairManager : org.jbox2d.collision.PairManager;
 
@@ -18141,9 +18141,9 @@ namespace org.jbox2d.collision {
         public static s_validate : boolean = false;
 
         /*private*/ dump() {
-            for(let i : number = 0; i < 10; i++) {
+            for(let i : number = 0; i < 10; i++) {{
                 console.info("bounds[ %d ] = %d, %d \n");
-            };
+            };}
         }
 
         public constructor(worldAABB : org.jbox2d.collision.AABB, callback : org.jbox2d.collision.PairCallback) {
@@ -18168,26 +18168,26 @@ namespace org.jbox2d.collision {
             this.pairBuffer = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxPairs_$LI$());
             this.m_bounds = <any> (function(dims) { let allocate = function(dims) { if(dims.length==0) { return null; } else { let array = []; for(let i = 0; i < dims[0]; i++) { array.push(allocate(dims.slice(1))); } return array; }}; return allocate(dims);})([2, 2 * org.jbox2d.common.Settings.maxProxies]);
             this.m_queryResults = (s => { let a=[]; while(s-->0) a.push(0); return a; })(org.jbox2d.common.Settings.maxProxies);
-            for(let i : number = 0; i < 2 * org.jbox2d.common.Settings.maxProxies; i++) {
+            for(let i : number = 0; i < 2 * org.jbox2d.common.Settings.maxProxies; i++) {{
                 this.m_bounds[0][i] = new org.jbox2d.collision.Bound();
                 this.m_bounds[1][i] = new org.jbox2d.collision.Bound();
-            };
-            for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies; i++) {
+            };}
+            for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies; i++) {{
                 this.pairBuffer[i] = new org.jbox2d.collision.BufferedPair();
-            };
+            };}
             this.m_pairManager = new org.jbox2d.collision.PairManager();
             this.m_pairManager.initialize(this, callback);
             this.m_worldAABB = new org.jbox2d.collision.AABB(worldAABB);
             this.m_proxyCount = 0;
             let d : org.jbox2d.common.Vec2 = worldAABB.upperBound.sub(worldAABB.lowerBound);
-            this.m_quantizationFactor = new org.jbox2d.common.Vec2((<any>Math).fround(Number.MAX_VALUE / d.x), (<any>Math).fround(Number.MAX_VALUE / d.y));
-            for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies - 1; ++i) {
+            this.m_quantizationFactor = new org.jbox2d.common.Vec2((<any>Math).fround(2147483647 / d.x), (<any>Math).fround(2147483647 / d.y));
+            for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies - 1; ++i) {{
                 this.m_proxyPool[i] = new org.jbox2d.collision.Proxy();
                 this.m_proxyPool[i].setNext(i + 1);
                 this.m_proxyPool[i].timeStamp = 0;
                 this.m_proxyPool[i].overlapCount = BroadPhase.INVALID_$LI$();
                 this.m_proxyPool[i].userData = null;
-            };
+            };}
             this.m_proxyPool[org.jbox2d.common.Settings.maxProxies - 1] = new org.jbox2d.collision.Proxy();
             this.m_proxyPool[org.jbox2d.common.Settings.maxProxies - 1].setNext(org.jbox2d.collision.PairManager.NULL_PROXY_$LI$());
             this.m_proxyPool[org.jbox2d.common.Settings.maxProxies - 1].timeStamp = 0;
@@ -18199,7 +18199,7 @@ namespace org.jbox2d.collision {
         }
 
         public testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy(p1 : org.jbox2d.collision.Proxy, p2 : org.jbox2d.collision.Proxy) : boolean {
-            for(let axis : number = 0; axis < 2; ++axis) {
+            for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
                 if(bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) {
                     return false;
@@ -18207,7 +18207,7 @@ namespace org.jbox2d.collision {
                 if(bounds[p1.upperBounds[axis]].value < bounds[p2.lowerBounds[axis]].value) {
                     return false;
                 }
-            };
+            };}
             return true;
         }
 
@@ -18220,7 +18220,7 @@ namespace org.jbox2d.collision {
         }
 
         /*private*/ testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(b : org.jbox2d.collision.BoundValues, p : org.jbox2d.collision.Proxy) : boolean {
-            for(let axis : number = 0; axis < 2; ++axis) {
+            for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
                 if(b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) {
                     return false;
@@ -18228,7 +18228,7 @@ namespace org.jbox2d.collision {
                 if(b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) {
                     return false;
                 }
-            };
+            };}
             return true;
         }
 
@@ -18266,19 +18266,19 @@ namespace org.jbox2d.collision {
             let upperValues : number[] = BroadPhase.tlUpperValues_$LI$().get(2);
             let indexes : number[] = BroadPhase.tlIndexes_$LI$().get(2);
             this.computeBounds(lowerValues, upperValues, aabb);
-            for(let axis : number = 0; axis < 2; ++axis) {
+            for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
                 this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[axis], upperValues[axis], bounds, boundCount, axis);
                 let lowerIndex : number = indexes[0];
                 let upperIndex : number = indexes[1];
                 /* arraycopy */((srcPts, srcOff, dstPts, dstOff, size) => { if(srcPts !== dstPts || dstOff >= srcOff + size) { while (--size >= 0) dstPts[dstOff++] = srcPts[srcOff++];} else { let tmp = srcPts.slice(srcOff, srcOff + size); for (let i = 0; i < size; i++) dstPts[dstOff++] = tmp[i]; }})(this.m_bounds[axis], upperIndex, this.m_bounds[axis], upperIndex + 2, boundCount - upperIndex);
-                for(let i : number = 0; i < boundCount - upperIndex; i++) {
+                for(let i : number = 0; i < boundCount - upperIndex; i++) {{
                     this.m_bounds[axis][upperIndex + 2 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][upperIndex + 2 + i]);
-                };
+                };}
                 /* arraycopy */((srcPts, srcOff, dstPts, dstOff, size) => { if(srcPts !== dstPts || dstOff >= srcOff + size) { while (--size >= 0) dstPts[dstOff++] = srcPts[srcOff++];} else { let tmp = srcPts.slice(srcOff, srcOff + size); for (let i = 0; i < size; i++) dstPts[dstOff++] = tmp[i]; }})(this.m_bounds[axis], lowerIndex, this.m_bounds[axis], lowerIndex + 1, upperIndex - lowerIndex);
-                for(let i : number = 0; i < upperIndex - lowerIndex; i++) {
+                for(let i : number = 0; i < upperIndex - lowerIndex; i++) {{
                     this.m_bounds[axis][lowerIndex + 1 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][lowerIndex + 1 + i]);
-                };
+                };}
                 ++upperIndex;
                 bounds[lowerIndex].value = lowerValues[axis];
                 bounds[lowerIndex].proxyId = proxyId;
@@ -18286,22 +18286,22 @@ namespace org.jbox2d.collision {
                 bounds[upperIndex].proxyId = proxyId;
                 bounds[lowerIndex].stabbingCount = lowerIndex === 0?0:bounds[lowerIndex - 1].stabbingCount;
                 bounds[upperIndex].stabbingCount = bounds[upperIndex - 1].stabbingCount;
-                for(let index : number = lowerIndex; index < upperIndex; ++index) {
+                for(let index : number = lowerIndex; index < upperIndex; ++index) {{
                     ++bounds[index].stabbingCount;
-                };
-                for(let index : number = lowerIndex; index < boundCount + 2; ++index) {
+                };}
+                for(let index : number = lowerIndex; index < boundCount + 2; ++index) {{
                     let proxyn : org.jbox2d.collision.Proxy = this.m_proxyPool[bounds[index].proxyId];
                     if(bounds[index].isLower()) {
                         proxyn.lowerBounds[axis] = index;
                     } else {
                         proxyn.upperBounds[axis] = index;
                     }
-                };
-            };
+                };}
+            };}
             ++this.m_proxyCount;
-            for(let i : number = 0; i < this.m_queryResultCount; ++i) {
+            for(let i : number = 0; i < this.m_queryResultCount; ++i) {{
                 this.m_pairManager.addBufferedPair(proxyId, this.m_queryResults[i]);
-            };
+            };}
             this.m_pairManager.commit();
             if(BroadPhase.s_validate) {
                 this.validate();
@@ -18317,36 +18317,36 @@ namespace org.jbox2d.collision {
             let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[proxyId];
             let boundCount : number = 2 * this.m_proxyCount;
             let ignored : number[] = BroadPhase.tlIgnored_$LI$().get(2);
-            for(let axis : number = 0; axis < 2; ++axis) {
+            for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
                 let lowerIndex : number = proxy.lowerBounds[axis];
                 let upperIndex : number = proxy.upperBounds[axis];
                 let lowerValue : number = bounds[lowerIndex].value;
                 let upperValue : number = bounds[upperIndex].value;
                 /* arraycopy */((srcPts, srcOff, dstPts, dstOff, size) => { if(srcPts !== dstPts || dstOff >= srcOff + size) { while (--size >= 0) dstPts[dstOff++] = srcPts[srcOff++];} else { let tmp = srcPts.slice(srcOff, srcOff + size); for (let i = 0; i < size; i++) dstPts[dstOff++] = tmp[i]; }})(this.m_bounds[axis], lowerIndex + 1, this.m_bounds[axis], lowerIndex, upperIndex - lowerIndex - 1);
-                for(let i : number = 0; i < upperIndex - lowerIndex - 1; i++) {
+                for(let i : number = 0; i < upperIndex - lowerIndex - 1; i++) {{
                     this.m_bounds[axis][lowerIndex + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][lowerIndex + i]);
-                };
+                };}
                 /* arraycopy */((srcPts, srcOff, dstPts, dstOff, size) => { if(srcPts !== dstPts || dstOff >= srcOff + size) { while (--size >= 0) dstPts[dstOff++] = srcPts[srcOff++];} else { let tmp = srcPts.slice(srcOff, srcOff + size); for (let i = 0; i < size; i++) dstPts[dstOff++] = tmp[i]; }})(this.m_bounds[axis], upperIndex + 1, this.m_bounds[axis], upperIndex - 1, boundCount - upperIndex - 1);
-                for(let i : number = 0; i < boundCount - upperIndex - 1; i++) {
+                for(let i : number = 0; i < boundCount - upperIndex - 1; i++) {{
                     this.m_bounds[axis][upperIndex - 1 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][upperIndex - 1 + i]);
-                };
-                for(let index : number = lowerIndex; index < boundCount - 2; ++index) {
+                };}
+                for(let index : number = lowerIndex; index < boundCount - 2; ++index) {{
                     let proxyn : org.jbox2d.collision.Proxy = this.m_proxyPool[bounds[index].proxyId];
                     if(bounds[index].isLower()) {
                         proxyn.lowerBounds[axis] = index;
                     } else {
                         proxyn.upperBounds[axis] = index;
                     }
-                };
-                for(let index : number = lowerIndex; index < upperIndex - 1; ++index) {
+                };}
+                for(let index : number = lowerIndex; index < upperIndex - 1; ++index) {{
                     --bounds[index].stabbingCount;
-                };
+                };}
                 this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(ignored, lowerValue, upperValue, bounds, boundCount - 2, axis);
-            };
-            for(let i : number = 0; i < this.m_queryResultCount; ++i) {
+            };}
+            for(let i : number = 0; i < this.m_queryResultCount; ++i) {{
                 this.m_pairManager.removeBufferedPair(proxyId, this.m_queryResults[i]);
-            };
+            };}
             this.m_pairManager.commit();
             this.m_queryResultCount = 0;
             this.incrementTimeStamp();
@@ -18385,11 +18385,11 @@ namespace org.jbox2d.collision {
             let boundCount : number = 2 * this.m_proxyCount;
             let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[proxyId];
             this.computeBounds(newValues.lowerValues, newValues.upperValues, aabb);
-            for(let axis : number = 0; axis < 2; ++axis) {
+            for(let axis : number = 0; axis < 2; ++axis) {{
                 oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
                 oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
-            };
-            for(let axis : number = 0; axis < 2; ++axis) {
+            };}
+            for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
                 let lowerIndex : number = proxy.lowerBounds[axis];
                 let upperIndex : number = proxy.upperBounds[axis];
@@ -18401,7 +18401,7 @@ namespace org.jbox2d.collision {
                 bounds[upperIndex].value = upperValue;
                 if(deltaLower < 0) {
                     let index : number = lowerIndex;
-                    while((index > 0 && lowerValue < bounds[index - 1].value)) {
+                    while((index > 0 && lowerValue < bounds[index - 1].value)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let prevBound : org.jbox2d.collision.Bound = bounds[index - 1];
                         let prevProxyId : number = prevBound.proxyId;
@@ -18420,11 +18420,11 @@ namespace org.jbox2d.collision {
                         --proxy.lowerBounds[axis];
                         bound.swap(prevBound);
                         --index;
-                    };
+                    }};
                 }
                 if(deltaUpper > 0) {
                     let index : number = upperIndex;
-                    while((index < boundCount - 1 && bounds[index + 1].value <= upperValue)) {
+                    while((index < boundCount - 1 && bounds[index + 1].value <= upperValue)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let nextBound : org.jbox2d.collision.Bound = bounds[index + 1];
                         let nextProxyId : number = nextBound.proxyId;
@@ -18443,11 +18443,11 @@ namespace org.jbox2d.collision {
                         ++proxy.upperBounds[axis];
                         bound.swap(nextBound);
                         ++index;
-                    };
+                    }};
                 }
                 if(deltaLower > 0) {
                     let index : number = lowerIndex;
-                    while((index < boundCount - 1 && bounds[index + 1].value <= lowerValue)) {
+                    while((index < boundCount - 1 && bounds[index + 1].value <= lowerValue)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let nextBound : org.jbox2d.collision.Bound = bounds[index + 1];
                         let nextProxyId : number = nextBound.proxyId;
@@ -18466,11 +18466,11 @@ namespace org.jbox2d.collision {
                         ++proxy.lowerBounds[axis];
                         bound.swap(nextBound);
                         ++index;
-                    };
+                    }};
                 }
                 if(deltaUpper < 0) {
                     let index : number = upperIndex;
-                    while((index > 0 && upperValue < bounds[index - 1].value)) {
+                    while((index > 0 && upperValue < bounds[index - 1].value)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let prevBound : org.jbox2d.collision.Bound = bounds[index - 1];
                         let prevProxyId : number = prevBound.proxyId;
@@ -18489,9 +18489,9 @@ namespace org.jbox2d.collision {
                         --proxy.upperBounds[axis];
                         bound.swap(prevBound);
                         --index;
-                    };
+                    }};
                 }
-            };
+            };}
             if(BroadPhase.s_validate) {
                 this.validate();
             }
@@ -18513,11 +18513,11 @@ namespace org.jbox2d.collision {
             this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[1], upperValues[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
             let results : any[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(maxCount);
             let count : number = 0;
-            for(let i : number = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
+            for(let i : number = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {{
                 let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[this.m_queryResults[i]];
                 proxy.isValid();
                 results[i] = proxy.userData;
-            };
+            };}
             let copy : any[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(count);
             /* arraycopy */((srcPts, srcOff, dstPts, dstOff, size) => { if(srcPts !== dstPts || dstOff >= srcOff + size) { while (--size >= 0) dstPts[dstOff++] = srcPts[srcOff++];} else { let tmp = srcPts.slice(srcOff, srcOff + size); for (let i = 0; i < size; i++) dstPts[dstOff++] = tmp[i]; }})(results, 0, copy, 0, count);
             this.m_queryResultCount = 0;
@@ -18529,19 +18529,19 @@ namespace org.jbox2d.collision {
             if(BroadPhase.debugPrint) {
                 console.info("Validate()");
             }
-            for(let axis : number = 0; axis < 2; ++axis) {
+            for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
                 let boundCount : number = 2 * this.m_proxyCount;
                 let stabbingCount : number = 0;
-                for(let i : number = 0; i < boundCount; ++i) {
+                for(let i : number = 0; i < boundCount; ++i) {{
                     let bound : org.jbox2d.collision.Bound = bounds[i];
                     if(bound.isLower() === true) {
                         ++stabbingCount;
                     } else {
                         --stabbingCount;
                     }
-                };
-            };
+                };}
+            };}
         }
 
         /*private*/ computeBounds(lowerValues : number[], upperValues : number[], aabb : org.jbox2d.collision.AABB) {
@@ -18556,9 +18556,9 @@ namespace org.jbox2d.collision {
             let b1y : number = aabb.upperBound.y < this.m_worldAABB.upperBound.y?aabb.upperBound.y:this.m_worldAABB.upperBound.y;
             let maxVertexX : number = this.m_worldAABB.lowerBound.x > b1x?this.m_worldAABB.lowerBound.x:b1x;
             let maxVertexY : number = this.m_worldAABB.lowerBound.y > b1y?this.m_worldAABB.lowerBound.y:b1y;
-            lowerValues[0] = (<number>((<any>Math).fround(this.m_quantizationFactor.x * ((<any>Math).fround(minVertexX - this.m_worldAABB.lowerBound.x))))|0) & (Number.MAX_VALUE - 1);
+            lowerValues[0] = (<number>((<any>Math).fround(this.m_quantizationFactor.x * ((<any>Math).fround(minVertexX - this.m_worldAABB.lowerBound.x))))|0) & (2147483647 - 1);
             upperValues[0] = (<number>((<any>Math).fround(this.m_quantizationFactor.x * ((<any>Math).fround(maxVertexX - this.m_worldAABB.lowerBound.x))))|0) | 1;
-            lowerValues[1] = (<number>((<any>Math).fround(this.m_quantizationFactor.y * ((<any>Math).fround(minVertexY - this.m_worldAABB.lowerBound.y))))|0) & (Number.MAX_VALUE - 1);
+            lowerValues[1] = (<number>((<any>Math).fround(this.m_quantizationFactor.y * ((<any>Math).fround(minVertexY - this.m_worldAABB.lowerBound.y))))|0) & (2147483647 - 1);
             upperValues[1] = (<number>((<any>Math).fround(this.m_quantizationFactor.y * ((<any>Math).fround(maxVertexY - this.m_worldAABB.lowerBound.y))))|0) | 1;
         }
 
@@ -18568,15 +18568,15 @@ namespace org.jbox2d.collision {
             }
             let lowerQuery : number = BroadPhase.binarySearch(bounds, boundCount, lowerValue);
             let upperQuery : number = BroadPhase.binarySearch(bounds, boundCount, upperValue);
-            for(let i : number = lowerQuery; i < upperQuery; ++i) {
+            for(let i : number = lowerQuery; i < upperQuery; ++i) {{
                 if(bounds[i].isLower()) {
                     this.incrementOverlapCount(bounds[i].proxyId);
                 }
-            };
+            };}
             if(lowerQuery > 0) {
                 let i : number = lowerQuery - 1;
                 let s : number = bounds[i].stabbingCount;
-                while((s !== 0)) {
+                while((s !== 0)) {{
                     if(bounds[i].isLower()) {
                         let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[bounds[i].proxyId];
                         if(lowerQuery <= proxy.upperBounds[axis]) {
@@ -18585,7 +18585,7 @@ namespace org.jbox2d.collision {
                         }
                     }
                     --i;
-                };
+                }};
             }
             indexes[0] = lowerQuery;
             indexes[1] = upperQuery;
@@ -18628,10 +18628,10 @@ namespace org.jbox2d.collision {
             if(BroadPhase.debugPrint) {
                 console.info("IncrementTimeStamp()");
             }
-            if(this.m_timeStamp === Number.MAX_VALUE) {
-                for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies; ++i) {
+            if(this.m_timeStamp === 2147483647) {
+                for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies; ++i) {{
                     this.m_proxyPool[i].timeStamp = 0;
-                };
+                };}
                 this.m_timeStamp = 1;
             } else {
                 ++this.m_timeStamp;
@@ -18644,7 +18644,7 @@ namespace org.jbox2d.collision {
             }
             let low : number = 0;
             let high : number = count - 1;
-            while((low <= high)) {
+            while((low <= high)) {{
                 let mid : number = (low + high) >> 1;
                 if(bounds[mid].value > value) {
                     high = mid - 1;
@@ -18653,7 +18653,7 @@ namespace org.jbox2d.collision {
                 } else {
                     return mid;
                 }
-            };
+            }};
             return low;
         }
 
@@ -18683,9 +18683,9 @@ namespace org.jbox2d.collision {
             let yIndex : number;
             let proxyId : number;
             let proxy : org.jbox2d.collision.Proxy = null;
-            startValues[0] = (<number>(p1x)|0) & (Number.MAX_VALUE - 1);
+            startValues[0] = (<number>(p1x)|0) & (2147483647 - 1);
             startValues2[0] = (<number>(p1x)|0) | 1;
-            startValues[1] = (<number>(p1y)|0) & (Number.MAX_VALUE - 1);
+            startValues[1] = (<number>(p1y)|0) & (2147483647 - 1);
             startValues2[1] = (<number>(p1y)|0) | 1;
             let results : number[] = BroadPhase.tlResults_$LI$().get(2);
             this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(results, startValues[0], startValues2[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
@@ -18693,11 +18693,11 @@ namespace org.jbox2d.collision {
             this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(results, startValues[1], startValues2[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
             if(sy >= 0) yIndex = results[1] - 1; else yIndex = results[0];
             if(sortKey != null) {
-                for(let i : number = 0; i < this.m_queryResultCount; i++) {
+                for(let i : number = 0; i < this.m_queryResultCount; i++) {{
                     this.m_querySortKeys[i] = sortKey.apply(this.m_proxyPool[this.m_queryResults[i]].userData);
-                };
+                };}
                 let i : number = 0;
-                while((i < this.m_queryResultCount - 1)) {
+                while((i < this.m_queryResultCount - 1)) {{
                     let a : number = this.m_querySortKeys[i];
                     let b : number = this.m_querySortKeys[i + 1];
                     if((a < 0)?(b >= 0):(a > b && b >= 0)) {
@@ -18711,10 +18711,10 @@ namespace org.jbox2d.collision {
                     } else {
                         i++;
                     }
-                };
-                while((this.m_queryResultCount > 0 && this.m_querySortKeys[this.m_queryResultCount - 1] < 0)) this.m_queryResultCount--;
+                }};
+                while((this.m_queryResultCount > 0 && this.m_querySortKeys[this.m_queryResultCount - 1] < 0)) {this.m_queryResultCount--};
             }
-            for(; ; ) {
+            for(; ; ) {{
                 let xProgress : number = 0;
                 let yProgress : number = 0;
                 xIndex += sx >= 0?1:-1;
@@ -18723,7 +18723,7 @@ namespace org.jbox2d.collision {
                 yIndex += sy >= 0?1:-1;
                 if(yIndex < 0 || yIndex >= this.m_proxyCount * 2) break;
                 if(sy !== 0) yProgress = (<any>Math).fround(((<any>Math).fround(<number>this.m_bounds[1][yIndex].value - p1y)) / dy);
-                for(; ; ) {
+                for(; ; ) {{
                     if(sy === 0 || (sx !== 0 && xProgress < yProgress)) {
                         if(xProgress > maxLambda) break;
                         if(sx > 0?this.m_bounds[0][xIndex].isLower():this.m_bounds[0][xIndex].isUpper()) {
@@ -18793,14 +18793,14 @@ namespace org.jbox2d.collision {
                         }
                         yProgress = (<any>Math).fround(((<any>Math).fround(<number>this.m_bounds[1][yIndex].value - p1y)) / dy);
                     }
-                };
+                };}
                 break;
-            };
+            };}
             let count : number = 0;
-            for(let i : number = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
+            for(let i : number = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {{
                 let proxya : org.jbox2d.collision.Proxy = this.m_proxyPool[this.m_queryResults[i]];
                 userData[i] = proxya.userData;
-            };
+            };}
             this.m_queryResultCount = 0;
             this.incrementTimeStamp();
             return count;
@@ -18810,13 +18810,13 @@ namespace org.jbox2d.collision {
             let key : number = sortKey.apply(proxy.userData);
             if(key < 0) return;
             let i : number = 0;
-            while((i < this.m_queryResultCount && this.m_querySortKeys[i] < key)) ++i;
+            while((i < this.m_queryResultCount && this.m_querySortKeys[i] < key)) {++i};
             if(maxCount === this.m_queryResultCount && i === this.m_queryResultCount) return;
             if(maxCount === this.m_queryResultCount) this.m_queryResultCount--;
-            for(let j : number = this.m_queryResultCount + 1; j > i; --j) {
+            for(let j : number = this.m_queryResultCount + 1; j > i; --j) {{
                 this.m_querySortKeys[j] = this.m_querySortKeys[j - 1];
                 this.m_queryResults[j] = this.m_queryResults[j - 1];
-            };
+            };}
             this.m_querySortKeys[i] = key;
             this.m_queryResults[i] = proxyId;
             this.m_queryResultCount++;
@@ -18866,25 +18866,25 @@ namespace org.jbox2d.dynamics.joints {
             this.world = def.bodies[0].getWorld();
             this.bodies = def.bodies;
             this.targetLengths = (s => { let a=[]; while(s-->0) a.push(0); return a; })(this.bodies.length);
-            for(let i : number = 0; i < this.targetLengths.length; ++i) {
+            for(let i : number = 0; i < this.targetLengths.length; ++i) {{
                 let next : number = (i === this.targetLengths.length - 1)?0:i + 1;
                 let dist : number = this.bodies[i].getMemberWorldCenter().sub(this.bodies[next].getMemberWorldCenter()).length();
                 this.targetLengths[i] = dist;
-            };
+            };}
             this.targetVolume = this.getArea();
             this.distanceJoints = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.bodies.length);
-            for(let i : number = 0; i < this.targetLengths.length; ++i) {
+            for(let i : number = 0; i < this.targetLengths.length; ++i) {{
                 let next : number = (i === this.targetLengths.length - 1)?0:i + 1;
                 let djd : org.jbox2d.dynamics.joints.DistanceJointDef = new org.jbox2d.dynamics.joints.DistanceJointDef();
                 djd.frequencyHz = def.frequencyHz;
                 djd.dampingRatio = def.dampingRatio;
                 djd.initialize(this.bodies[i], this.bodies[next], this.bodies[i].getMemberWorldCenter(), this.bodies[next].getMemberWorldCenter());
                 this.distanceJoints[i] = <org.jbox2d.dynamics.joints.DistanceJoint>this.world.createJoint(djd);
-            };
+            };}
             this.normals = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.bodies.length);
-            for(let i : number = 0; i < this.normals.length; ++i) {
+            for(let i : number = 0; i < this.normals.length; ++i) {{
                 this.normals[i] = new org.jbox2d.common.Vec2();
-            };
+            };}
             this.m_body1 = this.bodies[0];
             this.m_body2 = this.bodies[1];
             this.m_collideConnected = false;
@@ -18894,17 +18894,17 @@ namespace org.jbox2d.dynamics.joints {
          * 
          */
         public destructor() {
-            for(let i : number = 0; i < this.distanceJoints.length; ++i) {
+            for(let i : number = 0; i < this.distanceJoints.length; ++i) {{
                 this.world.destroyJoint(this.distanceJoints[i]);
-            };
+            };}
         }
 
         /*private*/ getArea() : number {
             let area : number = 0.0;
             area += (<any>Math).fround((<any>Math).fround(this.bodies[this.bodies.length - 1].getMemberWorldCenter().x * this.bodies[0].getMemberWorldCenter().y) - (<any>Math).fround(this.bodies[0].getMemberWorldCenter().x * this.bodies[this.bodies.length - 1].getMemberWorldCenter().y));
-            for(let i : number = 0; i < this.bodies.length - 1; ++i) {
+            for(let i : number = 0; i < this.bodies.length - 1; ++i) {{
                 area += (<any>Math).fround((<any>Math).fround(this.bodies[i].getMemberWorldCenter().x * this.bodies[i + 1].getMemberWorldCenter().y) - (<any>Math).fround(this.bodies[i + 1].getMemberWorldCenter().x * this.bodies[i].getMemberWorldCenter().y));
-            };
+            };}
             area *= 0.5;
             return area;
         }
@@ -18916,7 +18916,7 @@ namespace org.jbox2d.dynamics.joints {
          */
         public constrainEdges(step : org.jbox2d.dynamics.TimeStep) : boolean {
             let perimeter : number = 0.0;
-            for(let i : number = 0; i < this.bodies.length; ++i) {
+            for(let i : number = 0; i < this.bodies.length; ++i) {{
                 let next : number = (i === this.bodies.length - 1)?0:i + 1;
                 let dx : number = (<any>Math).fround(this.bodies[next].getMemberWorldCenter().x - this.bodies[i].getMemberWorldCenter().x);
                 let dy : number = (<any>Math).fround(this.bodies[next].getMemberWorldCenter().y - this.bodies[i].getMemberWorldCenter().y);
@@ -18927,11 +18927,11 @@ namespace org.jbox2d.dynamics.joints {
                 this.normals[i].x = (<any>Math).fround(dy / dist);
                 this.normals[i].y = (<any>Math).fround(-dx / dist);
                 perimeter += dist;
-            };
+            };}
             let deltaArea : number = (<any>Math).fround(this.targetVolume - this.getArea());
             let toExtrude : number = (<any>Math).fround((<any>Math).fround(0.5 * deltaArea) / perimeter);
             let done : boolean = true;
-            for(let i : number = 0; i < this.bodies.length; ++i) {
+            for(let i : number = 0; i < this.bodies.length; ++i) {{
                 let next : number = (i === this.bodies.length - 1)?0:i + 1;
                 let delta : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2((<any>Math).fround(toExtrude * ((<any>Math).fround(this.normals[i].x + this.normals[next].x))), (<any>Math).fround(toExtrude * ((<any>Math).fround(this.normals[i].y + this.normals[next].y))));
                 let norm : number = delta.length();
@@ -18944,7 +18944,7 @@ namespace org.jbox2d.dynamics.joints {
                 this.bodies[next].m_sweep.c.x += delta.x;
                 this.bodies[next].m_sweep.c.y += delta.y;
                 this.bodies[next].synchronizeTransform();
-            };
+            };}
             return done;
         }
 
@@ -18957,18 +18957,18 @@ namespace org.jbox2d.dynamics.joints {
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             this.m_step = step;
             let d : org.jbox2d.common.Vec2[] = ConstantVolumeJoint.tlD_$LI$().get(this.bodies.length);
-            for(let i : number = 0; i < this.bodies.length; ++i) {
+            for(let i : number = 0; i < this.bodies.length; ++i) {{
                 let prev : number = (i === 0)?this.bodies.length - 1:i - 1;
                 let next : number = (i === this.bodies.length - 1)?0:i + 1;
                 d[i].set$org_jbox2d_common_Vec2(this.bodies[next].getMemberWorldCenter());
                 d[i].subLocal(this.bodies[prev].getMemberWorldCenter());
-            };
+            };}
             if(step.warmStarting) {
                 this.m_impulse *= step.dtRatio;
-                for(let i : number = 0; i < this.bodies.length; ++i) {
+                for(let i : number = 0; i < this.bodies.length; ++i) {{
                     this.bodies[i].m_linearVelocity.x += (<any>Math).fround((<any>Math).fround((<any>Math).fround(this.bodies[i].m_invMass * d[i].y) * 0.5) * this.m_impulse);
                     this.bodies[i].m_linearVelocity.y += (<any>Math).fround((<any>Math).fround((<any>Math).fround(this.bodies[i].m_invMass * -d[i].x) * 0.5) * this.m_impulse);
-                };
+                };}
             } else {
                 this.m_impulse = 0.0;
             }
@@ -18990,20 +18990,20 @@ namespace org.jbox2d.dynamics.joints {
             let crossMassSum : number = 0.0;
             let dotMassSum : number = 0.0;
             let d : org.jbox2d.common.Vec2[] = ConstantVolumeJoint.tlD_$LI$().get(this.bodies.length);
-            for(let i : number = 0; i < this.bodies.length; ++i) {
+            for(let i : number = 0; i < this.bodies.length; ++i) {{
                 let prev : number = (i === 0)?this.bodies.length - 1:i - 1;
                 let next : number = (i === this.bodies.length - 1)?0:i + 1;
                 d[i].set$org_jbox2d_common_Vec2(this.bodies[next].getMemberWorldCenter());
                 d[i].subLocal(this.bodies[prev].getMemberWorldCenter());
                 dotMassSum += (<any>Math).fround((d[i].lengthSquared()) / this.bodies[i].getMass());
                 crossMassSum += org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.bodies[i].getLinearVelocity(), d[i]);
-            };
+            };}
             let lambda : number = (<any>Math).fround((<any>Math).fround(-2.0 * crossMassSum) / dotMassSum);
             this.m_impulse += lambda;
-            for(let i : number = 0; i < this.bodies.length; ++i) {
+            for(let i : number = 0; i < this.bodies.length; ++i) {{
                 this.bodies[i].m_linearVelocity.x += (<any>Math).fround((<any>Math).fround((<any>Math).fround(this.bodies[i].m_invMass * d[i].y) * 0.5) * lambda);
                 this.bodies[i].m_linearVelocity.y += (<any>Math).fround((<any>Math).fround((<any>Math).fround(this.bodies[i].m_invMass * -d[i].x) * 0.5) * lambda);
-            };
+            };}
         }
 
         /**
@@ -19130,7 +19130,7 @@ namespace org.jbox2d.dynamics {
         static contactSolvers : org.jbox2d.pooling.stacks.ContactSolverStack; public static contactSolvers_$LI$() : org.jbox2d.pooling.stacks.ContactSolverStack { if(Island.contactSolvers == null) Island.contactSolvers = new org.jbox2d.pooling.stacks.ContactSolverStack(); return Island.contactSolvers; };
 
         public solve(step : org.jbox2d.dynamics.TimeStep, gravity : org.jbox2d.common.Vec2, correctPositions : boolean, allowSleep : boolean) {
-            for(let i : number = 0; i < this.m_bodyCount; ++i) {
+            for(let i : number = 0; i < this.m_bodyCount; ++i) {{
                 let b : org.jbox2d.dynamics.Body = this.m_bodies[i];
                 if(b.isStatic()) {
                     continue;
@@ -19153,21 +19153,21 @@ namespace org.jbox2d.dynamics {
                         b.m_angularVelocity = org.jbox2d.common.Settings.maxAngularVelocity;
                     }
                 }
-            };
+            };}
             let contactSolver : org.jbox2d.dynamics.contacts.ContactSolver = Island.contactSolvers_$LI$().get();
             contactSolver.init(step, this.m_contacts, this.m_contactCount);
             contactSolver.initVelocityConstraints(step);
-            for(let i : number = 0; i < this.m_jointCount; ++i) {
+            for(let i : number = 0; i < this.m_jointCount; ++i) {{
                 this.m_joints[i].initVelocityConstraints(step);
-            };
-            for(let i : number = 0; i < step.maxIterations; ++i) {
+            };}
+            for(let i : number = 0; i < step.maxIterations; ++i) {{
                 contactSolver.solveVelocityConstraints();
-                for(let j : number = 0; j < this.m_jointCount; ++j) {
+                for(let j : number = 0; j < this.m_jointCount; ++j) {{
                     this.m_joints[j].solveVelocityConstraints(step);
-                };
-            };
+                };}
+            };}
             contactSolver.finalizeVelocityConstraints();
-            for(let i : number = 0; i < this.m_bodyCount; ++i) {
+            for(let i : number = 0; i < this.m_bodyCount; ++i) {{
                 let b : org.jbox2d.dynamics.Body = this.m_bodies[i];
                 if(b.isStatic()) {
                     continue;
@@ -19178,29 +19178,29 @@ namespace org.jbox2d.dynamics {
                 b.m_sweep.c.y += (<any>Math).fround(step.dt * b.m_linearVelocity.y);
                 b.m_sweep.a += (<any>Math).fround(step.dt * b.m_angularVelocity);
                 b.synchronizeTransform();
-            };
+            };}
             if(correctPositions) {
-                for(let i : number = 0; i < this.m_jointCount; ++i) {
+                for(let i : number = 0; i < this.m_jointCount; ++i) {{
                     this.m_joints[i].initPositionConstraints();
-                };
-                for(Island.m_positionIterationCount = 0; Island.m_positionIterationCount < step.maxIterations; ++Island.m_positionIterationCount) {
+                };}
+                for(Island.m_positionIterationCount = 0; Island.m_positionIterationCount < step.maxIterations; ++Island.m_positionIterationCount) {{
                     let contactsOkay : boolean = contactSolver.solvePositionConstraints(org.jbox2d.common.Settings.contactBaumgarte);
                     let jointsOkay : boolean = true;
-                    for(let i : number = 0; i < this.m_jointCount; ++i) {
+                    for(let i : number = 0; i < this.m_jointCount; ++i) {{
                         let jointOkay : boolean = this.m_joints[i].solvePositionConstraints();
                         jointsOkay = jointsOkay && jointOkay;
-                    };
+                    };}
                     if(contactsOkay && jointsOkay) {
                         break;
                     }
-                };
+                };}
             }
             this.report$org_jbox2d_dynamics_contacts_ContactConstraint_A(contactSolver.m_constraints);
             if(allowSleep) {
-                let minSleepTime : number = Number.MAX_VALUE;
+                let minSleepTime : number = 3.4028235E38;
                 let linTolSqr : number = (<any>Math).fround(org.jbox2d.common.Settings.linearSleepTolerance_$LI$() * org.jbox2d.common.Settings.linearSleepTolerance_$LI$());
                 let angTolSqr : number = (<any>Math).fround(org.jbox2d.common.Settings.angularSleepTolerance_$LI$() * org.jbox2d.common.Settings.angularSleepTolerance_$LI$());
-                for(let i : number = 0; i < this.m_bodyCount; ++i) {
+                for(let i : number = 0; i < this.m_bodyCount; ++i) {{
                     let b : org.jbox2d.dynamics.Body = this.m_bodies[i];
                     if(b.m_invMass === 0.0) {
                         continue;
@@ -19212,14 +19212,14 @@ namespace org.jbox2d.dynamics {
                         b.m_sleepTime += step.dt;
                         minSleepTime = org.jbox2d.common.MathUtils.min(minSleepTime, b.m_sleepTime);
                     }
-                };
+                };}
                 if(minSleepTime >= org.jbox2d.common.Settings.timeToSleep_$LI$()) {
-                    for(let i : number = 0; i < this.m_bodyCount; ++i) {
+                    for(let i : number = 0; i < this.m_bodyCount; ++i) {{
                         let b : org.jbox2d.dynamics.Body = this.m_bodies[i];
                         b.m_flags |= org.jbox2d.dynamics.Body.e_sleepFlag;
                         b.m_linearVelocity.setZero();
                         b.m_angularVelocity = 0.0;
-                    };
+                    };}
                 }
             }
             Island.contactSolvers_$LI$().recycle(contactSolver);
@@ -19230,18 +19230,18 @@ namespace org.jbox2d.dynamics {
             contactSolver.init(subStep, this.m_contacts, this.m_contactCount);
             if(org.jbox2d.common.Settings.maxTOIJointsPerIsland > 0) {
                 subStep.warmStarting = true;
-                for(let i : number = this.m_jointCount - 1; i >= 0; --i) {
+                for(let i : number = this.m_jointCount - 1; i >= 0; --i) {{
                     this.m_joints[i].initVelocityConstraints(subStep);
-                };
+                };}
                 subStep.warmStarting = false;
             }
-            for(let i : number = 0; i < subStep.maxIterations; ++i) {
+            for(let i : number = 0; i < subStep.maxIterations; ++i) {{
                 contactSolver.solveVelocityConstraints();
-                for(let j : number = this.m_jointCount - 1; j >= 0; --j) {
+                for(let j : number = this.m_jointCount - 1; j >= 0; --j) {{
                     this.m_joints[j].solveVelocityConstraints(subStep);
-                };
-            };
-            for(let i : number = 0; i < this.m_bodyCount; ++i) {
+                };}
+            };}
+            for(let i : number = 0; i < this.m_bodyCount; ++i) {{
                 let b : org.jbox2d.dynamics.Body = this.m_bodies[i];
                 if(b.isStatic()) {
                     continue;
@@ -19252,28 +19252,28 @@ namespace org.jbox2d.dynamics {
                 b.m_sweep.c.y += (<any>Math).fround(subStep.dt * b.m_linearVelocity.y);
                 b.m_sweep.a += (<any>Math).fround(subStep.dt * b.m_angularVelocity);
                 b.synchronizeTransform();
-            };
+            };}
             let k_toiBaumgarte : number = 0.75;
-            for(let i : number = 0; i < subStep.maxIterations; ++i) {
+            for(let i : number = 0; i < subStep.maxIterations; ++i) {{
                 let contactsOkay : boolean = contactSolver.solvePositionConstraints(k_toiBaumgarte);
                 let jointsOkay : boolean = true;
-                for(let j : number = this.m_jointCount - 1; j >= 0; --j) {
+                for(let j : number = this.m_jointCount - 1; j >= 0; --j) {{
                     let jointOkay : boolean = this.m_joints[j].solvePositionConstraints();
                     jointsOkay = jointsOkay && jointOkay;
-                };
+                };}
                 if(contactsOkay && jointsOkay) {
                     break;
                 }
-            };
+            };}
             this.report$org_jbox2d_dynamics_contacts_ContactConstraint_A(contactSolver.m_constraints);
             Island.contactSolvers_$LI$().recycle(contactSolver);
         }
 
         public report$java_util_List(constraints : Array<org.jbox2d.dynamics.contacts.ContactConstraint>) {
             let cc : org.jbox2d.dynamics.contacts.ContactConstraint[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(/* size */(<number>constraints.length));
-            for(let i : number = 0; i < cc.length; ++i) {
+            for(let i : number = 0; i < cc.length; ++i) {{
                 cc[i] = /* get */constraints[i];
-            };
+            };}
             this.report$org_jbox2d_dynamics_contacts_ContactConstraint_A(cc);
         }
 
@@ -19289,7 +19289,7 @@ namespace org.jbox2d.dynamics {
             if(this.m_listener == null) {
                 return;
             }
-            for(let i : number = 0; i < this.m_contactCount; ++i) {
+            for(let i : number = 0; i < this.m_contactCount; ++i) {{
                 let c : org.jbox2d.dynamics.contacts.Contact = this.m_contacts[i];
                 let cc : org.jbox2d.dynamics.contacts.ContactConstraint = constraints[i];
                 let cr : org.jbox2d.dynamics.contacts.ContactResult = new org.jbox2d.dynamics.contacts.ContactResult();
@@ -19298,10 +19298,10 @@ namespace org.jbox2d.dynamics {
                 let b1 : org.jbox2d.dynamics.Body = cr.shape1.getBody();
                 let manifoldCount : number = c.getManifoldCount();
                 let manifolds : Array<org.jbox2d.collision.Manifold> = c.getManifolds();
-                for(let j : number = 0; j < manifoldCount; ++j) {
+                for(let j : number = 0; j < manifoldCount; ++j) {{
                     let manifold : org.jbox2d.collision.Manifold = /* get */manifolds[j];
                     cr.normal.set$org_jbox2d_common_Vec2(manifold.normal);
-                    for(let k : number = 0; k < manifold.pointCount; ++k) {
+                    for(let k : number = 0; k < manifold.pointCount; ++k) {{
                         let point : org.jbox2d.collision.ManifoldPoint = manifold.points[k];
                         let ccp : org.jbox2d.dynamics.contacts.ContactConstraintPoint = cc.points[k];
                         org.jbox2d.common.XForm.mulToOut(b1.getMemberXForm(), point.localPoint1, cr.position);
@@ -19309,9 +19309,9 @@ namespace org.jbox2d.dynamics {
                         cr.tangentImpulse = ccp.tangentImpulse;
                         cr.id.set(point.id);
                         this.m_listener.result(cr);
-                    };
-                };
-            };
+                    };}
+                };}
+            };}
         }
     }
     Island["__class"] = "org.jbox2d.dynamics.Island";
@@ -19622,22 +19622,22 @@ namespace org.jbox2d.dynamics {
                 return;
             }
             let jn : org.jbox2d.dynamics.joints.JointEdge = b.m_jointList;
-            while((jn != null)) {
+            while((jn != null)) {{
                 let jn0 : org.jbox2d.dynamics.joints.JointEdge = jn;
                 jn = jn.next;
                 if(this.m_destructionListener != null) {
                     this.m_destructionListener['sayGoodbye$org_jbox2d_dynamics_joints_Joint'](jn0.joint);
                 }
                 this.destroyJoint(jn0.joint);
-            };
+            }};
             let ce : org.jbox2d.dynamics.controllers.ControllerEdge = b.m_controllerList;
-            while((ce != null)) {
+            while((ce != null)) {{
                 let ce0 : org.jbox2d.dynamics.controllers.ControllerEdge = ce;
                 ce = ce.nextController;
                 ce0.controller.removeBody(b);
-            };
+            }};
             let s : org.jbox2d.collision.shapes.Shape = b.m_shapeList;
-            while((s != null)) {
+            while((s != null)) {{
                 let s0 : org.jbox2d.collision.shapes.Shape = s;
                 s = s.m_next;
                 if(this.m_destructionListener != null) {
@@ -19645,7 +19645,7 @@ namespace org.jbox2d.dynamics {
                 }
                 s0.destroyProxy(this.m_broadPhase);
                 org.jbox2d.collision.shapes.Shape.destroy(s0);
-            };
+            }};
             if(b.m_prev != null) {
                 b.m_prev.m_next = b.m_next;
             }
@@ -19692,9 +19692,9 @@ namespace org.jbox2d.dynamics {
             j.m_body2.m_jointList = j.m_node2;
             if(def.collideConnected === false) {
                 let b : org.jbox2d.dynamics.Body = def.body1.m_shapeCount < def.body2.m_shapeCount?def.body1:def.body2;
-                for(let s : org.jbox2d.collision.shapes.Shape = b.m_shapeList; s != null; s = s.m_next) {
+                for(let s : org.jbox2d.collision.shapes.Shape = b.m_shapeList; s != null; s = s.m_next) {{
                     s.refilterProxy(this.m_broadPhase, b.getMemberXForm());
-                };
+                };}
             }
             return j;
         }
@@ -19745,9 +19745,9 @@ namespace org.jbox2d.dynamics {
             --this.m_jointCount;
             if(collideConnected === false) {
                 let b : org.jbox2d.dynamics.Body = body1.m_shapeCount < body2.m_shapeCount?body1:body2;
-                for(let s : org.jbox2d.collision.shapes.Shape = b.m_shapeList; s != null; s = s.m_next) {
+                for(let s : org.jbox2d.collision.shapes.Shape = b.m_shapeList; s != null; s = s.m_next) {{
                     s.refilterProxy(this.m_broadPhase, b.getMemberXForm());
-                };
+                };}
             }
         }
 
@@ -19880,23 +19880,23 @@ namespace org.jbox2d.dynamics {
          */
         public solve(step : org.jbox2d.dynamics.TimeStep) {
             this.m_positionIterationCount = 0;
-            for(let controller : org.jbox2d.dynamics.controllers.Controller = this.m_controllerList; controller != null; controller = controller.m_next) {
+            for(let controller : org.jbox2d.dynamics.controllers.Controller = this.m_controllerList; controller != null; controller = controller.m_next) {{
                 controller.step(step);
-            };
+            };}
             let island : org.jbox2d.dynamics.Island = World.islands_$LI$().get();
             island.init(this.m_bodyCount, this.m_contactCount, this.m_jointCount, this.m_contactListener);
-            for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.m_next) {
+            for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.m_next) {{
                 b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
-            };
-            for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_contactList; c != null; c = c.m_next) {
+            };}
+            for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_contactList; c != null; c = c.m_next) {{
                 c.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_islandFlag;
-            };
-            for(let j : org.jbox2d.dynamics.joints.Joint = this.m_jointList; j != null; j = j.m_next) {
+            };}
+            for(let j : org.jbox2d.dynamics.joints.Joint = this.m_jointList; j != null; j = j.m_next) {{
                 j.m_islandFlag = false;
-            };
+            };}
             let stackSize : number = this.m_bodyCount;
             let stack : org.jbox2d.dynamics.Body[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(stackSize);
-            for(let seed : org.jbox2d.dynamics.Body = this.m_bodyList; seed != null; seed = seed.m_next) {
+            for(let seed : org.jbox2d.dynamics.Body = this.m_bodyList; seed != null; seed = seed.m_next) {{
                 if((seed.m_flags & (org.jbox2d.dynamics.Body.e_islandFlag | org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) > 0) {
                     continue;
                 }
@@ -19907,14 +19907,14 @@ namespace org.jbox2d.dynamics {
                 let stackCount : number = 0;
                 stack[stackCount++] = seed;
                 seed.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                while((stackCount > 0)) {
+                while((stackCount > 0)) {{
                     let b : org.jbox2d.dynamics.Body = stack[--stackCount];
                     island.add$org_jbox2d_dynamics_Body(b);
                     b.m_flags &= ~org.jbox2d.dynamics.Body.e_sleepFlag;
                     if(b.isStatic()) {
                         continue;
                     }
-                    for(let cn : org.jbox2d.dynamics.contacts.ContactEdge = b.m_contactList; cn != null; cn = cn.next) {
+                    for(let cn : org.jbox2d.dynamics.contacts.ContactEdge = b.m_contactList; cn != null; cn = cn.next) {{
                         if((cn.contact.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_islandFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) > 0) {
                             continue;
                         }
@@ -19929,8 +19929,8 @@ namespace org.jbox2d.dynamics {
                         }
                         stack[stackCount++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                    };
-                    for(let jn : org.jbox2d.dynamics.joints.JointEdge = b.m_jointList; jn != null; jn = jn.next) {
+                    };}
+                    for(let jn : org.jbox2d.dynamics.joints.JointEdge = b.m_jointList; jn != null; jn = jn.next) {{
                         if(jn.joint.m_islandFlag === true) {
                             continue;
                         }
@@ -19942,18 +19942,18 @@ namespace org.jbox2d.dynamics {
                         }
                         stack[stackCount++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                    };
-                };
+                    };}
+                }};
                 island.solve(step, this.m_gravity, this.m_positionCorrection, this.m_allowSleep);
                 this.m_positionIterationCount = org.jbox2d.common.MathUtils.max$int$int(this.m_positionIterationCount, org.jbox2d.dynamics.Island.m_positionIterationCount);
-                for(let i : number = 0; i < island.m_bodyCount; ++i) {
+                for(let i : number = 0; i < island.m_bodyCount; ++i) {{
                     let b : org.jbox2d.dynamics.Body = island.m_bodies[i];
                     if(b.isStatic()) {
                         b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
                     }
-                };
-            };
-            for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {
+                };}
+            };}
+            for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {{
                 if((b.m_flags & (org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) !== 0) {
                     continue;
                 }
@@ -19964,7 +19964,7 @@ namespace org.jbox2d.dynamics {
                 if(inRange === false && this.m_boundaryListener != null) {
                     this.m_boundaryListener.violation(b);
                 }
-            };
+            };}
             this.m_broadPhase.commit();
             World.islands_$LI$().recycle(island);
         }
@@ -19980,20 +19980,20 @@ namespace org.jbox2d.dynamics {
             island.init(this.m_bodyCount, org.jbox2d.common.Settings.maxTOIContactsPerIsland, org.jbox2d.common.Settings.maxTOIJointsPerIsland, this.m_contactListener);
             let queueCapacity : number = this.m_bodyCount;
             let queue : org.jbox2d.dynamics.Body[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(queueCapacity);
-            for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.m_next) {
+            for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.m_next) {{
                 b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
                 b.m_sweep.t0 = 0.0;
-            };
-            for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_contactList; c != null; c = c.m_next) {
+            };}
+            for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_contactList; c != null; c = c.m_next) {{
                 c.m_flags &= ~(org.jbox2d.dynamics.contacts.Contact.e_toiFlag | org.jbox2d.dynamics.contacts.Contact.e_islandFlag);
-            };
-            for(let j : org.jbox2d.dynamics.joints.Joint = this.m_jointList; j != null; j = j.m_next) {
+            };}
+            for(let j : org.jbox2d.dynamics.joints.Joint = this.m_jointList; j != null; j = j.m_next) {{
                 j.m_islandFlag = false;
-            };
-            while((true)) {
+            };}
+            while((true)) {{
                 let minContact : org.jbox2d.dynamics.contacts.Contact = null;
                 let minTOI : number = 1.0;
-                for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_contactList; c != null; c = c.m_next) {
+                for(let c : org.jbox2d.dynamics.contacts.Contact = this.m_contactList; c != null; c = c.m_next) {{
                     if((c.m_flags & (org.jbox2d.dynamics.contacts.Contact.e_slowFlag | org.jbox2d.dynamics.contacts.Contact.e_nonSolidFlag)) !== 0) {
                         continue;
                     }
@@ -20027,7 +20027,7 @@ namespace org.jbox2d.dynamics {
                         minContact = c;
                         minTOI = toi;
                     }
-                };
+                };}
                 if(minContact == null || (<any>Math).fround(1.0 - (<any>Math).fround(100.0 * org.jbox2d.common.Settings.EPSILON)) < minTOI) {
                     break;
                 }
@@ -20051,7 +20051,7 @@ namespace org.jbox2d.dynamics {
                 let queueSize : number = 0;
                 queue[queueStart + queueSize++] = seed;
                 seed.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                while((queueSize > 0)) {
+                while((queueSize > 0)) {{
                     let b : org.jbox2d.dynamics.Body = queue[queueStart++];
                     --queueSize;
                     island.add$org_jbox2d_dynamics_Body(b);
@@ -20059,7 +20059,7 @@ namespace org.jbox2d.dynamics {
                     if(b.isStatic()) {
                         continue;
                     }
-                    for(let cn : org.jbox2d.dynamics.contacts.ContactEdge = b.m_contactList; cn != null; cn = cn.next) {
+                    for(let cn : org.jbox2d.dynamics.contacts.ContactEdge = b.m_contactList; cn != null; cn = cn.next) {{
                         if(island.m_contactCount === island.m_contactCapacity) {
                             continue;
                         }
@@ -20081,8 +20081,8 @@ namespace org.jbox2d.dynamics {
                         }
                         queue[queueStart + queueSize++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                    };
-                    for(let jn : org.jbox2d.dynamics.joints.JointEdge = b.m_jointList; jn != null; jn = jn.next) {
+                    };}
+                    for(let jn : org.jbox2d.dynamics.joints.JointEdge = b.m_jointList; jn != null; jn = jn.next) {{
                         if(island.m_jointCount === island.m_jointCapacity) {
                             continue;
                         }
@@ -20101,8 +20101,8 @@ namespace org.jbox2d.dynamics {
                         }
                         queue[queueStart + queueSize++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
-                    };
-                };
+                    };}
+                }};
                 let subStep : org.jbox2d.dynamics.TimeStep = World.steps_$LI$().get();
                 subStep.warmStarting = false;
                 subStep.dt = (<any>Math).fround(((<any>Math).fround(1.0 - minTOI)) * step.dt);
@@ -20110,7 +20110,7 @@ namespace org.jbox2d.dynamics {
                 subStep.maxIterations = step.maxIterations;
                 island.solveTOI(subStep);
                 World.steps_$LI$().recycle(subStep);
-                for(let i : number = 0; i < island.m_bodyCount; ++i) {
+                for(let i : number = 0; i < island.m_bodyCount; ++i) {{
                     let b : org.jbox2d.dynamics.Body = island.m_bodies[i];
                     b.m_flags &= ~org.jbox2d.dynamics.Body.e_islandFlag;
                     if((b.m_flags & (org.jbox2d.dynamics.Body.e_sleepFlag | org.jbox2d.dynamics.Body.e_frozenFlag)) !== 0) {
@@ -20123,20 +20123,20 @@ namespace org.jbox2d.dynamics {
                     if(inRange === false && this.m_boundaryListener != null) {
                         this.m_boundaryListener.violation(b);
                     }
-                    for(let cn : org.jbox2d.dynamics.contacts.ContactEdge = b.m_contactList; cn != null; cn = cn.next) {
+                    for(let cn : org.jbox2d.dynamics.contacts.ContactEdge = b.m_contactList; cn != null; cn = cn.next) {{
                         cn.contact.m_flags &= ~org.jbox2d.dynamics.contacts.Contact.e_toiFlag;
-                    };
-                };
-                for(let i : number = 0; i < island.m_contactCount; ++i) {
+                    };}
+                };}
+                for(let i : number = 0; i < island.m_contactCount; ++i) {{
                     let c : org.jbox2d.dynamics.contacts.Contact = island.m_contacts[i];
                     c.m_flags &= ~(org.jbox2d.dynamics.contacts.Contact.e_toiFlag | org.jbox2d.dynamics.contacts.Contact.e_islandFlag);
-                };
-                for(let i : number = 0; i < island.m_jointCount; ++i) {
+                };}
+                for(let i : number = 0; i < island.m_jointCount; ++i) {{
                     let j : org.jbox2d.dynamics.joints.Joint = island.m_joints[i];
                     j.m_islandFlag = false;
-                };
+                };}
                 this.m_broadPhase.commit();
-            };
+            }};
             World.islands_$LI$().recycle(island);
         }
 
@@ -20201,15 +20201,15 @@ namespace org.jbox2d.dynamics {
                 let vertexCount : number = poly.getVertexCount();
                 let localVertices : org.jbox2d.common.Vec2[] = poly.getVertices();
                 let vertices : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(vertexCount);
-                for(let i : number = 0; i < vertexCount; ++i) {
+                for(let i : number = 0; i < vertexCount; ++i) {{
                     vertices[i] = org.jbox2d.common.XForm.mul(xf, localVertices[i]);
-                };
+                };}
                 this.m_debugDraw.drawSolidPolygon(vertices, vertexCount, color);
                 if(core) {
                     let localCoreVertices : org.jbox2d.common.Vec2[] = poly.getCoreVertices();
-                    for(let i : number = 0; i < vertexCount; ++i) {
+                    for(let i : number = 0; i < vertexCount; ++i) {{
                         vertices[i] = org.jbox2d.common.XForm.mul(xf, localCoreVertices[i]);
-                    };
+                    };}
                     this.m_debugDraw.drawPolygon(vertices, vertexCount, this.coreColor);
                 }
             } else if(shape.getType() === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE) {
@@ -20254,12 +20254,12 @@ namespace org.jbox2d.dynamics {
             } else if(type === org.jbox2d.dynamics.joints.JointType.CONSTANT_VOLUME_JOINT) {
                 let cvj : org.jbox2d.dynamics.joints.ConstantVolumeJoint = <org.jbox2d.dynamics.joints.ConstantVolumeJoint>joint;
                 let bodies : org.jbox2d.dynamics.Body[] = cvj.getBodies();
-                for(let i : number = 0; i < bodies.length; ++i) {
+                for(let i : number = 0; i < bodies.length; ++i) {{
                     let next : number = (i === bodies.length - 1)?0:i + 1;
                     let first : org.jbox2d.common.Vec2 = bodies[i].getMemberWorldCenter();
                     let nextV : org.jbox2d.common.Vec2 = bodies[next].getMemberWorldCenter();
                     this.m_debugDraw.drawSegment(first, nextV, this.jointColor);
-                };
+                };}
             } else {
                 this.m_debugDraw.drawSegment(x1, p1, this.jointColor);
                 this.m_debugDraw.drawSegment(p1, p2, this.jointColor);
@@ -20303,9 +20303,9 @@ namespace org.jbox2d.dynamics {
             let flags : number = this.m_debugDraw.getFlags();
             if((flags & org.jbox2d.dynamics.DebugDraw.e_shapeBit) !== 0) {
                 let core : boolean = (flags & org.jbox2d.dynamics.DebugDraw.e_coreShapeBit) === org.jbox2d.dynamics.DebugDraw.e_coreShapeBit;
-                for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {
+                for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {{
                     let xf : org.jbox2d.common.XForm = b.getMemberXForm();
-                    for(let s : org.jbox2d.collision.shapes.Shape = b.getShapeList(); s != null; s = s.getNext()) {
+                    for(let s : org.jbox2d.collision.shapes.Shape = b.getShapeList(); s != null; s = s.getNext()) {{
                         if(b.isStatic()) {
                             this.drawShape(s, xf, this.staticColor, core);
                         } else if(b.isSleeping()) {
@@ -20313,23 +20313,23 @@ namespace org.jbox2d.dynamics {
                         } else {
                             this.drawShape(s, xf, this.activeColor, core);
                         }
-                    };
-                };
+                    };}
+                };}
             }
             if((flags & org.jbox2d.dynamics.DebugDraw.e_jointBit) !== 0) {
-                for(let j : org.jbox2d.dynamics.joints.Joint = this.m_jointList; j != null; j = j.getNext()) {
+                for(let j : org.jbox2d.dynamics.joints.Joint = this.m_jointList; j != null; j = j.getNext()) {{
                     if(j.getType() !== org.jbox2d.dynamics.joints.JointType.MOUSE_JOINT) {
                         this.drawJoint(j);
                     }
-                };
+                };}
             }
             if((flags & org.jbox2d.dynamics.DebugDraw.e_pairBit) !== 0) {
                 let bp : org.jbox2d.collision.BroadPhase = this.m_broadPhase;
                 let invQ : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2(0.0, 0.0);
                 invQ.set$float$float((<any>Math).fround(1.0 / bp.m_quantizationFactor.x), (<any>Math).fround(1.0 / bp.m_quantizationFactor.y));
-                for(let i : number = 0; i < org.jbox2d.collision.PairManager.TABLE_CAPACITY_$LI$(); ++i) {
+                for(let i : number = 0; i < org.jbox2d.collision.PairManager.TABLE_CAPACITY_$LI$(); ++i) {{
                     let index : number = bp.m_pairManager.m_hashTable[i];
-                    while((index !== org.jbox2d.collision.PairManager.NULL_PAIR_$LI$())) {
+                    while((index !== org.jbox2d.collision.PairManager.NULL_PAIR_$LI$())) {{
                         let pair : org.jbox2d.collision.Pair = bp.m_pairManager.m_pairs[index];
                         let p1 : org.jbox2d.collision.Proxy = bp.m_proxyPool[pair.proxyId1];
                         let p2 : org.jbox2d.collision.Proxy = bp.m_proxyPool[pair.proxyId2];
@@ -20347,13 +20347,13 @@ namespace org.jbox2d.dynamics {
                         this.pairX2.y = (<any>Math).fround(0.5 * ((<any>Math).fround(this.pairB2.lowerBound.y + this.pairB2.upperBound.y)));
                         this.m_debugDraw.drawSegment(this.pairX1, this.pairX1, this.pairColor);
                         index = pair.next;
-                    };
-                };
+                    }};
+                };}
             }
             if((flags & org.jbox2d.dynamics.DebugDraw.e_controllerBit) !== 0) {
-                for(let c : org.jbox2d.dynamics.controllers.Controller = this.m_controllerList; c != null; c = c.getNext()) {
+                for(let c : org.jbox2d.dynamics.controllers.Controller = this.m_controllerList; c != null; c = c.getNext()) {{
                     c.draw(this.m_debugDraw);
-                };
+                };}
             }
             let bp : org.jbox2d.collision.BroadPhase = this.m_broadPhase;
             let worldLower : org.jbox2d.common.Vec2 = bp.m_worldAABB.lowerBound;
@@ -20361,7 +20361,7 @@ namespace org.jbox2d.dynamics {
             if((flags & org.jbox2d.dynamics.DebugDraw.e_aabbBit) !== 0) {
                 let invQ : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2();
                 invQ.set$float$float((<any>Math).fround(1.0 / bp.m_quantizationFactor.x), (<any>Math).fround(1.0 / bp.m_quantizationFactor.y));
-                for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies; ++i) {
+                for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies; ++i) {{
                     let p : org.jbox2d.collision.Proxy = bp.m_proxyPool[i];
                     if(p.isValid() === false) {
                         continue;
@@ -20375,7 +20375,7 @@ namespace org.jbox2d.dynamics {
                     this.cornerVecs[2].set$float$float(this.aabbB.upperBound.x, this.aabbB.upperBound.y);
                     this.cornerVecs[3].set$float$float(this.aabbB.lowerBound.x, this.aabbB.upperBound.y);
                     this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.aabbColor);
-                };
+                };}
             }
             this.cornerVecs[0].set$float$float(worldLower.x, worldLower.y);
             this.cornerVecs[1].set$float$float(worldUpper.x, worldLower.y);
@@ -20383,9 +20383,9 @@ namespace org.jbox2d.dynamics {
             this.cornerVecs[3].set$float$float(worldLower.x, worldUpper.y);
             this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.worldColor);
             if((flags & org.jbox2d.dynamics.DebugDraw.e_obbBit) !== 0) {
-                for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {
+                for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {{
                     let xf : org.jbox2d.common.XForm = b.getMemberXForm();
-                    for(let s : org.jbox2d.collision.shapes.Shape = b.getShapeList(); s != null; s = s.getNext()) {
+                    for(let s : org.jbox2d.collision.shapes.Shape = b.getShapeList(); s != null; s = s.getNext()) {{
                         if(s.getType() !== org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE) {
                             continue;
                         }
@@ -20396,20 +20396,20 @@ namespace org.jbox2d.dynamics {
                         this.cornerVecs[1].set$float$float(h.x, -h.y);
                         this.cornerVecs[2].set$float$float(h.x, h.y);
                         this.cornerVecs[3].set$float$float(-h.x, h.y);
-                        for(let i : number = 0; i < this.cornerVecs.length; ++i) {
+                        for(let i : number = 0; i < this.cornerVecs.length; ++i) {{
                             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(obb.R, this.cornerVecs[i], this.cornerVecs[i]);
                             org.jbox2d.common.XForm.mulToOut(xf, this.cornerVecs[i], this.cornerVecs[i]);
-                        };
+                        };}
                         this.m_debugDraw.drawPolygon(this.cornerVecs, 4, this.obbColor);
-                    };
-                };
+                    };}
+                };}
             }
             if((flags & org.jbox2d.dynamics.DebugDraw.e_centerOfMassBit) !== 0) {
-                for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {
+                for(let b : org.jbox2d.dynamics.Body = this.m_bodyList; b != null; b = b.getNext()) {{
                     let xf : org.jbox2d.common.XForm = b.getMemberXForm();
                     xf.position = b.getMemberWorldCenter();
                     this.m_debugDraw.drawXForm(xf);
-                };
+                };}
             }
         }
 
@@ -20503,9 +20503,9 @@ namespace org.jbox2d.dynamics {
             this.m_raycastSolidShape = solidShapes;
             let results : any[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(maxCount);
             let count : number = this.m_broadPhase.querySegment(segment, results, maxCount, this.raycastSortKey);
-            for(let i : number = 0; i < count; ++i) {
+            for(let i : number = 0; i < count; ++i) {{
                 shapes[i] = <org.jbox2d.collision.shapes.Shape>results[i];
-            };
+            };}
             return count;
         }
 
@@ -21391,37 +21391,37 @@ namespace org.jbox2d.collision.shapes {
             this.m_normals = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.m_vertexCount);
             this.m_coreVertices = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.m_vertexCount);
             this.m_obb = new org.jbox2d.collision.OBB();
-            for(let i : number = 0; i < this.m_vertexCount; ++i) {
+            for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 this.m_vertices[i] = /* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(/* get */poly.vertices[i]);
-            };
+            };}
             let edge : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlEdge_$LI$().initialValue();
-            for(let i : number = 0; i < this.m_vertexCount; ++i) {
+            for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 let i1 : number = i;
                 let i2 : number = i + 1 < this.m_vertexCount?i + 1:0;
                 edge.set$org_jbox2d_common_Vec2(this.m_vertices[i2]).subLocal(this.m_vertices[i1]);
                 this.m_normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
                 this.m_normals[i].normalize();
-            };
+            };}
             if(PolygonShape.m_debug) {
-                for(let i : number = 0; i < this.m_vertexCount; ++i) {
-                    for(let j : number = 0; j < this.m_vertexCount; ++j) {
+                for(let i : number = 0; i < this.m_vertexCount; ++i) {{
+                    for(let j : number = 0; j < this.m_vertexCount; ++j) {{
                         if(j === i || j === (i + 1) % this.m_vertexCount) {
                             continue;
                         }
-                    };
-                };
-                for(let i : number = 1; i < this.m_vertexCount; ++i) {
+                    };}
+                };}
+                for(let i : number = 1; i < this.m_vertexCount; ++i) {{
                     let cross : number = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.m_normals[i - 1], this.m_normals[i]);
                     cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
                     let angle : number = (<any>Math).fround(Math.asin(cross));
-                };
+                };}
             }
             this.m_centroid = PolygonShape.computeCentroid(poly.vertices);
             PolygonShape.computeOBB(this.m_obb, this.m_vertices);
             let v : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlV_$LI$().initialValue();
             let d : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlD_$LI$().initialValue();
             let A : org.jbox2d.common.Mat22 = /* get */PolygonShape.tlA_$LI$().initialValue();
-            for(let i : number = 0; i < this.m_vertexCount; ++i) {
+            for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 let i1 : number = i - 1 >= 0?i - 1:this.m_vertexCount - 1;
                 let i2 : number = i;
                 let n1 : org.jbox2d.common.Vec2 = this.m_normals[i1];
@@ -21440,21 +21440,21 @@ namespace org.jbox2d.collision.shapes {
                 A.col1.y = n2.x;
                 A.col2.y = n2.y;
                 this.m_coreVertices[i] = A.solve(d).addLocal$org_jbox2d_common_Vec2(this.m_centroid);
-            };
+            };}
             if(PolygonShape.m_debug) {
                 console.info("\nDumping polygon shape...");
                 console.info("Vertices: ");
-                for(let i : number = 0; i < this.m_vertexCount; ++i) {
+                for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                     console.info(this.m_vertices[i]);
-                };
+                };}
                 console.info("Core Vertices: ");
-                for(let i : number = 0; i < this.m_vertexCount; ++i) {
+                for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                     console.info(this.m_coreVertices[i]);
-                };
+                };}
                 console.info("Normals: ");
-                for(let i : number = 0; i < this.m_vertexCount; ++i) {
+                for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                     console.info(this.m_normals[i]);
-                };
+                };}
                 console.info("Centroid: " + this.m_centroid);
             }
         }
@@ -21466,11 +21466,11 @@ namespace org.jbox2d.collision.shapes {
         public updateSweepRadius(center : org.jbox2d.common.Vec2) {
             let d : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlD_$LI$().initialValue();
             this.m_sweepRadius = 0.0;
-            for(let i : number = 0; i < this.m_vertexCount; ++i) {
+            for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 d.set$org_jbox2d_common_Vec2(this.m_coreVertices[i]);
                 d.subLocal(center);
                 this.m_sweepRadius = org.jbox2d.common.MathUtils.max$float$float(this.m_sweepRadius, d.length());
-            };
+            };}
         }
 
         static tlTemp : org.jbox2d.pooling.TLVec2; public static tlTemp_$LI$() : org.jbox2d.pooling.TLVec2 { if(PolygonShape.tlTemp == null) PolygonShape.tlTemp = (() => { let __o : any = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return PolygonShape.tlTemp; };
@@ -21492,19 +21492,19 @@ namespace org.jbox2d.collision.shapes {
             if(PolygonShape.m_debug) {
                 console.info("--testPoint debug--");
                 console.info("Vertices: ");
-                for(let i : number = 0; i < this.m_vertexCount; ++i) {
+                for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                     console.info(this.m_vertices[i]);
-                };
+                };}
                 console.info("pLocal: " + pLocal);
             }
-            for(let i : number = 0; i < this.m_vertexCount; ++i) {
+            for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 temp.set$org_jbox2d_common_Vec2(pLocal);
                 temp.subLocal(this.m_vertices[i]);
                 let dot : number = org.jbox2d.common.Vec2.dot(this.m_normals[i], temp);
                 if(dot > 0.0) {
                     return false;
                 }
-            };
+            };}
             return true;
         }
 
@@ -21533,7 +21533,7 @@ namespace org.jbox2d.collision.shapes {
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, p2, p2);
             d.set$org_jbox2d_common_Vec2(p2).subLocal(p1);
             let index : number = -1;
-            for(let i : number = 0; i < this.m_vertexCount; ++i) {
+            for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 temp.set$org_jbox2d_common_Vec2(this.m_vertices[i]).subLocal(p1);
                 let numerator : number = org.jbox2d.common.Vec2.dot(this.m_normals[i], temp);
                 let denominator : number = org.jbox2d.common.Vec2.dot(this.m_normals[i], d);
@@ -21551,7 +21551,7 @@ namespace org.jbox2d.collision.shapes {
                 if(upper < lower) {
                     return org.jbox2d.collision.SegmentCollide.MISS_COLLIDE;
                 }
-            };
+            };}
             if(index >= 0) {
                 out.lambda = lower;
                 org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_normals[index], out.normal);
@@ -21576,13 +21576,13 @@ namespace org.jbox2d.collision.shapes {
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, d, supportDLocal);
             let bestIndex : number = 0;
             let bestValue : number = org.jbox2d.common.Vec2.dot(this.m_coreVertices[0], supportDLocal);
-            for(let i : number = 1; i < this.m_vertexCount; ++i) {
+            for(let i : number = 1; i < this.m_vertexCount; ++i) {{
                 let value : number = org.jbox2d.common.Vec2.dot(this.m_coreVertices[i], supportDLocal);
                 if(value > bestValue) {
                     bestIndex = i;
                     bestValue = value;
                 }
-            };
+            };}
             org.jbox2d.common.XForm.mulToOut(xf, this.m_coreVertices[bestIndex], dest);
         }
 
@@ -21602,7 +21602,7 @@ namespace org.jbox2d.collision.shapes {
             let e1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE1_$LI$().initialValue();
             let e2 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE2_$LI$().initialValue();
             let p1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlP1_$LI$().initialValue();
-            for(let i : number = 0; i < count; ++i) {
+            for(let i : number = 0; i < count; ++i) {{
                 p1.set$org_jbox2d_common_Vec2(pRef);
                 let p2 : org.jbox2d.common.Vec2 = /* get */vs[i];
                 let p3 : org.jbox2d.common.Vec2 = i + 1 < count?/* get */vs[i + 1]:/* get */vs[0];
@@ -21613,7 +21613,7 @@ namespace org.jbox2d.collision.shapes {
                 area += triangleArea;
                 c.x += (<any>Math).fround((<any>Math).fround(triangleArea * inv3) * ((<any>Math).fround((<any>Math).fround(p1.x + p2.x) + p3.x)));
                 c.y += (<any>Math).fround((<any>Math).fround(triangleArea * inv3) * ((<any>Math).fround((<any>Math).fround(p1.y + p2.y) + p3.y)));
-            };
+            };}
             c.mulLocal((<any>Math).fround(1.0 / area));
             return c;
         }
@@ -21640,30 +21640,30 @@ namespace org.jbox2d.collision.shapes {
             let r : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlR_$LI$().initialValue();
             let center : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlCenter_$LI$().initialValue();
             let pRay : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxPolygonVertices + 1);
-            for(let i : number = 0; i < count; ++i) {
+            for(let i : number = 0; i < count; ++i) {{
                 pRay[i] = vs[i];
-            };
+            };}
             pRay[count] = pRay[0];
-            let minArea : number = Number.MAX_VALUE;
-            for(let i : number = 1; i <= count; ++i) {
+            let minArea : number = 3.4028235E38;
+            for(let i : number = 1; i <= count; ++i) {{
                 let root : org.jbox2d.common.Vec2 = pRay[i - 1];
                 ux.set$org_jbox2d_common_Vec2(pRay[i]);
                 ux.subLocal(root);
                 let length : number = ux.normalize();
                 uy.x = -ux.y;
                 uy.y = ux.x;
-                lower.x = Number.MAX_VALUE;
-                lower.y = Number.MAX_VALUE;
-                upper.x = -Number.MAX_VALUE;
-                upper.y = -Number.MAX_VALUE;
-                for(let j : number = 0; j < count; ++j) {
+                lower.x = 3.4028235E38;
+                lower.y = 3.4028235E38;
+                upper.x = -3.4028235E38;
+                upper.y = -3.4028235E38;
+                for(let j : number = 0; j < count; ++j) {{
                     d.set$org_jbox2d_common_Vec2(pRay[j]);
                     d.subLocal(root);
                     r.x = org.jbox2d.common.Vec2.dot(ux, d);
                     r.y = org.jbox2d.common.Vec2.dot(uy, d);
                     org.jbox2d.common.Vec2.minToOut(lower, r, lower);
                     org.jbox2d.common.Vec2.maxToOut(upper, r, upper);
-                };
+                };}
                 let area : number = (<any>Math).fround(((<any>Math).fround(upper.x - lower.x)) * ((<any>Math).fround(upper.y - lower.y)));
                 if(area < (<any>Math).fround(0.95 * minArea)) {
                     minArea = area;
@@ -21675,7 +21675,7 @@ namespace org.jbox2d.collision.shapes {
                     obb.extents.x = (<any>Math).fround(0.5 * ((<any>Math).fround(upper.x - lower.x)));
                     obb.extents.y = (<any>Math).fround(0.5 * ((<any>Math).fround(upper.y - lower.y)));
                 }
-            };
+            };}
         }
 
         static tlCaabbR : org.jbox2d.pooling.TLMat22; public static tlCaabbR_$LI$() : org.jbox2d.pooling.TLMat22 { if(PolygonShape.tlCaabbR == null) PolygonShape.tlCaabbR = (() => { let __o : any = new org.jbox2d.pooling.TLMat22(); __o.__delegate = new org.jbox2d.pooling.TLMat22(); return __o; })(); return PolygonShape.tlCaabbR; };
@@ -21733,7 +21733,7 @@ namespace org.jbox2d.collision.shapes {
             let k_inv3 : number = (<any>Math).fround(1.0 / 3.0);
             let e1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE1_$LI$().initialValue();
             let e2 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE2_$LI$().initialValue();
-            for(let i : number = 0; i < this.m_vertexCount; ++i) {
+            for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 let p1 : org.jbox2d.common.Vec2 = pRef;
                 let p2 : org.jbox2d.common.Vec2 = this.m_vertices[i];
                 let p3 : org.jbox2d.common.Vec2 = i + 1 < this.m_vertexCount?this.m_vertices[i + 1]:this.m_vertices[0];
@@ -21755,7 +21755,7 @@ namespace org.jbox2d.collision.shapes {
                 let intx2 : number = (<any>Math).fround((<any>Math).fround(k_inv3 * ((<any>Math).fround((<any>Math).fround(0.25 * ((<any>Math).fround((<any>Math).fround((<any>Math).fround(ex1 * ex1) + (<any>Math).fround(ex2 * ex1)) + (<any>Math).fround(ex2 * ex2)))) + ((<any>Math).fround((<any>Math).fround(px * ex1) + (<any>Math).fround(px * ex2)))))) + (<any>Math).fround((<any>Math).fround(0.5 * px) * px));
                 let inty2 : number = (<any>Math).fround((<any>Math).fround(k_inv3 * ((<any>Math).fround((<any>Math).fround(0.25 * ((<any>Math).fround((<any>Math).fround((<any>Math).fround(ey1 * ey1) + (<any>Math).fround(ey2 * ey1)) + (<any>Math).fround(ey2 * ey2)))) + ((<any>Math).fround((<any>Math).fround(py * ey1) + (<any>Math).fround(py * ey2)))))) + (<any>Math).fround((<any>Math).fround(0.5 * py) * py));
                 I += (<any>Math).fround(D * ((<any>Math).fround(intx2 + inty2)));
-            };
+            };}
             massData.mass = (<any>Math).fround(density * area);
             center.mulLocal((<any>Math).fround(1.0 / area));
             massData.center.set$org_jbox2d_common_Vec2(center);
@@ -21866,7 +21866,7 @@ namespace org.jbox2d.collision.shapes {
             let outoIndex : number = -1;
             let lastSubmerged : boolean = false;
             let i : number = 0;
-            for(i = 0; i < this.m_vertexCount; ++i) {
+            for(i = 0; i < this.m_vertexCount; ++i) {{
                 depths[i] = (<any>Math).fround(org.jbox2d.common.Vec2.dot(normalL, this.m_vertices[i]) - offsetL);
                 let isSubmerged : boolean = depths[i] < -org.jbox2d.common.Settings.EPSILON;
                 if(i > 0) {
@@ -21883,7 +21883,7 @@ namespace org.jbox2d.collision.shapes {
                     }
                 }
                 lastSubmerged = isSubmerged;
-            };
+            };}
             switch((diveCount)) {
             case 0:
                 if(lastSubmerged) {
@@ -21919,7 +21919,7 @@ namespace org.jbox2d.collision.shapes {
             p3.setZero();
             let k_inv3 : number = (<any>Math).fround(1.0 / 3.0);
             i = intoIndex2;
-            while((i !== outoIndex2)) {
+            while((i !== outoIndex2)) {{
                 i = (i + 1) % this.m_vertexCount;
                 if(i === outoIndex2) {
                     p3.set$org_jbox2d_common_Vec2(outoVec);
@@ -21936,7 +21936,7 @@ namespace org.jbox2d.collision.shapes {
                     center.y += (<any>Math).fround((<any>Math).fround(triangleArea * k_inv3) * ((<any>Math).fround((<any>Math).fround(intoVec.y + p2b.y) + p3.y)));
                 };
                 p2b.set$org_jbox2d_common_Vec2(p3);
-            };
+            }};
             center.x *= (<any>Math).fround(1.0 / area);
             center.y *= (<any>Math).fround(1.0 / area);
             org.jbox2d.common.XForm.mulToOut(xf, center, c);
