@@ -292,9 +292,9 @@ public class World {
 	 */
 	public Body createBody(final BodyDef def) {
 		assert(m_lock == false);
-		if (m_lock == true) {
-			return null;
-		}
+//		if (m_lock == true) {
+//			return null;
+//		}
 
 		final Body b = new Body(def, this);
 
@@ -319,9 +319,9 @@ public class World {
 	public void destroyBody(final Body b) {
 		assert(m_bodyCount > 0);
 		assert(m_lock == false);
-		if (m_lock == true) {
-			return;
-		}
+//		if (m_lock == true) {
+//			return;
+//		}
 
 		// Delete the attached joints.
 		JointEdge jn = b.m_jointList;

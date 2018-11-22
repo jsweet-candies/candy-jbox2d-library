@@ -412,4 +412,9 @@ public abstract class Shape {
 		}
 		return contacts;
 	}
+
+	@Override
+	public String toString() {
+		return "shape:" + (m_type == null ? "unknown" : m_type.name()) + "_uid=" + this.uid;
+	}
 }

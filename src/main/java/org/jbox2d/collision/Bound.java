@@ -48,9 +48,13 @@ public class Bound {
 	}
 
 	public final void set(final Bound b) {
-		value = b.value;
+		setValueInternal(b.value);
 		proxyId = b.proxyId;
 		stabbingCount = b.stabbingCount;
+	}
+	
+	public final void setValueInternal(int val) {
+		this.value = val;
 	}
 
 	public final boolean isLower() {
@@ -69,10 +73,10 @@ public class Bound {
 		final int value = this.value;
 		final int proxyId = this.proxyId;
 		final int stabbingCount = this.stabbingCount;
-		this.value = other.value;
+		setValueInternal(other.value);
 		this.proxyId = other.proxyId;
 		this.stabbingCount = other.stabbingCount;
-		other.value = value;
+		other.setValueInternal(value);
 		other.proxyId = proxyId;
 		other.stabbingCount = stabbingCount;
 	}

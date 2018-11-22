@@ -57,6 +57,10 @@ public class ContactManager implements PairCallback {
 	public Object pairAdded(final Object proxyUserData1, final Object proxyUserData2) {
 		Shape shape1 = (Shape) proxyUserData1;
 		Shape shape2 = (Shape) proxyUserData2;
+		
+		if (shape1 == null || shape2 == null) {
+			return m_nullContact;
+		}
 
 		Body body1 = shape1.getBody();
 		Body body2 = shape2.getBody();

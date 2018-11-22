@@ -155,9 +155,13 @@ namespace org.jbox2d.collision {
         }
 
         public set(b : Bound) {
-            this.value = b.value;
+            this.setValueInternal(b.value);
             this.proxyId = b.proxyId;
             this.stabbingCount = b.stabbingCount;
+        }
+
+        public setValueInternal(val : number) {
+            this.value = val;
         }
 
         public isLower() : boolean {
@@ -176,10 +180,10 @@ namespace org.jbox2d.collision {
             let value : number = this.value;
             let proxyId : number = this.proxyId;
             let stabbingCount : number = this.stabbingCount;
-            this.value = other.value;
+            this.setValueInternal(other.value);
             this.proxyId = other.proxyId;
             this.stabbingCount = other.stabbingCount;
-            other.value = value;
+            other.setValueInternal(value);
             other.proxyId = proxyId;
             other.stabbingCount = stabbingCount;
         }
@@ -502,10 +506,14 @@ namespace org.jbox2d.collision {
                 points[0].set$org_jbox2d_common_Vec2(points[2]);
                 return 1;
             }
+            if(!(sn > 0.0 || tn > 0.0)) throw new Error("Assertion error line 82: assert sn > 0.0F || tn > 0.0F;");;
+            if(!(sd > 0.0 || un > 0.0)) throw new Error("Assertion error line 83: assert sd > 0.0F || un > 0.0F;");;
             let n : number = (<any>Math).fround((<any>Math).fround(abx * acy) - (<any>Math).fround(aby * acx));
             let vc : number = (<any>Math).fround(n * org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(a, b));
+            if(!(vc > 0.0 || sn > 0.0 || sd > 0.0)) throw new Error("Assertion error line 86: assert vc > 0.0F || sn > 0.0F || sd > 0.0F;");;
             let va : number = (<any>Math).fround(n * org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b, c));
             if(va <= 0.0 && un >= 0.0 && ud >= 0.0 && (<any>Math).fround(un + ud) > 0.0) {
+                if(!((<any>Math).fround(un + ud) > 0.0)) throw new Error("Assertion error line 89: assert un + ud > 0.0F;");;
                 let lambda : number = (<any>Math).fround(un / ((<any>Math).fround(un + ud)));
                 x1.set$float$float((<any>Math).fround(p1s[1].x + (<any>Math).fround(lambda * ((<any>Math).fround(p1s[2].x - p1s[1].x)))), (<any>Math).fround(p1s[1].y + (<any>Math).fround(lambda * ((<any>Math).fround(p1s[2].y - p1s[1].y)))));
                 x2.set$float$float((<any>Math).fround(p2s[1].x + (<any>Math).fround(lambda * ((<any>Math).fround(p2s[2].x - p2s[1].x)))), (<any>Math).fround(p2s[1].y + (<any>Math).fround(lambda * ((<any>Math).fround(p2s[2].y - p2s[1].y)))));
@@ -516,6 +524,7 @@ namespace org.jbox2d.collision {
             }
             let vb : number = (<any>Math).fround(n * org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(c, a));
             if(vb <= 0.0 && tn >= 0.0 && td >= 0.0 && (<any>Math).fround(tn + td) > 0.0) {
+                if(!((<any>Math).fround(tn + td) > 0.0)) throw new Error("Assertion error line 100: assert tn + td > 0.0F;");;
                 let lambda : number = (<any>Math).fround(tn / ((<any>Math).fround(tn + td)));
                 x1.set$float$float((<any>Math).fround(p1s[0].x + (<any>Math).fround(lambda * ((<any>Math).fround(p1s[2].x - p1s[0].x)))), (<any>Math).fround(p1s[0].y + (<any>Math).fround(lambda * ((<any>Math).fround(p1s[2].y - p1s[0].y)))));
                 x2.set$float$float((<any>Math).fround(p2s[0].x + (<any>Math).fround(lambda * ((<any>Math).fround(p2s[2].x - p2s[0].x)))), (<any>Math).fround(p2s[0].y + (<any>Math).fround(lambda * ((<any>Math).fround(p2s[2].y - p2s[0].y)))));
@@ -525,6 +534,7 @@ namespace org.jbox2d.collision {
                 return 2;
             }
             let denom : number = (<any>Math).fround((<any>Math).fround(va + vb) + vc);
+            if(!(denom > 0.0)) throw new Error("Assertion error line 110: assert denom > 0.0F;");;
             denom = (<any>Math).fround(1.0 / denom);
             let u : number = (<any>Math).fround(va * denom);
             let v : number = (<any>Math).fround(vb * denom);
@@ -1680,6 +1690,7 @@ namespace org.jbox2d.collision.shapes {
             let ex : number = (<any>Math).fround(vertices[vertIndex2].x - vertices[vertIndex1].x);
             let ey : number = (<any>Math).fround(vertices[vertIndex2].y - vertices[vertIndex1].y);
             let length : number = org.jbox2d.common.MathUtils.sqrt((<any>Math).fround((<any>Math).fround(ex * ex) + (<any>Math).fround(ey * ey)));
+            if(!((length > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 165: assert (length > Settings.EPSILON);");;
             let invLength : number = (<any>Math).fround(1.0 / length);
             ex *= invLength;
             ey *= invLength;
@@ -1859,6 +1870,7 @@ namespace org.jbox2d.collision.shapes {
             let normals1 : org.jbox2d.common.Vec2[] = poly1.getNormals();
             let count2 : number = poly2.getVertexCount();
             let vertices2 : org.jbox2d.common.Vec2[] = poly2.getVertices();
+            if(!((0 <= edge1 && edge1 < count1))) throw new Error("Assertion error line 44: assert (0 <= edge1 && edge1 < count1);");;
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals1[edge1], this.normal1World);
             let normal1x : number = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col1);
             let normal1y : number = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col2);
@@ -1980,6 +1992,7 @@ namespace org.jbox2d.collision.shapes {
             let count2 : number = poly2.getVertexCount();
             let vertices2 : org.jbox2d.common.Vec2[] = poly2.getVertices();
             let normals2 : org.jbox2d.common.Vec2[] = poly2.getNormals();
+            if(!((0 <= edge1 && edge1 < count1))) throw new Error("Assertion error line 166: assert (0 <= edge1 && edge1 < count1);");;
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals1[edge1], this.mulTemp);
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf2.R, this.mulTemp, this.normal1);
             let index : number = 0;
@@ -2154,6 +2167,7 @@ namespace org.jbox2d.collision.shapes {
             this.colPPe.set$org_jbox2d_common_Vec2(vertices[vertIndex2]);
             this.colPPe.subLocal(vertices[vertIndex1]);
             let length : number = this.colPPe.normalize();
+            if(!((length > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 341: assert (length > Settings.EPSILON);");;
             this.colPPsub.set$org_jbox2d_common_Vec2(this.colPPcLocal);
             this.colPPsub.subLocal(vertices[vertIndex1]);
             let u : number = org.jbox2d.common.Vec2.dot(this.colPPsub, this.colPPe);
@@ -3037,6 +3051,7 @@ namespace org.jbox2d.common {
             let a21 : number = this.col1.y;
             let a22 : number = this.col2.y;
             let det : number = (<any>Math).fround((<any>Math).fround(a11 * a22) - (<any>Math).fround(a12 * a21));
+            if(!((det !== 0.0))) throw new Error("Assertion error line 365: assert (det != 0.0F);");;
             det = (<any>Math).fround(1.0 / det);
             let x : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2((<any>Math).fround(det * ((<any>Math).fround((<any>Math).fround(a22 * b.x) - (<any>Math).fround(a12 * b.y)))), (<any>Math).fround(det * ((<any>Math).fround((<any>Math).fround(a11 * b.y) - (<any>Math).fround(a21 * b.x)))));
             return x;
@@ -3048,6 +3063,7 @@ namespace org.jbox2d.common {
             let a21 : number = this.col1.y;
             let a22 : number = this.col2.y;
             let det : number = (<any>Math).fround((<any>Math).fround(a11 * a22) - (<any>Math).fround(a12 * a21));
+            if(!((det !== 0.0))) throw new Error("Assertion error line 377: assert (det != 0.0F);");;
             det = (<any>Math).fround(1.0 / det);
             let tempy : number = (<any>Math).fround(det * ((<any>Math).fround((<any>Math).fround(a11 * b.y) - (<any>Math).fround(a21 * b.x))));
             out.x = (<any>Math).fround(det * ((<any>Math).fround((<any>Math).fround(a22 * b.x) - (<any>Math).fround(a12 * b.y))));
@@ -3280,6 +3296,7 @@ namespace org.jbox2d.common {
         public solve(b : org.jbox2d.common.Vec3) : org.jbox2d.common.Vec3 {
             org.jbox2d.common.Vec3.crossToOut(this.col1, this.col2, this.temp);
             let det : number = org.jbox2d.common.Vec3.dot(this.col1, this.temp);
+            if(!((det !== 0.0))) throw new Error("Assertion error line 64: assert (det != 0.0F);");;
             det = (<any>Math).fround(1.0 / det);
             let x : org.jbox2d.common.Vec3 = new org.jbox2d.common.Vec3();
             org.jbox2d.common.Vec3.crossToOut(this.col2, this.col3, this.temp);
@@ -3294,6 +3311,7 @@ namespace org.jbox2d.common {
         public solveToOut(b : org.jbox2d.common.Vec3, out : org.jbox2d.common.Vec3) {
             org.jbox2d.common.Vec3.crossToOut(this.col1, this.col2, out);
             let det : number = org.jbox2d.common.Vec3.dot(this.col1, out);
+            if(!((det !== 0.0))) throw new Error("Assertion error line 79: assert (det != 0.0F);");;
             det = (<any>Math).fround(1.0 / det);
             org.jbox2d.common.Vec3.crossToOut(this.col2, this.col3, out);
             let tempx : number = (<any>Math).fround(det * org.jbox2d.common.Vec3.dot(b, out));
@@ -3401,12 +3419,12 @@ namespace org.jbox2d.common {
         /**
          * Must be a power of two.
          */
-        public static maxProxies : number = 2048;
+        public static maxProxies : number = 64;
 
         /**
          * Must be a power of two.
          */
-        public static maxPairs : number; public static maxPairs_$LI$() : number { if(Settings.maxPairs == null) Settings.maxPairs = 8 * Settings.maxProxies; return Settings.maxPairs; };
+        public static maxPairs : number; public static maxPairs_$LI$() : number { if(Settings.maxPairs == null) Settings.maxPairs = 64 * Settings.maxProxies; return Settings.maxPairs; };
 
         /**
          * A small length used as a collision and constraint tolerance. Usually it is
@@ -3574,6 +3592,7 @@ namespace org.jbox2d.common {
          * @param {number} t the normalized time in [0,1].
          */
         public getXForm(xf : org.jbox2d.common.XForm, t : number) {
+            if(!((xf != null))) throw new Error("Assertion error line 79: assert (xf != null);");;
             if((<any>Math).fround(1.0 - this.t0) > org.jbox2d.common.Settings.EPSILON) {
                 let alpha : number = (<any>Math).fround(((<any>Math).fround(t - this.t0)) / ((<any>Math).fround(1.0 - this.t0)));
                 xf.position.x = (<any>Math).fround((<any>Math).fround(((<any>Math).fround(1.0 - alpha)) * this.c0.x) + (<any>Math).fround(alpha * this.c.x));
@@ -4406,6 +4425,7 @@ namespace org.jbox2d.dynamics {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.bodies, b);
                             if(w == null) w = b.getWorld(); else if(b.getWorld() !== w) {
                                 console.info("Cannot add bodies from different worlds to a BodyGroup");
+                                if(!((false))) throw new Error("Assertion error line 30: assert (false) : 'Cannot add bodies from different worlds to a BodyGroup';");;
                             }
                         }
                     }
@@ -4426,6 +4446,7 @@ namespace org.jbox2d.dynamics {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.children, bg);
                             if(w == null) w = bg.getWorld(); else if(bg.getWorld() !== w) {
                                 console.info("Cannot add BodyGroups from different worlds to a BodyGroup");
+                                if(!((false))) throw new Error("Assertion error line 51: assert (false) : 'Cannot add BodyGroups from different worlds to a BodyGroup';");;
                             }
                         }
                     }
@@ -4818,6 +4839,7 @@ namespace org.jbox2d.dynamics.contacts {
         }
 
         public static destroy(contact : Contact) {
+            if(!((Contact.s_initialized === true))) throw new Error("Assertion error line 269: assert (s_initialized == true);");;
             if(contact.getManifoldCount() > 0) {
                 contact.getShape1().getBody().wakeUp();
                 contact.getShape2().getBody().wakeUp();
@@ -5155,6 +5177,7 @@ namespace org.jbox2d.dynamics.contacts {
             this.m_step = step;
             this.m_constraintCount = 0;
             for(let i : number = 0; i < contactCount; i++) {{
+                if(!((contacts[i].isSolid()))) throw new Error("Assertion error line 19: assert (contacts[i].isSolid());");;
                 this.m_constraintCount += contacts[i].getManifoldCount();
             };}
             this.m_constraints = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.m_constraintCount);
@@ -5176,7 +5199,9 @@ namespace org.jbox2d.dynamics.contacts {
                 let w2 : number = b2.m_angularVelocity;
                 for(let j : number = 0; j < manifoldCount; ++j) {{
                     let manifold : org.jbox2d.collision.Manifold = /* get */manifolds[j];
+                    if(!((manifold.pointCount > 0))) throw new Error("Assertion error line 41: assert (manifold.pointCount > 0) : 'Manifold ' + j + ' has length 0';");;
                     let normal : org.jbox2d.common.Vec2 = manifold.normal;
+                    if(!((count < this.m_constraintCount))) throw new Error("Assertion error line 43: assert (count < m_constraintCount);");;
                     let c : org.jbox2d.dynamics.contacts.ContactConstraint = this.m_constraints[count];
                     c.body1 = b1;
                     c.body2 = b2;
@@ -5205,9 +5230,11 @@ namespace org.jbox2d.dynamics.contacts {
                         rn1 *= rn1;
                         rn2 *= rn2;
                         let kNormal : number = (<any>Math).fround((<any>Math).fround((<any>Math).fround(b1.m_invMass + b2.m_invMass) + (<any>Math).fround(b1.m_invI * rn1)) + (<any>Math).fround(b2.m_invI * rn2));
+                        if(!((kNormal > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 72: assert (kNormal > Settings.EPSILON) : 'kNormal was ' + kNormal;");;
                         ccp.normalMass = (<any>Math).fround(1.0 / kNormal);
                         let kEqualized : number = (<any>Math).fround((<any>Math).fround(b1.m_mass * b1.m_invMass) + (<any>Math).fround(b2.m_mass * b2.m_invMass));
                         kEqualized += (<any>Math).fround((<any>Math).fround((<any>Math).fround(b1.m_mass * b1.m_invI) * rn1) + (<any>Math).fround((<any>Math).fround(b2.m_mass * b2.m_invI) * rn2));
+                        if(!((kEqualized > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 76: assert (kEqualized > Settings.EPSILON) : 'kEqualized was ' + kEqualized;");;
                         ccp.equalizedMass = (<any>Math).fround(1.0 / kEqualized);
                         let tangentx : number = normal.y;
                         let tangenty : number = -normal.x;
@@ -5218,6 +5245,7 @@ namespace org.jbox2d.dynamics.contacts {
                         rt1 *= rt1;
                         rt2 *= rt2;
                         let kTangent : number = (<any>Math).fround((<any>Math).fround((<any>Math).fround(b1.m_invMass + b2.m_invMass) + (<any>Math).fround(b1.m_invI * rt1)) + (<any>Math).fround(b2.m_invI * rt2));
+                        if(!((kTangent > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 87: assert (kTangent > Settings.EPSILON);");;
                         ccp.tangentMass = (<any>Math).fround(1.0 / kTangent);
                         ccp.velocityBias = 0.0;
                         if(ccp.separation > 0.0) {
@@ -5235,6 +5263,7 @@ namespace org.jbox2d.dynamics.contacts {
                     ++count;
                 };}
             };}
+            if(!((count === this.m_constraintCount))) throw new Error("Assertion error line 105: assert (count == m_constraintCount);");;
         }
 
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
@@ -5447,10 +5476,12 @@ namespace org.jbox2d.dynamics.controllers {
          * @param {org.jbox2d.dynamics.Body} body
          */
         public removeBody(body : org.jbox2d.dynamics.Body) {
+            if(!((this.m_bodyCount > 0))) throw new Error("Assertion error line 49: assert (m_bodyCount > 0);");;
             let edge : org.jbox2d.dynamics.controllers.ControllerEdge = this.m_bodyList;
             while((edge != null && edge.body !== body)) {{
                 edge = edge.nextBody;
             }};
+            if(!((edge != null))) throw new Error("Assertion error line 54: assert (edge != null);");;
             if(edge.prevBody != null) {
                 edge.prevBody.nextBody = edge.nextBody;
             }
@@ -5951,6 +5982,7 @@ namespace org.jbox2d.dynamics.joints {
             } else if(description.type === org.jbox2d.dynamics.joints.JointType.CONSTANT_VOLUME_JOINT) {
                 joint = new org.jbox2d.dynamics.joints.ConstantVolumeJoint(<org.jbox2d.dynamics.joints.ConstantVolumeJointDef>description);
             } else {
+                if(!(false)) throw new Error("Assertion error line 79: assert false;");;
             }
             return joint;
         }
@@ -7429,10 +7461,12 @@ namespace org.jbox2d.pooling.arrays {
         /*private*/ tlMap : DynamicTLArray.TLHashMap<number, I[]> = <any>((() => { let __o : any = new DynamicTLArray.TLHashMap<number, I[]>(); __o.__delegate = new DynamicTLArray.TLHashMap<number, I[]>(); return __o; })());
 
         public get(argLength : number) : I[] {
-            let map : any = /* get */this.tlMap.initialValue();
+            if(!((argLength > 0))) throw new Error("Assertion error line 6: assert (argLength > 0);");;
+            let map : any = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(this.tlMap);
             if(!/* containsKey */((m,k) => { if(m.entries==null) m.entries=[]; for(let i=0;i<m.entries.length;i++) if(m.entries[i].key.equals!=null && m.entries[i].key.equals(k) || m.entries[i].key===k) { return true; } return false; })(<any>map, argLength)) {
                 /* put */((m,k,v) => { if(m.entries==null) m.entries=[]; for(let i=0;i<m.entries.length;i++) if(m.entries[i].key.equals!=null && m.entries[i].key.equals(k) || m.entries[i].key===k) { m.entries[i].value=v; return; } m.entries.push({key:k,value:v,getKey: function() { return this.key }, getValue: function() { return this.value }}); })(<any>map, argLength, this.getInitializedArray(argLength));
             }
+            if(!((/* get */((m,k) => { if(m.entries==null) m.entries=[]; for(let i=0;i<m.entries.length;i++) if(m.entries[i].key.equals!=null && m.entries[i].key.equals(k) || m.entries[i].key===k) { return m.entries[i].value; } return null; })(<any>map, argLength).length === argLength))) throw new Error("Assertion error line 11: assert (map.get(argLength).length == argLength) : 'Array not built of correct length';");;
             return /* get */((m,k) => { if(m.entries==null) m.entries=[]; for(let i=0;i<m.entries.length;i++) if(m.entries[i].key.equals!=null && m.entries[i].key.equals(k) || m.entries[i].key===k) { return m.entries[i].value; } return null; })(<any>map, argLength);
         }
 
@@ -7464,15 +7498,15 @@ namespace org.jbox2d.pooling {
         static pool : SingletonPool.Pool; public static pool_$LI$() : SingletonPool.Pool { if(SingletonPool.pool == null) SingletonPool.pool = (() => { let __o : any = new SingletonPool.Pool(); __o.__delegate = new SingletonPool.Pool(); return __o; })(); return SingletonPool.pool; };
 
         public static getCollideCircle() : org.jbox2d.collision.shapes.CollideCircle {
-            return /* get */SingletonPool.pool_$LI$().initialValue().collideCircle;
+            return /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(SingletonPool.pool_$LI$()).collideCircle;
         }
 
         public static getCollidePoly() : org.jbox2d.collision.shapes.CollidePoly {
-            return /* get */SingletonPool.pool_$LI$().initialValue().collidePoly;
+            return /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(SingletonPool.pool_$LI$()).collidePoly;
         }
 
         public static getDistance() : org.jbox2d.collision.Distance {
-            return /* get */SingletonPool.pool_$LI$().initialValue().distance;
+            return /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(SingletonPool.pool_$LI$()).distance;
         }
     }
     SingletonPool["__class"] = "org.jbox2d.pooling.SingletonPool";
@@ -7511,7 +7545,7 @@ namespace org.jbox2d.pooling.stacks {
         /*private*/ tlStack : org.jbox2d.pooling.TLStack<T> = <any>((() => { let __o : any = new org.jbox2d.pooling.TLStack<T>(); __o.__delegate = new org.jbox2d.pooling.TLStack<T>(); return __o; })());
 
         public get() : T {
-            let stack : Array<T> = /* get */this.tlStack.initialValue();
+            let stack : Array<T> = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(this.tlStack);
             if(/* isEmpty */(stack.length == 0)) {
                 /* push */(stack.push(this.newObjectInstance())>0);
                 /* push */(stack.push(this.newObjectInstance())>0);
@@ -7521,7 +7555,7 @@ namespace org.jbox2d.pooling.stacks {
         }
 
         public recycle(argObject : T) {
-            /* push */(/* get */this.tlStack.initialValue().push(argObject)>0);
+            /* push */(/* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(this.tlStack).push(argObject)>0);
         }
 
         abstract newObjectInstance() : T;
@@ -9184,6 +9218,8 @@ namespace org.jbox2d.collision {
             this.m_pairs = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxPairs_$LI$());
             this.m_hashTable = (s => { let a=[]; while(s-->0) a.push(0); return a; })(PairManager.TABLE_CAPACITY_$LI$());
             this.m_pairBuffer = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxPairs_$LI$());
+            if(!(org.jbox2d.common.MathUtils.isPowerOfTwo(PairManager.TABLE_CAPACITY_$LI$()) === true)) throw new Error("Assertion error line 39: assert MathUtils.isPowerOfTwo(PairManager.TABLE_CAPACITY) == true;");;
+            if(!(PairManager.TABLE_CAPACITY_$LI$() >= org.jbox2d.common.Settings.maxPairs_$LI$())) throw new Error("Assertion error line 40: assert PairManager.TABLE_CAPACITY >= Settings.maxPairs;");;
             for(let i : number = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {{
                 this.m_hashTable[i] = PairManager.NULL_PAIR_$LI$();
             };}
@@ -9218,6 +9254,8 @@ namespace org.jbox2d.collision {
             if(pair != null) {
                 return pair;
             }
+            if(!((this.m_pairCount < org.jbox2d.common.Settings.maxPairs_$LI$()))) throw new Error("Assertion error line 75: assert (m_pairCount < Settings.maxPairs) : 'Too many pairs (' + m_pairCount + ' shape AABB overlaps) - this usually means you have too many bodies, or you need to increase Settings.maxPairs.';");;
+            if(!((this.m_freePair !== PairManager.NULL_PAIR_$LI$()))) throw new Error("Assertion error line 76: assert (m_freePair != PairManager.NULL_PAIR);");;
             let pairIndex : number = this.m_freePair;
             pair = this.m_pairs[pairIndex];
             this.m_freePair = pair.next;
@@ -9232,12 +9270,16 @@ namespace org.jbox2d.collision {
         }
 
         public removePair(proxyId1 : number, proxyId2 : number) : any {
+            if(!((this.m_pairCount > 0))) throw new Error("Assertion error line 91: assert (m_pairCount > 0);");;
             if(proxyId1 > proxyId2) {
                 proxyId1 += proxyId2;
                 proxyId2 = proxyId1 - proxyId2;
                 proxyId1 -= proxyId2;
             }
             let hash : number = this.hash(proxyId1, proxyId2) & PairManager.TABLE_MASK_$LI$();
+            if(org.jbox2d.collision.BroadPhase.debugPrint) {
+                console.info("removePair(" + proxyId1 + "," + proxyId2 + ") hash=" + hash);
+            }
             let derefnode : number = this.m_hashTable[hash];
             let isHash : boolean = true;
             let pderefnode : number = 0;
@@ -9265,24 +9307,29 @@ namespace org.jbox2d.collision {
                     isHash = false;
                 }
             }};
+            if(!((false))) throw new Error("Assertion error line 128: assert (false) : 'Attempted to remove a pair that does not exist';");;
             return null;
         }
 
         /**
-         * Buffer a pair for addition.
-         * We may add a pair that is not in the pair manager or pair buffer.
-         * We may add a pair that is already in the pair manager and pair buffer.
-         * If the added pair is not a new pair, then it must be in the pair buffer (because RemovePair was called).
+         * Buffer a pair for addition. We may add a pair that is not in the pair manager
+         * or pair buffer. We may add a pair that is already in the pair manager and
+         * pair buffer. If the added pair is not a new pair, then it must be in the pair
+         * buffer (because RemovePair was called).
          * @param {number} id1
          * @param {number} id2
          */
         public addBufferedPair(id1 : number, id2 : number) {
+            if(!((id1 !== PairManager.NULL_PROXY_$LI$() && id2 !== PairManager.NULL_PROXY_$LI$()))) throw new Error("Assertion error line 141: assert (id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);");;
+            if(!((this.m_pairBufferCount < org.jbox2d.common.Settings.maxPairs_$LI$()))) throw new Error("Assertion error line 142: assert (m_pairBufferCount < Settings.maxPairs);");;
             let pair : org.jbox2d.collision.Pair = this.addPair(id1, id2);
             if(pair.isBuffered() === false) {
+                if(!((pair.isFinal() === false))) throw new Error("Assertion error line 145: assert (pair.isFinal() == false);");;
                 pair.setBuffered();
                 this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
                 this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
                 ++this.m_pairBufferCount;
+                if(!((this.m_pairBufferCount <= this.m_pairCount))) throw new Error("Assertion error line 150: assert (m_pairBufferCount <= m_pairCount);");;
             }
             pair.clearRemoved();
             if(org.jbox2d.collision.BroadPhase.s_validate) {
@@ -9292,19 +9339,24 @@ namespace org.jbox2d.collision {
 
         /**
          * Buffer a pair for removal.
+         * 
          * @param {number} id1
          * @param {number} id2
          */
         public removeBufferedPair(id1 : number, id2 : number) {
+            if(!((id1 !== PairManager.NULL_PROXY_$LI$() && id2 !== PairManager.NULL_PROXY_$LI$()))) throw new Error("Assertion error line 165: assert (id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);");;
+            if(!((this.m_pairBufferCount < org.jbox2d.common.Settings.maxPairs_$LI$()))) throw new Error("Assertion error line 166: assert (m_pairBufferCount < Settings.maxPairs);");;
             let pair : org.jbox2d.collision.Pair = this.find$int$int(id1, id2);
             if(pair == null) {
                 return;
             }
             if(pair.isBuffered() === false) {
+                if(!((pair.isFinal() === true))) throw new Error("Assertion error line 172: assert (pair.isFinal() == true);");;
                 pair.setBuffered();
                 this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
                 this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
                 ++this.m_pairBufferCount;
+                if(!((this.m_pairBufferCount <= this.m_pairCount))) throw new Error("Assertion error line 177: assert (m_pairBufferCount <= m_pairCount);");;
             }
             pair.setRemoved();
             if(org.jbox2d.collision.BroadPhase.s_validate) {
@@ -9320,9 +9372,13 @@ namespace org.jbox2d.collision {
             let proxies : org.jbox2d.collision.Proxy[] = this.m_broadPhase.m_proxyPool;
             for(let i : number = 0; i < this.m_pairBufferCount; ++i) {{
                 let pair : org.jbox2d.collision.Pair = this.find$int$int(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
+                if(!((pair.isBuffered()))) throw new Error("Assertion error line 193: assert (pair.isBuffered());");;
                 pair.clearBuffered();
+                if(!((pair.proxyId1 < org.jbox2d.common.Settings.maxProxies && pair.proxyId2 < org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 195: assert (pair.proxyId1 < Settings.maxProxies && pair.proxyId2 < Settings.maxProxies);");;
                 let proxy1 : org.jbox2d.collision.Proxy = proxies[pair.proxyId1];
                 let proxy2 : org.jbox2d.collision.Proxy = proxies[pair.proxyId2];
+                if(!((proxy1.isValid()))) throw new Error("Assertion error line 198: assert (proxy1.isValid());");;
+                if(!((proxy2.isValid()))) throw new Error("Assertion error line 199: assert (proxy2.isValid());");;
                 if(pair.isRemoved()) {
                     if(pair.isFinal() === true) {
                         this.m_callback.pairRemoved(proxy1.userData, proxy2.userData, pair.userData);
@@ -9331,12 +9387,19 @@ namespace org.jbox2d.collision {
                     this.m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
                     ++removeCount;
                 } else {
+                    if(!((this.m_broadPhase.testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy(proxy1, proxy2) === true))) throw new Error("Assertion error line 208: assert (m_broadPhase.testOverlap(proxy1, proxy2) == true);");;
                     if(pair.isFinal() === false) {
+                        if(org.jbox2d.collision.BroadPhase.debugPrint) {
+                            console.info("add pair " + proxy1.userData + " == " + proxy2.userData);
+                        }
                         pair.userData = this.m_callback.pairAdded(proxy1.userData, proxy2.userData);
                         pair.setFinal();
                     }
                 }
             };}
+            if(org.jbox2d.collision.BroadPhase.debugPrint && removeCount > 0) {
+                console.info("pair manager removeCount=" + removeCount);
+            }
             for(let i : number = 0; i < removeCount; ++i) {{
                 this.removePair(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
             };}
@@ -9360,8 +9423,17 @@ namespace org.jbox2d.collision {
                 let index : number = this.m_hashTable[i];
                 while((index !== PairManager.NULL_PAIR_$LI$())) {{
                     let pair : org.jbox2d.collision.Pair = this.m_pairs[index];
+                    if(!((pair.isBuffered() === false))) throw new Error("Assertion error line 244: assert (pair.isBuffered() == false);");;
+                    if(!((pair.isFinal() === true))) throw new Error("Assertion error line 245: assert (pair.isFinal() == true);");;
+                    if(!((pair.isRemoved() === false))) throw new Error("Assertion error line 246: assert (pair.isRemoved() == false);");;
+                    if(!((pair.proxyId1 !== pair.proxyId2))) throw new Error("Assertion error line 247: assert (pair.proxyId1 != pair.proxyId2);");;
+                    if(!((pair.proxyId1 < org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 248: assert (pair.proxyId1 < Settings.maxProxies);");;
+                    if(!((pair.proxyId2 < org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 249: assert (pair.proxyId2 < Settings.maxProxies);");;
                     let proxy1 : org.jbox2d.collision.Proxy = this.m_broadPhase.m_proxyPool[pair.proxyId1];
                     let proxy2 : org.jbox2d.collision.Proxy = this.m_broadPhase.m_proxyPool[pair.proxyId2];
+                    if(!((proxy1.isValid() === true))) throw new Error("Assertion error line 252: assert (proxy1.isValid() == true);");;
+                    if(!((proxy2.isValid() === true))) throw new Error("Assertion error line 253: assert (proxy2.isValid() == true);");;
+                    if(!((this.m_broadPhase.testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy(proxy1, proxy2) === true))) throw new Error("Assertion error line 254: assert (m_broadPhase.testOverlap(proxy1, proxy2) == true);");;
                     index = pair.next;
                 }};
             };}
@@ -9369,17 +9441,22 @@ namespace org.jbox2d.collision {
 
         public find$int$int$int(proxyId1 : number, proxyId2 : number, hash : number) : org.jbox2d.collision.Pair {
             let index : number = this.m_hashTable[hash];
+            if(org.jbox2d.collision.BroadPhase.debugPrint) {
+                console.info("find(" + proxyId1 + "," + proxyId2 + ") hash=" + hash + " tableIdx=" + index);
+            }
             while((index !== PairManager.NULL_PAIR_$LI$() && this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[index], proxyId1, proxyId2) === false)) {{
                 index = this.m_pairs[index].next;
             }};
             if(index === PairManager.NULL_PAIR_$LI$()) {
                 return null;
             }
+            if(!(index < org.jbox2d.common.Settings.maxPairs_$LI$())) throw new Error("Assertion error line 271: assert index < Settings.maxPairs;");;
             return this.m_pairs[index];
         }
 
         /**
          * finds the pair with the given hash
+         * 
          * @param {number} proxyId1
          * @param {number} proxyId2
          * @param {number} hash
@@ -9421,6 +9498,7 @@ namespace org.jbox2d.collision {
 
         /**
          * returns if the pair has the two proxy id's
+         * 
          * @param {org.jbox2d.collision.Pair} pair
          * @param {number} proxyId1
          * @param {number} proxyId2
@@ -9440,8 +9518,9 @@ namespace org.jbox2d.collision {
         }
 
         /**
-         * For sorting.  Returns if the first pair's proxyid's are less than the
-         * second pair, starting with proxyId1
+         * For sorting. Returns if the first pair's proxyid's are less than the second
+         * pair, starting with proxyId1
+         * 
          * @param {org.jbox2d.collision.BufferedPair} pair1
          * @param {org.jbox2d.collision.BufferedPair} pair2
          * @return
@@ -9977,6 +10056,7 @@ namespace org.jbox2d.util.nonconvex {
             let currIndex : number = 0;
             for(let i : number = 0; i < this.nVertices; ++i) {{
                 if(mergeMe[i] || newNVertices === 0 || currIndex === newNVertices) continue;
+                if(!((currIndex < newNVertices))) throw new Error("Assertion error line 274: assert (currIndex < newNVertices);");;
                 newx[currIndex] = this.x[i];
                 newy[currIndex] = this.y[i];
                 ++currIndex;
@@ -10141,7 +10221,7 @@ namespace org.jbox2d.util.nonconvex {
                     break;
                 default:
                     console.info("don\'t know why.\n");
-                    ;
+                    if(!(false)) throw new Error("Assertion error line 439: assert false;");;
                 }
             }
             return noError;
@@ -10268,6 +10348,7 @@ namespace org.jbox2d.util.nonconvex {
         public addTo(pd : org.jbox2d.collision.shapes.PolygonDef) {
             if(this.nVertices < 3) return;
             let vecs : org.jbox2d.common.Vec2[] = this.getVertexVecs();
+            if(!((this.nVertices <= org.jbox2d.common.Settings.maxPolygonVertices))) throw new Error("Assertion error line 566: assert (nVertices <= Settings.maxPolygonVertices);");;
             let offset : number = 0;
             for(let i : number = 0; i < this.nVertices; ++i) {{
                 if(vecs[i].x === vecs[Polygon.remainder(i + 1, this.nVertices)].x && vecs[i].y === vecs[Polygon.remainder(i + 1, this.nVertices)].y) {
@@ -10461,6 +10542,7 @@ namespace org.jbox2d.util.nonconvex {
             let toAdd : org.jbox2d.util.nonconvex.Triangle = new org.jbox2d.util.nonconvex.Triangle(xrem[1], yrem[1], xrem[2], yrem[2], xrem[0], yrem[0]);
             buffer[bufferSize] = toAdd;
             ++bufferSize;
+            if(!((bufferSize === xremLength - 2))) throw new Error("Assertion error line 760: assert (bufferSize == xremLength - 2);");;
             for(let i : number = 0; i < bufferSize; i++) {{
                 results[i].set(buffer[i]);
             };}
@@ -10773,6 +10855,7 @@ namespace org.jbox2d.util.nonconvex {
         }
 
         public static convexHull$float_A$float_A$int(cloudX : number[], cloudY : number[], nVert : number) : Polygon {
+            if(!((nVert > 2))) throw new Error("Assertion error line 1073: assert (nVert > 2);");;
             let edgeList : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(nVert);
             let numEdges : number = 0;
             let minY : number = 3.4028235E38;
@@ -10924,6 +11007,7 @@ namespace org.jbox2d.util.nonconvex {
                             let njConn : number = jnode.nConnected;
                             for(let k : number = 0; k < njConn; ++k) {{
                                 let knode : org.jbox2d.util.nonconvex.PolyNode = jnode.connected[k];
+                                if(!((knode !== jnode))) throw new Error("Assertion error line 1225: assert (knode != jnode);");;
                                 if(knode !== inode) {
                                     inode.addConnection(knode);
                                     knode.addConnection(inode);
@@ -10953,6 +11037,7 @@ namespace org.jbox2d.util.nonconvex {
             let nResultVecs : number = 0;
             let currentNode : org.jbox2d.util.nonconvex.PolyNode = nodes[minYIndex];
             let startNode : org.jbox2d.util.nonconvex.PolyNode = currentNode;
+            if(!((currentNode.nConnected > 0))) throw new Error("Assertion error line 1255: assert (currentNode.nConnected > 0);");;
             let nextNode : org.jbox2d.util.nonconvex.PolyNode = currentNode.getRightestConnection$org_jbox2d_common_Vec2(origDir);
             if(nextNode == null) {
                 startNode = nextNode;
@@ -10961,6 +11046,7 @@ namespace org.jbox2d.util.nonconvex {
             ++nResultVecs;
             while((nextNode !== startNode)) {{
                 if(nResultVecs > 4 * nNodes) {
+                    if(!((false))) throw new Error("Assertion error line 1264: assert (false);");;
                 }
                 resultVecs[nResultVecs++] = nextNode.position;
                 let oldNode : org.jbox2d.util.nonconvex.PolyNode = currentNode;
@@ -11040,6 +11126,7 @@ namespace org.jbox2d.util.nonconvex {
         }
 
         addConnection(toMe : PolyNode) {
+            if(!((this.nConnected < PolyNode.MAX_CONNECTED))) throw new Error("Assertion error line 1344: assert (nConnected < MAX_CONNECTED);");;
             for(let i : number = 0; i < this.nConnected; ++i) {{
                 if(this.connected[i] === toMe) return;
             };}
@@ -11057,6 +11144,7 @@ namespace org.jbox2d.util.nonconvex {
                     break;
                 }
             };}
+            if(!((isFound))) throw new Error("Assertion error line 1362: assert (isFound);");;
             --this.nConnected;
             for(let i : number = foundIndex; i < this.nConnected; ++i) {{
                 this.connected[i] = this.connected[i + 1];
@@ -11083,6 +11171,7 @@ namespace org.jbox2d.util.nonconvex {
 
         public getRightestConnection$org_jbox2d_util_nonconvex_PolyNode(incoming : PolyNode) : PolyNode {
             if(this.nConnected === 0) {
+                if(!((false))) throw new Error("Assertion error line 1389: assert (false);");;
                 return null;
             }
             if(this.nConnected === 1) {
@@ -11090,12 +11179,14 @@ namespace org.jbox2d.util.nonconvex {
             }
             let inDir : org.jbox2d.common.Vec2 = this.position.sub(incoming.position);
             let inLength : number = inDir.normalize();
+            if(!((inLength > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 1397: assert (inLength > Settings.EPSILON);");;
             let result : PolyNode = null;
             for(let i : number = 0; i < this.nConnected; ++i) {{
                 if(this.connected[i] === incoming) continue;
                 let testDir : org.jbox2d.common.Vec2 = this.connected[i].position.sub(this.position);
                 let testLengthSqr : number = testDir.lengthSquared();
                 testDir.normalize();
+                if(!((testLengthSqr >= org.jbox2d.util.nonconvex.Polygon.COLLAPSE_DIST_SQR_$LI$()))) throw new Error("Assertion error line 1404: assert (testLengthSqr >= Polygon.COLLAPSE_DIST_SQR);");;
                 let myCos : number = org.jbox2d.common.Vec2.dot(inDir, testDir);
                 let mySin : number = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(inDir, testDir);
                 if(result != null) {
@@ -11110,6 +11201,7 @@ namespace org.jbox2d.util.nonconvex {
                     result = this.connected[i];
                 }
             };}
+            if(!((result != null))) throw new Error("Assertion error line 1419: assert (result != null);");;
             return result;
         }
 
@@ -11125,6 +11217,7 @@ namespace org.jbox2d.util.nonconvex {
             let diff : org.jbox2d.common.Vec2 = this.position.sub(incomingDir);
             let temp : PolyNode = new PolyNode(diff);
             let res : PolyNode = this.getRightestConnection$org_jbox2d_util_nonconvex_PolyNode(temp);
+            if(!((res != null))) throw new Error("Assertion error line 1435: assert (res != null);");;
             return res;
         }
     }
@@ -11762,6 +11855,10 @@ namespace org.jbox2d.dynamics.joints {
             this.m_J = new org.jbox2d.dynamics.joints.Jacobian();
             let type1 : org.jbox2d.dynamics.joints.JointType = def.joint1.getType();
             let type2 : org.jbox2d.dynamics.joints.JointType = def.joint2.getType();
+            if(!((type1 === org.jbox2d.dynamics.joints.JointType.REVOLUTE_JOINT || type1 === org.jbox2d.dynamics.joints.JointType.PRISMATIC_JOINT))) throw new Error("Assertion error line 73: assert (type1 == JointType.REVOLUTE_JOINT || type1 == JointType.PRISMATIC_JOINT);");;
+            if(!((type2 === org.jbox2d.dynamics.joints.JointType.REVOLUTE_JOINT || type2 === org.jbox2d.dynamics.joints.JointType.PRISMATIC_JOINT))) throw new Error("Assertion error line 74: assert (type2 == JointType.REVOLUTE_JOINT || type2 == JointType.PRISMATIC_JOINT);");;
+            if(!((def.joint1.getBody1().isStatic()))) throw new Error("Assertion error line 75: assert (def.joint1.getBody1().isStatic());");;
+            if(!((def.joint2.getBody1().isStatic()))) throw new Error("Assertion error line 76: assert (def.joint2.getBody1().isStatic());");;
             this.m_revolute1 = null;
             this.m_prismatic1 = null;
             this.m_revolute2 = null;
@@ -11812,8 +11909,8 @@ namespace org.jbox2d.dynamics.joints {
             let g2 : org.jbox2d.dynamics.Body = this.m_ground2;
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let ug : org.jbox2d.common.Vec2 = /* get */this.tlug.initialValue();
-            let r : org.jbox2d.common.Vec2 = /* get */this.tlr.initialValue();
+            let ug : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(this.tlug);
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(this.tlr);
             let K : number = 0.0;
             this.m_J.setZero();
             if(this.m_revolute1 != null) {
@@ -11840,6 +11937,7 @@ namespace org.jbox2d.dynamics.joints {
                 this.m_J.angular2 = (<any>Math).fround(-this.m_ratio * crug);
                 K += (<any>Math).fround((<any>Math).fround(this.m_ratio * this.m_ratio) * ((<any>Math).fround(b2.m_invMass + (<any>Math).fround((<any>Math).fround(b2.m_invI * crug) * crug))));
             }
+            if(!((K > 0.0))) throw new Error("Assertion error line 155: assert (K > 0.0F);");;
             this.m_mass = (<any>Math).fround(1.0 / K);
             if(step.warmStarting) {
                 let P : number = (<any>Math).fround(step.dt * this.m_force);
@@ -12284,6 +12382,7 @@ namespace org.jbox2d.dynamics.joints {
             let d2 : org.jbox2d.common.Vec2 = anchor2.sub(ga2);
             this.length2 = d2.length();
             this.ratio = r;
+            if(!((this.ratio > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 49: assert (ratio > Settings.EPSILON);");;
             let C : number = (<any>Math).fround(this.length1 + (<any>Math).fround(this.ratio * this.length2));
             this.maxLength1 = (<any>Math).fround(C - (<any>Math).fround(this.ratio * org.jbox2d.dynamics.joints.PulleyJoint.MIN_PULLEY_LENGTH));
             this.maxLength2 = (<any>Math).fround(((<any>Math).fround(C - org.jbox2d.dynamics.joints.PulleyJoint.MIN_PULLEY_LENGTH)) / this.ratio);
@@ -12740,7 +12839,7 @@ namespace org.jbox2d.collision.shapes {
             if(this.m_proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$()) {
                 return false;
             }
-            let aabb : org.jbox2d.collision.AABB = /* get */Shape.tlAabb_$LI$().initialValue();
+            let aabb : org.jbox2d.collision.AABB = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(Shape.tlAabb_$LI$());
             this.computeSweptAABB(aabb, transform1, transform2);
             if(broadPhase.inRange(aabb)) {
                 broadPhase.moveProxy(this.m_proxyId, aabb);
@@ -12783,6 +12882,7 @@ namespace org.jbox2d.collision.shapes {
             } else if(def.type === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE) {
                 return new org.jbox2d.collision.shapes.PointShape(def);
             }
+            if(!(false)) throw new Error("Assertion error line 287: assert false;");;
             return null;
         }
 
@@ -12807,6 +12907,7 @@ namespace org.jbox2d.collision.shapes {
          * Internal
          */
         public destructor() {
+            if(!((this.m_proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$()))) throw new Error("Assertion error line 312: assert (m_proxyId == PairManager.NULL_PROXY);");;
         }
 
         /**
@@ -12815,9 +12916,11 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.XForm} transform
          */
         public createProxy(broadPhase : org.jbox2d.collision.BroadPhase, transform : org.jbox2d.common.XForm) {
+            if(!((this.m_proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$()))) throw new Error("Assertion error line 321: assert (m_proxyId == PairManager.NULL_PROXY);");;
             let aabb : org.jbox2d.collision.AABB = new org.jbox2d.collision.AABB();
             this.computeAABB(aabb, transform);
             let inRange : boolean = broadPhase.inRange(aabb);
+            if(!((inRange))) throw new Error("Assertion error line 325: assert (inRange);");;
             if(inRange) {
                 this.m_proxyId = broadPhase.createProxy(aabb, this);
             } else {
@@ -12901,6 +13004,14 @@ namespace org.jbox2d.collision.shapes {
                 curr = curr.next;
             }};
             return contacts;
+        }
+
+        /**
+         * 
+         * @return {string}
+         */
+        public toString() : string {
+            return "shape:" + (this.m_type == null?"unknown":/* Enum.name */org.jbox2d.collision.shapes.ShapeType[this.m_type]) + "_uid=" + this.uid;
         }
     }
     Shape["__class"] = "org.jbox2d.collision.shapes.Shape";
@@ -13058,7 +13169,7 @@ namespace org.jbox2d.common {
          * @param {org.jbox2d.common.Vec2} argWorld
          */
         public vectorInverseTransform(argScreen : org.jbox2d.common.Vec2, argWorld : org.jbox2d.common.Vec2) {
-            let inv : org.jbox2d.common.Mat22 = /* get */OBBViewportTransform.tlInv_$LI$().initialValue();
+            let inv : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(OBBViewportTransform.tlInv_$LI$());
             inv.set$org_jbox2d_common_Mat22(this.box.R);
             inv.invertLocal();
             inv.mulToOut$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(argScreen, argWorld);
@@ -13102,7 +13213,7 @@ namespace org.jbox2d.common {
         public getScreenToWorld(argScreen : org.jbox2d.common.Vec2, argWorld : org.jbox2d.common.Vec2) {
             argWorld.set$org_jbox2d_common_Vec2(argScreen);
             argWorld.subLocal(this.box.extents);
-            let inv : org.jbox2d.common.Mat22 = /* get */OBBViewportTransform.tlInv_$LI$().initialValue();
+            let inv : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(OBBViewportTransform.tlInv_$LI$());
             this.box.R.invertToOut(inv);
             inv.mulToOut$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(argWorld, argWorld);
             if(this.yFlip) {
@@ -13142,13 +13253,13 @@ namespace org.jbox2d.collision {
 
         public testSegment(out : org.jbox2d.common.RaycastResult, segment : Segment, maxLambda : number) : boolean {
             let s : org.jbox2d.common.Vec2 = segment.p1;
-            let r : org.jbox2d.common.Vec2 = /* get */Segment.tlR_$LI$().initialValue().set$org_jbox2d_common_Vec2(segment.p2);
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(Segment.tlR_$LI$()).set$org_jbox2d_common_Vec2(segment.p2);
             r.subLocal(s);
-            let d : org.jbox2d.common.Vec2 = /* get */Segment.tlD_$LI$().initialValue().set$org_jbox2d_common_Vec2(this.p2);
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(Segment.tlD_$LI$()).set$org_jbox2d_common_Vec2(this.p2);
             d.subLocal(this.p1);
-            let n : org.jbox2d.common.Vec2 = /* get */Segment.tlN_$LI$().initialValue();
+            let n : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(Segment.tlN_$LI$());
             org.jbox2d.common.Vec2.crossToOut$org_jbox2d_common_Vec2$float$org_jbox2d_common_Vec2(d, 1.0, n);
-            let b : org.jbox2d.common.Vec2 = /* get */Segment.tlB_$LI$().initialValue();
+            let b : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(Segment.tlB_$LI$());
             let k_slop : number = (<any>Math).fround(100.0 * org.jbox2d.common.Settings.EPSILON);
             let denom : number = -org.jbox2d.common.Vec2.dot(r, n);
             if(denom > k_slop) {
@@ -13195,6 +13306,9 @@ namespace org.jbox2d.dynamics {
         public pairAdded(proxyUserData1 : any, proxyUserData2 : any) : any {
             let shape1 : org.jbox2d.collision.shapes.Shape = <org.jbox2d.collision.shapes.Shape>proxyUserData1;
             let shape2 : org.jbox2d.collision.shapes.Shape = <org.jbox2d.collision.shapes.Shape>proxyUserData2;
+            if(shape1 == null || shape2 == null) {
+                return this.m_nullContact;
+            }
             let body1 : org.jbox2d.dynamics.Body = shape1.getBody();
             let body2 : org.jbox2d.dynamics.Body = shape2.getBody();
             if(body1.isStatic() && body2.isStatic()) {
@@ -13259,8 +13373,8 @@ namespace org.jbox2d.dynamics {
         static tlCp : org.jbox2d.pooling.TLContactPoint; public static tlCp_$LI$() : org.jbox2d.pooling.TLContactPoint { if(ContactManager.tlCp == null) ContactManager.tlCp = (() => { let __o : any = new org.jbox2d.pooling.TLContactPoint(); __o.__delegate = new org.jbox2d.pooling.TLContactPoint(); return __o; })(); return ContactManager.tlCp; };
 
         public destroy(c : org.jbox2d.dynamics.contacts.Contact) {
-            let v1 : org.jbox2d.common.Vec2 = /* get */ContactManager.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */ContactManager.tlCp_$LI$().initialValue();
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(ContactManager.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(ContactManager.tlCp_$LI$());
             let shape1 : org.jbox2d.collision.shapes.Shape = c.getShape1();
             let shape2 : org.jbox2d.collision.shapes.Shape = c.getShape2();
             let manifoldCount : number = c.getManifoldCount();
@@ -13368,6 +13482,8 @@ namespace org.jbox2d.dynamics.contacts {
                 (() => {
                     this.m_manifold = new org.jbox2d.collision.Manifold();
                     /* add */(this.manifoldList.push(this.m_manifold)>0);
+                    if(!((this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE))) throw new Error("Assertion error line 33: assert (m_shape1.getType() == ShapeType.CIRCLE_SHAPE);");;
+                    if(!((this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE))) throw new Error("Assertion error line 34: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");;
                     this.m_manifold.pointCount = 0;
                     this.m_manifold.points[0].normalImpulse = 0.0;
                     this.m_manifold.points[0].tangentImpulse = 0.0;
@@ -13404,9 +13520,9 @@ namespace org.jbox2d.dynamics.contacts {
         public evaluate(listener : org.jbox2d.dynamics.ContactListener) {
             let b1 : org.jbox2d.dynamics.Body = this.m_shape1.getBody();
             let b2 : org.jbox2d.dynamics.Body = this.m_shape2.getBody();
-            let m0 : org.jbox2d.collision.Manifold = /* get */CircleContact.tlm0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */CircleContact.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */CircleContact.tlCp_$LI$().initialValue();
+            let m0 : org.jbox2d.collision.Manifold = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleContact.tlm0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleContact.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleContact.tlCp_$LI$());
             m0.set(this.m_manifold);
             org.jbox2d.pooling.SingletonPool.getCollideCircle().collideCircles(this.m_manifold, <org.jbox2d.collision.shapes.CircleShape>this.m_shape1, b1.m_xf, <org.jbox2d.collision.shapes.CircleShape>this.m_shape2, b2.m_xf);
             cp.shape1 = this.m_shape1;
@@ -13487,6 +13603,8 @@ namespace org.jbox2d.dynamics.contacts {
                 this.manifoldList = <any>([]);
                 if(this.m_manifold===undefined) this.m_manifold = null;
                 (() => {
+                    if(!((this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE))) throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.EDGE_SHAPE);");;
+                    if(!((this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE))) throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");;
                     this.m_manifold = new org.jbox2d.collision.Manifold();
                     /* add */(this.manifoldList.push(this.m_manifold)>0);
                     this.m_manifoldCount = 0;
@@ -13510,6 +13628,7 @@ namespace org.jbox2d.dynamics.contacts {
          * @return {org.jbox2d.dynamics.contacts.Contact}
          */
         public clone() : org.jbox2d.dynamics.contacts.Contact {
+            if(!(false)) throw new Error("Assertion error line 40: assert false : 'Not yet implemented.';");;
             return this;
         }
 
@@ -13533,9 +13652,9 @@ namespace org.jbox2d.dynamics.contacts {
         public evaluate(listener : org.jbox2d.dynamics.ContactListener) {
             let b1 : org.jbox2d.dynamics.Body = this.m_shape1.getBody();
             let b2 : org.jbox2d.dynamics.Body = this.m_shape2.getBody();
-            let m0 : org.jbox2d.collision.Manifold = /* get */EdgeAndCircleContact.tlm0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */EdgeAndCircleContact.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */EdgeAndCircleContact.tlCp_$LI$().initialValue();
+            let m0 : org.jbox2d.collision.Manifold = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeAndCircleContact.tlm0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeAndCircleContact.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeAndCircleContact.tlCp_$LI$());
             m0.set(this.m_manifold);
             org.jbox2d.pooling.SingletonPool.getCollideCircle().collideEdgeAndCircle(this.m_manifold, <org.jbox2d.collision.shapes.EdgeShape>this.m_shape1, b1.getMemberXForm(), <org.jbox2d.collision.shapes.CircleShape>this.m_shape2, b2.getMemberXForm());
             cp.shape1 = this.m_shape1;
@@ -13637,6 +13756,8 @@ namespace org.jbox2d.dynamics.contacts {
                 if(this.m_manifold===undefined) this.m_manifold = null;
                 (() => {
                     this.m_manifold = new org.jbox2d.collision.Manifold();
+                    if(!((this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE))) throw new Error("Assertion error line 32: assert (m_shape1.getType() == ShapeType.POINT_SHAPE);");;
+                    if(!((this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE))) throw new Error("Assertion error line 33: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");;
                     /* add */(this.manifoldList.push(this.m_manifold)>0);
                     this.m_manifold.pointCount = 0;
                     this.m_manifold.points[0].normalImpulse = 0.0;
@@ -13674,9 +13795,9 @@ namespace org.jbox2d.dynamics.contacts {
         public evaluate(listener : org.jbox2d.dynamics.ContactListener) {
             let b1 : org.jbox2d.dynamics.Body = this.m_shape1.getBody();
             let b2 : org.jbox2d.dynamics.Body = this.m_shape2.getBody();
-            let m0 : org.jbox2d.collision.Manifold = /* get */PointAndCircleContact.tlm0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */PointAndCircleContact.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */PointAndCircleContact.tlCp_$LI$().initialValue();
+            let m0 : org.jbox2d.collision.Manifold = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointAndCircleContact.tlm0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointAndCircleContact.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointAndCircleContact.tlCp_$LI$());
             m0.set(this.m_manifold);
             org.jbox2d.pooling.SingletonPool.getCollideCircle().collidePointAndCircle(this.m_manifold, <org.jbox2d.collision.shapes.PointShape>this.m_shape1, b1.m_xf, <org.jbox2d.collision.shapes.CircleShape>this.m_shape2, b2.m_xf);
             cp.shape1 = this.m_shape1;
@@ -13757,6 +13878,8 @@ namespace org.jbox2d.dynamics.contacts {
                 this.manifoldList = <any>([]);
                 if(this.m_manifold===undefined) this.m_manifold = null;
                 (() => {
+                    if(!((this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE))) throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");;
+                    if(!((this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE))) throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.POLYGON_SHAPE);");;
                     this.m_manifold = new org.jbox2d.collision.Manifold();
                     this.m_manifoldCount = 0;
                     /* add */(this.manifoldList.push(this.m_manifold)>0);
@@ -13829,9 +13952,9 @@ namespace org.jbox2d.dynamics.contacts {
         public evaluate(listener : org.jbox2d.dynamics.ContactListener) {
             let b1 : org.jbox2d.dynamics.Body = this.m_shape1.getBody();
             let b2 : org.jbox2d.dynamics.Body = this.m_shape2.getBody();
-            let m0 : org.jbox2d.collision.Manifold = /* get */PolyContact.tlm0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */PolyContact.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */PolyContact.tlCp_$LI$().initialValue();
+            let m0 : org.jbox2d.collision.Manifold = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyContact.tlm0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyContact.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyContact.tlCp_$LI$());
             m0.set(this.m_manifold);
             org.jbox2d.pooling.SingletonPool.getCollidePoly().collidePolygons(this.m_manifold, <org.jbox2d.collision.shapes.PolygonShape>this.m_shape1, b1.getMemberXForm(), <org.jbox2d.collision.shapes.PolygonShape>this.m_shape2, b2.getMemberXForm());
             let persisted : boolean[] = [false, false];
@@ -13993,7 +14116,7 @@ namespace org.jbox2d.dynamics.joints {
          * @return {org.jbox2d.common.Vec2}
          */
         public getReactionForce() : org.jbox2d.common.Vec2 {
-            let reactionForce : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlReactionForce_$LI$().initialValue();
+            let reactionForce : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlReactionForce_$LI$());
             reactionForce.x = (<any>Math).fround(this.m_impulse * this.m_u.x);
             reactionForce.y = (<any>Math).fround(this.m_impulse * this.m_u.y);
             return reactionForce;
@@ -14019,9 +14142,9 @@ namespace org.jbox2d.dynamics.joints {
          */
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             this.m_inv_dt = step.inv_dt;
-            let r1 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlr2_$LI$().initialValue();
-            let P : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlP_$LI$().initialValue();
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlr2_$LI$());
+            let P : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlP_$LI$());
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.getMemberXForm().R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
@@ -14038,6 +14161,7 @@ namespace org.jbox2d.dynamics.joints {
             let cr1u : number = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r1, this.m_u);
             let cr2u : number = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r2, this.m_u);
             let invMass : number = (<any>Math).fround((<any>Math).fround((<any>Math).fround(b1.m_invMass + (<any>Math).fround((<any>Math).fround(b1.m_invI * cr1u) * cr1u)) + b2.m_invMass) + (<any>Math).fround((<any>Math).fround(b2.m_invI * cr2u) * cr2u));
+            if(!((invMass > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 131: assert (invMass > Settings.EPSILON);");;
             this.m_mass = (<any>Math).fround(1.0 / invMass);
             if(this.m_frequencyHz > 0.0) {
                 let C : number = (<any>Math).fround(length - this.m_length);
@@ -14073,9 +14197,9 @@ namespace org.jbox2d.dynamics.joints {
             if(this.m_frequencyHz > 0.0) {
                 return true;
             }
-            let d : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tld_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlr2_$LI$().initialValue();
-            let r1 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlr1_$LI$().initialValue();
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tld_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlr2_$LI$());
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlr1_$LI$());
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.getMemberXForm().R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
@@ -14111,10 +14235,10 @@ namespace org.jbox2d.dynamics.joints {
         public solveVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let v1 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlv1_$LI$().initialValue();
-            let v2 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlv2_$LI$().initialValue();
-            let r1 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */DistanceJoint.tlr2_$LI$().initialValue();
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlv1_$LI$());
+            let v2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlv2_$LI$());
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(DistanceJoint.tlr2_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_xf.R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b2.m_xf.R, this.m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
             org.jbox2d.common.Vec2.crossToOut$float$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_angularVelocity, r1, v1);
@@ -14206,7 +14330,7 @@ namespace org.jbox2d.dynamics.joints {
          * @return {org.jbox2d.common.Vec2}
          */
         public getAnchor2() : org.jbox2d.common.Vec2 {
-            let anchor2 : org.jbox2d.common.Vec2 = /* get */MouseJoint.tlanchor2_$LI$().initialValue();
+            let anchor2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlanchor2_$LI$());
             this.m_body2.getWorldLocationToOut(this.m_localAnchor, anchor2);
             return anchor2;
         }
@@ -14223,9 +14347,9 @@ namespace org.jbox2d.dynamics.joints {
          */
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b : org.jbox2d.dynamics.Body = this.m_body2;
-            let r : org.jbox2d.common.Vec2 = /* get */MouseJoint.tlr_$LI$().initialValue();
-            let K1 : org.jbox2d.common.Mat22 = /* get */MouseJoint.tlK1_$LI$().initialValue();
-            let K2 : org.jbox2d.common.Mat22 = /* get */MouseJoint.tlK2_$LI$().initialValue();
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlr_$LI$());
+            let K1 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlK1_$LI$());
+            let K2 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlK2_$LI$());
             r.set$org_jbox2d_common_Vec2(this.m_localAnchor);
             r.subLocal(b.getMemberLocalCenter());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b.m_xf.R, r, r);
@@ -14268,11 +14392,11 @@ namespace org.jbox2d.dynamics.joints {
          */
         public solveVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b : org.jbox2d.dynamics.Body = this.m_body2;
-            let r : org.jbox2d.common.Vec2 = /* get */MouseJoint.tlr_$LI$().initialValue();
-            let Cdot : org.jbox2d.common.Vec2 = /* get */MouseJoint.tlCdot_$LI$().initialValue();
-            let force : org.jbox2d.common.Vec2 = /* get */MouseJoint.tlforce_$LI$().initialValue();
-            let oldForce : org.jbox2d.common.Vec2 = /* get */MouseJoint.tloldForce_$LI$().initialValue();
-            let P : org.jbox2d.common.Vec2 = /* get */MouseJoint.tlP_$LI$().initialValue();
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlr_$LI$());
+            let Cdot : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlCdot_$LI$());
+            let force : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlforce_$LI$());
+            let oldForce : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tloldForce_$LI$());
+            let P : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(MouseJoint.tlP_$LI$());
             r.set$org_jbox2d_common_Vec2(this.m_localAnchor);
             r.subLocal(b.getMemberLocalCenter());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b.m_xf.R, r, r);
@@ -14440,14 +14564,14 @@ namespace org.jbox2d.dynamics.joints {
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let r1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr2_$LI$().initialValue();
-            let ax1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlax1_$LI$().initialValue();
-            let ay1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlay1_$LI$().initialValue();
-            let e : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tle_$LI$().initialValue();
-            let ax1Neg : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlax1Neg_$LI$().initialValue();
-            let ay1Neg : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlay1Neg_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tld_$LI$().initialValue();
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr2_$LI$());
+            let ax1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlax1_$LI$());
+            let ay1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlay1_$LI$());
+            let e : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tle_$LI$());
+            let ax1Neg : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlax1Neg_$LI$());
+            let ay1Neg : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlay1Neg_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tld_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_xf.R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b2.m_xf.R, this.m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
             let invMass1 : number = b1.m_invMass;
@@ -14460,6 +14584,7 @@ namespace org.jbox2d.dynamics.joints {
             org.jbox2d.common.Vec2.negateToOut(ay1, ay1Neg);
             this.m_linearJacobian.set(ay1Neg, -org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e, ay1), ay1, org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r2, ay1));
             this.m_linearMass = (<any>Math).fround((<any>Math).fround((<any>Math).fround(invMass1 + (<any>Math).fround((<any>Math).fround(invI1 * this.m_linearJacobian.angular1) * this.m_linearJacobian.angular1)) + invMass2) + (<any>Math).fround((<any>Math).fround(invI2 * this.m_linearJacobian.angular2) * this.m_linearJacobian.angular2));
+            if(!(this.m_linearMass > org.jbox2d.common.Settings.EPSILON)) throw new Error("Assertion error line 148: assert m_linearMass > Settings.EPSILON;");;
             this.m_linearMass = (<any>Math).fround(1.0 / this.m_linearMass);
             this.m_angularMass = (<any>Math).fround(invI1 + invI2);
             if(this.m_angularMass > org.jbox2d.common.Settings.EPSILON) {
@@ -14470,6 +14595,7 @@ namespace org.jbox2d.dynamics.joints {
                 org.jbox2d.common.Vec2.negateToOut(ax1, ax1Neg);
                 this.m_motorJacobian.set(ax1Neg, -org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e, ax1), ax1, org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r2, ax1));
                 this.m_motorMass = (<any>Math).fround((<any>Math).fround((<any>Math).fround(invMass1 + (<any>Math).fround((<any>Math).fround(invI1 * this.m_motorJacobian.angular1) * this.m_motorJacobian.angular1)) + invMass2) + (<any>Math).fround((<any>Math).fround(invI2 * this.m_motorJacobian.angular2) * this.m_motorJacobian.angular2));
+                if(!(this.m_motorMass > org.jbox2d.common.Settings.EPSILON)) throw new Error("Assertion error line 159: assert m_motorMass > Settings.EPSILON;");;
                 this.m_motorMass = (<any>Math).fround(1.0 / this.m_motorMass);
                 if(this.m_enableLimit) {
                     d.set$org_jbox2d_common_Vec2(e);
@@ -14620,19 +14746,19 @@ namespace org.jbox2d.dynamics.joints {
         public solvePositionConstraints() : boolean {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let temp : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tltemp_$LI$().initialValue();
-            let p1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp2_$LI$().initialValue();
-            let r1z : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr1z_$LI$().initialValue();
-            let r2z : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr2z_$LI$().initialValue();
-            let p1z : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp1z_$LI$().initialValue();
-            let p2z : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp2z_$LI$().initialValue();
-            let dz : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tldz_$LI$().initialValue();
-            let r1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr2_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tld_$LI$().initialValue();
-            let ax1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlax1_$LI$().initialValue();
-            let ay1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlay1_$LI$().initialValue();
+            let temp : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tltemp_$LI$());
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp2_$LI$());
+            let r1z : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr1z_$LI$());
+            let r2z : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr2z_$LI$());
+            let p1z : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp1z_$LI$());
+            let p2z : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp2z_$LI$());
+            let dz : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tldz_$LI$());
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr2_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tld_$LI$());
+            let ax1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlax1_$LI$());
+            let ay1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlay1_$LI$());
             let invMass1 : number = b1.m_invMass;
             let invMass2 : number = b2.m_invMass;
             let invI1 : number = b1.m_invI;
@@ -14746,10 +14872,10 @@ namespace org.jbox2d.dynamics.joints {
         public getJointTranslation() : number {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let axis : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlaxis_$LI$().initialValue();
-            let p1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp2_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tld_$LI$().initialValue();
+            let axis : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlaxis_$LI$());
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp2_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tld_$LI$());
             b1.getWorldLocationToOut(this.m_localAnchor1, p1);
             b2.getWorldLocationToOut(this.m_localAnchor2, p2);
             d.set$org_jbox2d_common_Vec2(p2);
@@ -14770,16 +14896,16 @@ namespace org.jbox2d.dynamics.joints {
         public getJointSpeed() : number {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let r1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlr2_$LI$().initialValue();
-            let p1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlp2_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tld_$LI$().initialValue();
-            let axis : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlaxis_$LI$().initialValue();
-            let w1xAxis : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlw1xAxis_$LI$().initialValue();
-            let v22 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlv22_$LI$().initialValue();
-            let w2xR2 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlw2xR2_$LI$().initialValue();
-            let w1xR1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlw1xR1_$LI$().initialValue();
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlr2_$LI$());
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlp2_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tld_$LI$());
+            let axis : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlaxis_$LI$());
+            let w1xAxis : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlw1xAxis_$LI$());
+            let v22 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlv22_$LI$());
+            let w2xR2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlw2xR2_$LI$());
+            let w1xR1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlw1xR1_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_xf.R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b2.m_xf.R, this.m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
             p1.set$org_jbox2d_common_Vec2(b1.m_sweep.c);
@@ -14822,7 +14948,7 @@ namespace org.jbox2d.dynamics.joints {
         static tlreactionAx1 : org.jbox2d.pooling.TLVec2; public static tlreactionAx1_$LI$() : org.jbox2d.pooling.TLVec2 { if(PrismaticJoint.tlreactionAx1 == null) PrismaticJoint.tlreactionAx1 = (() => { let __o : any = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return PrismaticJoint.tlreactionAx1; };
 
         public getReactionForceToOut(out : org.jbox2d.common.Vec2) {
-            let reactionAx1 : org.jbox2d.common.Vec2 = /* get */PrismaticJoint.tlreactionAx1_$LI$().initialValue();
+            let reactionAx1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PrismaticJoint.tlreactionAx1_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.m_body1.m_xf.R, this.m_localXAxis1, reactionAx1);
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.m_body1.m_xf.R, this.m_localYAxis1, out);
             out.x = (<any>Math).fround((<any>Math).fround(this.m_limitForce * reactionAx1.x) + (<any>Math).fround(this.m_force * out.x));
@@ -14867,6 +14993,7 @@ namespace org.jbox2d.dynamics.joints {
          * @param {number} upper
          */
         public setLimits(lower : number, upper : number) {
+            if(!((lower <= upper))) throw new Error("Assertion error line 557: assert (lower <= upper);");;
             this.m_lowerTranslation = lower;
             this.m_upperTranslation = upper;
         }
@@ -15004,6 +15131,7 @@ namespace org.jbox2d.dynamics.joints {
             this.m_localAnchor2 = /* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(def.localAnchor2);
             this.m_u1 = new org.jbox2d.common.Vec2();
             this.m_u2 = new org.jbox2d.common.Vec2();
+            if(!((def.ratio !== 0.0))) throw new Error("Assertion error line 83: assert (def.ratio != 0.0F);");;
             this.m_ratio = def.ratio;
             this.m_constant = (<any>Math).fround(def.length1 + (<any>Math).fround(this.m_ratio * def.length2));
             this.m_maxLength1 = org.jbox2d.common.MathUtils.min(def.maxLength1, (<any>Math).fround(this.m_constant - (<any>Math).fround(this.m_ratio * PulleyJoint.MIN_PULLEY_LENGTH)));
@@ -15036,14 +15164,14 @@ namespace org.jbox2d.dynamics.joints {
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let r1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlr2_$LI$().initialValue();
-            let p1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlp1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlp2_$LI$().initialValue();
-            let s1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tls1_$LI$().initialValue();
-            let s2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tls2_$LI$().initialValue();
-            let P1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlP1_$LI$().initialValue();
-            let P2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlP2_$LI$().initialValue();
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlr2_$LI$());
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlp1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlp2_$LI$());
+            let s1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tls1_$LI$());
+            let s2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tls2_$LI$());
+            let P1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlP1_$LI$());
+            let P2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlP2_$LI$());
             r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
             r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
             r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -15101,6 +15229,9 @@ namespace org.jbox2d.dynamics.joints {
             this.m_limitMass1 = (<any>Math).fround(b1.m_invMass + (<any>Math).fround((<any>Math).fround(b1.m_invI * cr1u1) * cr1u1));
             this.m_limitMass2 = (<any>Math).fround(b2.m_invMass + (<any>Math).fround((<any>Math).fround(b2.m_invI * cr2u2) * cr2u2));
             this.m_pulleyMass = (<any>Math).fround(this.m_limitMass1 + (<any>Math).fround((<any>Math).fround(this.m_ratio * this.m_ratio) * this.m_limitMass2));
+            if(!((this.m_limitMass1 > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 181: assert (m_limitMass1 > Settings.EPSILON);");;
+            if(!((this.m_limitMass2 > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 182: assert (m_limitMass2 > Settings.EPSILON);");;
+            if(!((this.m_pulleyMass > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 183: assert (m_pulleyMass > Settings.EPSILON);");;
             this.m_limitMass1 = (<any>Math).fround(1.0 / this.m_limitMass1);
             this.m_limitMass2 = (<any>Math).fround(1.0 / this.m_limitMass2);
             this.m_pulleyMass = (<any>Math).fround(1.0 / this.m_pulleyMass);
@@ -15131,12 +15262,12 @@ namespace org.jbox2d.dynamics.joints {
         public solveVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let v1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlv1_$LI$().initialValue();
-            let v2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlv2_$LI$().initialValue();
-            let P1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlP1_$LI$().initialValue();
-            let P2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlP2_$LI$().initialValue();
-            let r1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlr2_$LI$().initialValue();
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlv1_$LI$());
+            let v2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlv2_$LI$());
+            let P1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlP1_$LI$());
+            let P2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlP2_$LI$());
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlr2_$LI$());
             r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
             r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
             r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -15201,14 +15332,14 @@ namespace org.jbox2d.dynamics.joints {
         public solvePositionConstraints() : boolean {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let r1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlr2_$LI$().initialValue();
-            let p1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlp1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlp2_$LI$().initialValue();
-            let s1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tls1_$LI$().initialValue();
-            let s2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tls2_$LI$().initialValue();
-            let P1 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlP1_$LI$().initialValue();
-            let P2 : org.jbox2d.common.Vec2 = /* get */PulleyJoint.tlP2_$LI$().initialValue();
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlr2_$LI$());
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlp1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlp2_$LI$());
+            let s1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tls1_$LI$());
+            let s2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tls2_$LI$());
+            let P1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlP1_$LI$());
+            let P2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PulleyJoint.tlP2_$LI$());
             s1.set$org_jbox2d_common_Vec2(this.m_ground.m_xf.position);
             s1.addLocal$org_jbox2d_common_Vec2(this.m_groundAnchor1);
             s2.set$org_jbox2d_common_Vec2(this.m_ground.m_xf.position);
@@ -15463,11 +15594,11 @@ namespace org.jbox2d.dynamics.joints {
         public initVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let r1 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlr2_$LI$().initialValue();
-            let K1 : org.jbox2d.common.Mat22 = /* get */RevoluteJoint.tlK1_$LI$().initialValue();
-            let K2 : org.jbox2d.common.Mat22 = /* get */RevoluteJoint.tlK2_$LI$().initialValue();
-            let K3 : org.jbox2d.common.Mat22 = /* get */RevoluteJoint.tlK3_$LI$().initialValue();
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlr2_$LI$());
+            let K1 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlK1_$LI$());
+            let K2 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlK2_$LI$());
+            let K3 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlK3_$LI$());
             r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
             r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
             r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -15547,11 +15678,11 @@ namespace org.jbox2d.dynamics.joints {
         public solveVelocityConstraints(step : org.jbox2d.dynamics.TimeStep) {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let temp : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tltemp_$LI$().initialValue();
-            let pivotCdot : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlpivotCdot_$LI$().initialValue();
-            let pivotForce : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlpivotForce_$LI$().initialValue();
-            let r1 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlr2_$LI$().initialValue();
+            let temp : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tltemp_$LI$());
+            let pivotCdot : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlpivotCdot_$LI$());
+            let pivotForce : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlpivotForce_$LI$());
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlr2_$LI$());
             r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
             r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
             r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -15624,15 +15755,15 @@ namespace org.jbox2d.dynamics.joints {
         public solvePositionConstraints() : boolean {
             let b1 : org.jbox2d.dynamics.Body = this.m_body1;
             let b2 : org.jbox2d.dynamics.Body = this.m_body2;
-            let p1 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlp1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlp2_$LI$().initialValue();
-            let ptpC : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlptpC_$LI$().initialValue();
-            let impulse : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlimpulse_$LI$().initialValue();
-            let r1 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlr1_$LI$().initialValue();
-            let r2 : org.jbox2d.common.Vec2 = /* get */RevoluteJoint.tlr2_$LI$().initialValue();
-            let K1 : org.jbox2d.common.Mat22 = /* get */RevoluteJoint.tlK1_$LI$().initialValue();
-            let K2 : org.jbox2d.common.Mat22 = /* get */RevoluteJoint.tlK2_$LI$().initialValue();
-            let K3 : org.jbox2d.common.Mat22 = /* get */RevoluteJoint.tlK3_$LI$().initialValue();
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlp1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlp2_$LI$());
+            let ptpC : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlptpC_$LI$());
+            let impulse : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlimpulse_$LI$());
+            let r1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlr1_$LI$());
+            let r2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlr2_$LI$());
+            let K1 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlK1_$LI$());
+            let K2 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlK2_$LI$());
+            let K3 : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(RevoluteJoint.tlK3_$LI$());
             let positionError : number = 0.0;
             r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
             r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
@@ -15787,6 +15918,7 @@ namespace org.jbox2d.dynamics.joints {
         }
 
         public setLimits(lower : number, upper : number) {
+            if(!((lower <= upper))) throw new Error("Assertion error line 410: assert (lower <= upper);");;
             this.m_lowerAngle = lower;
             this.m_upperAngle = upper;
         }
@@ -15819,12 +15951,14 @@ namespace org.jbox2d.collision {
          * @param {org.jbox2d.common.Sweep} sweep2
          */
         public static timeOfImpact(shape1 : org.jbox2d.collision.shapes.Shape, sweep1 : org.jbox2d.common.Sweep, shape2 : org.jbox2d.collision.shapes.Shape, sweep2 : org.jbox2d.common.Sweep) : number {
-            let xf1 : org.jbox2d.common.XForm = /* get */TOI.tlxf1_$LI$().initialValue();
-            let xf2 : org.jbox2d.common.XForm = /* get */TOI.tlxf2_$LI$().initialValue();
-            let p1 : org.jbox2d.common.Vec2 = /* get */TOI.tlP1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */TOI.tlP2_$LI$().initialValue();
+            let xf1 : org.jbox2d.common.XForm = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(TOI.tlxf1_$LI$());
+            let xf2 : org.jbox2d.common.XForm = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(TOI.tlxf2_$LI$());
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(TOI.tlP1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(TOI.tlP2_$LI$());
             let r1 : number = shape1.getSweepRadius();
             let r2 : number = shape2.getSweepRadius();
+            if(!((sweep1.t0 === sweep2.t0))) throw new Error("Assertion error line 32: assert (sweep1.t0 == sweep2.t0);");;
+            if(!(((<any>Math).fround(1.0 - sweep1.t0) > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 33: assert (1.0F - sweep1.t0 > Settings.EPSILON);");;
             let t0 : number = sweep1.t0;
             let vx : number = (<any>Math).fround(((<any>Math).fround(sweep1.c.x - sweep1.c0.x)) - ((<any>Math).fround(sweep2.c.x - sweep2.c0.x)));
             let vy : number = (<any>Math).fround(((<any>Math).fround(sweep1.c.y - sweep1.c0.y)) - ((<any>Math).fround(sweep2.c.y - sweep2.c0.y)));
@@ -16033,6 +16167,7 @@ namespace org.jbox2d.dynamics {
                 if(this.m_sleepTime===undefined) this.m_sleepTime = 0;
                 if(this.m_userData===undefined) this.m_userData = null;
                 (() => {
+                    if(!((world.m_lock === false))) throw new Error("Assertion error line 152: assert (world.m_lock == false);");;
                     {
                         this.m_uniqueID = Body.nextID++;
                     };
@@ -16149,6 +16284,7 @@ namespace org.jbox2d.dynamics {
                     if(this.m_sleepTime===undefined) this.m_sleepTime = 0;
                     if(this.m_userData===undefined) this.m_userData = null;
                     (() => {
+                        if(!((world.m_lock === false))) throw new Error("Assertion error line 269: assert (world.m_lock == false);");;
                         {
                             this.m_uniqueID = Body.nextID++;
                         };
@@ -16231,9 +16367,7 @@ namespace org.jbox2d.dynamics {
          * @return {org.jbox2d.collision.shapes.Shape}
          */
         public createShape(def : org.jbox2d.collision.shapes.ShapeDef) : org.jbox2d.collision.shapes.Shape {
-            if(this.m_world.m_lock === true) {
-                return null;
-            }
+            if(!((this.m_world.m_lock === false))) throw new Error("Assertion error line 352: assert (m_world.m_lock == false);");;
             if(def.type === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE) {
                 let edgeDef : org.jbox2d.collision.shapes.EdgeChainDef = <org.jbox2d.collision.shapes.EdgeChainDef>def;
                 let v1 : org.jbox2d.common.Vec2;
@@ -16291,10 +16425,10 @@ namespace org.jbox2d.dynamics {
          * @param {org.jbox2d.collision.shapes.Shape} s the shape to be removed.
          */
         public destroyShape(s : org.jbox2d.collision.shapes.Shape) {
-            if(this.m_world.m_lock === true) {
-                return;
-            }
+            if(!((this.m_world.m_lock === false))) throw new Error("Assertion error line 410: assert (m_world.m_lock == false);");;
+            if(!((s.getBody() === this))) throw new Error("Assertion error line 411: assert (s.getBody() == this);");;
             s.destroyProxy(this.m_world.m_broadPhase);
+            if(!((this.m_shapeCount > 0))) throw new Error("Assertion error line 413: assert (m_shapeCount > 0);");;
             let node : org.jbox2d.collision.shapes.Shape = this.m_shapeList;
             let prevNode : org.jbox2d.collision.shapes.Shape = null;
             let found : boolean = false;
@@ -16313,6 +16447,7 @@ namespace org.jbox2d.dynamics {
                 prevNode = node;
                 node = node.m_next;
             }};
+            if(!((found))) throw new Error("Assertion error line 432: assert (found);");;
             s.m_body = null;
             s.m_next = null;
             --this.m_shapeCount;
@@ -16326,9 +16461,7 @@ namespace org.jbox2d.dynamics {
          * @param {org.jbox2d.collision.MassData} massData the mass properties.
          */
         public setMass(massData : org.jbox2d.collision.MassData) {
-            if(this.m_world.m_lock === true) {
-                return;
-            }
+            if(!((this.m_world.m_lock === false))) throw new Error("Assertion error line 446: assert (m_world.m_lock == false);");;
             this.m_invMass = 0.0;
             this.m_I = 0.0;
             this.m_invI = 0.0;
@@ -16369,14 +16502,12 @@ namespace org.jbox2d.dynamics {
          * to call this again. Note that this changes the center of mass position.
          */
         public setMassFromShapes() {
-            if(this.m_world.m_lock === true) {
-                return;
-            }
+            if(!((this.m_world.m_lock === false))) throw new Error("Assertion error line 487: assert (m_world.m_lock == false);");;
             this.m_mass = 0.0;
             this.m_invMass = 0.0;
             this.m_I = 0.0;
             this.m_invI = 0.0;
-            let center : org.jbox2d.common.Vec2 = /* get */Body.tlCenter_$LI$().initialValue();
+            let center : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(Body.tlCenter_$LI$());
             center.setZero();
             for(let s : org.jbox2d.collision.shapes.Shape = this.m_shapeList; s != null; s = s.m_next) {{
                 let massData : org.jbox2d.collision.MassData = new org.jbox2d.collision.MassData();
@@ -16393,6 +16524,7 @@ namespace org.jbox2d.dynamics {
             }
             if(this.m_I > 0.0 && (this.m_flags & Body.e_fixedRotationFlag) === 0) {
                 this.m_I -= (<any>Math).fround(this.m_mass * org.jbox2d.common.Vec2.dot(center, center));
+                if(!((this.m_I > 0.0))) throw new Error("Assertion error line 509: assert (m_I > 0.0F);");;
                 this.m_invI = (<any>Math).fround(1.0 / this.m_I);
             } else {
                 this.m_I = 0.0;
@@ -16427,9 +16559,7 @@ namespace org.jbox2d.dynamics {
          * body is automatically frozen.
          */
         public setXForm(position : org.jbox2d.common.Vec2, angle : number) : boolean {
-            if(this.m_world.m_lock === true) {
-                return true;
-            }
+            if(!((this.m_world.m_lock === false))) throw new Error("Assertion error line 544: assert (m_world.m_lock == false);");;
             if(this.isFrozen()) {
                 return false;
             }
@@ -16861,7 +16991,7 @@ namespace org.jbox2d.dynamics {
          * @return {boolean}
          */
         public synchronizeShapes() : boolean {
-            let xf1 : org.jbox2d.common.XForm = /* get */Body.tlXf1_$LI$().initialValue();
+            let xf1 : org.jbox2d.common.XForm = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(Body.tlXf1_$LI$());
             xf1.R.set$float(this.m_sweep.a0);
             let R : org.jbox2d.common.Mat22 = xf1.R;
             let v : org.jbox2d.common.Vec2 = this.m_sweep.localCenter;
@@ -17616,6 +17746,8 @@ namespace org.jbox2d.dynamics.contacts {
                 this.manifoldList = <any>([]);
                 if(this.m_manifold===undefined) this.m_manifold = null;
                 (() => {
+                    if(!((this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE))) throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");;
+                    if(!((this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE))) throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.POINT_SHAPE);");;
                     this.m_manifold = new org.jbox2d.collision.Manifold();
                     /* add */(this.manifoldList.push(this.m_manifold)>0);
                     this.m_manifoldCount = 0;
@@ -17690,9 +17822,9 @@ namespace org.jbox2d.dynamics.contacts {
         public evaluate(listener : org.jbox2d.dynamics.ContactListener) {
             let b1 : org.jbox2d.dynamics.Body = this.m_shape1.getBody();
             let b2 : org.jbox2d.dynamics.Body = this.m_shape2.getBody();
-            let m0 : org.jbox2d.collision.Manifold = /* get */PointAndPolyContact.tlm0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */PointAndPolyContact.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */PointAndPolyContact.tlCp_$LI$().initialValue();
+            let m0 : org.jbox2d.collision.Manifold = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointAndPolyContact.tlm0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointAndPolyContact.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointAndPolyContact.tlCp_$LI$());
             m0.set(this.m_manifold);
             org.jbox2d.pooling.SingletonPool.getCollidePoly().collidePolygonAndPoint(this.m_manifold, <org.jbox2d.collision.shapes.PolygonShape>this.m_shape1, b1.getMemberXForm(), <org.jbox2d.collision.shapes.PointShape>this.m_shape2, b2.getMemberXForm());
             let persisted : boolean[] = PointAndPolyContact.tlPersisted_$LI$().get(2);
@@ -17783,6 +17915,8 @@ namespace org.jbox2d.dynamics.contacts {
                 this.manifoldList = <any>([]);
                 if(this.m_manifold===undefined) this.m_manifold = null;
                 (() => {
+                    if(!((this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE))) throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");;
+                    if(!((this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE))) throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");;
                     this.m_manifold = new org.jbox2d.collision.Manifold();
                     /* add */(this.manifoldList.push(this.m_manifold)>0);
                     this.m_manifoldCount = 0;
@@ -17846,9 +17980,9 @@ namespace org.jbox2d.dynamics.contacts {
         public evaluate(listener : org.jbox2d.dynamics.ContactListener) {
             let b1 : org.jbox2d.dynamics.Body = this.m_shape1.getBody();
             let b2 : org.jbox2d.dynamics.Body = this.m_shape2.getBody();
-            let m0 : org.jbox2d.collision.Manifold = /* get */PolyAndCircleContact.tlm0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */PolyAndCircleContact.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */PolyAndCircleContact.tlCp_$LI$().initialValue();
+            let m0 : org.jbox2d.collision.Manifold = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyAndCircleContact.tlm0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyAndCircleContact.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyAndCircleContact.tlCp_$LI$());
             m0.set(this.m_manifold);
             org.jbox2d.pooling.SingletonPool.getCollideCircle().collidePolygonAndCircle(this.m_manifold, <org.jbox2d.collision.shapes.PolygonShape>this.m_shape1, b1.getMemberXForm(), <org.jbox2d.collision.shapes.CircleShape>this.m_shape2, b2.getMemberXForm());
             let persisted : boolean[] = PolyAndCircleContact.tlPersisted_$LI$().get(2);
@@ -17945,6 +18079,8 @@ namespace org.jbox2d.dynamics.contacts {
                 this.manifoldList = <any>([]);
                 if(this.m_manifold===undefined) this.m_manifold = null;
                 (() => {
+                    if(!((this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE))) throw new Error("Assertion error line 19: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");;
+                    if(!((this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE))) throw new Error("Assertion error line 20: assert (m_shape2.getType() == ShapeType.EDGE_SHAPE);");;
                     this.m_manifold = new org.jbox2d.collision.Manifold();
                     this.m_manifoldCount = 0;
                     /* add */(this.manifoldList.push(this.m_manifold)>0);
@@ -17975,6 +18111,7 @@ namespace org.jbox2d.dynamics.contacts {
          * @return {org.jbox2d.dynamics.contacts.Contact}
          */
         public clone() : org.jbox2d.dynamics.contacts.Contact {
+            if(!(false)) throw new Error("Assertion error line 51: assert false : 'Not yet implemented.';");;
             return this;
         }
 
@@ -17993,9 +18130,9 @@ namespace org.jbox2d.dynamics.contacts {
         public evaluate(listener : org.jbox2d.dynamics.ContactListener) {
             let b1 : org.jbox2d.dynamics.Body = this.m_shape1.getBody();
             let b2 : org.jbox2d.dynamics.Body = this.m_shape2.getBody();
-            let m0 : org.jbox2d.collision.Manifold = /* get */PolyAndEdgeContact.tlm0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */PolyAndEdgeContact.tlV1_$LI$().initialValue();
-            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */PolyAndEdgeContact.tlCp_$LI$().initialValue();
+            let m0 : org.jbox2d.collision.Manifold = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyAndEdgeContact.tlm0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyAndEdgeContact.tlV1_$LI$());
+            let cp : org.jbox2d.dynamics.contacts.ContactPoint = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolyAndEdgeContact.tlCp_$LI$());
             m0.set(this.m_manifold);
             org.jbox2d.pooling.SingletonPool.getCollidePoly().collidePolyAndEdge(this.m_manifold, <org.jbox2d.collision.shapes.PolygonShape>this.m_shape1, b1.getMemberXForm(), <org.jbox2d.collision.shapes.EdgeShape>this.m_shape2, b2.getMemberXForm());
             let persisted : boolean[] = PolyAndEdgeContact.tlPersisted_$LI$().get(2);
@@ -18136,14 +18273,22 @@ namespace org.jbox2d.collision {
 
         m_timeStamp : number;
 
-        static debugPrint : boolean = false;
+        public static debugPrint : boolean = false;
 
         public static s_validate : boolean = false;
 
         /*private*/ dump() {
-            for(let i : number = 0; i < 10; i++) {{
-                console.info("bounds[ %d ] = %d, %d \n");
+            console.info("*****DUMP START");
+            for(let i : number = 0; i < 100; i++) {{
+                console.info("bounds[ " + i + " ] = " + this.m_bounds[0][i].value + ", " + this.m_bounds[1][i].value + " \n");
             };}
+            for(let i : number = 0; i < this.m_proxyPool.length; i++) {{
+                let p : org.jbox2d.collision.Proxy = this.m_proxyPool[i];
+                if(p != null) {
+                    console.info("proxy#" + i + ": valid=" + p.isValid() + " userData= upperBounds=" + /* implicit toString */ (a => a?'['+a.join(', ')+']':'null')(/* asList */p.upperBounds.slice(0)) + " lowerBounds=" + /* implicit toString */ (a => a?'['+a.join(', ')+']':'null')(/* asList */p.lowerBounds.slice(0)) + " timeStamp=" + p.timeStamp + " overlapCount=" + p.overlapCount + " next=" + p.getNext());
+                }
+            };}
+            console.info("*****DUMP END");
         }
 
         public constructor(worldAABB : org.jbox2d.collision.AABB, callback : org.jbox2d.collision.PairCallback) {
@@ -18177,10 +18322,14 @@ namespace org.jbox2d.collision {
             };}
             this.m_pairManager = new org.jbox2d.collision.PairManager();
             this.m_pairManager.initialize(this, callback);
+            if(!(worldAABB.isValid())) throw new Error("Assertion error line 104: assert worldAABB.isValid();");;
             this.m_worldAABB = new org.jbox2d.collision.AABB(worldAABB);
             this.m_proxyCount = 0;
             let d : org.jbox2d.common.Vec2 = worldAABB.upperBound.sub(worldAABB.lowerBound);
             this.m_quantizationFactor = new org.jbox2d.common.Vec2((<any>Math).fround(2147483647 / d.x), (<any>Math).fround(2147483647 / d.y));
+            if(BroadPhase.debugPrint) {
+                console.info("BroadPhase: m_quantizationFactor=" + this.m_quantizationFactor);
+            }
             for(let i : number = 0; i < org.jbox2d.common.Settings.maxProxies - 1; ++i) {{
                 this.m_proxyPool[i] = new org.jbox2d.collision.Proxy();
                 this.m_proxyPool[i].setNext(i + 1);
@@ -18201,6 +18350,10 @@ namespace org.jbox2d.collision {
         public testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy(p1 : org.jbox2d.collision.Proxy, p2 : org.jbox2d.collision.Proxy) : boolean {
             for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
+                if(!((p1.lowerBounds[axis] < 2 * this.m_proxyCount))) throw new Error("Assertion error line 132: assert (p1.lowerBounds[axis] < 2 * m_proxyCount);");;
+                if(!((p1.upperBounds[axis] < 2 * this.m_proxyCount))) throw new Error("Assertion error line 133: assert (p1.upperBounds[axis] < 2 * m_proxyCount);");;
+                if(!((p2.lowerBounds[axis] < 2 * this.m_proxyCount))) throw new Error("Assertion error line 134: assert (p2.lowerBounds[axis] < 2 * m_proxyCount);");;
+                if(!((p2.upperBounds[axis] < 2 * this.m_proxyCount))) throw new Error("Assertion error line 135: assert (p2.upperBounds[axis] < 2 * m_proxyCount);");;
                 if(bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) {
                     return false;
                 }
@@ -18222,10 +18375,12 @@ namespace org.jbox2d.collision {
         /*private*/ testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(b : org.jbox2d.collision.BoundValues, p : org.jbox2d.collision.Proxy) : boolean {
             for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
-                if(b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) {
+                if(!((p.lowerBounds[axis] < 2 * this.m_proxyCount))) throw new Error("Assertion error line 157: assert (p.lowerBounds[axis] < 2 * m_proxyCount);");;
+                if(!((p.upperBounds[axis] < 2 * this.m_proxyCount))) throw new Error("Assertion error line 158: assert (p.upperBounds[axis] < 2 * m_proxyCount);");;
+                if(bounds[p.upperBounds[axis]] != null && b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) {
                     return false;
                 }
-                if(b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) {
+                if(bounds[p.lowerBounds[axis]] != null && b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) {
                     return false;
                 }
             };}
@@ -18253,12 +18408,14 @@ namespace org.jbox2d.collision {
          * @return {number}
          */
         public createProxy(aabb : org.jbox2d.collision.AABB, userData : any) : number {
-            if(BroadPhase.debugPrint) {
-                console.info("CreateProxy()");
-            }
+            if(!((this.m_proxyCount < org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 190: assert (m_proxyCount < Settings.maxProxies);");;
+            if(!((this.m_freeProxy !== org.jbox2d.collision.PairManager.NULL_PROXY_$LI$()))) throw new Error("Assertion error line 191: assert (m_freeProxy != PairManager.NULL_PROXY);");;
             let proxyId : number = this.m_freeProxy;
             let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[proxyId];
             this.m_freeProxy = proxy.getNext();
+            if(BroadPhase.debugPrint) {
+                console.info("CreateProxy() bbox=" + aabb + " proxyId=" + proxyId + "/" + this.m_proxyCount + " m_freeProxy=" + this.m_freeProxy);
+            }
             proxy.overlapCount = 0;
             proxy.userData = userData;
             let boundCount : number = 2 * this.m_proxyCount;
@@ -18280,9 +18437,11 @@ namespace org.jbox2d.collision {
                     this.m_bounds[axis][lowerIndex + 1 + i] = new org.jbox2d.collision.Bound(this.m_bounds[axis][lowerIndex + 1 + i]);
                 };}
                 ++upperIndex;
-                bounds[lowerIndex].value = lowerValues[axis];
+                if(!((bounds[lowerIndex] != null))) throw new Error("Assertion error line 219: assert (bounds[lowerIndex] != null) : 'Null pointer (lower)';");;
+                if(!((bounds[upperIndex] != null))) throw new Error("Assertion error line 220: assert (bounds[upperIndex] != null) : 'Null pointer (upper)';");;
+                bounds[lowerIndex].setValueInternal(lowerValues[axis]);
                 bounds[lowerIndex].proxyId = proxyId;
-                bounds[upperIndex].value = upperValues[axis];
+                bounds[upperIndex].setValueInternal(upperValues[axis]);
                 bounds[upperIndex].proxyId = proxyId;
                 bounds[lowerIndex].stabbingCount = lowerIndex === 0?0:bounds[lowerIndex - 1].stabbingCount;
                 bounds[upperIndex].stabbingCount = bounds[upperIndex - 1].stabbingCount;
@@ -18299,7 +18458,10 @@ namespace org.jbox2d.collision {
                 };}
             };}
             ++this.m_proxyCount;
+            if(!(this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies)) throw new Error("Assertion error line 240: assert m_queryResultCount < Settings.maxProxies;");;
             for(let i : number = 0; i < this.m_queryResultCount; ++i) {{
+                if(!((this.m_queryResults[i] < org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 242: assert (m_queryResults[i] < Settings.maxProxies);");;
+                if(!((this.m_proxyPool[this.m_queryResults[i]].isValid()))) throw new Error("Assertion error line 243: assert (m_proxyPool[m_queryResults[i]].isValid());");;
                 this.m_pairManager.addBufferedPair(proxyId, this.m_queryResults[i]);
             };}
             this.m_pairManager.commit();
@@ -18314,7 +18476,13 @@ namespace org.jbox2d.collision {
         static tlIgnored : org.jbox2d.pooling.arrays.IntegerArray; public static tlIgnored_$LI$() : org.jbox2d.pooling.arrays.IntegerArray { if(BroadPhase.tlIgnored == null) BroadPhase.tlIgnored = new org.jbox2d.pooling.arrays.IntegerArray(); return BroadPhase.tlIgnored; };
 
         public destroyProxy(proxyId : number) {
+            if(!((0 < this.m_proxyCount && this.m_proxyCount <= org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 258: assert (0 < m_proxyCount && m_proxyCount <= Settings.maxProxies);");;
+            if(BroadPhase.debugPrint) {
+                console.info("destroyProxy(" + proxyId + ")");
+                this.dump();
+            }
             let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[proxyId];
+            if(!((proxy.isValid()))) throw new Error("Assertion error line 264: assert (proxy.isValid());");;
             let boundCount : number = 2 * this.m_proxyCount;
             let ignored : number[] = BroadPhase.tlIgnored_$LI$().get(2);
             for(let axis : number = 0; axis < 2; ++axis) {{
@@ -18344,7 +18512,9 @@ namespace org.jbox2d.collision {
                 };}
                 this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(ignored, lowerValue, upperValue, bounds, boundCount - 2, axis);
             };}
+            if(!((this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 294: assert (m_queryResultCount < Settings.maxProxies);");;
             for(let i : number = 0; i < this.m_queryResultCount; ++i) {{
+                if(!((this.m_proxyPool[this.m_queryResults[i]].isValid()))) throw new Error("Assertion error line 296: assert (m_proxyPool[m_queryResults[i]].isValid());");;
                 this.m_pairManager.removeBufferedPair(proxyId, this.m_queryResults[i]);
             };}
             this.m_pairManager.commit();
@@ -18375,19 +18545,24 @@ namespace org.jbox2d.collision {
          */
         public moveProxy(proxyId : number, aabb : org.jbox2d.collision.AABB) {
             if(BroadPhase.debugPrint) {
-                console.info("MoveProxy()");
+                console.info("MoveProxy(" + proxyId + "/" + this.m_proxyCount + ")");
             }
-            let newValues : org.jbox2d.collision.BoundValues = /* get */BroadPhase.tlNewValues_$LI$().initialValue();
-            let oldValues : org.jbox2d.collision.BoundValues = /* get */BroadPhase.tlOldValues_$LI$().initialValue();
+            let newValues : org.jbox2d.collision.BoundValues = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(BroadPhase.tlNewValues_$LI$());
+            let oldValues : org.jbox2d.collision.BoundValues = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(BroadPhase.tlOldValues_$LI$());
             if(proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$() || org.jbox2d.common.Settings.maxProxies <= proxyId) {
                 return;
             }
+            if(!((aabb.isValid()))) throw new Error("Assertion error line 334: assert (aabb.isValid()) : 'invalid AABB';");;
             let boundCount : number = 2 * this.m_proxyCount;
             let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[proxyId];
             this.computeBounds(newValues.lowerValues, newValues.upperValues, aabb);
             for(let axis : number = 0; axis < 2; ++axis) {{
-                oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
-                oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+                if(this.m_bounds[axis][proxy.lowerBounds[axis]] != null) {
+                    oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
+                }
+                if(this.m_bounds[axis][proxy.lowerBounds[axis]] != null) {
+                    oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+                }
             };}
             for(let axis : number = 0; axis < 2; ++axis) {{
                 let bounds : org.jbox2d.collision.Bound[] = this.m_bounds[axis];
@@ -18395,30 +18570,32 @@ namespace org.jbox2d.collision {
                 let upperIndex : number = proxy.upperBounds[axis];
                 let lowerValue : number = newValues.lowerValues[axis];
                 let upperValue : number = newValues.upperValues[axis];
-                let deltaLower : number = lowerValue - bounds[lowerIndex].value;
-                let deltaUpper : number = upperValue - bounds[upperIndex].value;
-                bounds[lowerIndex].value = lowerValue;
-                bounds[upperIndex].value = upperValue;
+                let deltaLower : number = bounds[lowerIndex] == null?0:lowerValue - bounds[lowerIndex].value;
+                let deltaUpper : number = bounds[upperIndex] == null?0:upperValue - bounds[upperIndex].value;
+                bounds[lowerIndex].setValueInternal(lowerValue);
+                bounds[upperIndex].setValueInternal(upperValue);
                 if(deltaLower < 0) {
                     let index : number = lowerIndex;
                     while((index > 0 && lowerValue < bounds[index - 1].value)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let prevBound : org.jbox2d.collision.Bound = bounds[index - 1];
-                        let prevProxyId : number = prevBound.proxyId;
-                        let prevProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[prevBound.proxyId];
-                        ++prevBound.stabbingCount;
-                        if(prevBound.isUpper() === true) {
-                            if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, prevProxy)) {
-                                this.m_pairManager.addBufferedPair(proxyId, prevProxyId);
+                        if(bound != null && prevBound != null) {
+                            let prevProxyId : number = prevBound.proxyId;
+                            let prevProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[prevBound.proxyId];
+                            ++prevBound.stabbingCount;
+                            if(prevBound.isUpper() === true) {
+                                if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, prevProxy)) {
+                                    this.m_pairManager.addBufferedPair(proxyId, prevProxyId);
+                                }
+                                ++prevProxy.upperBounds[axis];
+                                ++bound.stabbingCount;
+                            } else {
+                                ++prevProxy.lowerBounds[axis];
+                                --bound.stabbingCount;
                             }
-                            ++prevProxy.upperBounds[axis];
-                            ++bound.stabbingCount;
-                        } else {
-                            ++prevProxy.lowerBounds[axis];
-                            --bound.stabbingCount;
+                            --proxy.lowerBounds[axis];
+                            bound.swap(prevBound);
                         }
-                        --proxy.lowerBounds[axis];
-                        bound.swap(prevBound);
                         --index;
                     }};
                 }
@@ -18427,21 +18604,23 @@ namespace org.jbox2d.collision {
                     while((index < boundCount - 1 && bounds[index + 1].value <= upperValue)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let nextBound : org.jbox2d.collision.Bound = bounds[index + 1];
-                        let nextProxyId : number = nextBound.proxyId;
-                        let nextProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[nextProxyId];
-                        ++nextBound.stabbingCount;
-                        if(nextBound.isLower() === true) {
-                            if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, nextProxy)) {
-                                this.m_pairManager.addBufferedPair(proxyId, nextProxyId);
+                        if(bound != null && nextBound != null) {
+                            let nextProxyId : number = nextBound.proxyId;
+                            let nextProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[nextProxyId];
+                            ++nextBound.stabbingCount;
+                            if(nextBound.isLower() === true) {
+                                if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, nextProxy)) {
+                                    this.m_pairManager.addBufferedPair(proxyId, nextProxyId);
+                                }
+                                --nextProxy.lowerBounds[axis];
+                                ++bound.stabbingCount;
+                            } else {
+                                --nextProxy.upperBounds[axis];
+                                --bound.stabbingCount;
                             }
-                            --nextProxy.lowerBounds[axis];
-                            ++bound.stabbingCount;
-                        } else {
-                            --nextProxy.upperBounds[axis];
-                            --bound.stabbingCount;
+                            ++proxy.upperBounds[axis];
+                            bound.swap(nextBound);
                         }
-                        ++proxy.upperBounds[axis];
-                        bound.swap(nextBound);
                         ++index;
                     }};
                 }
@@ -18450,21 +18629,23 @@ namespace org.jbox2d.collision {
                     while((index < boundCount - 1 && bounds[index + 1].value <= lowerValue)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let nextBound : org.jbox2d.collision.Bound = bounds[index + 1];
-                        let nextProxyId : number = nextBound.proxyId;
-                        let nextProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[nextProxyId];
-                        --nextBound.stabbingCount;
-                        if(nextBound.isUpper()) {
-                            if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, nextProxy)) {
-                                this.m_pairManager.removeBufferedPair(proxyId, nextProxyId);
+                        if(bound != null && nextBound != null) {
+                            let nextProxyId : number = nextBound.proxyId;
+                            let nextProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[nextProxyId];
+                            --nextBound.stabbingCount;
+                            if(nextBound.isUpper()) {
+                                if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, nextProxy)) {
+                                    this.m_pairManager.removeBufferedPair(proxyId, nextProxyId);
+                                }
+                                --nextProxy.upperBounds[axis];
+                                --bound.stabbingCount;
+                            } else {
+                                --nextProxy.lowerBounds[axis];
+                                ++bound.stabbingCount;
                             }
-                            --nextProxy.upperBounds[axis];
-                            --bound.stabbingCount;
-                        } else {
-                            --nextProxy.lowerBounds[axis];
-                            ++bound.stabbingCount;
+                            ++proxy.lowerBounds[axis];
+                            bound.swap(nextBound);
                         }
-                        ++proxy.lowerBounds[axis];
-                        bound.swap(nextBound);
                         ++index;
                     }};
                 }
@@ -18473,21 +18654,23 @@ namespace org.jbox2d.collision {
                     while((index > 0 && upperValue < bounds[index - 1].value)) {{
                         let bound : org.jbox2d.collision.Bound = bounds[index];
                         let prevBound : org.jbox2d.collision.Bound = bounds[index - 1];
-                        let prevProxyId : number = prevBound.proxyId;
-                        let prevProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[prevProxyId];
-                        --prevBound.stabbingCount;
-                        if(prevBound.isLower() === true) {
-                            if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, prevProxy)) {
-                                this.m_pairManager.removeBufferedPair(proxyId, prevProxyId);
+                        if(bound != null && prevBound != null) {
+                            let prevProxyId : number = prevBound.proxyId;
+                            let prevProxy : org.jbox2d.collision.Proxy = this.m_proxyPool[prevProxyId];
+                            --prevBound.stabbingCount;
+                            if(prevBound.isLower() === true) {
+                                if(this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, prevProxy)) {
+                                    this.m_pairManager.removeBufferedPair(proxyId, prevProxyId);
+                                }
+                                ++prevProxy.lowerBounds[axis];
+                                --bound.stabbingCount;
+                            } else {
+                                ++prevProxy.upperBounds[axis];
+                                ++bound.stabbingCount;
                             }
-                            ++prevProxy.lowerBounds[axis];
-                            --bound.stabbingCount;
-                        } else {
-                            ++prevProxy.upperBounds[axis];
-                            ++bound.stabbingCount;
+                            --proxy.upperBounds[axis];
+                            bound.swap(prevBound);
                         }
-                        --proxy.upperBounds[axis];
-                        bound.swap(prevBound);
                         --index;
                     }};
                 }
@@ -18511,9 +18694,11 @@ namespace org.jbox2d.collision {
             let indexes : number[] = BroadPhase.tlIndexes_$LI$().get(2);
             this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[0], upperValues[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
             this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[1], upperValues[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
+            if(!(this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies)) throw new Error("Assertion error line 476: assert m_queryResultCount < Settings.maxProxies;");;
             let results : any[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(maxCount);
             let count : number = 0;
             for(let i : number = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {{
+                if(!(this.m_queryResults[i] < org.jbox2d.common.Settings.maxProxies)) throw new Error("Assertion error line 480: assert m_queryResults[i] < Settings.maxProxies;");;
                 let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[this.m_queryResults[i]];
                 proxy.isValid();
                 results[i] = proxy.userData;
@@ -18535,11 +18720,17 @@ namespace org.jbox2d.collision {
                 let stabbingCount : number = 0;
                 for(let i : number = 0; i < boundCount; ++i) {{
                     let bound : org.jbox2d.collision.Bound = bounds[i];
+                    if(!((i === 0 || bounds[i - 1].value <= bound.value))) throw new Error("Assertion error line 502: assert (i == 0 || bounds[i - 1].value <= bound.value);");;
+                    if(!((bound.proxyId !== org.jbox2d.collision.PairManager.NULL_PROXY_$LI$()))) throw new Error("Assertion error line 503: assert (bound.proxyId != PairManager.NULL_PROXY);");;
+                    if(!((this.m_proxyPool[bound.proxyId].isValid()))) throw new Error("Assertion error line 504: assert (m_proxyPool[bound.proxyId].isValid());");;
                     if(bound.isLower() === true) {
+                        if(!((this.m_proxyPool[bound.proxyId].lowerBounds[axis] === i))) throw new Error("Assertion error line 506: assert (m_proxyPool[bound.proxyId].lowerBounds[axis] == i) : (m_proxyPool[bound.proxyId].lowerBounds[axis] + ' not ' + i);");;
                         ++stabbingCount;
                     } else {
+                        if(!((this.m_proxyPool[bound.proxyId].upperBounds[axis] === i))) throw new Error("Assertion error line 509: assert (m_proxyPool[bound.proxyId].upperBounds[axis] == i);");;
                         --stabbingCount;
                     }
+                    if(!((bound.stabbingCount === stabbingCount))) throw new Error("Assertion error line 512: assert (bound.stabbingCount == stabbingCount);");;
                 };}
             };}
         }
@@ -18548,6 +18739,8 @@ namespace org.jbox2d.collision {
             if(BroadPhase.debugPrint) {
                 console.info("ComputeBounds()");
             }
+            if(!((aabb.upperBound.x >= aabb.lowerBound.x))) throw new Error("Assertion error line 521: assert (aabb.upperBound.x >= aabb.lowerBound.x);");;
+            if(!((aabb.upperBound.y >= aabb.lowerBound.y))) throw new Error("Assertion error line 522: assert (aabb.upperBound.y >= aabb.lowerBound.y);");;
             let bx : number = aabb.lowerBound.x < this.m_worldAABB.upperBound.x?aabb.lowerBound.x:this.m_worldAABB.upperBound.x;
             let by : number = aabb.lowerBound.y < this.m_worldAABB.upperBound.y?aabb.lowerBound.y:this.m_worldAABB.upperBound.y;
             let minVertexX : number = this.m_worldAABB.lowerBound.x > bx?this.m_worldAABB.lowerBound.x:bx;
@@ -18560,6 +18753,15 @@ namespace org.jbox2d.collision {
             upperValues[0] = (<number>((<any>Math).fround(this.m_quantizationFactor.x * ((<any>Math).fround(maxVertexX - this.m_worldAABB.lowerBound.x))))|0) | 1;
             lowerValues[1] = (<number>((<any>Math).fround(this.m_quantizationFactor.y * ((<any>Math).fround(minVertexY - this.m_worldAABB.lowerBound.y))))|0) & (2147483647 - 1);
             upperValues[1] = (<number>((<any>Math).fround(this.m_quantizationFactor.y * ((<any>Math).fround(maxVertexY - this.m_worldAABB.lowerBound.y))))|0) | 1;
+            if(upperValues[0] < 0) {
+                upperValues[0] = 2147483647;
+            }
+            if(upperValues[1] < 0) {
+                upperValues[1] = 2147483647;
+            }
+            if(BroadPhase.debugPrint) {
+                console.info("ComputeBounds() vals: lowerValues[0]=" + lowerValues[0] + " upperValues[0]=" + upperValues[0] + " lowerValues[1]=" + lowerValues[1] + " upperValues[1]=" + upperValues[1] + " test=" + ((<number>((<any>Math).fround(this.m_quantizationFactor.x * ((<any>Math).fround(minVertexX - this.m_worldAABB.lowerBound.x))))|0)));
+            }
         }
 
         public query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes : number[], lowerValue : number, upperValue : number, bounds : org.jbox2d.collision.Bound[], boundCount : number, axis : number) {
@@ -18569,23 +18771,29 @@ namespace org.jbox2d.collision {
             let lowerQuery : number = BroadPhase.binarySearch(bounds, boundCount, lowerValue);
             let upperQuery : number = BroadPhase.binarySearch(bounds, boundCount, upperValue);
             for(let i : number = lowerQuery; i < upperQuery; ++i) {{
-                if(bounds[i].isLower()) {
+                if(bounds[i] != null && bounds[i].isLower()) {
                     this.incrementOverlapCount(bounds[i].proxyId);
                 }
             };}
             if(lowerQuery > 0) {
                 let i : number = lowerQuery - 1;
-                let s : number = bounds[i].stabbingCount;
-                while((s !== 0)) {{
-                    if(bounds[i].isLower()) {
-                        let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[bounds[i].proxyId];
-                        if(lowerQuery <= proxy.upperBounds[axis]) {
-                            this.incrementOverlapCount(bounds[i].proxyId);
-                            --s;
+                if(bounds[i] != null) {
+                    let s : number = bounds[i].stabbingCount;
+                    while((s !== 0)) {{
+                        if(!((i >= 0))) throw new Error("Assertion error line 562: assert (i >= 0) : ('i = ' + i + '; s = ' + s);");;
+                        if(bounds[i] != null && bounds[i].isLower()) {
+                            let proxy : org.jbox2d.collision.Proxy = this.m_proxyPool[bounds[i].proxyId];
+                            if(lowerQuery <= proxy.upperBounds[axis]) {
+                                this.incrementOverlapCount(bounds[i].proxyId);
+                                --s;
+                            }
                         }
-                    }
-                    --i;
-                }};
+                        --i;
+                        if(i < 0) {
+                            break;
+                        }
+                    }};
+                }
             }
             indexes[0] = lowerQuery;
             indexes[1] = upperQuery;
@@ -18619,6 +18827,7 @@ namespace org.jbox2d.collision {
                 proxy.overlapCount = 1;
             } else {
                 proxy.overlapCount = 2;
+                if(!(this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies)) throw new Error("Assertion error line 609: assert m_queryResultCount < Settings.maxProxies;");;
                 this.m_queryResults[this.m_queryResultCount] = proxyId;
                 ++this.m_queryResultCount;
             }
@@ -18664,7 +18873,11 @@ namespace org.jbox2d.collision {
             let by : number = (<any>Math).fround(this.m_worldAABB.lowerBound.y - aabb.upperBound.y);
             let dx : number = org.jbox2d.common.MathUtils.max$float$float(ax, bx);
             let dy : number = org.jbox2d.common.MathUtils.max$float$float(ay, by);
-            return (org.jbox2d.common.MathUtils.max$float$float(dx, dy) < 0.0);
+            let inRange : boolean = (org.jbox2d.common.MathUtils.max$float$float(dx, dy) < 0.0);
+            if(BroadPhase.debugPrint) {
+                console.info("inRange (" + inRange + "): aabb=" + aabb + " // world[" + this.m_worldAABB + "] => dx=" + dx + " dy=" + dy);
+            }
+            return inRange;
         }
 
         static tlResults : org.jbox2d.pooling.arrays.IntegerArray; public static tlResults_$LI$() : org.jbox2d.pooling.arrays.IntegerArray { if(BroadPhase.tlResults == null) BroadPhase.tlResults = new org.jbox2d.pooling.arrays.IntegerArray(); return BroadPhase.tlResults; };
@@ -18675,6 +18888,7 @@ namespace org.jbox2d.collision {
             let dy : number = (<any>Math).fround(((<any>Math).fround(segment.p2.y - segment.p1.y)) * this.m_quantizationFactor.y);
             let sx : number = dx < -org.jbox2d.common.Settings.EPSILON?-1:(dx > org.jbox2d.common.Settings.EPSILON?1:0);
             let sy : number = dy < -org.jbox2d.common.Settings.EPSILON?-1:(dy > org.jbox2d.common.Settings.EPSILON?1:0);
+            if(!((sx !== 0 || sy !== 0))) throw new Error("Assertion error line 670: assert (sx != 0 || sy != 0);");;
             let p1x : number = (<any>Math).fround(((<any>Math).fround(segment.p1.x - this.m_worldAABB.lowerBound.x)) * this.m_quantizationFactor.x);
             let p1y : number = (<any>Math).fround(((<any>Math).fround(segment.p1.y - this.m_worldAABB.lowerBound.y)) * this.m_quantizationFactor.y);
             let startValues : number[] = [0, 0];
@@ -18798,7 +19012,9 @@ namespace org.jbox2d.collision {
             };}
             let count : number = 0;
             for(let i : number = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {{
+                if(!((this.m_queryResults[i] < org.jbox2d.common.Settings.maxProxies))) throw new Error("Assertion error line 794: assert (m_queryResults[i] < Settings.maxProxies);");;
                 let proxya : org.jbox2d.collision.Proxy = this.m_proxyPool[this.m_queryResults[i]];
+                if(!((proxya.isValid()))) throw new Error("Assertion error line 796: assert (proxya.isValid());");;
                 userData[i] = proxya.userData;
             };}
             this.m_queryResultCount = 0;
@@ -19078,6 +19294,7 @@ namespace org.jbox2d.dynamics {
         }
 
         public add$org_jbox2d_dynamics_Body(body : org.jbox2d.dynamics.Body) {
+            if(!(this.m_bodyCount < this.m_bodyCapacity)) throw new Error("Assertion error line 38: assert m_bodyCount < m_bodyCapacity;");;
             this.m_bodies[this.m_bodyCount++] = body;
         }
 
@@ -19092,10 +19309,12 @@ namespace org.jbox2d.dynamics {
         }
 
         add$org_jbox2d_dynamics_contacts_Contact(contact : org.jbox2d.dynamics.contacts.Contact) {
+            if(!((this.m_contactCount < this.m_contactCapacity))) throw new Error("Assertion error line 53: assert (m_contactCount < m_contactCapacity);");;
             this.m_contacts[this.m_contactCount++] = contact;
         }
 
         add$org_jbox2d_dynamics_joints_Joint(joint : org.jbox2d.dynamics.joints.Joint) {
+            if(!((this.m_jointCount < this.m_jointCapacity))) throw new Error("Assertion error line 58: assert (m_jointCount < m_jointCapacity);");;
             this.m_joints[this.m_jointCount++] = joint;
         }
 
@@ -19596,9 +19815,7 @@ namespace org.jbox2d.dynamics {
          * @return {org.jbox2d.dynamics.Body}
          */
         public createBody(def : org.jbox2d.dynamics.BodyDef) : org.jbox2d.dynamics.Body {
-            if(this.m_lock === true) {
-                return null;
-            }
+            if(!((this.m_lock === false))) throw new Error("Assertion error line 280: assert (m_lock == false);");;
             let b : org.jbox2d.dynamics.Body = new org.jbox2d.dynamics.Body(def, this);
             b.m_prev = null;
             b.m_next = this.m_bodyList;
@@ -19618,9 +19835,8 @@ namespace org.jbox2d.dynamics {
          * @param {org.jbox2d.dynamics.Body} b
          */
         public destroyBody(b : org.jbox2d.dynamics.Body) {
-            if(this.m_lock === true) {
-                return;
-            }
+            if(!((this.m_bodyCount > 0))) throw new Error("Assertion error line 300: assert (m_bodyCount > 0);");;
+            if(!((this.m_lock === false))) throw new Error("Assertion error line 301: assert (m_lock == false);");;
             let jn : org.jbox2d.dynamics.joints.JointEdge = b.m_jointList;
             while((jn != null)) {{
                 let jn0 : org.jbox2d.dynamics.joints.JointEdge = jn;
@@ -19666,6 +19882,7 @@ namespace org.jbox2d.dynamics {
          * @return {org.jbox2d.dynamics.joints.Joint}
          */
         public createJoint(def : org.jbox2d.dynamics.joints.JointDef) : org.jbox2d.dynamics.joints.Joint {
+            if(!((this.m_lock === false))) throw new Error("Assertion error line 347: assert (m_lock == false);");;
             let j : org.jbox2d.dynamics.joints.Joint = org.jbox2d.dynamics.joints.Joint.create(def);
             j.m_prev = null;
             j.m_next = this.m_jointList;
@@ -19705,6 +19922,7 @@ namespace org.jbox2d.dynamics {
          * @param {org.jbox2d.dynamics.joints.Joint} j
          */
         public destroyJoint(j : org.jbox2d.dynamics.joints.Joint) {
+            if(!((this.m_lock === false))) throw new Error("Assertion error line 387: assert (m_lock == false);");;
             let collideConnected : boolean = j.m_collideConnected;
             if(j.m_prev != null) {
                 j.m_prev.m_next = j.m_next;
@@ -19742,6 +19960,7 @@ namespace org.jbox2d.dynamics {
             j.m_node2.prev = null;
             j.m_node2.next = null;
             org.jbox2d.dynamics.joints.Joint.destroy(j);
+            if(!(this.m_jointCount > 0)) throw new Error("Assertion error line 425: assert m_jointCount > 0;");;
             --this.m_jointCount;
             if(collideConnected === false) {
                 let b : org.jbox2d.dynamics.Body = body1.m_shapeCount < body2.m_shapeCount?body1:body2;
@@ -19765,6 +19984,7 @@ namespace org.jbox2d.dynamics {
         }
 
         public destroyController(controller : org.jbox2d.dynamics.controllers.Controller) {
+            if(!((this.m_controllerCount > 0))) throw new Error("Assertion error line 449: assert (m_controllerCount > 0);");;
             if(controller.m_next != null) {
                 controller.m_next.m_prev = controller.m_prev;
             }
@@ -19787,7 +20007,7 @@ namespace org.jbox2d.dynamics {
          */
         public step(dt : number, iterations : number) {
             this.m_lock = true;
-            let step : org.jbox2d.dynamics.TimeStep = /* get */World.tlStep_$LI$().initialValue();
+            let step : org.jbox2d.dynamics.TimeStep = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(World.tlStep_$LI$());
             step.dt = dt;
             step.maxIterations = iterations;
             if(dt > 0.0) {
@@ -19927,6 +20147,7 @@ namespace org.jbox2d.dynamics {
                         if((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
                             continue;
                         }
+                        if(!(stackCount < stackSize)) throw new Error("Assertion error line 612: assert stackCount < stackSize;");;
                         stack[stackCount++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                     };}
@@ -19940,6 +20161,7 @@ namespace org.jbox2d.dynamics {
                         if((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
                             continue;
                         }
+                        if(!((stackCount < stackSize))) throw new Error("Assertion error line 626: assert (stackCount < stackSize);");;
                         stack[stackCount++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                     };}
@@ -20016,7 +20238,9 @@ namespace org.jbox2d.dynamics {
                             t0 = b1.m_sweep.t0;
                             b2.m_sweep.advance(t0);
                         }
+                        if(!((t0 < 1.0))) throw new Error("Assertion error line 703: assert (t0 < 1.0F);");;
                         toi = org.jbox2d.collision.TOI.timeOfImpact(c.m_shape1, b1.m_sweep, c.m_shape2, b2.m_sweep);
+                        if(!((0.0 <= toi && toi <= 1.0))) throw new Error("Assertion error line 705: assert (0.0F <= toi && toi <= 1.0F);");;
                         if(toi > 0.0 && toi < 1.0) {
                             toi = org.jbox2d.common.MathUtils.min((<any>Math).fround((<any>Math).fround(((<any>Math).fround(1.0 - toi)) * t0) + toi), 1.0);
                         }
@@ -20079,6 +20303,7 @@ namespace org.jbox2d.dynamics {
                             other.advance(minTOI);
                             other.wakeUp();
                         }
+                        if(!((queueSize < queueCapacity))) throw new Error("Assertion error line 768: assert (queueSize < queueCapacity);");;
                         queue[queueStart + queueSize++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                     };}
@@ -20099,6 +20324,7 @@ namespace org.jbox2d.dynamics {
                             other.advance(minTOI);
                             other.wakeUp();
                         }
+                        if(!((queueSize < queueCapacity))) throw new Error("Assertion error line 789: assert (queueSize < queueCapacity);");;
                         queue[queueStart + queueSize++] = other;
                         other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                     };}
@@ -20106,6 +20332,7 @@ namespace org.jbox2d.dynamics {
                 let subStep : org.jbox2d.dynamics.TimeStep = World.steps_$LI$().get();
                 subStep.warmStarting = false;
                 subStep.dt = (<any>Math).fround(((<any>Math).fround(1.0 - minTOI)) * step.dt);
+                if(!((subStep.dt > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 797: assert (subStep.dt > Settings.EPSILON);");;
                 subStep.inv_dt = (<any>Math).fround(1.0 / subStep.dt);
                 subStep.maxIterations = step.maxIterations;
                 island.solveTOI(subStep);
@@ -20200,6 +20427,7 @@ namespace org.jbox2d.dynamics {
                 let poly : org.jbox2d.collision.shapes.PolygonShape = <org.jbox2d.collision.shapes.PolygonShape>shape;
                 let vertexCount : number = poly.getVertexCount();
                 let localVertices : org.jbox2d.common.Vec2[] = poly.getVertices();
+                if(!((vertexCount <= org.jbox2d.common.Settings.maxPolygonVertices))) throw new Error("Assertion error line 892: assert (vertexCount <= Settings.maxPolygonVertices);");;
                 let vertices : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(vertexCount);
                 for(let i : number = 0; i < vertexCount; ++i) {{
                     vertices[i] = org.jbox2d.common.XForm.mul(xf, localVertices[i]);
@@ -20529,6 +20757,7 @@ namespace org.jbox2d.dynamics {
             let shapes : org.jbox2d.collision.shapes.Shape[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(maxCount);
             let count : number = this.raycast(segment, shapes, maxCount, solidShapes, userData);
             if(count === 0) return null;
+            if(!((count === 1))) throw new Error("Assertion error line 1222: assert (count == 1);");;
             shapes[0].testSegment(shapes[0].getBody().getMemberXForm(), result, segment, 1.0);
             return shapes[0];
         }
@@ -20595,6 +20824,7 @@ namespace org.jbox2d.collision.shapes {
             super(def);
             if(this.m_radius===undefined) this.m_radius = 0;
             if(this.m_localPosition===undefined) this.m_localPosition = null;
+            if(!((def.type === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE))) throw new Error("Assertion error line 21: assert (def.type == ShapeType.CIRCLE_SHAPE);");;
             let circleDef : org.jbox2d.collision.shapes.CircleDef = <org.jbox2d.collision.shapes.CircleDef>def;
             this.m_type = org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE;
             this.m_localPosition = /* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(circleDef.localPosition);
@@ -20622,7 +20852,7 @@ namespace org.jbox2d.collision.shapes {
          * @return {boolean}
          */
         public testPoint(transform : org.jbox2d.common.XForm, p : org.jbox2d.common.Vec2) : boolean {
-            let center : org.jbox2d.common.Vec2 = /* get */CircleShape.tlCenter_$LI$().initialValue();
+            let center : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleShape.tlCenter_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform.R, this.m_localPosition, center);
             center.addLocal$org_jbox2d_common_Vec2(transform.position);
             let d : org.jbox2d.common.Vec2 = center.subLocal(p).negateLocal();
@@ -20645,8 +20875,8 @@ namespace org.jbox2d.collision.shapes {
          * @return {org.jbox2d.collision.SegmentCollide}
          */
         public testSegment(xf : org.jbox2d.common.XForm, out : org.jbox2d.common.RaycastResult, segment : org.jbox2d.collision.Segment, maxLambda : number) : org.jbox2d.collision.SegmentCollide {
-            let position : org.jbox2d.common.Vec2 = /* get */CircleShape.tlPosition_$LI$().initialValue();
-            let s : org.jbox2d.common.Vec2 = /* get */CircleShape.tlS_$LI$().initialValue();
+            let position : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleShape.tlPosition_$LI$());
+            let s : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleShape.tlS_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_localPosition, position);
             position.addLocal$org_jbox2d_common_Vec2(xf.position);
             s.set$org_jbox2d_common_Vec2(segment.p1);
@@ -20655,7 +20885,7 @@ namespace org.jbox2d.collision.shapes {
             if(b < 0.0) {
                 return org.jbox2d.collision.SegmentCollide.STARTS_INSIDE_COLLIDE;
             }
-            let r : org.jbox2d.common.Vec2 = /* get */CircleShape.tlR_$LI$().initialValue();
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleShape.tlR_$LI$());
             r.set$org_jbox2d_common_Vec2(segment.p2).subLocal(segment.p1);
             let c : number = org.jbox2d.common.Vec2.dot(s, r);
             let rr : number = org.jbox2d.common.Vec2.dot(r, r);
@@ -20682,7 +20912,7 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.XForm} transform
          */
         public computeAABB(aabb : org.jbox2d.collision.AABB, transform : org.jbox2d.common.XForm) {
-            let p : org.jbox2d.common.Vec2 = /* get */CircleShape.tlP_$LI$().initialValue();
+            let p : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleShape.tlP_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform.R, this.m_localPosition, p);
             p.addLocal$org_jbox2d_common_Vec2(transform.position);
             aabb.lowerBound.x = (<any>Math).fround(p.x - this.m_radius);
@@ -20747,7 +20977,7 @@ namespace org.jbox2d.collision.shapes {
         }
 
         public computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_XForm$org_jbox2d_common_Vec2(normal : org.jbox2d.common.Vec2, offset : number, xf : org.jbox2d.common.XForm, c : org.jbox2d.common.Vec2) : number {
-            let p : org.jbox2d.common.Vec2 = /* get */CircleShape.tlP_$LI$().initialValue();
+            let p : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(CircleShape.tlP_$LI$());
             org.jbox2d.common.XForm.mulToOut(xf, this.m_localPosition, p);
             let l : number = -((<any>Math).fround(org.jbox2d.common.Vec2.dot(normal, p) - offset));
             if(l < (<any>Math).fround(-this.m_radius + org.jbox2d.common.Settings.EPSILON)) {
@@ -20840,6 +21070,7 @@ namespace org.jbox2d.collision.shapes {
             if(this.m_cornerConvex2===undefined) this.m_cornerConvex2 = false;
             if(this.m_nextEdge===undefined) this.m_nextEdge = null;
             if(this.m_prevEdge===undefined) this.m_prevEdge = null;
+            if(!((def.type === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE))) throw new Error("Assertion error line 56: assert (def.type == ShapeType.EDGE_SHAPE);");;
             this.m_type = org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE;
             this.m_prevEdge = null;
             this.m_nextEdge = null;
@@ -20897,11 +21128,11 @@ namespace org.jbox2d.collision.shapes {
          * @return {org.jbox2d.collision.SegmentCollide}
          */
         public testSegment(xf : org.jbox2d.common.XForm, out : org.jbox2d.common.RaycastResult, segment : org.jbox2d.collision.Segment, maxLambda : number) : org.jbox2d.collision.SegmentCollide {
-            let r : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlR_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlV1_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlD_$LI$().initialValue();
-            let n : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlN_$LI$().initialValue();
-            let b : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlB_$LI$().initialValue();
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlR_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlV1_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlD_$LI$());
+            let n : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlN_$LI$());
+            let b : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlB_$LI$());
             r.set$org_jbox2d_common_Vec2(segment.p2).subLocal(segment.p1);
             org.jbox2d.common.XForm.mulToOut(xf, this.m_v1, v1);
             org.jbox2d.common.XForm.mulToOut(xf, this.m_v2, d);
@@ -20935,7 +21166,7 @@ namespace org.jbox2d.collision.shapes {
          */
         public computeAABB(aabb : org.jbox2d.collision.AABB, transform : org.jbox2d.common.XForm) {
             org.jbox2d.common.XForm.mulToOut(transform, this.m_v1, aabb.lowerBound);
-            let v2 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlV2_$LI$().initialValue();
+            let v2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlV2_$LI$());
             org.jbox2d.common.XForm.mulToOut(transform, this.m_v2, v2);
             org.jbox2d.common.Vec2.maxToOut(aabb.lowerBound, v2, aabb.upperBound);
             org.jbox2d.common.Vec2.minToOut(aabb.lowerBound, v2, aabb.lowerBound);
@@ -20956,10 +21187,10 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.XForm} transform2
          */
         public computeSweptAABB(aabb : org.jbox2d.collision.AABB, transform1 : org.jbox2d.common.XForm, transform2 : org.jbox2d.common.XForm) {
-            let sweptV1 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlSwept1_$LI$().initialValue();
-            let sweptV2 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlSwept2_$LI$().initialValue();
-            let sweptV3 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlSwept3_$LI$().initialValue();
-            let sweptV4 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlSwept4_$LI$().initialValue();
+            let sweptV1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlSwept1_$LI$());
+            let sweptV2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlSwept2_$LI$());
+            let sweptV3 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlSwept3_$LI$());
+            let sweptV4 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlSwept4_$LI$());
             org.jbox2d.common.XForm.mulToOut(transform1, this.m_v1, sweptV1);
             org.jbox2d.common.XForm.mulToOut(transform1, this.m_v2, sweptV2);
             org.jbox2d.common.XForm.mulToOut(transform2, this.m_v1, sweptV3);
@@ -20993,8 +21224,8 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.Vec2} d
          */
         public support(dest : org.jbox2d.common.Vec2, xf : org.jbox2d.common.XForm, d : org.jbox2d.common.Vec2) {
-            let supportV1 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlSupportV1_$LI$().initialValue();
-            let supportV2 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlSupportV2_$LI$().initialValue();
+            let supportV1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlSupportV1_$LI$());
+            let supportV2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlSupportV2_$LI$());
             org.jbox2d.common.XForm.mulToOut(xf, this.m_coreV1, supportV1);
             org.jbox2d.common.XForm.mulToOut(xf, this.m_coreV2, supportV2);
             dest.set$org_jbox2d_common_Vec2(org.jbox2d.common.Vec2.dot(supportV1, d) > org.jbox2d.common.Vec2.dot(supportV2, d)?supportV1:supportV2);
@@ -21120,10 +21351,10 @@ namespace org.jbox2d.collision.shapes {
         static tlE2 : org.jbox2d.pooling.TLVec2; public static tlE2_$LI$() : org.jbox2d.pooling.TLVec2 { if(EdgeShape.tlE2 == null) EdgeShape.tlE2 = (() => { let __o : any = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return EdgeShape.tlE2; };
 
         public computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_XForm$org_jbox2d_common_Vec2(normal : org.jbox2d.common.Vec2, offset : number, xf : org.jbox2d.common.XForm, c : org.jbox2d.common.Vec2) : number {
-            let v0 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlV0_$LI$().initialValue();
-            let v1 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlV1_$LI$().initialValue();
-            let v2 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlV2_$LI$().initialValue();
-            let temp : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlTemp_$LI$().initialValue();
+            let v0 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlV0_$LI$());
+            let v1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlV1_$LI$());
+            let v2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlV2_$LI$());
+            let temp : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlTemp_$LI$());
             v0.set$org_jbox2d_common_Vec2(normal).mul(offset);
             org.jbox2d.common.XForm.mulToOut(xf, this.m_v1, v1);
             org.jbox2d.common.XForm.mulToOut(xf, this.m_v2, v2);
@@ -21143,8 +21374,8 @@ namespace org.jbox2d.collision.shapes {
                 } else {
                 }
             }
-            let e1 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlE1_$LI$().initialValue();
-            let e2 : org.jbox2d.common.Vec2 = /* get */EdgeShape.tlE2_$LI$().initialValue();
+            let e1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlE1_$LI$());
+            let e2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(EdgeShape.tlE2_$LI$());
             let k_inv3 : number = (<any>Math).fround(1.0 / 3.0);
             c.x = (<any>Math).fround(k_inv3 * ((<any>Math).fround((<any>Math).fround(v0.x + v1.x) + v2.x)));
             c.y = (<any>Math).fround(k_inv3 * ((<any>Math).fround((<any>Math).fround(v0.y + v1.y) + v2.y)));
@@ -21183,6 +21414,7 @@ namespace org.jbox2d.collision.shapes {
             super(def);
             if(this.m_localPosition===undefined) this.m_localPosition = null;
             if(this.m_mass===undefined) this.m_mass = 0;
+            if(!((def.type === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE))) throw new Error("Assertion error line 18: assert (def.type == ShapeType.POINT_SHAPE);");;
             let pointDef : org.jbox2d.collision.shapes.PointDef = <org.jbox2d.collision.shapes.PointDef>def;
             this.m_type = org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE;
             this.m_localPosition = /* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(pointDef.localPosition);
@@ -21197,7 +21429,7 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.XForm} transform
          */
         public computeAABB(aabb : org.jbox2d.collision.AABB, transform : org.jbox2d.common.XForm) {
-            let p : org.jbox2d.common.Vec2 = /* get */PointShape.tlP_$LI$().initialValue();
+            let p : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointShape.tlP_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform.R, this.m_localPosition, p);
             p.add(transform.position);
             aabb.lowerBound.set$float$float((<any>Math).fround(p.x - org.jbox2d.common.Settings.EPSILON), (<any>Math).fround(p.y - org.jbox2d.common.Settings.EPSILON));
@@ -21225,8 +21457,8 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.XForm} transform2
          */
         public computeSweptAABB(aabb : org.jbox2d.collision.AABB, transform1 : org.jbox2d.common.XForm, transform2 : org.jbox2d.common.XForm) {
-            let sweptP1 : org.jbox2d.common.Vec2 = /* get */PointShape.tlSwept1_$LI$().initialValue();
-            let sweptP2 : org.jbox2d.common.Vec2 = /* get */PointShape.tlSwept2_$LI$().initialValue();
+            let sweptP1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointShape.tlSwept1_$LI$());
+            let sweptP2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointShape.tlSwept2_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform2.R, this.m_localPosition, sweptP1);
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform2.R, this.m_localPosition, sweptP2);
             org.jbox2d.common.Vec2.minToOut(sweptP1, sweptP2, aabb.lowerBound);
@@ -21262,8 +21494,8 @@ namespace org.jbox2d.collision.shapes {
          * @return {org.jbox2d.collision.SegmentCollide}
          */
         public testSegment(xf : org.jbox2d.common.XForm, out : org.jbox2d.common.RaycastResult, segment : org.jbox2d.collision.Segment, maxLambda : number) : org.jbox2d.collision.SegmentCollide {
-            let position : org.jbox2d.common.Vec2 = /* get */PointShape.tlPosition_$LI$().initialValue();
-            let s : org.jbox2d.common.Vec2 = /* get */PointShape.tlS_$LI$().initialValue();
+            let position : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointShape.tlPosition_$LI$());
+            let s : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointShape.tlS_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_localPosition, position);
             position.addLocal$org_jbox2d_common_Vec2(xf.position);
             s.set$org_jbox2d_common_Vec2(segment.p1);
@@ -21272,7 +21504,7 @@ namespace org.jbox2d.collision.shapes {
             if(b < 0.0) {
                 return org.jbox2d.collision.SegmentCollide.STARTS_INSIDE_COLLIDE;
             }
-            let r : org.jbox2d.common.Vec2 = /* get */PointShape.tlR_$LI$().initialValue();
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PointShape.tlR_$LI$());
             r.set$org_jbox2d_common_Vec2(segment.p2).subLocal(segment.p1);
             let c : number = org.jbox2d.common.Vec2.dot(s, r);
             let rr : number = org.jbox2d.common.Vec2.dot(r, r);
@@ -21384,6 +21616,7 @@ namespace org.jbox2d.collision.shapes {
             if(this.m_normals===undefined) this.m_normals = null;
             if(this.m_coreVertices===undefined) this.m_coreVertices = null;
             if(this.m_vertexCount===undefined) this.m_vertexCount = 0;
+            if(!((def.type === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE))) throw new Error("Assertion error line 60: assert (def.type == ShapeType.POLYGON_SHAPE);");;
             this.m_type = org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE;
             let poly : org.jbox2d.collision.shapes.PolygonDef = <org.jbox2d.collision.shapes.PolygonDef>def;
             this.m_vertexCount = poly.getVertexCount();
@@ -21391,14 +21624,16 @@ namespace org.jbox2d.collision.shapes {
             this.m_normals = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.m_vertexCount);
             this.m_coreVertices = (s => { let a=[]; while(s-->0) a.push(null); return a; })(this.m_vertexCount);
             this.m_obb = new org.jbox2d.collision.OBB();
+            if(!((3 <= this.m_vertexCount && this.m_vertexCount <= org.jbox2d.common.Settings.maxPolygonVertices))) throw new Error("Assertion error line 68: assert (3 <= m_vertexCount && m_vertexCount <= Settings.maxPolygonVertices);");;
             for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 this.m_vertices[i] = /* clone *//* clone */((o:any) => { if(o.clone!=undefined) { return (<any>o).clone(); } else { let clone = Object.create(o); for(let p in o) { if (o.hasOwnProperty(p)) clone[p] = o[p]; } return clone; } })(/* get */poly.vertices[i]);
             };}
-            let edge : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlEdge_$LI$().initialValue();
+            let edge : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlEdge_$LI$());
             for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 let i1 : number = i;
                 let i2 : number = i + 1 < this.m_vertexCount?i + 1:0;
                 edge.set$org_jbox2d_common_Vec2(this.m_vertices[i2]).subLocal(this.m_vertices[i1]);
+                if(!((edge.lengthSquared() > (<any>Math).fround(org.jbox2d.common.Settings.EPSILON * org.jbox2d.common.Settings.EPSILON)))) throw new Error("Assertion error line 77: assert (edge.lengthSquared() > Settings.EPSILON * Settings.EPSILON);");;
                 this.m_normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
                 this.m_normals[i].normalize();
             };}
@@ -21408,19 +21643,21 @@ namespace org.jbox2d.collision.shapes {
                         if(j === i || j === (i + 1) % this.m_vertexCount) {
                             continue;
                         }
+                        if(!((org.jbox2d.common.Vec2.dot(this.m_normals[i], this.m_vertices[j].sub(this.m_vertices[i])) < -org.jbox2d.common.Settings.linearSlop_$LI$()))) throw new Error("Assertion error line 87: assert (Vec2.dot(m_normals[i], m_vertices[j].sub(m_vertices[i])) < -Settings.linearSlop);");;
                     };}
                 };}
                 for(let i : number = 1; i < this.m_vertexCount; ++i) {{
                     let cross : number = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.m_normals[i - 1], this.m_normals[i]);
                     cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
                     let angle : number = (<any>Math).fround(Math.asin(cross));
+                    if(!((angle > org.jbox2d.common.Settings.angularSlop_$LI$()))) throw new Error("Assertion error line 94: assert (angle > Settings.angularSlop);");;
                 };}
             }
             this.m_centroid = PolygonShape.computeCentroid(poly.vertices);
             PolygonShape.computeOBB(this.m_obb, this.m_vertices);
-            let v : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlV_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlD_$LI$().initialValue();
-            let A : org.jbox2d.common.Mat22 = /* get */PolygonShape.tlA_$LI$().initialValue();
+            let v : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlV_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlD_$LI$());
+            let A : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlA_$LI$());
             for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 let i1 : number = i - 1 >= 0?i - 1:this.m_vertexCount - 1;
                 let i2 : number = i;
@@ -21435,6 +21672,8 @@ namespace org.jbox2d.collision.shapes {
                     console.info("n1: " + n1 + "; n2: " + n2);
                     console.info("v: " + v);
                 }
+                if(!((d.x >= 0.0))) throw new Error("Assertion error line 116: assert (d.x >= 0.0F);");;
+                if(!((d.y >= 0.0))) throw new Error("Assertion error line 117: assert (d.y >= 0.0F);");;
                 A.col1.x = n1.x;
                 A.col2.x = n1.y;
                 A.col1.y = n2.x;
@@ -21464,7 +21703,7 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.Vec2} center
          */
         public updateSweepRadius(center : org.jbox2d.common.Vec2) {
-            let d : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlD_$LI$().initialValue();
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlD_$LI$());
             this.m_sweepRadius = 0.0;
             for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 d.set$org_jbox2d_common_Vec2(this.m_coreVertices[i]);
@@ -21484,8 +21723,8 @@ namespace org.jbox2d.collision.shapes {
          * @return {boolean}
          */
         public testPoint(xf : org.jbox2d.common.XForm, p : org.jbox2d.common.Vec2) : boolean {
-            let temp : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlTemp_$LI$().initialValue();
-            let pLocal : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlPLocal_$LI$().initialValue();
+            let temp : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlTemp_$LI$());
+            let pLocal : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlPLocal_$LI$());
             temp.set$org_jbox2d_common_Vec2(p);
             temp.subLocal(xf.position);
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, temp, pLocal);
@@ -21523,10 +21762,10 @@ namespace org.jbox2d.collision.shapes {
         public testSegment(xf : org.jbox2d.common.XForm, out : org.jbox2d.common.RaycastResult, segment : org.jbox2d.collision.Segment, maxLambda : number) : org.jbox2d.collision.SegmentCollide {
             let lower : number = 0.0;
             let upper : number = maxLambda;
-            let p1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlP1_$LI$().initialValue();
-            let p2 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlP2_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlD_$LI$().initialValue();
-            let temp : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlTemp_$LI$().initialValue();
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlP1_$LI$());
+            let p2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlP2_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlD_$LI$());
+            let temp : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlTemp_$LI$());
             p1.set$org_jbox2d_common_Vec2(segment.p1).subLocal(xf.position);
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, p1, p1);
             p2.set$org_jbox2d_common_Vec2(segment.p2).subLocal(xf.position);
@@ -21552,6 +21791,7 @@ namespace org.jbox2d.collision.shapes {
                     return org.jbox2d.collision.SegmentCollide.MISS_COLLIDE;
                 }
             };}
+            if(!((0.0 <= lower && lower <= maxLambda))) throw new Error("Assertion error line 235: assert (0.0F <= lower && lower <= maxLambda);");;
             if(index >= 0) {
                 out.lambda = lower;
                 org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_normals[index], out.normal);
@@ -21572,7 +21812,7 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.Vec2} d
          */
         public support(dest : org.jbox2d.common.Vec2, xf : org.jbox2d.common.XForm, d : org.jbox2d.common.Vec2) {
-            let supportDLocal : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlSupDLocal_$LI$().initialValue();
+            let supportDLocal : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlSupDLocal_$LI$());
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, d, supportDLocal);
             let bestIndex : number = 0;
             let bestValue : number = org.jbox2d.common.Vec2.dot(this.m_coreVertices[0], supportDLocal);
@@ -21594,14 +21834,15 @@ namespace org.jbox2d.collision.shapes {
 
         public static computeCentroid(vs : Array<org.jbox2d.common.Vec2>) : org.jbox2d.common.Vec2 {
             let count : number = /* size */(<number>vs.length);
+            if(!((count >= 3))) throw new Error("Assertion error line 278: assert (count >= 3);");;
             let c : org.jbox2d.common.Vec2 = new org.jbox2d.common.Vec2();
             let area : number = 0.0;
-            let pRef : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlPRef_$LI$().initialValue();
+            let pRef : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlPRef_$LI$());
             pRef.setZero();
             let inv3 : number = (<any>Math).fround(1.0 / 3.0);
-            let e1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE1_$LI$().initialValue();
-            let e2 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE2_$LI$().initialValue();
-            let p1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlP1_$LI$().initialValue();
+            let e1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlE1_$LI$());
+            let e2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlE2_$LI$());
+            let p1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlP1_$LI$());
             for(let i : number = 0; i < count; ++i) {{
                 p1.set$org_jbox2d_common_Vec2(pRef);
                 let p2 : org.jbox2d.common.Vec2 = /* get */vs[i];
@@ -21614,6 +21855,7 @@ namespace org.jbox2d.collision.shapes {
                 c.x += (<any>Math).fround((<any>Math).fround(triangleArea * inv3) * ((<any>Math).fround((<any>Math).fround(p1.x + p2.x) + p3.x)));
                 c.y += (<any>Math).fround((<any>Math).fround(triangleArea * inv3) * ((<any>Math).fround((<any>Math).fround(p1.y + p2.y) + p3.y)));
             };}
+            if(!((area > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 299: assert (area > Settings.EPSILON);");;
             c.mulLocal((<any>Math).fround(1.0 / area));
             return c;
         }
@@ -21632,13 +21874,14 @@ namespace org.jbox2d.collision.shapes {
 
         public static computeOBB(obb : org.jbox2d.collision.OBB, vs : org.jbox2d.common.Vec2[]) {
             let count : number = vs.length;
-            let ux : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlUX_$LI$().initialValue();
-            let uy : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlUY_$LI$().initialValue();
-            let lower : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlLower_$LI$().initialValue();
-            let upper : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlUpper_$LI$().initialValue();
-            let d : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlD_$LI$().initialValue();
-            let r : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlR_$LI$().initialValue();
-            let center : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlCenter_$LI$().initialValue();
+            if(!((count <= org.jbox2d.common.Settings.maxPolygonVertices))) throw new Error("Assertion error line 318: assert (count <= Settings.maxPolygonVertices);");;
+            let ux : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlUX_$LI$());
+            let uy : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlUY_$LI$());
+            let lower : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlLower_$LI$());
+            let upper : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlUpper_$LI$());
+            let d : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlD_$LI$());
+            let r : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlR_$LI$());
+            let center : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlCenter_$LI$());
             let pRay : org.jbox2d.common.Vec2[] = (s => { let a=[]; while(s-->0) a.push(null); return a; })(org.jbox2d.common.Settings.maxPolygonVertices + 1);
             for(let i : number = 0; i < count; ++i) {{
                 pRay[i] = vs[i];
@@ -21650,6 +21893,7 @@ namespace org.jbox2d.collision.shapes {
                 ux.set$org_jbox2d_common_Vec2(pRay[i]);
                 ux.subLocal(root);
                 let length : number = ux.normalize();
+                if(!((length > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 337: assert (length > Settings.EPSILON);");;
                 uy.x = -ux.y;
                 uy.y = ux.x;
                 lower.x = 3.4028235E38;
@@ -21676,6 +21920,7 @@ namespace org.jbox2d.collision.shapes {
                     obb.extents.y = (<any>Math).fround(0.5 * ((<any>Math).fround(upper.y - lower.y)));
                 }
             };}
+            if(!((minArea < 3.4028235E38))) throw new Error("Assertion error line 364: assert (minArea < Float.MAX_VALUE);");;
         }
 
         static tlCaabbR : org.jbox2d.pooling.TLMat22; public static tlCaabbR_$LI$() : org.jbox2d.pooling.TLMat22 { if(PolygonShape.tlCaabbR == null) PolygonShape.tlCaabbR = (() => { let __o : any = new org.jbox2d.pooling.TLMat22(); __o.__delegate = new org.jbox2d.pooling.TLMat22(); return __o; })(); return PolygonShape.tlCaabbR; };
@@ -21688,8 +21933,8 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.XForm} xf
          */
         public computeAABB(aabb : org.jbox2d.collision.AABB, xf : org.jbox2d.common.XForm) {
-            let caabbR : org.jbox2d.common.Mat22 = /* get */PolygonShape.tlCaabbR_$LI$().initialValue();
-            let caabbH : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlCaabbH_$LI$().initialValue();
+            let caabbR : org.jbox2d.common.Mat22 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlCaabbR_$LI$());
+            let caabbH : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlCaabbH_$LI$());
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Mat22$org_jbox2d_common_Mat22(xf.R, this.m_obb.R, caabbR);
             caabbR.absLocal();
             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(caabbR, this.m_obb.extents, caabbH);
@@ -21711,8 +21956,8 @@ namespace org.jbox2d.collision.shapes {
          * @param {org.jbox2d.common.XForm} transform2
          */
         public computeSweptAABB(aabb : org.jbox2d.collision.AABB, transform1 : org.jbox2d.common.XForm, transform2 : org.jbox2d.common.XForm) {
-            let sweptAABB1 : org.jbox2d.collision.AABB = /* get */PolygonShape.tlSwept1_$LI$().initialValue();
-            let sweptAABB2 : org.jbox2d.collision.AABB = /* get */PolygonShape.tlSwept2_$LI$().initialValue();
+            let sweptAABB1 : org.jbox2d.collision.AABB = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlSwept1_$LI$());
+            let sweptAABB2 : org.jbox2d.collision.AABB = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlSwept2_$LI$());
             this.computeAABB(sweptAABB1, transform1);
             this.computeAABB(sweptAABB2, transform2);
             org.jbox2d.common.Vec2.minToOut(sweptAABB1.lowerBound, sweptAABB2.lowerBound, aabb.lowerBound);
@@ -21724,15 +21969,16 @@ namespace org.jbox2d.collision.shapes {
         }
 
         public computeMass$org_jbox2d_collision_MassData$float(massData : org.jbox2d.collision.MassData, density : number) {
-            let center : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlCenter_$LI$().initialValue();
+            if(!((this.m_vertexCount >= 3))) throw new Error("Assertion error line 413: assert (m_vertexCount >= 3);");;
+            let center : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlCenter_$LI$());
             center.setZero();
             let area : number = 0.0;
             let I : number = 0.0;
-            let pRef : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlPRef_$LI$().initialValue();
+            let pRef : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlPRef_$LI$());
             pRef.setZero();
             let k_inv3 : number = (<any>Math).fround(1.0 / 3.0);
-            let e1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE1_$LI$().initialValue();
-            let e2 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE2_$LI$().initialValue();
+            let e1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlE1_$LI$());
+            let e2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlE2_$LI$());
             for(let i : number = 0; i < this.m_vertexCount; ++i) {{
                 let p1 : org.jbox2d.common.Vec2 = pRef;
                 let p2 : org.jbox2d.common.Vec2 = this.m_vertices[i];
@@ -21757,6 +22003,7 @@ namespace org.jbox2d.collision.shapes {
                 I += (<any>Math).fround(D * ((<any>Math).fround(intx2 + inty2)));
             };}
             massData.mass = (<any>Math).fround(density * area);
+            if(!((area > org.jbox2d.common.Settings.EPSILON))) throw new Error("Assertion error line 447: assert (area > Settings.EPSILON);");;
             center.mulLocal((<any>Math).fround(1.0 / area));
             massData.center.set$org_jbox2d_common_Vec2(center);
             massData.I = (<any>Math).fround(I * density);
@@ -21856,8 +22103,8 @@ namespace org.jbox2d.collision.shapes {
         static tlP3 : org.jbox2d.pooling.TLVec2; public static tlP3_$LI$() : org.jbox2d.pooling.TLVec2 { if(PolygonShape.tlP3 == null) PolygonShape.tlP3 = (() => { let __o : any = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return PolygonShape.tlP3; };
 
         public computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_XForm$org_jbox2d_common_Vec2(normal : org.jbox2d.common.Vec2, offset : number, xf : org.jbox2d.common.XForm, c : org.jbox2d.common.Vec2) : number {
-            let normalL : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlNormalL_$LI$().initialValue();
-            let md : org.jbox2d.collision.MassData = /* get */PolygonShape.tlMd_$LI$().initialValue();
+            let normalL : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlNormalL_$LI$());
+            let md : org.jbox2d.collision.MassData = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlMd_$LI$());
             org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, normal, normalL);
             let offsetL : number = (<any>Math).fround(offset - org.jbox2d.common.Vec2.dot(normal, xf.position));
             let depths : number[] = (s => { let a=[]; while(s-->0) a.push(0); return a; })(org.jbox2d.common.Settings.maxPolygonVertices);
@@ -21901,10 +22148,10 @@ namespace org.jbox2d.collision.shapes {
                 }
                 break;
             }
-            let intoVec : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlIntoVec_$LI$().initialValue();
-            let outoVec : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlOutoVec_$LI$().initialValue();
-            let e1 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE1_$LI$().initialValue();
-            let e2 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlE2_$LI$().initialValue();
+            let intoVec : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlIntoVec_$LI$());
+            let outoVec : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlOutoVec_$LI$());
+            let e1 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlE1_$LI$());
+            let e2 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlE2_$LI$());
             let intoIndex2 : number = (intoIndex + 1) % this.m_vertexCount;
             let outoIndex2 : number = (outoIndex + 1) % this.m_vertexCount;
             let intoLambda : number = (<any>Math).fround(((<any>Math).fround(0 - depths[intoIndex])) / ((<any>Math).fround(depths[intoIndex2] - depths[intoIndex])));
@@ -21912,10 +22159,10 @@ namespace org.jbox2d.collision.shapes {
             intoVec.set$float$float((<any>Math).fround((<any>Math).fround(this.m_vertices[intoIndex].x * ((<any>Math).fround(1 - intoLambda))) + (<any>Math).fround(this.m_vertices[intoIndex2].x * intoLambda)), (<any>Math).fround((<any>Math).fround(this.m_vertices[intoIndex].y * ((<any>Math).fround(1 - intoLambda))) + (<any>Math).fround(this.m_vertices[intoIndex2].y * intoLambda)));
             outoVec.set$float$float((<any>Math).fround((<any>Math).fround(this.m_vertices[outoIndex].x * ((<any>Math).fround(1 - outoLambda))) + (<any>Math).fround(this.m_vertices[outoIndex2].x * outoLambda)), (<any>Math).fround((<any>Math).fround(this.m_vertices[outoIndex].y * ((<any>Math).fround(1 - outoLambda))) + (<any>Math).fround(this.m_vertices[outoIndex2].y * outoLambda)));
             let area : number = 0;
-            let center : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlCenter_$LI$().initialValue();
+            let center : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlCenter_$LI$());
             center.setZero();
-            let p2b : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlP2b_$LI$().initialValue().set$org_jbox2d_common_Vec2(this.m_vertices[intoIndex2]);
-            let p3 : org.jbox2d.common.Vec2 = /* get */PolygonShape.tlP3_$LI$().initialValue();
+            let p2b : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlP2b_$LI$()).set$org_jbox2d_common_Vec2(this.m_vertices[intoIndex2]);
+            let p3 : org.jbox2d.common.Vec2 = /* get */((tlObj: any) => {    if (tlObj.___value) { return tlObj.___value }     else { return tlObj.___value = tlObj.initialValue() }   })(PolygonShape.tlP3_$LI$());
             p3.setZero();
             let k_inv3 : number = (<any>Math).fround(1.0 / 3.0);
             i = intoIndex2;

@@ -244,9 +244,9 @@ public class Body {
 	public Shape createShape(final ShapeDef def){
 		assert(m_world.m_lock == false);
 
-		if (m_world.m_lock == true){
-			return null;
-		}
+//		if (m_world.m_lock == true){
+//			return null;
+//		} 
 
 		// TODO: Decide on a better place to initialize edgeShapes. (b2Shape::Create() can't
 		//       return more than one shape to add to parent body... maybe it should add
@@ -322,9 +322,9 @@ public class Body {
 	 */
 	public void destroyShape(final Shape s){
 		assert(m_world.m_lock == false);
-		if (m_world.m_lock == true) {
-			return;
-		}
+//		if (m_world.m_lock == true) {
+//			return;
+//		}
 
 		assert(s.getBody() == this);
 		s.destroyProxy(m_world.m_broadPhase);
@@ -385,9 +385,9 @@ public class Body {
 	 */
 	public void setMass(final MassData massData){
 		assert(m_world.m_lock == false);
-		if (m_world.m_lock == true) {
-			return;
-		}
+//		if (m_world.m_lock == true) {
+//			return;
+//		}
 
 		m_invMass = 0.0f;
 		m_I = 0.0f;
@@ -441,9 +441,9 @@ public class Body {
 	 */
 	public void setMassFromShapes(){
 		assert(m_world.m_lock == false);
-		if (m_world.m_lock == true) {
-			return;
-		}
+//		if (m_world.m_lock == true) {
+//			return;
+//		}
 
 		// Compute mass data from shapes.  Each shape has its own density.
 		m_mass = 0.0f;
@@ -516,9 +516,9 @@ public class Body {
 	 */
 	public boolean setXForm(final Vec2 position, final float angle){
 		assert(m_world.m_lock == false);
-		if (m_world.m_lock == true) {
-			return true;
-		}
+//		if (m_world.m_lock == true) {
+//			return true;
+//		}
 		if (isFrozen()) {
 			return false;
 		}

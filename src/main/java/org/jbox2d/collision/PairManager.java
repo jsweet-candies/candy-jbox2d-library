@@ -43,7 +43,7 @@ public class PairManager {
 
 	public int m_hashTable[];
 
-	//int m_next[];
+	// int m_next[];
 
 	public BroadPhase m_broadPhase;
 
@@ -57,7 +57,7 @@ public class PairManager {
 	public PairManager() {
 		m_pairs = new Pair[Settings.maxPairs];
 		m_hashTable = new int[PairManager.TABLE_CAPACITY];
-		//m_next = new int[Settings.maxPairs];
+		// m_next = new int[Settings.maxPairs];
 		m_pairBuffer = new BufferedPair[Settings.maxPairs];
 
 		assert MathUtils.isPowerOfTwo(PairManager.TABLE_CAPACITY) == true;
@@ -68,17 +68,17 @@ public class PairManager {
 		}
 		m_freePair = 0;
 		for (int i = 0; i < Settings.maxPairs; ++i) {
-			//m_next[i] = NULL_PAIR;
+			// m_next[i] = NULL_PAIR;
 			m_pairs[i] = new Pair();
 			m_pairs[i].proxyId1 = PairManager.NULL_PROXY;
 			m_pairs[i].proxyId2 = PairManager.NULL_PROXY;
 			m_pairs[i].userData = null;
 			m_pairs[i].status = 0;
-			m_pairs[i].next = i+1;
+			m_pairs[i].next = i + 1;
 
 			m_pairBuffer[i] = new BufferedPair();
 		}
-		m_pairs[Settings.maxPairs-1].next = PairManager.NULL_PAIR;
+		m_pairs[Settings.maxPairs - 1].next = PairManager.NULL_PAIR;
 		m_pairCount = 0;
 		m_pairBufferCount = 0;
 	}
@@ -106,8 +106,9 @@ public class PairManager {
 			return pair;
 		}
 
-		assert(m_pairCount < Settings.maxPairs):"Too many pairs ("+m_pairCount+" shape AABB overlaps) - this usually means you have too many bodies, or you need to increase Settings.maxPairs.";
-		assert(m_freePair != PairManager.NULL_PAIR);
+		assert (m_pairCount < Settings.maxPairs) : "Too many pairs (" + m_pairCount
+				+ " shape AABB overlaps) - this usually means you have too many bodies, or you need to increase Settings.maxPairs.";
+		assert (m_freePair != PairManager.NULL_PAIR);
 
 		final int pairIndex = m_freePair;
 		pair = m_pairs[pairIndex];
@@ -128,7 +129,7 @@ public class PairManager {
 
 	// Remove a pair, return the pair's userData.
 	public Object removePair(int proxyId1, int proxyId2) {
-		assert(m_pairCount > 0);
+		assert (m_pairCount > 0);
 
 		if (proxyId1 > proxyId2) {
 			// integer primitive swap (safe for small ints)
@@ -138,15 +139,19 @@ public class PairManager {
 		}
 
 		final int hash = hash(proxyId1, proxyId2) & PairManager.TABLE_MASK;
-		//int* node = &m_hashTable[hash];
+		if (BroadPhase.debugPrint) {
+			System.out.println("removePair(" + proxyId1 + "," + proxyId2 + ") hash=" + hash);
+		}
+
+		// int* node = &m_hashTable[hash];
 		int derefnode = m_hashTable[hash];
 		boolean isHash = true;
 		int pderefnode = 0;
 		while (derefnode != PairManager.NULL_PAIR) {
 			if (equals(m_pairs[derefnode], proxyId1, proxyId2)) {
-				//int index = *node;
+				// int index = *node;
 				final int index = derefnode;
-				//*node = m_pairs[*node].next;
+				// *node = m_pairs[*node].next;
 				if (isHash) {
 					m_hashTable[hash] = m_pairs[m_hashTable[hash]].next;
 				} else {
@@ -168,44 +173,46 @@ public class PairManager {
 
 				return userData;
 			} else {
-				//node = &m_pairs[*node].next;
+				// node = &m_pairs[*node].next;
 				pderefnode = derefnode;
 				derefnode = m_pairs[derefnode].next;
 				isHash = false;
 			}
 		}
 
-		assert(false) : "Attempted to remove a pair that does not exist";
+		assert (false) : "Attempted to remove a pair that does not exist";
 		return null;
 	}
 
 	/*
-     * As proxies are created and moved, many pairs are created and destroyed. Even worse, the same
-     * pair may be added and removed multiple times in a single time step of the physics engine. To reduce
-     * traffic in the pair manager, we try to avoid destroying pairs in the pair manager until the
-     * end of the physics step. This is done by buffering all the RemovePair requests. AddPair
-     * requests are processed immediately because we need the hash table entry for quick lookup.
-     * 
-     * All user user callbacks are delayed until the buffered pairs are confirmed in Commit.
-     * This is very important because the user callbacks may be very expensive and client logic
-     * may be harmed if pairs are added and removed within the same time step.
+	 * As proxies are created and moved, many pairs are created and destroyed. Even
+	 * worse, the same pair may be added and removed multiple times in a single time
+	 * step of the physics engine. To reduce traffic in the pair manager, we try to
+	 * avoid destroying pairs in the pair manager until the end of the physics step.
+	 * This is done by buffering all the RemovePair requests. AddPair requests are
+	 * processed immediately because we need the hash table entry for quick lookup.
+	 * 
+	 * All user user callbacks are delayed until the buffered pairs are confirmed in
+	 * Commit. This is very important because the user callbacks may be very
+	 * expensive and client logic may be harmed if pairs are added and removed
+	 * within the same time step.
 	 */
 	/**
-	 * Buffer a pair for addition.
-     * We may add a pair that is not in the pair manager or pair buffer.
-     * We may add a pair that is already in the pair manager and pair buffer.
-     * If the added pair is not a new pair, then it must be in the pair buffer (because RemovePair was called).
+	 * Buffer a pair for addition. We may add a pair that is not in the pair manager
+	 * or pair buffer. We may add a pair that is already in the pair manager and
+	 * pair buffer. If the added pair is not a new pair, then it must be in the pair
+	 * buffer (because RemovePair was called).
 	 */
 	public void addBufferedPair(final int id1, final int id2) {
-		assert(id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);
-		assert(m_pairBufferCount < Settings.maxPairs);
+		assert (id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);
+		assert (m_pairBufferCount < Settings.maxPairs);
 
 		final Pair pair = addPair(id1, id2);
 
 		// If this pair is not in the pair buffer ...
 		if (pair.isBuffered() == false) {
 			// This must be a newly added pair.
-			assert(pair.isFinal() == false);
+			assert (pair.isFinal() == false);
 
 			// Add it to the pair buffer.
 			pair.setBuffered();
@@ -213,25 +220,26 @@ public class PairManager {
 			m_pairBuffer[m_pairBufferCount].proxyId2 = pair.proxyId2;
 			++m_pairBufferCount;
 
-			assert(m_pairBufferCount <= m_pairCount);
+			assert (m_pairBufferCount <= m_pairCount);
 		}
 
 		// Confirm this pair for the subsequent call to Commit.
 		pair.clearRemoved();
 
-		if (BroadPhase.s_validate){
+		if (BroadPhase.s_validate) {
 			validateBuffer();
 		}
 	}
 
 	/**
 	 * Buffer a pair for removal.
+	 * 
 	 * @param id1
 	 * @param id2
 	 */
 	public void removeBufferedPair(final int id1, final int id2) {
-		assert(id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);
-		assert(m_pairBufferCount < Settings.maxPairs);
+		assert (id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);
+		assert (m_pairBufferCount < Settings.maxPairs);
 
 		final Pair pair = find(id1, id2);
 
@@ -243,14 +251,14 @@ public class PairManager {
 		// If this pair is not in the pair buffer ...
 		if (pair.isBuffered() == false) {
 			// This must be an old pair.
-			assert(pair.isFinal() == true);
+			assert (pair.isFinal() == true);
 
 			pair.setBuffered();
 			m_pairBuffer[m_pairBufferCount].proxyId1 = pair.proxyId1;
 			m_pairBuffer[m_pairBufferCount].proxyId2 = pair.proxyId2;
 			++m_pairBufferCount;
 
-			assert(m_pairBufferCount <= m_pairCount);
+			assert (m_pairBufferCount <= m_pairCount);
 		}
 
 		pair.setRemoved();
@@ -264,23 +272,23 @@ public class PairManager {
 	 * commits the proxies
 	 */
 	public void commit() {
-		//System.out.println("Entering commit");
+		// System.out.println("Entering commit");
 		int removeCount = 0;
 
 		final Proxy[] proxies = m_broadPhase.m_proxyPool;
 
 		for (int i = 0; i < m_pairBufferCount; ++i) {
 			final Pair pair = find(m_pairBuffer[i].proxyId1, m_pairBuffer[i].proxyId2);
-			assert(pair.isBuffered());
+			assert (pair.isBuffered());
 			pair.clearBuffered();
 
-			assert(pair.proxyId1 < Settings.maxProxies && pair.proxyId2 < Settings.maxProxies);
+			assert (pair.proxyId1 < Settings.maxProxies && pair.proxyId2 < Settings.maxProxies);
 
 			final Proxy proxy1 = proxies[pair.proxyId1];
 			final Proxy proxy2 = proxies[pair.proxyId2];
 
-			assert(proxy1.isValid());
-			assert(proxy2.isValid());
+			assert (proxy1.isValid());
+			assert (proxy2.isValid());
 
 			if (pair.isRemoved()) {
 				// It is possible a pair was added then removed before a commit. Therefore,
@@ -293,38 +301,45 @@ public class PairManager {
 				// Store the ids so we can actually remove the pair below.
 				m_pairBuffer[removeCount].proxyId1 = pair.proxyId1;
 				m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
-				//System.out.println("Buffering "+pair.proxyId1 + ", "+pair.proxyId2 + " for removal");
+				// System.out.println("Buffering "+pair.proxyId1 + ", "+pair.proxyId2 + " for
+				// removal");
 				++removeCount;
 			} else {
-				assert(m_broadPhase.testOverlap(proxy1, proxy2) == true);
+				assert (m_broadPhase.testOverlap(proxy1, proxy2) == true);
 
 				if (pair.isFinal() == false) {
+					if (BroadPhase.debugPrint) {
+						System.out.println("add pair " + proxy1.userData + " == " + proxy2.userData);
+					}
 					pair.userData = m_callback.pairAdded(proxy1.userData, proxy2.userData);
 					pair.setFinal();
 				}
 
-				//                if ( ((Shape)proxy1.userData).getBody().isStatic() &&
-						//                     ((Shape)proxy2.userData).getBody().isStatic() ) {
-				//                	if (pair.isFinal() == true) {
-				//                        m_callback.pairRemoved(proxy1.userData, proxy2.userData, pair.userData);
-				//                    }
+				// if ( ((Shape)proxy1.userData).getBody().isStatic() &&
+				// ((Shape)proxy2.userData).getBody().isStatic() ) {
+				// if (pair.isFinal() == true) {
+				// m_callback.pairRemoved(proxy1.userData, proxy2.userData, pair.userData);
+				// }
 				//
-				//                    // Store the ids so we can actually remove the pair below.
-				//                    m_pairBuffer[removeCount].proxyId1 = pair.proxyId1;
-				//                    m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
-				//                    //System.out.println("Buffering "+pair.proxyId1 + ", "+pair.proxyId2 + " for removal");
-				//                    ++removeCount;
-				//                }
+				// // Store the ids so we can actually remove the pair below.
+				// m_pairBuffer[removeCount].proxyId1 = pair.proxyId1;
+				// m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
+				// //System.out.println("Buffering "+pair.proxyId1 + ", "+pair.proxyId2 + " for
+				// removal");
+				// ++removeCount;
+				// }
 			}
 		}
-
+		if (BroadPhase.debugPrint && removeCount > 0) {
+			System.out.println("pair manager removeCount=" + removeCount);
+		}
 		for (int i = 0; i < removeCount; ++i) {
 
 			removePair(m_pairBuffer[i].proxyId1, m_pairBuffer[i].proxyId2);
-			//            System.out.println("Remaining pairs: ");
-			//            for (int j=0; j<m_pairCount; ++j) {
-			//                System.out.println("  "+m_pairs[j].proxyId1 + ", " + m_pairs[j].proxyId2);
-			//            }
+			// System.out.println("Remaining pairs: ");
+			// for (int j=0; j<m_pairCount; ++j) {
+			// System.out.println(" "+m_pairs[j].proxyId1 + ", " + m_pairs[j].proxyId2);
+			// }
 		}
 
 		m_pairBufferCount = 0;
@@ -338,67 +353,68 @@ public class PairManager {
 	 * Unimplemented - for debugging purposes only in C++ version
 	 */
 	public void validateBuffer() {
-		//#ifdef _DEBUG
-		//        assert(m_pairBufferCount <= m_pairCount);
+		// #ifdef _DEBUG
+		// assert(m_pairBufferCount <= m_pairCount);
 		//
-		//        std::sort(m_pairBuffer, m_pairBuffer + m_pairBufferCount);
+		// std::sort(m_pairBuffer, m_pairBuffer + m_pairBufferCount);
 		//
-		//        for (int32 i = 0; i < m_pairBufferCount; ++i)
-		//        {
-		//            if (i > 0)
-		//            {
-		//                b2Assert(Equals(m_pairBuffer[i], m_pairBuffer[i-1]) == false);
-		//            }
+		// for (int32 i = 0; i < m_pairBufferCount; ++i)
+		// {
+		// if (i > 0)
+		// {
+		// b2Assert(Equals(m_pairBuffer[i], m_pairBuffer[i-1]) == false);
+		// }
 		//
-		//            b2Pair* pair = Find(m_pairBuffer[i].proxyId1, m_pairBuffer[i].proxyId2);
-		//            b2Assert(pair->IsBuffered());
+		// b2Pair* pair = Find(m_pairBuffer[i].proxyId1, m_pairBuffer[i].proxyId2);
+		// b2Assert(pair->IsBuffered());
 		//
-		//            b2Assert(pair->proxyId1 != pair->proxyId2);
-		//            b2Assert(pair->proxyId1 < b2_maxProxies);
-		//            b2Assert(pair->proxyId2 < b2_maxProxies);
+		// b2Assert(pair->proxyId1 != pair->proxyId2);
+		// b2Assert(pair->proxyId1 < b2_maxProxies);
+		// b2Assert(pair->proxyId2 < b2_maxProxies);
 		//
-		//            b2Proxy* proxy1 = m_broadPhase->m_proxyPool + pair->proxyId1;
-		//            b2Proxy* proxy2 = m_broadPhase->m_proxyPool + pair->proxyId2;
+		// b2Proxy* proxy1 = m_broadPhase->m_proxyPool + pair->proxyId1;
+		// b2Proxy* proxy2 = m_broadPhase->m_proxyPool + pair->proxyId2;
 		//
-		//            b2Assert(proxy1->IsValid() == true);
-		//            b2Assert(proxy2->IsValid() == true);
-		//        }
-		//#endif
+		// b2Assert(proxy1->IsValid() == true);
+		// b2Assert(proxy2->IsValid() == true);
+		// }
+		// #endif
 	}
 
 	/**
 	 * For debugging
 	 */
 	public void validateTable() {
-		//    #ifdef _DEBUG
+		// #ifdef _DEBUG
 		for (int i = 0; i < PairManager.TABLE_CAPACITY; ++i) {
 			int index = m_hashTable[i];
 			while (index != PairManager.NULL_PAIR) {
 				final Pair pair = m_pairs[index];
-				assert(pair.isBuffered() == false);
-				assert(pair.isFinal() == true);
-				assert(pair.isRemoved() == false);
+				assert (pair.isBuffered() == false);
+				assert (pair.isFinal() == true);
+				assert (pair.isRemoved() == false);
 
-				assert(pair.proxyId1 != pair.proxyId2);
-				assert(pair.proxyId1 < Settings.maxProxies);
-				assert(pair.proxyId2 < Settings.maxProxies);
+				assert (pair.proxyId1 != pair.proxyId2);
+				assert (pair.proxyId1 < Settings.maxProxies);
+				assert (pair.proxyId2 < Settings.maxProxies);
 
 				final Proxy proxy1 = m_broadPhase.m_proxyPool[pair.proxyId1];
 				final Proxy proxy2 = m_broadPhase.m_proxyPool[pair.proxyId2];
 
-				assert(proxy1.isValid() == true);
-				assert(proxy2.isValid() == true);
+				assert (proxy1.isValid() == true);
+				assert (proxy2.isValid() == true);
 
-				assert(m_broadPhase.testOverlap(proxy1, proxy2) == true);
+				assert (m_broadPhase.testOverlap(proxy1, proxy2) == true);
 
 				index = pair.next;
 			}
 		}
-		//    #endif
+		// #endif
 	}
 
 	/**
 	 * finds the pair with the given hash
+	 * 
 	 * @param proxyId1
 	 * @param proxyId2
 	 * @param hash
@@ -407,15 +423,17 @@ public class PairManager {
 	public Pair find(final int proxyId1, final int proxyId2, final int hash) {
 
 		int index = m_hashTable[hash];
+		if (BroadPhase.debugPrint) {
+			System.out.println("find(" + proxyId1 + "," + proxyId2 + ") hash=" + hash + " tableIdx=" + index);
+		}
 
-		while (index != PairManager.NULL_PAIR
-				&& equals(m_pairs[index], proxyId1, proxyId2) == false) {
+		while (index != PairManager.NULL_PAIR && equals(m_pairs[index], proxyId1, proxyId2) == false) {
 			index = m_pairs[index].next;
 		}
 
-		//System.out.println("Found at index "+index);
+		// System.out.println("Found at index "+index);
 		if (index == PairManager.NULL_PAIR) {
-			//System.out.println("Which is null...");
+			// System.out.println("Which is null...");
 			return null;
 		}
 
@@ -425,6 +443,7 @@ public class PairManager {
 
 	/**
 	 * finds the pair, creates hash and uses {@link #find(int, int, int)}
+	 * 
 	 * @param proxyId1
 	 * @param proxyId2
 	 * @return
@@ -441,59 +460,59 @@ public class PairManager {
 		return find(proxyId1, proxyId2, hash);
 	}
 
-	//    public int findIndex(int proxyId1, int proxyId2) {
-	//        // System.out.printf("PairManager.FindIndex(%d, %d)\n", proxyId1,
-	//        // proxyId2);
-	//        if (proxyId1 > proxyId2) {
-	//            // integer primitive swap
-	//            proxyId1 += proxyId2;
-	//            proxyId2 = proxyId1 - proxyId2;
-	//            proxyId1 -= proxyId2;
-	//        }
+	// public int findIndex(int proxyId1, int proxyId2) {
+	// // System.out.printf("PairManager.FindIndex(%d, %d)\n", proxyId1,
+	// // proxyId2);
+	// if (proxyId1 > proxyId2) {
+	// // integer primitive swap
+	// proxyId1 += proxyId2;
+	// proxyId2 = proxyId1 - proxyId2;
+	// proxyId1 -= proxyId2;
+	// }
 	//
-	//        int hash = hash(proxyId1, proxyId2) & TABLE_MASK;
+	// int hash = hash(proxyId1, proxyId2) & TABLE_MASK;
 	//
-	//        int index = m_hashTable[hash];
-	//        while (index != NULL_PAIR
-	//                && equals(m_pairs[index], proxyId1, proxyId2) == false) {
-	//            index = m_next[index];
-	//        }
+	// int index = m_hashTable[hash];
+	// while (index != NULL_PAIR
+	// && equals(m_pairs[index], proxyId1, proxyId2) == false) {
+	// index = m_next[index];
+	// }
 	//
-	//        if (index == NULL_PAIR) {
-	//            return -1;
-	//        }
+	// if (index == NULL_PAIR) {
+	// return -1;
+	// }
 	//
-	//        assert index < m_pairCount;
+	// assert index < m_pairCount;
 	//
-	//        return index;
-	//    }
+	// return index;
+	// }
 	//
-	//    public int getCount() {
-	//        return m_pairCount;
-	//    }
+	// public int getCount() {
+	// return m_pairCount;
+	// }
 	//
-	//    public Pair[] getPairs() {
-	//        return m_pairs;
-	//    }
+	// public Pair[] getPairs() {
+	// return m_pairs;
+	// }
 	//
 	//
 	//
-	//    private int findIndex(int proxyId1, int proxyId2, int hash) {
-	//        int index = m_hashTable[hash];
+	// private int findIndex(int proxyId1, int proxyId2, int hash) {
+	// int index = m_hashTable[hash];
 	//
-	//        while (index != NULL_PAIR
-	//                && equals(m_pairs[index], proxyId1, proxyId2) == false) {
-	//            index = m_next[index];
-	//        }
+	// while (index != NULL_PAIR
+	// && equals(m_pairs[index], proxyId1, proxyId2) == false) {
+	// index = m_next[index];
+	// }
 	//
-	//        if (index == NULL_PAIR) {
-	//            return -1;
-	//        }
+	// if (index == NULL_PAIR) {
+	// return -1;
+	// }
 	//
-	//        assert index < m_pairCount;
+	// assert index < m_pairCount;
 	//
-	//        return index;
-	//    }
+	// return index;
+	// }
 
 	private final int hash(final int proxyId1, final int proxyId2) {
 		// djm: this operation here is pretty self explanitory,
@@ -511,6 +530,7 @@ public class PairManager {
 
 	/**
 	 * returns if the pair has the two proxy id's
+	 * 
 	 * @param pair
 	 * @param proxyId1
 	 * @param proxyId2
@@ -522,6 +542,7 @@ public class PairManager {
 
 	/**
 	 * returns if the pairs have the same proxy id's
+	 * 
 	 * @param pair1
 	 * @param pair2
 	 * @return
@@ -531,13 +552,14 @@ public class PairManager {
 	}
 
 	/**
-	 *  For sorting.  Returns if the first pair's proxyid's are less than the
-	 *  second pair, starting with proxyId1
+	 * For sorting. Returns if the first pair's proxyid's are less than the second
+	 * pair, starting with proxyId1
+	 * 
 	 * @param pair1
 	 * @param pair2
 	 * @return
 	 */
-	public final boolean minor (final BufferedPair pair1, final BufferedPair pair2){
+	public final boolean minor(final BufferedPair pair1, final BufferedPair pair2) {
 		if (pair1.proxyId1 < pair2.proxyId1) {
 			return true;
 		}

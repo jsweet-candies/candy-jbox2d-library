@@ -53,6 +53,7 @@ declare namespace org.jbox2d.collision {
         stabbingCount: number;
         constructor(b?: any);
         set(b: Bound): void;
+        setValueInternal(val: number): void;
         isLower(): boolean;
         isUpper(): boolean;
         /**
@@ -3507,16 +3508,17 @@ declare namespace org.jbox2d.collision {
         addPair(proxyId1: number, proxyId2: number): org.jbox2d.collision.Pair;
         removePair(proxyId1: number, proxyId2: number): any;
         /**
-         * Buffer a pair for addition.
-         * We may add a pair that is not in the pair manager or pair buffer.
-         * We may add a pair that is already in the pair manager and pair buffer.
-         * If the added pair is not a new pair, then it must be in the pair buffer (because RemovePair was called).
+         * Buffer a pair for addition. We may add a pair that is not in the pair manager
+         * or pair buffer. We may add a pair that is already in the pair manager and
+         * pair buffer. If the added pair is not a new pair, then it must be in the pair
+         * buffer (because RemovePair was called).
          * @param {number} id1
          * @param {number} id2
          */
         addBufferedPair(id1: number, id2: number): void;
         /**
          * Buffer a pair for removal.
+         *
          * @param {number} id1
          * @param {number} id2
          */
@@ -3536,6 +3538,7 @@ declare namespace org.jbox2d.collision {
         find$int$int$int(proxyId1: number, proxyId2: number, hash: number): org.jbox2d.collision.Pair;
         /**
          * finds the pair with the given hash
+         *
          * @param {number} proxyId1
          * @param {number} proxyId2
          * @param {number} hash
@@ -3548,6 +3551,7 @@ declare namespace org.jbox2d.collision {
         equals$org_jbox2d_collision_Pair$int$int(pair: org.jbox2d.collision.Pair, proxyId1: number, proxyId2: number): boolean;
         /**
          * returns if the pair has the two proxy id's
+         *
          * @param {org.jbox2d.collision.Pair} pair
          * @param {number} proxyId1
          * @param {number} proxyId2
@@ -3557,8 +3561,9 @@ declare namespace org.jbox2d.collision {
         equals(pair?: any, proxyId1?: any, proxyId2?: any): any;
         equals$org_jbox2d_collision_BufferedPair$org_jbox2d_collision_BufferedPair(pair1: org.jbox2d.collision.BufferedPair, pair2: org.jbox2d.collision.BufferedPair): boolean;
         /**
-         * For sorting.  Returns if the first pair's proxyid's are less than the
-         * second pair, starting with proxyId1
+         * For sorting. Returns if the first pair's proxyid's are less than the second
+         * pair, starting with proxyId1
+         *
          * @param {org.jbox2d.collision.BufferedPair} pair1
          * @param {org.jbox2d.collision.BufferedPair} pair2
          * @return
@@ -4675,6 +4680,11 @@ declare namespace org.jbox2d.collision.shapes {
          * @return {org.jbox2d.dynamics.contacts.Contact[]} a Set<Contact> of all (active) contacts involving this shape
          */
         getContacts(): Array<org.jbox2d.dynamics.contacts.Contact>;
+        /**
+         *
+         * @return {string}
+         */
+        toString(): string;
     }
 }
 declare namespace org.jbox2d.common {

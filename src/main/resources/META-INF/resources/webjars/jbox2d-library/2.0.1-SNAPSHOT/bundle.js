@@ -224,9 +224,12 @@ var org;
                         throw new Error('invalid overload');
                 }
                 Bound.prototype.set = function (b) {
-                    this.value = b.value;
+                    this.setValueInternal(b.value);
                     this.proxyId = b.proxyId;
                     this.stabbingCount = b.stabbingCount;
+                };
+                Bound.prototype.setValueInternal = function (val) {
+                    this.value = val;
                 };
                 Bound.prototype.isLower = function () {
                     return (this.value & 1) === 0;
@@ -242,10 +245,10 @@ var org;
                     var value = this.value;
                     var proxyId = this.proxyId;
                     var stabbingCount = this.stabbingCount;
-                    this.value = other.value;
+                    this.setValueInternal(other.value);
                     this.proxyId = other.proxyId;
                     this.stabbingCount = other.stabbingCount;
-                    other.value = value;
+                    other.setValueInternal(value);
                     other.proxyId = proxyId;
                     other.stabbingCount = stabbingCount;
                 };
@@ -596,10 +599,22 @@ var org;
                         points[0].set$org_jbox2d_common_Vec2(points[2]);
                         return 1;
                     }
+                    if (!(sn > 0.0 || tn > 0.0))
+                        throw new Error("Assertion error line 82: assert sn > 0.0F || tn > 0.0F;");
+                    ;
+                    if (!(sd > 0.0 || un > 0.0))
+                        throw new Error("Assertion error line 83: assert sd > 0.0F || un > 0.0F;");
+                    ;
                     var n = Math.fround(Math.fround(abx * acy) - Math.fround(aby * acx));
                     var vc = Math.fround(n * org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(a, b));
+                    if (!(vc > 0.0 || sn > 0.0 || sd > 0.0))
+                        throw new Error("Assertion error line 86: assert vc > 0.0F || sn > 0.0F || sd > 0.0F;");
+                    ;
                     var va = Math.fround(n * org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b, c));
                     if (va <= 0.0 && un >= 0.0 && ud >= 0.0 && Math.fround(un + ud) > 0.0) {
+                        if (!(Math.fround(un + ud) > 0.0))
+                            throw new Error("Assertion error line 89: assert un + ud > 0.0F;");
+                        ;
                         var lambda = Math.fround(un / (Math.fround(un + ud)));
                         x1.set$float$float(Math.fround(p1s[1].x + Math.fround(lambda * (Math.fround(p1s[2].x - p1s[1].x)))), Math.fround(p1s[1].y + Math.fround(lambda * (Math.fround(p1s[2].y - p1s[1].y)))));
                         x2.set$float$float(Math.fround(p2s[1].x + Math.fround(lambda * (Math.fround(p2s[2].x - p2s[1].x)))), Math.fround(p2s[1].y + Math.fround(lambda * (Math.fround(p2s[2].y - p2s[1].y)))));
@@ -610,6 +625,9 @@ var org;
                     }
                     var vb = Math.fround(n * org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(c, a));
                     if (vb <= 0.0 && tn >= 0.0 && td >= 0.0 && Math.fround(tn + td) > 0.0) {
+                        if (!(Math.fround(tn + td) > 0.0))
+                            throw new Error("Assertion error line 100: assert tn + td > 0.0F;");
+                        ;
                         var lambda = Math.fround(tn / (Math.fround(tn + td)));
                         x1.set$float$float(Math.fround(p1s[0].x + Math.fround(lambda * (Math.fround(p1s[2].x - p1s[0].x)))), Math.fround(p1s[0].y + Math.fround(lambda * (Math.fround(p1s[2].y - p1s[0].y)))));
                         x2.set$float$float(Math.fround(p2s[0].x + Math.fround(lambda * (Math.fround(p2s[2].x - p2s[0].x)))), Math.fround(p2s[0].y + Math.fround(lambda * (Math.fround(p2s[2].y - p2s[0].y)))));
@@ -619,6 +637,9 @@ var org;
                         return 2;
                     }
                     var denom = Math.fround(Math.fround(va + vb) + vc);
+                    if (!(denom > 0.0))
+                        throw new Error("Assertion error line 110: assert denom > 0.0F;");
+                    ;
                     denom = Math.fround(1.0 / denom);
                     var u = Math.fround(va * denom);
                     var v = Math.fround(vb * denom);
@@ -1919,6 +1940,9 @@ var org;
                         var ex = Math.fround(vertices[vertIndex2].x - vertices[vertIndex1].x);
                         var ey = Math.fround(vertices[vertIndex2].y - vertices[vertIndex1].y);
                         var length = org.jbox2d.common.MathUtils.sqrt(Math.fround(Math.fround(ex * ex) + Math.fround(ey * ey)));
+                        if (!((length > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 165: assert (length > Settings.EPSILON);");
+                        ;
                         var invLength = Math.fround(1.0 / length);
                         ex *= invLength;
                         ey *= invLength;
@@ -2128,6 +2152,9 @@ var org;
                         var normals1 = poly1.getNormals();
                         var count2 = poly2.getVertexCount();
                         var vertices2 = poly2.getVertices();
+                        if (!((0 <= edge1 && edge1 < count1)))
+                            throw new Error("Assertion error line 44: assert (0 <= edge1 && edge1 < count1);");
+                        ;
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals1[edge1], this.normal1World);
                         var normal1x = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col1);
                         var normal1y = org.jbox2d.common.Vec2.dot(this.normal1World, xf2.R.col2);
@@ -2254,6 +2281,9 @@ var org;
                         var count2 = poly2.getVertexCount();
                         var vertices2 = poly2.getVertices();
                         var normals2 = poly2.getNormals();
+                        if (!((0 <= edge1 && edge1 < count1)))
+                            throw new Error("Assertion error line 166: assert (0 <= edge1 && edge1 < count1);");
+                        ;
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf1.R, normals1[edge1], this.mulTemp);
                         org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf2.R, this.mulTemp, this.normal1);
                         var index = 0;
@@ -2424,6 +2454,9 @@ var org;
                         this.colPPe.set$org_jbox2d_common_Vec2(vertices[vertIndex2]);
                         this.colPPe.subLocal(vertices[vertIndex1]);
                         var length = this.colPPe.normalize();
+                        if (!((length > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 341: assert (length > Settings.EPSILON);");
+                        ;
                         this.colPPsub.set$org_jbox2d_common_Vec2(this.colPPcLocal);
                         this.colPPsub.subLocal(vertices[vertIndex1]);
                         var u = org.jbox2d.common.Vec2.dot(this.colPPsub, this.colPPe);
@@ -3198,6 +3231,9 @@ var org;
                     var a21 = this.col1.y;
                     var a22 = this.col2.y;
                     var det = Math.fround(Math.fround(a11 * a22) - Math.fround(a12 * a21));
+                    if (!((det !== 0.0)))
+                        throw new Error("Assertion error line 365: assert (det != 0.0F);");
+                    ;
                     det = Math.fround(1.0 / det);
                     var x = new org.jbox2d.common.Vec2(Math.fround(det * (Math.fround(Math.fround(a22 * b.x) - Math.fround(a12 * b.y)))), Math.fround(det * (Math.fround(Math.fround(a11 * b.y) - Math.fround(a21 * b.x)))));
                     return x;
@@ -3208,6 +3244,9 @@ var org;
                     var a21 = this.col1.y;
                     var a22 = this.col2.y;
                     var det = Math.fround(Math.fround(a11 * a22) - Math.fround(a12 * a21));
+                    if (!((det !== 0.0)))
+                        throw new Error("Assertion error line 377: assert (det != 0.0F);");
+                    ;
                     det = Math.fround(1.0 / det);
                     var tempy = Math.fround(det * (Math.fround(Math.fround(a11 * b.y) - Math.fround(a21 * b.x))));
                     out.x = Math.fround(det * (Math.fround(Math.fround(a22 * b.x) - Math.fround(a12 * b.y))));
@@ -3482,6 +3521,9 @@ var org;
                 Mat33.prototype.solve = function (b) {
                     org.jbox2d.common.Vec3.crossToOut(this.col1, this.col2, this.temp);
                     var det = org.jbox2d.common.Vec3.dot(this.col1, this.temp);
+                    if (!((det !== 0.0)))
+                        throw new Error("Assertion error line 64: assert (det != 0.0F);");
+                    ;
                     det = Math.fround(1.0 / det);
                     var x = new org.jbox2d.common.Vec3();
                     org.jbox2d.common.Vec3.crossToOut(this.col2, this.col3, this.temp);
@@ -3495,6 +3537,9 @@ var org;
                 Mat33.prototype.solveToOut = function (b, out) {
                     org.jbox2d.common.Vec3.crossToOut(this.col1, this.col2, out);
                     var det = org.jbox2d.common.Vec3.dot(this.col1, out);
+                    if (!((det !== 0.0)))
+                        throw new Error("Assertion error line 79: assert (det != 0.0F);");
+                    ;
                     det = Math.fround(1.0 / det);
                     org.jbox2d.common.Vec3.crossToOut(this.col2, this.col3, out);
                     var tempx = Math.fround(det * org.jbox2d.common.Vec3.dot(b, out));
@@ -3554,7 +3599,7 @@ var org;
                     Settings.SINCOS_LUT_LENGTH = (Math.ceil(Math.PI * 2 / Settings.SINCOS_LUT_PRECISION) | 0); return Settings.SINCOS_LUT_LENGTH; };
                 ;
                 Settings.maxPairs_$LI$ = function () { if (Settings.maxPairs == null)
-                    Settings.maxPairs = 8 * Settings.maxProxies; return Settings.maxPairs; };
+                    Settings.maxPairs = 64 * Settings.maxProxies; return Settings.maxPairs; };
                 ;
                 Settings.linearSlop_$LI$ = function () { if (Settings.linearSlop == null)
                     Settings.linearSlop = Math.fround(0.005 * Settings.lengthUnitsPerMeter); return Settings.linearSlop; };
@@ -3644,7 +3689,7 @@ var org;
             /**
              * Must be a power of two.
              */
-            Settings.maxProxies = 2048;
+            Settings.maxProxies = 64;
             /**
              * This scale factor controls how fast overlap is resolved. Ideally this would be 1 so
              * that overlap is removed in one time step. However using values close to 1 often lead
@@ -3729,6 +3774,9 @@ var org;
                  * @param {number} t the normalized time in [0,1].
                  */
                 Sweep.prototype.getXForm = function (xf, t) {
+                    if (!((xf != null)))
+                        throw new Error("Assertion error line 79: assert (xf != null);");
+                    ;
                     if (Math.fround(1.0 - this.t0) > org.jbox2d.common.Settings.EPSILON) {
                         var alpha = Math.fround((Math.fround(t - this.t0)) / (Math.fround(1.0 - this.t0)));
                         xf.position.x = Math.fround(Math.fround((Math.fround(1.0 - alpha)) * this.c0.x) + Math.fround(alpha * this.c.x));
@@ -4594,6 +4642,9 @@ var org;
                                         w = b.getWorld();
                                     else if (b.getWorld() !== w) {
                                         console.info("Cannot add bodies from different worlds to a BodyGroup");
+                                        if (!((false)))
+                                            throw new Error("Assertion error line 30: assert (false) : 'Cannot add bodies from different worlds to a BodyGroup';");
+                                        ;
                                     }
                                 }
                             }
@@ -4625,6 +4676,9 @@ var org;
                                         w = bg.getWorld();
                                     else if (bg.getWorld() !== w) {
                                         console.info("Cannot add BodyGroups from different worlds to a BodyGroup");
+                                        if (!((false)))
+                                            throw new Error("Assertion error line 51: assert (false) : 'Cannot add BodyGroups from different worlds to a BodyGroup';");
+                                        ;
                                     }
                                 }
                             }
@@ -4962,6 +5016,9 @@ var org;
                         return null;
                     };
                     Contact.destroy = function (contact) {
+                        if (!((Contact.s_initialized === true)))
+                            throw new Error("Assertion error line 269: assert (s_initialized == true);");
+                        ;
                         if (contact.getManifoldCount() > 0) {
                             contact.getShape1().getBody().wakeUp();
                             contact.getShape2().getBody().wakeUp();
@@ -5267,6 +5324,9 @@ var org;
                         this.m_constraintCount = 0;
                         for (var i = 0; i < contactCount; i++) {
                             {
+                                if (!((contacts[i].isSolid())))
+                                    throw new Error("Assertion error line 19: assert (contacts[i].isSolid());");
+                                ;
                                 this.m_constraintCount += contacts[i].getManifoldCount();
                             }
                             ;
@@ -5296,7 +5356,13 @@ var org;
                                 for (var j = 0; j < manifoldCount; ++j) {
                                     {
                                         var manifold = manifolds[j];
+                                        if (!((manifold.pointCount > 0)))
+                                            throw new Error("Assertion error line 41: assert (manifold.pointCount > 0) : 'Manifold ' + j + ' has length 0';");
+                                        ;
                                         var normal = manifold.normal;
+                                        if (!((count < this.m_constraintCount)))
+                                            throw new Error("Assertion error line 43: assert (count < m_constraintCount);");
+                                        ;
                                         var c = this.m_constraints[count];
                                         c.body1 = b1;
                                         c.body2 = b2;
@@ -5326,9 +5392,15 @@ var org;
                                                 rn1 *= rn1;
                                                 rn2 *= rn2;
                                                 var kNormal = Math.fround(Math.fround(Math.fround(b1.m_invMass + b2.m_invMass) + Math.fround(b1.m_invI * rn1)) + Math.fround(b2.m_invI * rn2));
+                                                if (!((kNormal > org.jbox2d.common.Settings.EPSILON)))
+                                                    throw new Error("Assertion error line 72: assert (kNormal > Settings.EPSILON) : 'kNormal was ' + kNormal;");
+                                                ;
                                                 ccp.normalMass = Math.fround(1.0 / kNormal);
                                                 var kEqualized = Math.fround(Math.fround(b1.m_mass * b1.m_invMass) + Math.fround(b2.m_mass * b2.m_invMass));
                                                 kEqualized += Math.fround(Math.fround(Math.fround(b1.m_mass * b1.m_invI) * rn1) + Math.fround(Math.fround(b2.m_mass * b2.m_invI) * rn2));
+                                                if (!((kEqualized > org.jbox2d.common.Settings.EPSILON)))
+                                                    throw new Error("Assertion error line 76: assert (kEqualized > Settings.EPSILON) : 'kEqualized was ' + kEqualized;");
+                                                ;
                                                 ccp.equalizedMass = Math.fround(1.0 / kEqualized);
                                                 var tangentx = normal.y;
                                                 var tangenty = -normal.x;
@@ -5339,6 +5411,9 @@ var org;
                                                 rt1 *= rt1;
                                                 rt2 *= rt2;
                                                 var kTangent = Math.fround(Math.fround(Math.fround(b1.m_invMass + b2.m_invMass) + Math.fround(b1.m_invI * rt1)) + Math.fround(b2.m_invI * rt2));
+                                                if (!((kTangent > org.jbox2d.common.Settings.EPSILON)))
+                                                    throw new Error("Assertion error line 87: assert (kTangent > Settings.EPSILON);");
+                                                ;
                                                 ccp.tangentMass = Math.fround(1.0 / kTangent);
                                                 ccp.velocityBias = 0.0;
                                                 if (ccp.separation > 0.0) {
@@ -5362,6 +5437,9 @@ var org;
                             }
                             ;
                         }
+                        if (!((count === this.m_constraintCount)))
+                            throw new Error("Assertion error line 105: assert (count == m_constraintCount);");
+                        ;
                     };
                     ContactSolver.prototype.initVelocityConstraints = function (step) {
                         for (var i = 0; i < this.m_constraintCount; ++i) {
@@ -5626,12 +5704,18 @@ var org;
                      * @param {org.jbox2d.dynamics.Body} body
                      */
                     Controller.prototype.removeBody = function (body) {
+                        if (!((this.m_bodyCount > 0)))
+                            throw new Error("Assertion error line 49: assert (m_bodyCount > 0);");
+                        ;
                         var edge = this.m_bodyList;
                         while ((edge != null && edge.body !== body)) {
                             {
                                 edge = edge.nextBody;
                             }
                         }
+                        ;
+                        if (!((edge != null)))
+                            throw new Error("Assertion error line 54: assert (edge != null);");
                         ;
                         if (edge.prevBody != null) {
                             edge.prevBody.nextBody = edge.nextBody;
@@ -6081,6 +6165,9 @@ var org;
                             joint = new org.jbox2d.dynamics.joints.ConstantVolumeJoint(description);
                         }
                         else {
+                            if (!(false))
+                                throw new Error("Assertion error line 79: assert false;");
+                            ;
                         }
                         return joint;
                     };
@@ -7633,7 +7720,15 @@ var org;
                         /*private*/ this.tlMap = ((function () { var __o = new DynamicTLArray.TLHashMap(); __o.__delegate = new DynamicTLArray.TLHashMap(); return __o; })());
                     }
                     DynamicTLArray.prototype.get = function (argLength) {
-                        var map = this.tlMap.initialValue();
+                        if (!((argLength > 0)))
+                            throw new Error("Assertion error line 6: assert (argLength > 0);");
+                        ;
+                        var map = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(this.tlMap);
                         if (!(function (m, k) { if (m.entries == null)
                             m.entries = []; for (var i = 0; i < m.entries.length; i++)
                             if (m.entries[i].key.equals != null && m.entries[i].key.equals(k) || m.entries[i].key === k) {
@@ -7646,6 +7741,13 @@ var org;
                                     return;
                                 } m.entries.push({ key: k, value: v, getKey: function () { return this.key; }, getValue: function () { return this.value; } }); })(map, argLength, this.getInitializedArray(argLength));
                         }
+                        if (!(((function (m, k) { if (m.entries == null)
+                            m.entries = []; for (var i = 0; i < m.entries.length; i++)
+                            if (m.entries[i].key.equals != null && m.entries[i].key.equals(k) || m.entries[i].key === k) {
+                                return m.entries[i].value;
+                            } return null; })(map, argLength).length === argLength)))
+                            throw new Error("Assertion error line 11: assert (map.get(argLength).length == argLength) : 'Array not built of correct length';");
+                        ;
                         return (function (m, k) { if (m.entries == null)
                             m.entries = []; for (var i = 0; i < m.entries.length; i++)
                             if (m.entries[i].key.equals != null && m.entries[i].key.equals(k) || m.entries[i].key === k) {
@@ -7686,13 +7788,28 @@ var org;
                     SingletonPool.pool = (function () { var __o = new SingletonPool.Pool(); __o.__delegate = new SingletonPool.Pool(); return __o; })(); return SingletonPool.pool; };
                 ;
                 SingletonPool.getCollideCircle = function () {
-                    return SingletonPool.pool_$LI$().initialValue().collideCircle;
+                    return (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(SingletonPool.pool_$LI$()).collideCircle;
                 };
                 SingletonPool.getCollidePoly = function () {
-                    return SingletonPool.pool_$LI$().initialValue().collidePoly;
+                    return (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(SingletonPool.pool_$LI$()).collidePoly;
                 };
                 SingletonPool.getDistance = function () {
-                    return SingletonPool.pool_$LI$().initialValue().distance;
+                    return (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(SingletonPool.pool_$LI$()).distance;
                 };
                 return SingletonPool;
             }());
@@ -7735,7 +7852,12 @@ var org;
                         /*private*/ this.tlStack = ((function () { var __o = new org.jbox2d.pooling.TLStack(); __o.__delegate = new org.jbox2d.pooling.TLStack(); return __o; })());
                     }
                     DynamicTLStack.prototype.get = function () {
-                        var stack = this.tlStack.initialValue();
+                        var stack = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(this.tlStack);
                         if ((stack.length == 0)) {
                             /* push */ (stack.push(this.newObjectInstance()) > 0);
                             /* push */ (stack.push(this.newObjectInstance()) > 0);
@@ -7744,7 +7866,12 @@ var org;
                         return stack.pop();
                     };
                     DynamicTLStack.prototype.recycle = function (argObject) {
-                        /* push */ (this.tlStack.initialValue().push(argObject) > 0);
+                        /* push */ ((function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(this.tlStack).push(argObject) > 0);
                     };
                     return DynamicTLStack;
                 }());
@@ -9763,6 +9890,12 @@ var org;
                         a.push(0); return a; })(PairManager.TABLE_CAPACITY_$LI$());
                     this.m_pairBuffer = (function (s) { var a = []; while (s-- > 0)
                         a.push(null); return a; })(org.jbox2d.common.Settings.maxPairs_$LI$());
+                    if (!(org.jbox2d.common.MathUtils.isPowerOfTwo(PairManager.TABLE_CAPACITY_$LI$()) === true))
+                        throw new Error("Assertion error line 39: assert MathUtils.isPowerOfTwo(PairManager.TABLE_CAPACITY) == true;");
+                    ;
+                    if (!(PairManager.TABLE_CAPACITY_$LI$() >= org.jbox2d.common.Settings.maxPairs_$LI$()))
+                        throw new Error("Assertion error line 40: assert PairManager.TABLE_CAPACITY >= Settings.maxPairs;");
+                    ;
                     for (var i = 0; i < PairManager.TABLE_CAPACITY_$LI$(); ++i) {
                         {
                             this.m_hashTable[i] = PairManager.NULL_PAIR_$LI$();
@@ -9813,6 +9946,12 @@ var org;
                     if (pair != null) {
                         return pair;
                     }
+                    if (!((this.m_pairCount < org.jbox2d.common.Settings.maxPairs_$LI$())))
+                        throw new Error("Assertion error line 75: assert (m_pairCount < Settings.maxPairs) : 'Too many pairs (' + m_pairCount + ' shape AABB overlaps) - this usually means you have too many bodies, or you need to increase Settings.maxPairs.';");
+                    ;
+                    if (!((this.m_freePair !== PairManager.NULL_PAIR_$LI$())))
+                        throw new Error("Assertion error line 76: assert (m_freePair != PairManager.NULL_PAIR);");
+                    ;
                     var pairIndex = this.m_freePair;
                     pair = this.m_pairs[pairIndex];
                     this.m_freePair = pair.next;
@@ -9826,12 +9965,18 @@ var org;
                     return pair;
                 };
                 PairManager.prototype.removePair = function (proxyId1, proxyId2) {
+                    if (!((this.m_pairCount > 0)))
+                        throw new Error("Assertion error line 91: assert (m_pairCount > 0);");
+                    ;
                     if (proxyId1 > proxyId2) {
                         proxyId1 += proxyId2;
                         proxyId2 = proxyId1 - proxyId2;
                         proxyId1 -= proxyId2;
                     }
                     var hash = this.hash(proxyId1, proxyId2) & PairManager.TABLE_MASK_$LI$();
+                    if (org.jbox2d.collision.BroadPhase.debugPrint) {
+                        console.info("removePair(" + proxyId1 + "," + proxyId2 + ") hash=" + hash);
+                    }
                     var derefnode = this.m_hashTable[hash];
                     var isHash = true;
                     var pderefnode = 0;
@@ -9864,23 +10009,38 @@ var org;
                         }
                     }
                     ;
+                    if (!((false)))
+                        throw new Error("Assertion error line 128: assert (false) : 'Attempted to remove a pair that does not exist';");
+                    ;
                     return null;
                 };
                 /**
-                 * Buffer a pair for addition.
-                 * We may add a pair that is not in the pair manager or pair buffer.
-                 * We may add a pair that is already in the pair manager and pair buffer.
-                 * If the added pair is not a new pair, then it must be in the pair buffer (because RemovePair was called).
+                 * Buffer a pair for addition. We may add a pair that is not in the pair manager
+                 * or pair buffer. We may add a pair that is already in the pair manager and
+                 * pair buffer. If the added pair is not a new pair, then it must be in the pair
+                 * buffer (because RemovePair was called).
                  * @param {number} id1
                  * @param {number} id2
                  */
                 PairManager.prototype.addBufferedPair = function (id1, id2) {
+                    if (!((id1 !== PairManager.NULL_PROXY_$LI$() && id2 !== PairManager.NULL_PROXY_$LI$())))
+                        throw new Error("Assertion error line 141: assert (id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);");
+                    ;
+                    if (!((this.m_pairBufferCount < org.jbox2d.common.Settings.maxPairs_$LI$())))
+                        throw new Error("Assertion error line 142: assert (m_pairBufferCount < Settings.maxPairs);");
+                    ;
                     var pair = this.addPair(id1, id2);
                     if (pair.isBuffered() === false) {
+                        if (!((pair.isFinal() === false)))
+                            throw new Error("Assertion error line 145: assert (pair.isFinal() == false);");
+                        ;
                         pair.setBuffered();
                         this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
                         this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
                         ++this.m_pairBufferCount;
+                        if (!((this.m_pairBufferCount <= this.m_pairCount)))
+                            throw new Error("Assertion error line 150: assert (m_pairBufferCount <= m_pairCount);");
+                        ;
                     }
                     pair.clearRemoved();
                     if (org.jbox2d.collision.BroadPhase.s_validate) {
@@ -9889,19 +10049,32 @@ var org;
                 };
                 /**
                  * Buffer a pair for removal.
+                 *
                  * @param {number} id1
                  * @param {number} id2
                  */
                 PairManager.prototype.removeBufferedPair = function (id1, id2) {
+                    if (!((id1 !== PairManager.NULL_PROXY_$LI$() && id2 !== PairManager.NULL_PROXY_$LI$())))
+                        throw new Error("Assertion error line 165: assert (id1 != PairManager.NULL_PROXY && id2 != PairManager.NULL_PROXY);");
+                    ;
+                    if (!((this.m_pairBufferCount < org.jbox2d.common.Settings.maxPairs_$LI$())))
+                        throw new Error("Assertion error line 166: assert (m_pairBufferCount < Settings.maxPairs);");
+                    ;
                     var pair = this.find$int$int(id1, id2);
                     if (pair == null) {
                         return;
                     }
                     if (pair.isBuffered() === false) {
+                        if (!((pair.isFinal() === true)))
+                            throw new Error("Assertion error line 172: assert (pair.isFinal() == true);");
+                        ;
                         pair.setBuffered();
                         this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
                         this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
                         ++this.m_pairBufferCount;
+                        if (!((this.m_pairBufferCount <= this.m_pairCount)))
+                            throw new Error("Assertion error line 177: assert (m_pairBufferCount <= m_pairCount);");
+                        ;
                     }
                     pair.setRemoved();
                     if (org.jbox2d.collision.BroadPhase.s_validate) {
@@ -9917,9 +10090,21 @@ var org;
                     for (var i = 0; i < this.m_pairBufferCount; ++i) {
                         {
                             var pair = this.find$int$int(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
+                            if (!((pair.isBuffered())))
+                                throw new Error("Assertion error line 193: assert (pair.isBuffered());");
+                            ;
                             pair.clearBuffered();
+                            if (!((pair.proxyId1 < org.jbox2d.common.Settings.maxProxies && pair.proxyId2 < org.jbox2d.common.Settings.maxProxies)))
+                                throw new Error("Assertion error line 195: assert (pair.proxyId1 < Settings.maxProxies && pair.proxyId2 < Settings.maxProxies);");
+                            ;
                             var proxy1 = proxies[pair.proxyId1];
                             var proxy2 = proxies[pair.proxyId2];
+                            if (!((proxy1.isValid())))
+                                throw new Error("Assertion error line 198: assert (proxy1.isValid());");
+                            ;
+                            if (!((proxy2.isValid())))
+                                throw new Error("Assertion error line 199: assert (proxy2.isValid());");
+                            ;
                             if (pair.isRemoved()) {
                                 if (pair.isFinal() === true) {
                                     this.m_callback.pairRemoved(proxy1.userData, proxy2.userData, pair.userData);
@@ -9929,13 +10114,22 @@ var org;
                                 ++removeCount;
                             }
                             else {
+                                if (!((this.m_broadPhase.testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy(proxy1, proxy2) === true)))
+                                    throw new Error("Assertion error line 208: assert (m_broadPhase.testOverlap(proxy1, proxy2) == true);");
+                                ;
                                 if (pair.isFinal() === false) {
+                                    if (org.jbox2d.collision.BroadPhase.debugPrint) {
+                                        console.info("add pair " + proxy1.userData + " == " + proxy2.userData);
+                                    }
                                     pair.userData = this.m_callback.pairAdded(proxy1.userData, proxy2.userData);
                                     pair.setFinal();
                                 }
                             }
                         }
                         ;
+                    }
+                    if (org.jbox2d.collision.BroadPhase.debugPrint && removeCount > 0) {
+                        console.info("pair manager removeCount=" + removeCount);
                     }
                     for (var i = 0; i < removeCount; ++i) {
                         {
@@ -9963,8 +10157,35 @@ var org;
                             while ((index !== PairManager.NULL_PAIR_$LI$())) {
                                 {
                                     var pair = this.m_pairs[index];
+                                    if (!((pair.isBuffered() === false)))
+                                        throw new Error("Assertion error line 244: assert (pair.isBuffered() == false);");
+                                    ;
+                                    if (!((pair.isFinal() === true)))
+                                        throw new Error("Assertion error line 245: assert (pair.isFinal() == true);");
+                                    ;
+                                    if (!((pair.isRemoved() === false)))
+                                        throw new Error("Assertion error line 246: assert (pair.isRemoved() == false);");
+                                    ;
+                                    if (!((pair.proxyId1 !== pair.proxyId2)))
+                                        throw new Error("Assertion error line 247: assert (pair.proxyId1 != pair.proxyId2);");
+                                    ;
+                                    if (!((pair.proxyId1 < org.jbox2d.common.Settings.maxProxies)))
+                                        throw new Error("Assertion error line 248: assert (pair.proxyId1 < Settings.maxProxies);");
+                                    ;
+                                    if (!((pair.proxyId2 < org.jbox2d.common.Settings.maxProxies)))
+                                        throw new Error("Assertion error line 249: assert (pair.proxyId2 < Settings.maxProxies);");
+                                    ;
                                     var proxy1 = this.m_broadPhase.m_proxyPool[pair.proxyId1];
                                     var proxy2 = this.m_broadPhase.m_proxyPool[pair.proxyId2];
+                                    if (!((proxy1.isValid() === true)))
+                                        throw new Error("Assertion error line 252: assert (proxy1.isValid() == true);");
+                                    ;
+                                    if (!((proxy2.isValid() === true)))
+                                        throw new Error("Assertion error line 253: assert (proxy2.isValid() == true);");
+                                    ;
+                                    if (!((this.m_broadPhase.testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy(proxy1, proxy2) === true)))
+                                        throw new Error("Assertion error line 254: assert (m_broadPhase.testOverlap(proxy1, proxy2) == true);");
+                                    ;
                                     index = pair.next;
                                 }
                             }
@@ -9975,6 +10196,9 @@ var org;
                 };
                 PairManager.prototype.find$int$int$int = function (proxyId1, proxyId2, hash) {
                     var index = this.m_hashTable[hash];
+                    if (org.jbox2d.collision.BroadPhase.debugPrint) {
+                        console.info("find(" + proxyId1 + "," + proxyId2 + ") hash=" + hash + " tableIdx=" + index);
+                    }
                     while ((index !== PairManager.NULL_PAIR_$LI$() && this.equals$org_jbox2d_collision_Pair$int$int(this.m_pairs[index], proxyId1, proxyId2) === false)) {
                         {
                             index = this.m_pairs[index].next;
@@ -9984,10 +10208,14 @@ var org;
                     if (index === PairManager.NULL_PAIR_$LI$()) {
                         return null;
                     }
+                    if (!(index < org.jbox2d.common.Settings.maxPairs_$LI$()))
+                        throw new Error("Assertion error line 271: assert index < Settings.maxPairs;");
+                    ;
                     return this.m_pairs[index];
                 };
                 /**
                  * finds the pair with the given hash
+                 *
                  * @param {number} proxyId1
                  * @param {number} proxyId2
                  * @param {number} hash
@@ -10028,6 +10256,7 @@ var org;
                 };
                 /**
                  * returns if the pair has the two proxy id's
+                 *
                  * @param {org.jbox2d.collision.Pair} pair
                  * @param {number} proxyId1
                  * @param {number} proxyId2
@@ -10048,8 +10277,9 @@ var org;
                     return pair1.proxyId1 === pair2.proxyId1 && pair1.proxyId2 === pair2.proxyId2;
                 };
                 /**
-                 * For sorting.  Returns if the first pair's proxyid's are less than the
-                 * second pair, starting with proxyId1
+                 * For sorting. Returns if the first pair's proxyid's are less than the second
+                 * pair, starting with proxyId1
+                 *
                  * @param {org.jbox2d.collision.BufferedPair} pair1
                  * @param {org.jbox2d.collision.BufferedPair} pair2
                  * @return
@@ -10714,6 +10944,9 @@ var org;
                             {
                                 if (mergeMe[i] || newNVertices === 0 || currIndex === newNVertices)
                                     continue;
+                                if (!((currIndex < newNVertices)))
+                                    throw new Error("Assertion error line 274: assert (currIndex < newNVertices);");
+                                ;
                                 newx[currIndex] = this.x[i];
                                 newy[currIndex] = this.y[i];
                                 ++currIndex;
@@ -10902,6 +11135,8 @@ var org;
                                     break;
                                 default:
                                     console.info("don\'t know why.\n");
+                                    if (!(false))
+                                        throw new Error("Assertion error line 439: assert false;");
                                     ;
                             }
                         }
@@ -11050,6 +11285,9 @@ var org;
                         if (this.nVertices < 3)
                             return;
                         var vecs = this.getVertexVecs();
+                        if (!((this.nVertices <= org.jbox2d.common.Settings.maxPolygonVertices)))
+                            throw new Error("Assertion error line 566: assert (nVertices <= Settings.maxPolygonVertices);");
+                        ;
                         var offset = 0;
                         for (var i = 0; i < this.nVertices; ++i) {
                             {
@@ -11305,6 +11543,9 @@ var org;
                         var toAdd = new org.jbox2d.util.nonconvex.Triangle(xrem[1], yrem[1], xrem[2], yrem[2], xrem[0], yrem[0]);
                         buffer[bufferSize] = toAdd;
                         ++bufferSize;
+                        if (!((bufferSize === xremLength - 2)))
+                            throw new Error("Assertion error line 760: assert (bufferSize == xremLength - 2);");
+                        ;
                         for (var i = 0; i < bufferSize; i++) {
                             {
                                 results[i].set(buffer[i]);
@@ -11678,6 +11919,9 @@ var org;
                         return result;
                     };
                     Polygon.convexHull$float_A$float_A$int = function (cloudX, cloudY, nVert) {
+                        if (!((nVert > 2)))
+                            throw new Error("Assertion error line 1073: assert (nVert > 2);");
+                        ;
                         var edgeList = (function (s) { var a = []; while (s-- > 0)
                             a.push(0); return a; })(nVert);
                         var numEdges = 0;
@@ -11899,6 +12143,9 @@ var org;
                                                     for (var k = 0; k < njConn; ++k) {
                                                         {
                                                             var knode = jnode.connected[k];
+                                                            if (!((knode !== jnode)))
+                                                                throw new Error("Assertion error line 1225: assert (knode != jnode);");
+                                                            ;
                                                             if (knode !== inode) {
                                                                 inode.addConnection(knode);
                                                                 knode.addConnection(inode);
@@ -11941,6 +12188,9 @@ var org;
                         var nResultVecs = 0;
                         var currentNode = nodes[minYIndex];
                         var startNode = currentNode;
+                        if (!((currentNode.nConnected > 0)))
+                            throw new Error("Assertion error line 1255: assert (currentNode.nConnected > 0);");
+                        ;
                         var nextNode = currentNode.getRightestConnection$org_jbox2d_common_Vec2(origDir);
                         if (nextNode == null) {
                             startNode = nextNode;
@@ -11950,6 +12200,9 @@ var org;
                         while ((nextNode !== startNode)) {
                             {
                                 if (nResultVecs > 4 * nNodes) {
+                                    if (!((false)))
+                                        throw new Error("Assertion error line 1264: assert (false);");
+                                    ;
                                 }
                                 resultVecs[nResultVecs++] = nextNode.position;
                                 var oldNode = currentNode;
@@ -12051,6 +12304,9 @@ var org;
                             throw new Error('invalid overload');
                     }
                     PolyNode.prototype.addConnection = function (toMe) {
+                        if (!((this.nConnected < PolyNode.MAX_CONNECTED)))
+                            throw new Error("Assertion error line 1344: assert (nConnected < MAX_CONNECTED);");
+                        ;
                         for (var i = 0; i < this.nConnected; ++i) {
                             {
                                 if (this.connected[i] === toMe)
@@ -12074,6 +12330,9 @@ var org;
                             }
                             ;
                         }
+                        if (!((isFound)))
+                            throw new Error("Assertion error line 1362: assert (isFound);");
+                        ;
                         --this.nConnected;
                         for (var i = foundIndex; i < this.nConnected; ++i) {
                             {
@@ -12106,6 +12365,9 @@ var org;
                     };
                     PolyNode.prototype.getRightestConnection$org_jbox2d_util_nonconvex_PolyNode = function (incoming) {
                         if (this.nConnected === 0) {
+                            if (!((false)))
+                                throw new Error("Assertion error line 1389: assert (false);");
+                            ;
                             return null;
                         }
                         if (this.nConnected === 1) {
@@ -12113,6 +12375,9 @@ var org;
                         }
                         var inDir = this.position.sub(incoming.position);
                         var inLength = inDir.normalize();
+                        if (!((inLength > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 1397: assert (inLength > Settings.EPSILON);");
+                        ;
                         var result = null;
                         for (var i = 0; i < this.nConnected; ++i) {
                             {
@@ -12121,6 +12386,9 @@ var org;
                                 var testDir = this.connected[i].position.sub(this.position);
                                 var testLengthSqr = testDir.lengthSquared();
                                 testDir.normalize();
+                                if (!((testLengthSqr >= org.jbox2d.util.nonconvex.Polygon.COLLAPSE_DIST_SQR_$LI$())))
+                                    throw new Error("Assertion error line 1404: assert (testLengthSqr >= Polygon.COLLAPSE_DIST_SQR);");
+                                ;
                                 var myCos = org.jbox2d.common.Vec2.dot(inDir, testDir);
                                 var mySin = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(inDir, testDir);
                                 if (result != null) {
@@ -12138,6 +12406,9 @@ var org;
                             }
                             ;
                         }
+                        if (!((result != null)))
+                            throw new Error("Assertion error line 1419: assert (result != null);");
+                        ;
                         return result;
                     };
                     PolyNode.prototype.getRightestConnection = function (incoming) {
@@ -12154,6 +12425,9 @@ var org;
                         var diff = this.position.sub(incomingDir);
                         var temp = new PolyNode(diff);
                         var res = this.getRightestConnection$org_jbox2d_util_nonconvex_PolyNode(temp);
+                        if (!((res != null)))
+                            throw new Error("Assertion error line 1435: assert (res != null);");
+                        ;
                         return res;
                     };
                     return PolyNode;
@@ -12820,6 +13094,18 @@ var org;
                         _this.m_J = new org.jbox2d.dynamics.joints.Jacobian();
                         var type1 = def.joint1.getType();
                         var type2 = def.joint2.getType();
+                        if (!((type1 === org.jbox2d.dynamics.joints.JointType.REVOLUTE_JOINT || type1 === org.jbox2d.dynamics.joints.JointType.PRISMATIC_JOINT)))
+                            throw new Error("Assertion error line 73: assert (type1 == JointType.REVOLUTE_JOINT || type1 == JointType.PRISMATIC_JOINT);");
+                        ;
+                        if (!((type2 === org.jbox2d.dynamics.joints.JointType.REVOLUTE_JOINT || type2 === org.jbox2d.dynamics.joints.JointType.PRISMATIC_JOINT)))
+                            throw new Error("Assertion error line 74: assert (type2 == JointType.REVOLUTE_JOINT || type2 == JointType.PRISMATIC_JOINT);");
+                        ;
+                        if (!((def.joint1.getBody1().isStatic())))
+                            throw new Error("Assertion error line 75: assert (def.joint1.getBody1().isStatic());");
+                        ;
+                        if (!((def.joint2.getBody1().isStatic())))
+                            throw new Error("Assertion error line 76: assert (def.joint2.getBody1().isStatic());");
+                        ;
                         _this.m_revolute1 = null;
                         _this.m_prismatic1 = null;
                         _this.m_revolute2 = null;
@@ -12868,8 +13154,18 @@ var org;
                         var g2 = this.m_ground2;
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var ug = this.tlug.initialValue();
-                        var r = this.tlr.initialValue();
+                        var ug = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(this.tlug);
+                        var r = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(this.tlr);
                         var K = 0.0;
                         this.m_J.setZero();
                         if (this.m_revolute1 != null) {
@@ -12898,6 +13194,9 @@ var org;
                             this.m_J.angular2 = Math.fround(-this.m_ratio * crug);
                             K += Math.fround(Math.fround(this.m_ratio * this.m_ratio) * (Math.fround(b2.m_invMass + Math.fround(Math.fround(b2.m_invI * crug) * crug))));
                         }
+                        if (!((K > 0.0)))
+                            throw new Error("Assertion error line 155: assert (K > 0.0F);");
+                        ;
                         this.m_mass = Math.fround(1.0 / K);
                         if (step.warmStarting) {
                             var P = Math.fround(step.dt * this.m_force);
@@ -13358,6 +13657,9 @@ var org;
                         var d2 = anchor2.sub(ga2);
                         this.length2 = d2.length();
                         this.ratio = r;
+                        if (!((this.ratio > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 49: assert (ratio > Settings.EPSILON);");
+                        ;
                         var C = Math.fround(this.length1 + Math.fround(this.ratio * this.length2));
                         this.maxLength1 = Math.fround(C - Math.fround(this.ratio * org.jbox2d.dynamics.joints.PulleyJoint.MIN_PULLEY_LENGTH));
                         this.maxLength2 = Math.fround((Math.fround(C - org.jbox2d.dynamics.joints.PulleyJoint.MIN_PULLEY_LENGTH)) / this.ratio);
@@ -13786,7 +14088,12 @@ var org;
                         if (this.m_proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$()) {
                             return false;
                         }
-                        var aabb = Shape.tlAabb_$LI$().initialValue();
+                        var aabb = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(Shape.tlAabb_$LI$());
                         this.computeSweptAABB(aabb, transform1, transform2);
                         if (broadPhase.inRange(aabb)) {
                             broadPhase.moveProxy(this.m_proxyId, aabb);
@@ -13831,6 +14138,9 @@ var org;
                         else if (def.type === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE) {
                             return new org.jbox2d.collision.shapes.PointShape(def);
                         }
+                        if (!(false))
+                            throw new Error("Assertion error line 287: assert false;");
+                        ;
                         return null;
                     };
                     /**
@@ -13853,6 +14163,9 @@ var org;
                      * Internal
                      */
                     Shape.prototype.destructor = function () {
+                        if (!((this.m_proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$())))
+                            throw new Error("Assertion error line 312: assert (m_proxyId == PairManager.NULL_PROXY);");
+                        ;
                     };
                     /**
                      * Internal
@@ -13860,9 +14173,15 @@ var org;
                      * @param {org.jbox2d.common.XForm} transform
                      */
                     Shape.prototype.createProxy = function (broadPhase, transform) {
+                        if (!((this.m_proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$())))
+                            throw new Error("Assertion error line 321: assert (m_proxyId == PairManager.NULL_PROXY);");
+                        ;
                         var aabb = new org.jbox2d.collision.AABB();
                         this.computeAABB(aabb, transform);
                         var inRange = broadPhase.inRange(aabb);
+                        if (!((inRange)))
+                            throw new Error("Assertion error line 325: assert (inRange);");
+                        ;
                         if (inRange) {
                             this.m_proxyId = broadPhase.createProxy(aabb, this);
                         }
@@ -13975,6 +14294,13 @@ var org;
                         }
                         ;
                         return contacts;
+                    };
+                    /**
+                     *
+                     * @return {string}
+                     */
+                    Shape.prototype.toString = function () {
+                        return "shape:" + (this.m_type == null ? "unknown" : org.jbox2d.collision.shapes.ShapeType[this.m_type]) + "_uid=" + this.uid;
                     };
                     return Shape;
                 }());
@@ -14131,7 +14457,12 @@ var org;
                  * @param {org.jbox2d.common.Vec2} argWorld
                  */
                 OBBViewportTransform.prototype.vectorInverseTransform = function (argScreen, argWorld) {
-                    var inv = OBBViewportTransform.tlInv_$LI$().initialValue();
+                    var inv = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(OBBViewportTransform.tlInv_$LI$());
                     inv.set$org_jbox2d_common_Mat22(this.box.R);
                     inv.invertLocal();
                     inv.mulToOut$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(argScreen, argWorld);
@@ -14172,7 +14503,12 @@ var org;
                 OBBViewportTransform.prototype.getScreenToWorld = function (argScreen, argWorld) {
                     argWorld.set$org_jbox2d_common_Vec2(argScreen);
                     argWorld.subLocal(this.box.extents);
-                    var inv = OBBViewportTransform.tlInv_$LI$().initialValue();
+                    var inv = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(OBBViewportTransform.tlInv_$LI$());
                     this.box.R.invertToOut(inv);
                     inv.mulToOut$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(argWorld, argWorld);
                     if (this.yFlip) {
@@ -14221,13 +14557,33 @@ var org;
                 ;
                 Segment.prototype.testSegment = function (out, segment, maxLambda) {
                     var s = segment.p1;
-                    var r = Segment.tlR_$LI$().initialValue().set$org_jbox2d_common_Vec2(segment.p2);
+                    var r = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(Segment.tlR_$LI$()).set$org_jbox2d_common_Vec2(segment.p2);
                     r.subLocal(s);
-                    var d = Segment.tlD_$LI$().initialValue().set$org_jbox2d_common_Vec2(this.p2);
+                    var d = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(Segment.tlD_$LI$()).set$org_jbox2d_common_Vec2(this.p2);
                     d.subLocal(this.p1);
-                    var n = Segment.tlN_$LI$().initialValue();
+                    var n = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(Segment.tlN_$LI$());
                     org.jbox2d.common.Vec2.crossToOut$org_jbox2d_common_Vec2$float$org_jbox2d_common_Vec2(d, 1.0, n);
-                    var b = Segment.tlB_$LI$().initialValue();
+                    var b = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(Segment.tlB_$LI$());
                     var k_slop = Math.fround(100.0 * org.jbox2d.common.Settings.EPSILON);
                     var denom = -org.jbox2d.common.Vec2.dot(r, n);
                     if (denom > k_slop) {
@@ -14277,6 +14633,9 @@ var org;
                 ContactManager.prototype.pairAdded = function (proxyUserData1, proxyUserData2) {
                     var shape1 = proxyUserData1;
                     var shape2 = proxyUserData2;
+                    if (shape1 == null || shape2 == null) {
+                        return this.m_nullContact;
+                    }
                     var body1 = shape1.getBody();
                     var body2 = shape2.getBody();
                     if (body1.isStatic() && body2.isStatic()) {
@@ -14341,8 +14700,18 @@ var org;
                     ContactManager.tlCp = (function () { var __o = new org.jbox2d.pooling.TLContactPoint(); __o.__delegate = new org.jbox2d.pooling.TLContactPoint(); return __o; })(); return ContactManager.tlCp; };
                 ;
                 ContactManager.prototype.destroy = function (c) {
-                    var v1 = ContactManager.tlV1_$LI$().initialValue();
-                    var cp = ContactManager.tlCp_$LI$().initialValue();
+                    var v1 = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(ContactManager.tlV1_$LI$());
+                    var cp = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(ContactManager.tlCp_$LI$());
                     var shape1 = c.getShape1();
                     var shape2 = c.getShape2();
                     var manifoldCount = c.getManifoldCount();
@@ -14450,6 +14819,12 @@ var org;
                             (function () {
                                 _this.m_manifold = new org.jbox2d.collision.Manifold();
                                 /* add */ (_this.manifoldList.push(_this.m_manifold) > 0);
+                                if (!((_this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE)))
+                                    throw new Error("Assertion error line 33: assert (m_shape1.getType() == ShapeType.CIRCLE_SHAPE);");
+                                ;
+                                if (!((_this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE)))
+                                    throw new Error("Assertion error line 34: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");
+                                ;
                                 _this.m_manifold.pointCount = 0;
                                 _this.m_manifold.points[0].normalImpulse = 0.0;
                                 _this.m_manifold.points[0].tangentImpulse = 0.0;
@@ -14506,9 +14881,24 @@ var org;
                     CircleContact.prototype.evaluate = function (listener) {
                         var b1 = this.m_shape1.getBody();
                         var b2 = this.m_shape2.getBody();
-                        var m0 = CircleContact.tlm0_$LI$().initialValue();
-                        var v1 = CircleContact.tlV1_$LI$().initialValue();
-                        var cp = CircleContact.tlCp_$LI$().initialValue();
+                        var m0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleContact.tlm0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleContact.tlV1_$LI$());
+                        var cp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleContact.tlCp_$LI$());
                         m0.set(this.m_manifold);
                         org.jbox2d.pooling.SingletonPool.getCollideCircle().collideCircles(this.m_manifold, this.m_shape1, b1.m_xf, this.m_shape2, b2.m_xf);
                         cp.shape1 = this.m_shape1;
@@ -14599,6 +14989,12 @@ var org;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
                             (function () {
+                                if (!((_this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE)))
+                                    throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.EDGE_SHAPE);");
+                                ;
+                                if (!((_this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE)))
+                                    throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");
+                                ;
                                 _this.m_manifold = new org.jbox2d.collision.Manifold();
                                 /* add */ (_this.manifoldList.push(_this.m_manifold) > 0);
                                 _this.m_manifoldCount = 0;
@@ -14627,6 +15023,9 @@ var org;
                      * @return {org.jbox2d.dynamics.contacts.Contact}
                      */
                     EdgeAndCircleContact.prototype.clone = function () {
+                        if (!(false))
+                            throw new Error("Assertion error line 40: assert false : 'Not yet implemented.';");
+                        ;
                         return this;
                     };
                     EdgeAndCircleContact.Destroy = function (contact) {
@@ -14650,9 +15049,24 @@ var org;
                     EdgeAndCircleContact.prototype.evaluate = function (listener) {
                         var b1 = this.m_shape1.getBody();
                         var b2 = this.m_shape2.getBody();
-                        var m0 = EdgeAndCircleContact.tlm0_$LI$().initialValue();
-                        var v1 = EdgeAndCircleContact.tlV1_$LI$().initialValue();
-                        var cp = EdgeAndCircleContact.tlCp_$LI$().initialValue();
+                        var m0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeAndCircleContact.tlm0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeAndCircleContact.tlV1_$LI$());
+                        var cp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeAndCircleContact.tlCp_$LI$());
                         m0.set(this.m_manifold);
                         org.jbox2d.pooling.SingletonPool.getCollideCircle().collideEdgeAndCircle(this.m_manifold, this.m_shape1, b1.getMemberXForm(), this.m_shape2, b2.getMemberXForm());
                         cp.shape1 = this.m_shape1;
@@ -14747,6 +15161,12 @@ var org;
                                 _this.m_manifold = null;
                             (function () {
                                 _this.m_manifold = new org.jbox2d.collision.Manifold();
+                                if (!((_this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE)))
+                                    throw new Error("Assertion error line 32: assert (m_shape1.getType() == ShapeType.POINT_SHAPE);");
+                                ;
+                                if (!((_this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE)))
+                                    throw new Error("Assertion error line 33: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");
+                                ;
                                 /* add */ (_this.manifoldList.push(_this.m_manifold) > 0);
                                 _this.m_manifold.pointCount = 0;
                                 _this.m_manifold.points[0].normalImpulse = 0.0;
@@ -14804,9 +15224,24 @@ var org;
                     PointAndCircleContact.prototype.evaluate = function (listener) {
                         var b1 = this.m_shape1.getBody();
                         var b2 = this.m_shape2.getBody();
-                        var m0 = PointAndCircleContact.tlm0_$LI$().initialValue();
-                        var v1 = PointAndCircleContact.tlV1_$LI$().initialValue();
-                        var cp = PointAndCircleContact.tlCp_$LI$().initialValue();
+                        var m0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointAndCircleContact.tlm0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointAndCircleContact.tlV1_$LI$());
+                        var cp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointAndCircleContact.tlCp_$LI$());
                         m0.set(this.m_manifold);
                         org.jbox2d.pooling.SingletonPool.getCollideCircle().collidePointAndCircle(this.m_manifold, this.m_shape1, b1.m_xf, this.m_shape2, b2.m_xf);
                         cp.shape1 = this.m_shape1;
@@ -14897,6 +15332,12 @@ var org;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
                             (function () {
+                                if (!((_this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE)))
+                                    throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");
+                                ;
+                                if (!((_this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE)))
+                                    throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.POLYGON_SHAPE);");
+                                ;
                                 _this.m_manifold = new org.jbox2d.collision.Manifold();
                                 _this.m_manifoldCount = 0;
                                 /* add */ (_this.manifoldList.push(_this.m_manifold) > 0);
@@ -14976,9 +15417,24 @@ var org;
                     PolyContact.prototype.evaluate = function (listener) {
                         var b1 = this.m_shape1.getBody();
                         var b2 = this.m_shape2.getBody();
-                        var m0 = PolyContact.tlm0_$LI$().initialValue();
-                        var v1 = PolyContact.tlV1_$LI$().initialValue();
-                        var cp = PolyContact.tlCp_$LI$().initialValue();
+                        var m0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyContact.tlm0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyContact.tlV1_$LI$());
+                        var cp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyContact.tlCp_$LI$());
                         m0.set(this.m_manifold);
                         org.jbox2d.pooling.SingletonPool.getCollidePoly().collidePolygons(this.m_manifold, this.m_shape1, b1.getMemberXForm(), this.m_shape2, b2.getMemberXForm());
                         var persisted = [false, false];
@@ -15165,7 +15621,12 @@ var org;
                      * @return {org.jbox2d.common.Vec2}
                      */
                     DistanceJoint.prototype.getReactionForce = function () {
-                        var reactionForce = DistanceJoint.tlReactionForce_$LI$().initialValue();
+                        var reactionForce = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlReactionForce_$LI$());
                         reactionForce.x = Math.fround(this.m_impulse * this.m_u.x);
                         reactionForce.y = Math.fround(this.m_impulse * this.m_u.y);
                         return reactionForce;
@@ -15192,9 +15653,24 @@ var org;
                      */
                     DistanceJoint.prototype.initVelocityConstraints = function (step) {
                         this.m_inv_dt = step.inv_dt;
-                        var r1 = DistanceJoint.tlr1_$LI$().initialValue();
-                        var r2 = DistanceJoint.tlr2_$LI$().initialValue();
-                        var P = DistanceJoint.tlP_$LI$().initialValue();
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlr2_$LI$());
+                        var P = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlP_$LI$());
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.getMemberXForm().R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
@@ -15212,6 +15688,9 @@ var org;
                         var cr1u = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r1, this.m_u);
                         var cr2u = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r2, this.m_u);
                         var invMass = Math.fround(Math.fround(Math.fround(b1.m_invMass + Math.fround(Math.fround(b1.m_invI * cr1u) * cr1u)) + b2.m_invMass) + Math.fround(Math.fround(b2.m_invI * cr2u) * cr2u));
+                        if (!((invMass > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 131: assert (invMass > Settings.EPSILON);");
+                        ;
                         this.m_mass = Math.fround(1.0 / invMass);
                         if (this.m_frequencyHz > 0.0) {
                             var C = Math.fround(length - this.m_length);
@@ -15248,9 +15727,24 @@ var org;
                         if (this.m_frequencyHz > 0.0) {
                             return true;
                         }
-                        var d = DistanceJoint.tld_$LI$().initialValue();
-                        var r2 = DistanceJoint.tlr2_$LI$().initialValue();
-                        var r1 = DistanceJoint.tlr1_$LI$().initialValue();
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tld_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlr2_$LI$());
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlr1_$LI$());
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.getMemberXForm().R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
@@ -15287,10 +15781,30 @@ var org;
                     DistanceJoint.prototype.solveVelocityConstraints = function (step) {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var v1 = DistanceJoint.tlv1_$LI$().initialValue();
-                        var v2 = DistanceJoint.tlv2_$LI$().initialValue();
-                        var r1 = DistanceJoint.tlr1_$LI$().initialValue();
-                        var r2 = DistanceJoint.tlr2_$LI$().initialValue();
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlv1_$LI$());
+                        var v2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlv2_$LI$());
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(DistanceJoint.tlr2_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_xf.R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b2.m_xf.R, this.m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
                         org.jbox2d.common.Vec2.crossToOut$float$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_angularVelocity, r1, v1);
@@ -15384,7 +15898,12 @@ var org;
                      * @return {org.jbox2d.common.Vec2}
                      */
                     MouseJoint.prototype.getAnchor2 = function () {
-                        var anchor2 = MouseJoint.tlanchor2_$LI$().initialValue();
+                        var anchor2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlanchor2_$LI$());
                         this.m_body2.getWorldLocationToOut(this.m_localAnchor, anchor2);
                         return anchor2;
                     };
@@ -15403,9 +15922,24 @@ var org;
                      */
                     MouseJoint.prototype.initVelocityConstraints = function (step) {
                         var b = this.m_body2;
-                        var r = MouseJoint.tlr_$LI$().initialValue();
-                        var K1 = MouseJoint.tlK1_$LI$().initialValue();
-                        var K2 = MouseJoint.tlK2_$LI$().initialValue();
+                        var r = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlr_$LI$());
+                        var K1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlK1_$LI$());
+                        var K2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlK2_$LI$());
                         r.set$org_jbox2d_common_Vec2(this.m_localAnchor);
                         r.subLocal(b.getMemberLocalCenter());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b.m_xf.R, r, r);
@@ -15450,11 +15984,36 @@ var org;
                      */
                     MouseJoint.prototype.solveVelocityConstraints = function (step) {
                         var b = this.m_body2;
-                        var r = MouseJoint.tlr_$LI$().initialValue();
-                        var Cdot = MouseJoint.tlCdot_$LI$().initialValue();
-                        var force = MouseJoint.tlforce_$LI$().initialValue();
-                        var oldForce = MouseJoint.tloldForce_$LI$().initialValue();
-                        var P = MouseJoint.tlP_$LI$().initialValue();
+                        var r = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlr_$LI$());
+                        var Cdot = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlCdot_$LI$());
+                        var force = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlforce_$LI$());
+                        var oldForce = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tloldForce_$LI$());
+                        var P = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(MouseJoint.tlP_$LI$());
                         r.set$org_jbox2d_common_Vec2(this.m_localAnchor);
                         r.subLocal(b.getMemberLocalCenter());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b.m_xf.R, r, r);
@@ -15649,14 +16208,54 @@ var org;
                     PrismaticJoint.prototype.initVelocityConstraints = function (step) {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var r1 = PrismaticJoint.tlr1_$LI$().initialValue();
-                        var r2 = PrismaticJoint.tlr2_$LI$().initialValue();
-                        var ax1 = PrismaticJoint.tlax1_$LI$().initialValue();
-                        var ay1 = PrismaticJoint.tlay1_$LI$().initialValue();
-                        var e = PrismaticJoint.tle_$LI$().initialValue();
-                        var ax1Neg = PrismaticJoint.tlax1Neg_$LI$().initialValue();
-                        var ay1Neg = PrismaticJoint.tlay1Neg_$LI$().initialValue();
-                        var d = PrismaticJoint.tld_$LI$().initialValue();
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr2_$LI$());
+                        var ax1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlax1_$LI$());
+                        var ay1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlay1_$LI$());
+                        var e = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tle_$LI$());
+                        var ax1Neg = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlax1Neg_$LI$());
+                        var ay1Neg = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlay1Neg_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tld_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_xf.R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b2.m_xf.R, this.m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
                         var invMass1 = b1.m_invMass;
@@ -15669,6 +16268,9 @@ var org;
                         org.jbox2d.common.Vec2.negateToOut(ay1, ay1Neg);
                         this.m_linearJacobian.set(ay1Neg, -org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e, ay1), ay1, org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r2, ay1));
                         this.m_linearMass = Math.fround(Math.fround(Math.fround(invMass1 + Math.fround(Math.fround(invI1 * this.m_linearJacobian.angular1) * this.m_linearJacobian.angular1)) + invMass2) + Math.fround(Math.fround(invI2 * this.m_linearJacobian.angular2) * this.m_linearJacobian.angular2));
+                        if (!(this.m_linearMass > org.jbox2d.common.Settings.EPSILON))
+                            throw new Error("Assertion error line 148: assert m_linearMass > Settings.EPSILON;");
+                        ;
                         this.m_linearMass = Math.fround(1.0 / this.m_linearMass);
                         this.m_angularMass = Math.fround(invI1 + invI2);
                         if (this.m_angularMass > org.jbox2d.common.Settings.EPSILON) {
@@ -15679,6 +16281,9 @@ var org;
                             org.jbox2d.common.Vec2.negateToOut(ax1, ax1Neg);
                             this.m_motorJacobian.set(ax1Neg, -org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(e, ax1), ax1, org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(r2, ax1));
                             this.m_motorMass = Math.fround(Math.fround(Math.fround(invMass1 + Math.fround(Math.fround(invI1 * this.m_motorJacobian.angular1) * this.m_motorJacobian.angular1)) + invMass2) + Math.fround(Math.fround(invI2 * this.m_motorJacobian.angular2) * this.m_motorJacobian.angular2));
+                            if (!(this.m_motorMass > org.jbox2d.common.Settings.EPSILON))
+                                throw new Error("Assertion error line 159: assert m_motorMass > Settings.EPSILON;");
+                            ;
                             this.m_motorMass = Math.fround(1.0 / this.m_motorMass);
                             if (this.m_enableLimit) {
                                 d.set$org_jbox2d_common_Vec2(e);
@@ -15839,19 +16444,84 @@ var org;
                     PrismaticJoint.prototype.solvePositionConstraints = function () {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var temp = PrismaticJoint.tltemp_$LI$().initialValue();
-                        var p1 = PrismaticJoint.tlp1_$LI$().initialValue();
-                        var p2 = PrismaticJoint.tlp2_$LI$().initialValue();
-                        var r1z = PrismaticJoint.tlr1z_$LI$().initialValue();
-                        var r2z = PrismaticJoint.tlr2z_$LI$().initialValue();
-                        var p1z = PrismaticJoint.tlp1z_$LI$().initialValue();
-                        var p2z = PrismaticJoint.tlp2z_$LI$().initialValue();
-                        var dz = PrismaticJoint.tldz_$LI$().initialValue();
-                        var r1 = PrismaticJoint.tlr1_$LI$().initialValue();
-                        var r2 = PrismaticJoint.tlr2_$LI$().initialValue();
-                        var d = PrismaticJoint.tld_$LI$().initialValue();
-                        var ax1 = PrismaticJoint.tlax1_$LI$().initialValue();
-                        var ay1 = PrismaticJoint.tlay1_$LI$().initialValue();
+                        var temp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tltemp_$LI$());
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp1_$LI$());
+                        var p2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp2_$LI$());
+                        var r1z = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr1z_$LI$());
+                        var r2z = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr2z_$LI$());
+                        var p1z = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp1z_$LI$());
+                        var p2z = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp2z_$LI$());
+                        var dz = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tldz_$LI$());
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr2_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tld_$LI$());
+                        var ax1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlax1_$LI$());
+                        var ay1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlay1_$LI$());
                         var invMass1 = b1.m_invMass;
                         var invMass2 = b2.m_invMass;
                         var invI1 = b1.m_invI;
@@ -15963,10 +16633,30 @@ var org;
                     PrismaticJoint.prototype.getJointTranslation = function () {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var axis = PrismaticJoint.tlaxis_$LI$().initialValue();
-                        var p1 = PrismaticJoint.tlp1_$LI$().initialValue();
-                        var p2 = PrismaticJoint.tlp2_$LI$().initialValue();
-                        var d = PrismaticJoint.tld_$LI$().initialValue();
+                        var axis = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlaxis_$LI$());
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp1_$LI$());
+                        var p2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp2_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tld_$LI$());
                         b1.getWorldLocationToOut(this.m_localAnchor1, p1);
                         b2.getWorldLocationToOut(this.m_localAnchor2, p2);
                         d.set$org_jbox2d_common_Vec2(p2);
@@ -15990,16 +16680,66 @@ var org;
                     PrismaticJoint.prototype.getJointSpeed = function () {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var r1 = PrismaticJoint.tlr1_$LI$().initialValue();
-                        var r2 = PrismaticJoint.tlr2_$LI$().initialValue();
-                        var p1 = PrismaticJoint.tlp1_$LI$().initialValue();
-                        var p2 = PrismaticJoint.tlp2_$LI$().initialValue();
-                        var d = PrismaticJoint.tld_$LI$().initialValue();
-                        var axis = PrismaticJoint.tlaxis_$LI$().initialValue();
-                        var w1xAxis = PrismaticJoint.tlw1xAxis_$LI$().initialValue();
-                        var v22 = PrismaticJoint.tlv22_$LI$().initialValue();
-                        var w2xR2 = PrismaticJoint.tlw2xR2_$LI$().initialValue();
-                        var w1xR1 = PrismaticJoint.tlw1xR1_$LI$().initialValue();
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlr2_$LI$());
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp1_$LI$());
+                        var p2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlp2_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tld_$LI$());
+                        var axis = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlaxis_$LI$());
+                        var w1xAxis = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlw1xAxis_$LI$());
+                        var v22 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlv22_$LI$());
+                        var w2xR2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlw2xR2_$LI$());
+                        var w1xR1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlw1xR1_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b1.m_xf.R, this.m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(b2.m_xf.R, this.m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
                         p1.set$org_jbox2d_common_Vec2(b1.m_sweep.c);
@@ -16040,7 +16780,12 @@ var org;
                         PrismaticJoint.tlreactionAx1 = (function () { var __o = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return PrismaticJoint.tlreactionAx1; };
                     ;
                     PrismaticJoint.prototype.getReactionForceToOut = function (out) {
-                        var reactionAx1 = PrismaticJoint.tlreactionAx1_$LI$().initialValue();
+                        var reactionAx1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PrismaticJoint.tlreactionAx1_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.m_body1.m_xf.R, this.m_localXAxis1, reactionAx1);
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(this.m_body1.m_xf.R, this.m_localYAxis1, out);
                         out.x = Math.fround(Math.fround(this.m_limitForce * reactionAx1.x) + Math.fround(this.m_force * out.x));
@@ -16080,6 +16825,9 @@ var org;
                      * @param {number} upper
                      */
                     PrismaticJoint.prototype.setLimits = function (lower, upper) {
+                        if (!((lower <= upper)))
+                            throw new Error("Assertion error line 557: assert (lower <= upper);");
+                        ;
                         this.m_lowerTranslation = lower;
                         this.m_upperTranslation = upper;
                     };
@@ -16217,6 +16965,9 @@ var org;
                         } })(def.localAnchor2);
                         _this.m_u1 = new org.jbox2d.common.Vec2();
                         _this.m_u2 = new org.jbox2d.common.Vec2();
+                        if (!((def.ratio !== 0.0)))
+                            throw new Error("Assertion error line 83: assert (def.ratio != 0.0F);");
+                        ;
                         _this.m_ratio = def.ratio;
                         _this.m_constant = Math.fround(def.length1 + Math.fround(_this.m_ratio * def.length2));
                         _this.m_maxLength1 = org.jbox2d.common.MathUtils.min(def.maxLength1, Math.fround(_this.m_constant - Math.fround(_this.m_ratio * PulleyJoint.MIN_PULLEY_LENGTH)));
@@ -16257,14 +17008,54 @@ var org;
                     PulleyJoint.prototype.initVelocityConstraints = function (step) {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var r1 = PulleyJoint.tlr1_$LI$().initialValue();
-                        var r2 = PulleyJoint.tlr2_$LI$().initialValue();
-                        var p1 = PulleyJoint.tlp1_$LI$().initialValue();
-                        var p2 = PulleyJoint.tlp2_$LI$().initialValue();
-                        var s1 = PulleyJoint.tls1_$LI$().initialValue();
-                        var s2 = PulleyJoint.tls2_$LI$().initialValue();
-                        var P1 = PulleyJoint.tlP1_$LI$().initialValue();
-                        var P2 = PulleyJoint.tlP2_$LI$().initialValue();
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlr2_$LI$());
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlp1_$LI$());
+                        var p2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlp2_$LI$());
+                        var s1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tls1_$LI$());
+                        var s2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tls2_$LI$());
+                        var P1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlP1_$LI$());
+                        var P2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlP2_$LI$());
                         r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
                         r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
                         r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -16327,6 +17118,15 @@ var org;
                         this.m_limitMass1 = Math.fround(b1.m_invMass + Math.fround(Math.fround(b1.m_invI * cr1u1) * cr1u1));
                         this.m_limitMass2 = Math.fround(b2.m_invMass + Math.fround(Math.fround(b2.m_invI * cr2u2) * cr2u2));
                         this.m_pulleyMass = Math.fround(this.m_limitMass1 + Math.fround(Math.fround(this.m_ratio * this.m_ratio) * this.m_limitMass2));
+                        if (!((this.m_limitMass1 > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 181: assert (m_limitMass1 > Settings.EPSILON);");
+                        ;
+                        if (!((this.m_limitMass2 > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 182: assert (m_limitMass2 > Settings.EPSILON);");
+                        ;
+                        if (!((this.m_pulleyMass > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 183: assert (m_pulleyMass > Settings.EPSILON);");
+                        ;
                         this.m_limitMass1 = Math.fround(1.0 / this.m_limitMass1);
                         this.m_limitMass2 = Math.fround(1.0 / this.m_limitMass2);
                         this.m_pulleyMass = Math.fround(1.0 / this.m_pulleyMass);
@@ -16359,12 +17159,42 @@ var org;
                     PulleyJoint.prototype.solveVelocityConstraints = function (step) {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var v1 = PulleyJoint.tlv1_$LI$().initialValue();
-                        var v2 = PulleyJoint.tlv2_$LI$().initialValue();
-                        var P1 = PulleyJoint.tlP1_$LI$().initialValue();
-                        var P2 = PulleyJoint.tlP2_$LI$().initialValue();
-                        var r1 = PulleyJoint.tlr1_$LI$().initialValue();
-                        var r2 = PulleyJoint.tlr2_$LI$().initialValue();
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlv1_$LI$());
+                        var v2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlv2_$LI$());
+                        var P1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlP1_$LI$());
+                        var P2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlP2_$LI$());
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlr2_$LI$());
                         r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
                         r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
                         r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -16428,14 +17258,54 @@ var org;
                     PulleyJoint.prototype.solvePositionConstraints = function () {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var r1 = PulleyJoint.tlr1_$LI$().initialValue();
-                        var r2 = PulleyJoint.tlr2_$LI$().initialValue();
-                        var p1 = PulleyJoint.tlp1_$LI$().initialValue();
-                        var p2 = PulleyJoint.tlp2_$LI$().initialValue();
-                        var s1 = PulleyJoint.tls1_$LI$().initialValue();
-                        var s2 = PulleyJoint.tls2_$LI$().initialValue();
-                        var P1 = PulleyJoint.tlP1_$LI$().initialValue();
-                        var P2 = PulleyJoint.tlP2_$LI$().initialValue();
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlr2_$LI$());
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlp1_$LI$());
+                        var p2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlp2_$LI$());
+                        var s1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tls1_$LI$());
+                        var s2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tls2_$LI$());
+                        var P1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlP1_$LI$());
+                        var P2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PulleyJoint.tlP2_$LI$());
                         s1.set$org_jbox2d_common_Vec2(this.m_ground.m_xf.position);
                         s1.addLocal$org_jbox2d_common_Vec2(this.m_groundAnchor1);
                         s2.set$org_jbox2d_common_Vec2(this.m_ground.m_xf.position);
@@ -16707,11 +17577,36 @@ var org;
                     RevoluteJoint.prototype.initVelocityConstraints = function (step) {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var r1 = RevoluteJoint.tlr1_$LI$().initialValue();
-                        var r2 = RevoluteJoint.tlr2_$LI$().initialValue();
-                        var K1 = RevoluteJoint.tlK1_$LI$().initialValue();
-                        var K2 = RevoluteJoint.tlK2_$LI$().initialValue();
-                        var K3 = RevoluteJoint.tlK3_$LI$().initialValue();
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlr2_$LI$());
+                        var K1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlK1_$LI$());
+                        var K2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlK2_$LI$());
+                        var K3 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlK3_$LI$());
                         r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
                         r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
                         r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -16796,11 +17691,36 @@ var org;
                     RevoluteJoint.prototype.solveVelocityConstraints = function (step) {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var temp = RevoluteJoint.tltemp_$LI$().initialValue();
-                        var pivotCdot = RevoluteJoint.tlpivotCdot_$LI$().initialValue();
-                        var pivotForce = RevoluteJoint.tlpivotForce_$LI$().initialValue();
-                        var r1 = RevoluteJoint.tlr1_$LI$().initialValue();
-                        var r2 = RevoluteJoint.tlr2_$LI$().initialValue();
+                        var temp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tltemp_$LI$());
+                        var pivotCdot = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlpivotCdot_$LI$());
+                        var pivotForce = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlpivotForce_$LI$());
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlr2_$LI$());
                         r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
                         r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
                         r1.subLocal(this.m_localAnchor1).negateLocal();
@@ -16879,15 +17799,60 @@ var org;
                     RevoluteJoint.prototype.solvePositionConstraints = function () {
                         var b1 = this.m_body1;
                         var b2 = this.m_body2;
-                        var p1 = RevoluteJoint.tlp1_$LI$().initialValue();
-                        var p2 = RevoluteJoint.tlp2_$LI$().initialValue();
-                        var ptpC = RevoluteJoint.tlptpC_$LI$().initialValue();
-                        var impulse = RevoluteJoint.tlimpulse_$LI$().initialValue();
-                        var r1 = RevoluteJoint.tlr1_$LI$().initialValue();
-                        var r2 = RevoluteJoint.tlr2_$LI$().initialValue();
-                        var K1 = RevoluteJoint.tlK1_$LI$().initialValue();
-                        var K2 = RevoluteJoint.tlK2_$LI$().initialValue();
-                        var K3 = RevoluteJoint.tlK3_$LI$().initialValue();
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlp1_$LI$());
+                        var p2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlp2_$LI$());
+                        var ptpC = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlptpC_$LI$());
+                        var impulse = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlimpulse_$LI$());
+                        var r1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlr1_$LI$());
+                        var r2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlr2_$LI$());
+                        var K1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlK1_$LI$());
+                        var K2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlK2_$LI$());
+                        var K3 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(RevoluteJoint.tlK3_$LI$());
                         var positionError = 0.0;
                         r1.set$org_jbox2d_common_Vec2(b1.getMemberLocalCenter());
                         r2.set$org_jbox2d_common_Vec2(b2.getMemberLocalCenter());
@@ -17028,6 +17993,9 @@ var org;
                         return this.m_upperAngle;
                     };
                     RevoluteJoint.prototype.setLimits = function (lower, upper) {
+                        if (!((lower <= upper)))
+                            throw new Error("Assertion error line 410: assert (lower <= upper);");
+                        ;
                         this.m_lowerAngle = lower;
                         this.m_upperAngle = upper;
                     };
@@ -17074,12 +18042,38 @@ var org;
                  * @param {org.jbox2d.common.Sweep} sweep2
                  */
                 TOI.timeOfImpact = function (shape1, sweep1, shape2, sweep2) {
-                    var xf1 = TOI.tlxf1_$LI$().initialValue();
-                    var xf2 = TOI.tlxf2_$LI$().initialValue();
-                    var p1 = TOI.tlP1_$LI$().initialValue();
-                    var p2 = TOI.tlP2_$LI$().initialValue();
+                    var xf1 = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(TOI.tlxf1_$LI$());
+                    var xf2 = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(TOI.tlxf2_$LI$());
+                    var p1 = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(TOI.tlP1_$LI$());
+                    var p2 = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(TOI.tlP2_$LI$());
                     var r1 = shape1.getSweepRadius();
                     var r2 = shape2.getSweepRadius();
+                    if (!((sweep1.t0 === sweep2.t0)))
+                        throw new Error("Assertion error line 32: assert (sweep1.t0 == sweep2.t0);");
+                    ;
+                    if (!((Math.fround(1.0 - sweep1.t0) > org.jbox2d.common.Settings.EPSILON)))
+                        throw new Error("Assertion error line 33: assert (1.0F - sweep1.t0 > Settings.EPSILON);");
+                    ;
                     var t0 = sweep1.t0;
                     var vx = Math.fround((Math.fround(sweep1.c.x - sweep1.c0.x)) - (Math.fround(sweep2.c.x - sweep2.c0.x)));
                     var vy = Math.fround((Math.fround(sweep1.c.y - sweep1.c0.y)) - (Math.fround(sweep2.c.y - sweep2.c0.y)));
@@ -17265,6 +18259,9 @@ var org;
                         if (this.m_userData === undefined)
                             this.m_userData = null;
                         (function () {
+                            if (!((world.m_lock === false)))
+                                throw new Error("Assertion error line 152: assert (world.m_lock == false);");
+                            ;
                             {
                                 _this.m_uniqueID = Body.nextID++;
                             }
@@ -17434,6 +18431,9 @@ var org;
                             if (this.m_userData === undefined)
                                 this.m_userData = null;
                             (function () {
+                                if (!((world_1.m_lock === false)))
+                                    throw new Error("Assertion error line 269: assert (world.m_lock == false);");
+                                ;
                                 {
                                     _this.m_uniqueID = Body.nextID++;
                                 }
@@ -17521,9 +18521,9 @@ var org;
                  * @return {org.jbox2d.collision.shapes.Shape}
                  */
                 Body.prototype.createShape = function (def) {
-                    if (this.m_world.m_lock === true) {
-                        return null;
-                    }
+                    if (!((this.m_world.m_lock === false)))
+                        throw new Error("Assertion error line 352: assert (m_world.m_lock == false);");
+                    ;
                     if (def.type === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE) {
                         var edgeDef = def;
                         var v1 = void 0;
@@ -17585,10 +18585,16 @@ var org;
                  * @param {org.jbox2d.collision.shapes.Shape} s the shape to be removed.
                  */
                 Body.prototype.destroyShape = function (s) {
-                    if (this.m_world.m_lock === true) {
-                        return;
-                    }
+                    if (!((this.m_world.m_lock === false)))
+                        throw new Error("Assertion error line 410: assert (m_world.m_lock == false);");
+                    ;
+                    if (!((s.getBody() === this)))
+                        throw new Error("Assertion error line 411: assert (s.getBody() == this);");
+                    ;
                     s.destroyProxy(this.m_world.m_broadPhase);
+                    if (!((this.m_shapeCount > 0)))
+                        throw new Error("Assertion error line 413: assert (m_shapeCount > 0);");
+                    ;
                     var node = this.m_shapeList;
                     var prevNode = null;
                     var found = false;
@@ -17611,6 +18617,9 @@ var org;
                         }
                     }
                     ;
+                    if (!((found)))
+                        throw new Error("Assertion error line 432: assert (found);");
+                    ;
                     s.m_body = null;
                     s.m_next = null;
                     --this.m_shapeCount;
@@ -17623,9 +18632,9 @@ var org;
                  * @param {org.jbox2d.collision.MassData} massData the mass properties.
                  */
                 Body.prototype.setMass = function (massData) {
-                    if (this.m_world.m_lock === true) {
-                        return;
-                    }
+                    if (!((this.m_world.m_lock === false)))
+                        throw new Error("Assertion error line 446: assert (m_world.m_lock == false);");
+                    ;
                     this.m_invMass = 0.0;
                     this.m_I = 0.0;
                     this.m_invI = 0.0;
@@ -17673,14 +18682,19 @@ var org;
                  * to call this again. Note that this changes the center of mass position.
                  */
                 Body.prototype.setMassFromShapes = function () {
-                    if (this.m_world.m_lock === true) {
-                        return;
-                    }
+                    if (!((this.m_world.m_lock === false)))
+                        throw new Error("Assertion error line 487: assert (m_world.m_lock == false);");
+                    ;
                     this.m_mass = 0.0;
                     this.m_invMass = 0.0;
                     this.m_I = 0.0;
                     this.m_invI = 0.0;
-                    var center = Body.tlCenter_$LI$().initialValue();
+                    var center = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(Body.tlCenter_$LI$());
                     center.setZero();
                     for (var s = this.m_shapeList; s != null; s = s.m_next) {
                         {
@@ -17700,6 +18714,9 @@ var org;
                     }
                     if (this.m_I > 0.0 && (this.m_flags & Body.e_fixedRotationFlag) === 0) {
                         this.m_I -= Math.fround(this.m_mass * org.jbox2d.common.Vec2.dot(center, center));
+                        if (!((this.m_I > 0.0)))
+                            throw new Error("Assertion error line 509: assert (m_I > 0.0F);");
+                        ;
                         this.m_invI = Math.fround(1.0 / this.m_I);
                     }
                     else {
@@ -17741,9 +18758,9 @@ var org;
                  * body is automatically frozen.
                  */
                 Body.prototype.setXForm = function (position, angle) {
-                    if (this.m_world.m_lock === true) {
-                        return true;
-                    }
+                    if (!((this.m_world.m_lock === false)))
+                        throw new Error("Assertion error line 544: assert (m_world.m_lock == false);");
+                    ;
                     if (this.isFrozen()) {
                         return false;
                     }
@@ -18172,7 +19189,12 @@ var org;
                  * @return {boolean}
                  */
                 Body.prototype.synchronizeShapes = function () {
-                    var xf1 = Body.tlXf1_$LI$().initialValue();
+                    var xf1 = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(Body.tlXf1_$LI$());
                     xf1.R.set$float(this.m_sweep.a0);
                     var R = xf1.R;
                     var v = this.m_sweep.localCenter;
@@ -19089,6 +20111,12 @@ var org;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
                             (function () {
+                                if (!((_this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE)))
+                                    throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");
+                                ;
+                                if (!((_this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE)))
+                                    throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.POINT_SHAPE);");
+                                ;
                                 _this.m_manifold = new org.jbox2d.collision.Manifold();
                                 /* add */ (_this.manifoldList.push(_this.m_manifold) > 0);
                                 _this.m_manifoldCount = 0;
@@ -19168,9 +20196,24 @@ var org;
                     PointAndPolyContact.prototype.evaluate = function (listener) {
                         var b1 = this.m_shape1.getBody();
                         var b2 = this.m_shape2.getBody();
-                        var m0 = PointAndPolyContact.tlm0_$LI$().initialValue();
-                        var v1 = PointAndPolyContact.tlV1_$LI$().initialValue();
-                        var cp = PointAndPolyContact.tlCp_$LI$().initialValue();
+                        var m0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointAndPolyContact.tlm0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointAndPolyContact.tlV1_$LI$());
+                        var cp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointAndPolyContact.tlCp_$LI$());
                         m0.set(this.m_manifold);
                         org.jbox2d.pooling.SingletonPool.getCollidePoly().collidePolygonAndPoint(this.m_manifold, this.m_shape1, b1.getMemberXForm(), this.m_shape2, b2.getMemberXForm());
                         var persisted = PointAndPolyContact.tlPersisted_$LI$().get(2);
@@ -19280,6 +20323,12 @@ var org;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
                             (function () {
+                                if (!((_this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE)))
+                                    throw new Error("Assertion error line 15: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");
+                                ;
+                                if (!((_this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE)))
+                                    throw new Error("Assertion error line 16: assert (m_shape2.getType() == ShapeType.CIRCLE_SHAPE);");
+                                ;
                                 _this.m_manifold = new org.jbox2d.collision.Manifold();
                                 /* add */ (_this.manifoldList.push(_this.m_manifold) > 0);
                                 _this.m_manifoldCount = 0;
@@ -19349,9 +20398,24 @@ var org;
                     PolyAndCircleContact.prototype.evaluate = function (listener) {
                         var b1 = this.m_shape1.getBody();
                         var b2 = this.m_shape2.getBody();
-                        var m0 = PolyAndCircleContact.tlm0_$LI$().initialValue();
-                        var v1 = PolyAndCircleContact.tlV1_$LI$().initialValue();
-                        var cp = PolyAndCircleContact.tlCp_$LI$().initialValue();
+                        var m0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyAndCircleContact.tlm0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyAndCircleContact.tlV1_$LI$());
+                        var cp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyAndCircleContact.tlCp_$LI$());
                         m0.set(this.m_manifold);
                         org.jbox2d.pooling.SingletonPool.getCollideCircle().collidePolygonAndCircle(this.m_manifold, this.m_shape1, b1.getMemberXForm(), this.m_shape2, b2.getMemberXForm());
                         var persisted = PolyAndCircleContact.tlPersisted_$LI$().get(2);
@@ -19463,6 +20527,12 @@ var org;
                             if (_this.m_manifold === undefined)
                                 _this.m_manifold = null;
                             (function () {
+                                if (!((_this.m_shape1.getType() === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE)))
+                                    throw new Error("Assertion error line 19: assert (m_shape1.getType() == ShapeType.POLYGON_SHAPE);");
+                                ;
+                                if (!((_this.m_shape2.getType() === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE)))
+                                    throw new Error("Assertion error line 20: assert (m_shape2.getType() == ShapeType.EDGE_SHAPE);");
+                                ;
                                 _this.m_manifold = new org.jbox2d.collision.Manifold();
                                 _this.m_manifoldCount = 0;
                                 /* add */ (_this.manifoldList.push(_this.m_manifold) > 0);
@@ -19499,6 +20569,9 @@ var org;
                      * @return {org.jbox2d.dynamics.contacts.Contact}
                      */
                     PolyAndEdgeContact.prototype.clone = function () {
+                        if (!(false))
+                            throw new Error("Assertion error line 51: assert false : 'Not yet implemented.';");
+                        ;
                         return this;
                     };
                     PolyAndEdgeContact.tlm0_$LI$ = function () { if (PolyAndEdgeContact.tlm0 == null)
@@ -19520,9 +20593,24 @@ var org;
                     PolyAndEdgeContact.prototype.evaluate = function (listener) {
                         var b1 = this.m_shape1.getBody();
                         var b2 = this.m_shape2.getBody();
-                        var m0 = PolyAndEdgeContact.tlm0_$LI$().initialValue();
-                        var v1 = PolyAndEdgeContact.tlV1_$LI$().initialValue();
-                        var cp = PolyAndEdgeContact.tlCp_$LI$().initialValue();
+                        var m0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyAndEdgeContact.tlm0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyAndEdgeContact.tlV1_$LI$());
+                        var cp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolyAndEdgeContact.tlCp_$LI$());
                         m0.set(this.m_manifold);
                         org.jbox2d.pooling.SingletonPool.getCollidePoly().collidePolyAndEdge(this.m_manifold, this.m_shape1, b1.getMemberXForm(), this.m_shape2, b2.getMemberXForm());
                         var persisted = PolyAndEdgeContact.tlPersisted_$LI$().get(2);
@@ -19712,10 +20800,16 @@ var org;
                     }
                     this.m_pairManager = new org.jbox2d.collision.PairManager();
                     this.m_pairManager.initialize(this, callback);
+                    if (!(worldAABB.isValid()))
+                        throw new Error("Assertion error line 104: assert worldAABB.isValid();");
+                    ;
                     this.m_worldAABB = new org.jbox2d.collision.AABB(worldAABB);
                     this.m_proxyCount = 0;
                     var d = worldAABB.upperBound.sub(worldAABB.lowerBound);
                     this.m_quantizationFactor = new org.jbox2d.common.Vec2(Math.fround(2147483647 / d.x), Math.fround(2147483647 / d.y));
+                    if (BroadPhase.debugPrint) {
+                        console.info("BroadPhase: m_quantizationFactor=" + this.m_quantizationFactor);
+                    }
                     for (var i = 0; i < org.jbox2d.common.Settings.maxProxies - 1; ++i) {
                         {
                             this.m_proxyPool[i] = new org.jbox2d.collision.Proxy();
@@ -19742,17 +20836,40 @@ var org;
                     BroadPhase.NULL_EDGE = 2147483647; return BroadPhase.NULL_EDGE; };
                 ;
                 /*private*/ BroadPhase.prototype.dump = function () {
-                    for (var i = 0; i < 10; i++) {
+                    console.info("*****DUMP START");
+                    for (var i = 0; i < 100; i++) {
                         {
-                            console.info("bounds[ %d ] = %d, %d \n");
+                            console.info("bounds[ " + i + " ] = " + this.m_bounds[0][i].value + ", " + this.m_bounds[1][i].value + " \n");
                         }
                         ;
                     }
+                    for (var i = 0; i < this.m_proxyPool.length; i++) {
+                        {
+                            var p = this.m_proxyPool[i];
+                            if (p != null) {
+                                console.info("proxy#" + i + ": valid=" + p.isValid() + " userData= upperBounds=" + (function (a) { return a ? '[' + a.join(', ') + ']' : 'null'; })(/* asList */ p.upperBounds.slice(0)) + " lowerBounds=" + (function (a) { return a ? '[' + a.join(', ') + ']' : 'null'; })(/* asList */ p.lowerBounds.slice(0)) + " timeStamp=" + p.timeStamp + " overlapCount=" + p.overlapCount + " next=" + p.getNext());
+                            }
+                        }
+                        ;
+                    }
+                    console.info("*****DUMP END");
                 };
                 BroadPhase.prototype.testOverlap$org_jbox2d_collision_Proxy$org_jbox2d_collision_Proxy = function (p1, p2) {
                     for (var axis = 0; axis < 2; ++axis) {
                         {
                             var bounds = this.m_bounds[axis];
+                            if (!((p1.lowerBounds[axis] < 2 * this.m_proxyCount)))
+                                throw new Error("Assertion error line 132: assert (p1.lowerBounds[axis] < 2 * m_proxyCount);");
+                            ;
+                            if (!((p1.upperBounds[axis] < 2 * this.m_proxyCount)))
+                                throw new Error("Assertion error line 133: assert (p1.upperBounds[axis] < 2 * m_proxyCount);");
+                            ;
+                            if (!((p2.lowerBounds[axis] < 2 * this.m_proxyCount)))
+                                throw new Error("Assertion error line 134: assert (p2.lowerBounds[axis] < 2 * m_proxyCount);");
+                            ;
+                            if (!((p2.upperBounds[axis] < 2 * this.m_proxyCount)))
+                                throw new Error("Assertion error line 135: assert (p2.upperBounds[axis] < 2 * m_proxyCount);");
+                            ;
                             if (bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) {
                                 return false;
                             }
@@ -19778,10 +20895,16 @@ var org;
                     for (var axis = 0; axis < 2; ++axis) {
                         {
                             var bounds = this.m_bounds[axis];
-                            if (b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) {
+                            if (!((p.lowerBounds[axis] < 2 * this.m_proxyCount)))
+                                throw new Error("Assertion error line 157: assert (p.lowerBounds[axis] < 2 * m_proxyCount);");
+                            ;
+                            if (!((p.upperBounds[axis] < 2 * this.m_proxyCount)))
+                                throw new Error("Assertion error line 158: assert (p.upperBounds[axis] < 2 * m_proxyCount);");
+                            ;
+                            if (bounds[p.upperBounds[axis]] != null && b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) {
                                 return false;
                             }
-                            if (b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) {
+                            if (bounds[p.lowerBounds[axis]] != null && b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) {
                                 return false;
                             }
                         }
@@ -19813,12 +20936,18 @@ var org;
                  * @return {number}
                  */
                 BroadPhase.prototype.createProxy = function (aabb, userData) {
-                    if (BroadPhase.debugPrint) {
-                        console.info("CreateProxy()");
-                    }
+                    if (!((this.m_proxyCount < org.jbox2d.common.Settings.maxProxies)))
+                        throw new Error("Assertion error line 190: assert (m_proxyCount < Settings.maxProxies);");
+                    ;
+                    if (!((this.m_freeProxy !== org.jbox2d.collision.PairManager.NULL_PROXY_$LI$())))
+                        throw new Error("Assertion error line 191: assert (m_freeProxy != PairManager.NULL_PROXY);");
+                    ;
                     var proxyId = this.m_freeProxy;
                     var proxy = this.m_proxyPool[proxyId];
                     this.m_freeProxy = proxy.getNext();
+                    if (BroadPhase.debugPrint) {
+                        console.info("CreateProxy() bbox=" + aabb + " proxyId=" + proxyId + "/" + this.m_proxyCount + " m_freeProxy=" + this.m_freeProxy);
+                    }
                     proxy.overlapCount = 0;
                     proxy.userData = userData;
                     var boundCount = 2 * this.m_proxyCount;
@@ -19863,9 +20992,15 @@ var org;
                                 ;
                             }
                             ++upperIndex;
-                            bounds[lowerIndex].value = lowerValues[axis];
+                            if (!((bounds[lowerIndex] != null)))
+                                throw new Error("Assertion error line 219: assert (bounds[lowerIndex] != null) : 'Null pointer (lower)';");
+                            ;
+                            if (!((bounds[upperIndex] != null)))
+                                throw new Error("Assertion error line 220: assert (bounds[upperIndex] != null) : 'Null pointer (upper)';");
+                            ;
+                            bounds[lowerIndex].setValueInternal(lowerValues[axis]);
                             bounds[lowerIndex].proxyId = proxyId;
-                            bounds[upperIndex].value = upperValues[axis];
+                            bounds[upperIndex].setValueInternal(upperValues[axis]);
                             bounds[upperIndex].proxyId = proxyId;
                             bounds[lowerIndex].stabbingCount = lowerIndex === 0 ? 0 : bounds[lowerIndex - 1].stabbingCount;
                             bounds[upperIndex].stabbingCount = bounds[upperIndex - 1].stabbingCount;
@@ -19891,8 +21026,17 @@ var org;
                         ;
                     }
                     ++this.m_proxyCount;
+                    if (!(this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies))
+                        throw new Error("Assertion error line 240: assert m_queryResultCount < Settings.maxProxies;");
+                    ;
                     for (var i = 0; i < this.m_queryResultCount; ++i) {
                         {
+                            if (!((this.m_queryResults[i] < org.jbox2d.common.Settings.maxProxies)))
+                                throw new Error("Assertion error line 242: assert (m_queryResults[i] < Settings.maxProxies);");
+                            ;
+                            if (!((this.m_proxyPool[this.m_queryResults[i]].isValid())))
+                                throw new Error("Assertion error line 243: assert (m_proxyPool[m_queryResults[i]].isValid());");
+                            ;
                             this.m_pairManager.addBufferedPair(proxyId, this.m_queryResults[i]);
                         }
                         ;
@@ -19909,7 +21053,17 @@ var org;
                     BroadPhase.tlIgnored = new org.jbox2d.pooling.arrays.IntegerArray(); return BroadPhase.tlIgnored; };
                 ;
                 BroadPhase.prototype.destroyProxy = function (proxyId) {
+                    if (!((0 < this.m_proxyCount && this.m_proxyCount <= org.jbox2d.common.Settings.maxProxies)))
+                        throw new Error("Assertion error line 258: assert (0 < m_proxyCount && m_proxyCount <= Settings.maxProxies);");
+                    ;
+                    if (BroadPhase.debugPrint) {
+                        console.info("destroyProxy(" + proxyId + ")");
+                        this.dump();
+                    }
                     var proxy = this.m_proxyPool[proxyId];
+                    if (!((proxy.isValid())))
+                        throw new Error("Assertion error line 264: assert (proxy.isValid());");
+                    ;
                     var boundCount = 2 * this.m_proxyCount;
                     var ignored = BroadPhase.tlIgnored_$LI$().get(2);
                     for (var axis = 0; axis < 2; ++axis) {
@@ -19971,8 +21125,14 @@ var org;
                         }
                         ;
                     }
+                    if (!((this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies)))
+                        throw new Error("Assertion error line 294: assert (m_queryResultCount < Settings.maxProxies);");
+                    ;
                     for (var i = 0; i < this.m_queryResultCount; ++i) {
                         {
+                            if (!((this.m_proxyPool[this.m_queryResults[i]].isValid())))
+                                throw new Error("Assertion error line 296: assert (m_proxyPool[m_queryResults[i]].isValid());");
+                            ;
                             this.m_pairManager.removeBufferedPair(proxyId, this.m_queryResults[i]);
                         }
                         ;
@@ -20006,20 +21166,37 @@ var org;
                  */
                 BroadPhase.prototype.moveProxy = function (proxyId, aabb) {
                     if (BroadPhase.debugPrint) {
-                        console.info("MoveProxy()");
+                        console.info("MoveProxy(" + proxyId + "/" + this.m_proxyCount + ")");
                     }
-                    var newValues = BroadPhase.tlNewValues_$LI$().initialValue();
-                    var oldValues = BroadPhase.tlOldValues_$LI$().initialValue();
+                    var newValues = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(BroadPhase.tlNewValues_$LI$());
+                    var oldValues = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(BroadPhase.tlOldValues_$LI$());
                     if (proxyId === org.jbox2d.collision.PairManager.NULL_PROXY_$LI$() || org.jbox2d.common.Settings.maxProxies <= proxyId) {
                         return;
                     }
+                    if (!((aabb.isValid())))
+                        throw new Error("Assertion error line 334: assert (aabb.isValid()) : 'invalid AABB';");
+                    ;
                     var boundCount = 2 * this.m_proxyCount;
                     var proxy = this.m_proxyPool[proxyId];
                     this.computeBounds(newValues.lowerValues, newValues.upperValues, aabb);
                     for (var axis = 0; axis < 2; ++axis) {
                         {
-                            oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
-                            oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+                            if (this.m_bounds[axis][proxy.lowerBounds[axis]] != null) {
+                                oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
+                            }
+                            if (this.m_bounds[axis][proxy.lowerBounds[axis]] != null) {
+                                oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+                            }
                         }
                         ;
                     }
@@ -20030,32 +21207,34 @@ var org;
                             var upperIndex = proxy.upperBounds[axis];
                             var lowerValue = newValues.lowerValues[axis];
                             var upperValue = newValues.upperValues[axis];
-                            var deltaLower = lowerValue - bounds[lowerIndex].value;
-                            var deltaUpper = upperValue - bounds[upperIndex].value;
-                            bounds[lowerIndex].value = lowerValue;
-                            bounds[upperIndex].value = upperValue;
+                            var deltaLower = bounds[lowerIndex] == null ? 0 : lowerValue - bounds[lowerIndex].value;
+                            var deltaUpper = bounds[upperIndex] == null ? 0 : upperValue - bounds[upperIndex].value;
+                            bounds[lowerIndex].setValueInternal(lowerValue);
+                            bounds[upperIndex].setValueInternal(upperValue);
                             if (deltaLower < 0) {
                                 var index = lowerIndex;
                                 while ((index > 0 && lowerValue < bounds[index - 1].value)) {
                                     {
                                         var bound = bounds[index];
                                         var prevBound = bounds[index - 1];
-                                        var prevProxyId = prevBound.proxyId;
-                                        var prevProxy = this.m_proxyPool[prevBound.proxyId];
-                                        ++prevBound.stabbingCount;
-                                        if (prevBound.isUpper() === true) {
-                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, prevProxy)) {
-                                                this.m_pairManager.addBufferedPair(proxyId, prevProxyId);
+                                        if (bound != null && prevBound != null) {
+                                            var prevProxyId = prevBound.proxyId;
+                                            var prevProxy = this.m_proxyPool[prevBound.proxyId];
+                                            ++prevBound.stabbingCount;
+                                            if (prevBound.isUpper() === true) {
+                                                if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, prevProxy)) {
+                                                    this.m_pairManager.addBufferedPair(proxyId, prevProxyId);
+                                                }
+                                                ++prevProxy.upperBounds[axis];
+                                                ++bound.stabbingCount;
                                             }
-                                            ++prevProxy.upperBounds[axis];
-                                            ++bound.stabbingCount;
+                                            else {
+                                                ++prevProxy.lowerBounds[axis];
+                                                --bound.stabbingCount;
+                                            }
+                                            --proxy.lowerBounds[axis];
+                                            bound.swap(prevBound);
                                         }
-                                        else {
-                                            ++prevProxy.lowerBounds[axis];
-                                            --bound.stabbingCount;
-                                        }
-                                        --proxy.lowerBounds[axis];
-                                        bound.swap(prevBound);
                                         --index;
                                     }
                                 }
@@ -20067,22 +21246,24 @@ var org;
                                     {
                                         var bound = bounds[index];
                                         var nextBound = bounds[index + 1];
-                                        var nextProxyId = nextBound.proxyId;
-                                        var nextProxy = this.m_proxyPool[nextProxyId];
-                                        ++nextBound.stabbingCount;
-                                        if (nextBound.isLower() === true) {
-                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, nextProxy)) {
-                                                this.m_pairManager.addBufferedPair(proxyId, nextProxyId);
+                                        if (bound != null && nextBound != null) {
+                                            var nextProxyId = nextBound.proxyId;
+                                            var nextProxy = this.m_proxyPool[nextProxyId];
+                                            ++nextBound.stabbingCount;
+                                            if (nextBound.isLower() === true) {
+                                                if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(newValues, nextProxy)) {
+                                                    this.m_pairManager.addBufferedPair(proxyId, nextProxyId);
+                                                }
+                                                --nextProxy.lowerBounds[axis];
+                                                ++bound.stabbingCount;
                                             }
-                                            --nextProxy.lowerBounds[axis];
-                                            ++bound.stabbingCount;
+                                            else {
+                                                --nextProxy.upperBounds[axis];
+                                                --bound.stabbingCount;
+                                            }
+                                            ++proxy.upperBounds[axis];
+                                            bound.swap(nextBound);
                                         }
-                                        else {
-                                            --nextProxy.upperBounds[axis];
-                                            --bound.stabbingCount;
-                                        }
-                                        ++proxy.upperBounds[axis];
-                                        bound.swap(nextBound);
                                         ++index;
                                     }
                                 }
@@ -20094,22 +21275,24 @@ var org;
                                     {
                                         var bound = bounds[index];
                                         var nextBound = bounds[index + 1];
-                                        var nextProxyId = nextBound.proxyId;
-                                        var nextProxy = this.m_proxyPool[nextProxyId];
-                                        --nextBound.stabbingCount;
-                                        if (nextBound.isUpper()) {
-                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, nextProxy)) {
-                                                this.m_pairManager.removeBufferedPair(proxyId, nextProxyId);
+                                        if (bound != null && nextBound != null) {
+                                            var nextProxyId = nextBound.proxyId;
+                                            var nextProxy = this.m_proxyPool[nextProxyId];
+                                            --nextBound.stabbingCount;
+                                            if (nextBound.isUpper()) {
+                                                if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, nextProxy)) {
+                                                    this.m_pairManager.removeBufferedPair(proxyId, nextProxyId);
+                                                }
+                                                --nextProxy.upperBounds[axis];
+                                                --bound.stabbingCount;
                                             }
-                                            --nextProxy.upperBounds[axis];
-                                            --bound.stabbingCount;
+                                            else {
+                                                --nextProxy.lowerBounds[axis];
+                                                ++bound.stabbingCount;
+                                            }
+                                            ++proxy.lowerBounds[axis];
+                                            bound.swap(nextBound);
                                         }
-                                        else {
-                                            --nextProxy.lowerBounds[axis];
-                                            ++bound.stabbingCount;
-                                        }
-                                        ++proxy.lowerBounds[axis];
-                                        bound.swap(nextBound);
                                         ++index;
                                     }
                                 }
@@ -20121,22 +21304,24 @@ var org;
                                     {
                                         var bound = bounds[index];
                                         var prevBound = bounds[index - 1];
-                                        var prevProxyId = prevBound.proxyId;
-                                        var prevProxy = this.m_proxyPool[prevProxyId];
-                                        --prevBound.stabbingCount;
-                                        if (prevBound.isLower() === true) {
-                                            if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, prevProxy)) {
-                                                this.m_pairManager.removeBufferedPair(proxyId, prevProxyId);
+                                        if (bound != null && prevBound != null) {
+                                            var prevProxyId = prevBound.proxyId;
+                                            var prevProxy = this.m_proxyPool[prevProxyId];
+                                            --prevBound.stabbingCount;
+                                            if (prevBound.isLower() === true) {
+                                                if (this.testOverlap$org_jbox2d_collision_BoundValues$org_jbox2d_collision_Proxy(oldValues, prevProxy)) {
+                                                    this.m_pairManager.removeBufferedPair(proxyId, prevProxyId);
+                                                }
+                                                ++prevProxy.lowerBounds[axis];
+                                                --bound.stabbingCount;
                                             }
-                                            ++prevProxy.lowerBounds[axis];
-                                            --bound.stabbingCount;
+                                            else {
+                                                ++prevProxy.upperBounds[axis];
+                                                ++bound.stabbingCount;
+                                            }
+                                            --proxy.upperBounds[axis];
+                                            bound.swap(prevBound);
                                         }
-                                        else {
-                                            ++prevProxy.upperBounds[axis];
-                                            ++bound.stabbingCount;
-                                        }
-                                        --proxy.upperBounds[axis];
-                                        bound.swap(prevBound);
                                         --index;
                                     }
                                 }
@@ -20162,11 +21347,17 @@ var org;
                     var indexes = BroadPhase.tlIndexes_$LI$().get(2);
                     this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[0], upperValues[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
                     this.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int(indexes, lowerValues[1], upperValues[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
+                    if (!(this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies))
+                        throw new Error("Assertion error line 476: assert m_queryResultCount < Settings.maxProxies;");
+                    ;
                     var results = (function (s) { var a = []; while (s-- > 0)
                         a.push(null); return a; })(maxCount);
                     var count = 0;
                     for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
                         {
+                            if (!(this.m_queryResults[i] < org.jbox2d.common.Settings.maxProxies))
+                                throw new Error("Assertion error line 480: assert m_queryResults[i] < Settings.maxProxies;");
+                            ;
                             var proxy = this.m_proxyPool[this.m_queryResults[i]];
                             proxy.isValid();
                             results[i] = proxy.userData;
@@ -20200,12 +21391,30 @@ var org;
                             for (var i = 0; i < boundCount; ++i) {
                                 {
                                     var bound = bounds[i];
+                                    if (!((i === 0 || bounds[i - 1].value <= bound.value)))
+                                        throw new Error("Assertion error line 502: assert (i == 0 || bounds[i - 1].value <= bound.value);");
+                                    ;
+                                    if (!((bound.proxyId !== org.jbox2d.collision.PairManager.NULL_PROXY_$LI$())))
+                                        throw new Error("Assertion error line 503: assert (bound.proxyId != PairManager.NULL_PROXY);");
+                                    ;
+                                    if (!((this.m_proxyPool[bound.proxyId].isValid())))
+                                        throw new Error("Assertion error line 504: assert (m_proxyPool[bound.proxyId].isValid());");
+                                    ;
                                     if (bound.isLower() === true) {
+                                        if (!((this.m_proxyPool[bound.proxyId].lowerBounds[axis] === i)))
+                                            throw new Error("Assertion error line 506: assert (m_proxyPool[bound.proxyId].lowerBounds[axis] == i) : (m_proxyPool[bound.proxyId].lowerBounds[axis] + ' not ' + i);");
+                                        ;
                                         ++stabbingCount;
                                     }
                                     else {
+                                        if (!((this.m_proxyPool[bound.proxyId].upperBounds[axis] === i)))
+                                            throw new Error("Assertion error line 509: assert (m_proxyPool[bound.proxyId].upperBounds[axis] == i);");
+                                        ;
                                         --stabbingCount;
                                     }
+                                    if (!((bound.stabbingCount === stabbingCount)))
+                                        throw new Error("Assertion error line 512: assert (bound.stabbingCount == stabbingCount);");
+                                    ;
                                 }
                                 ;
                             }
@@ -20217,6 +21426,12 @@ var org;
                     if (BroadPhase.debugPrint) {
                         console.info("ComputeBounds()");
                     }
+                    if (!((aabb.upperBound.x >= aabb.lowerBound.x)))
+                        throw new Error("Assertion error line 521: assert (aabb.upperBound.x >= aabb.lowerBound.x);");
+                    ;
+                    if (!((aabb.upperBound.y >= aabb.lowerBound.y)))
+                        throw new Error("Assertion error line 522: assert (aabb.upperBound.y >= aabb.lowerBound.y);");
+                    ;
                     var bx = aabb.lowerBound.x < this.m_worldAABB.upperBound.x ? aabb.lowerBound.x : this.m_worldAABB.upperBound.x;
                     var by = aabb.lowerBound.y < this.m_worldAABB.upperBound.y ? aabb.lowerBound.y : this.m_worldAABB.upperBound.y;
                     var minVertexX = this.m_worldAABB.lowerBound.x > bx ? this.m_worldAABB.lowerBound.x : bx;
@@ -20229,6 +21444,15 @@ var org;
                     upperValues[0] = ((Math.fround(this.m_quantizationFactor.x * (Math.fround(maxVertexX - this.m_worldAABB.lowerBound.x)))) | 0) | 1;
                     lowerValues[1] = ((Math.fround(this.m_quantizationFactor.y * (Math.fround(minVertexY - this.m_worldAABB.lowerBound.y)))) | 0) & (2147483647 - 1);
                     upperValues[1] = ((Math.fround(this.m_quantizationFactor.y * (Math.fround(maxVertexY - this.m_worldAABB.lowerBound.y)))) | 0) | 1;
+                    if (upperValues[0] < 0) {
+                        upperValues[0] = 2147483647;
+                    }
+                    if (upperValues[1] < 0) {
+                        upperValues[1] = 2147483647;
+                    }
+                    if (BroadPhase.debugPrint) {
+                        console.info("ComputeBounds() vals: lowerValues[0]=" + lowerValues[0] + " upperValues[0]=" + upperValues[0] + " lowerValues[1]=" + lowerValues[1] + " upperValues[1]=" + upperValues[1] + " test=" + (((Math.fround(this.m_quantizationFactor.x * (Math.fround(minVertexX - this.m_worldAABB.lowerBound.x)))) | 0)));
+                    }
                 };
                 BroadPhase.prototype.query$java_lang_Integer_A$int$int$org_jbox2d_collision_Bound_A$int$int = function (indexes, lowerValue, upperValue, bounds, boundCount, axis) {
                     if (BroadPhase.debugPrint) {
@@ -20238,7 +21462,7 @@ var org;
                     var upperQuery = BroadPhase.binarySearch(bounds, boundCount, upperValue);
                     for (var i = lowerQuery; i < upperQuery; ++i) {
                         {
-                            if (bounds[i].isLower()) {
+                            if (bounds[i] != null && bounds[i].isLower()) {
                                 this.incrementOverlapCount(bounds[i].proxyId);
                             }
                         }
@@ -20246,20 +21470,28 @@ var org;
                     }
                     if (lowerQuery > 0) {
                         var i = lowerQuery - 1;
-                        var s = bounds[i].stabbingCount;
-                        while ((s !== 0)) {
-                            {
-                                if (bounds[i].isLower()) {
-                                    var proxy = this.m_proxyPool[bounds[i].proxyId];
-                                    if (lowerQuery <= proxy.upperBounds[axis]) {
-                                        this.incrementOverlapCount(bounds[i].proxyId);
-                                        --s;
+                        if (bounds[i] != null) {
+                            var s = bounds[i].stabbingCount;
+                            while ((s !== 0)) {
+                                {
+                                    if (!((i >= 0)))
+                                        throw new Error("Assertion error line 562: assert (i >= 0) : ('i = ' + i + '; s = ' + s);");
+                                    ;
+                                    if (bounds[i] != null && bounds[i].isLower()) {
+                                        var proxy = this.m_proxyPool[bounds[i].proxyId];
+                                        if (lowerQuery <= proxy.upperBounds[axis]) {
+                                            this.incrementOverlapCount(bounds[i].proxyId);
+                                            --s;
+                                        }
+                                    }
+                                    --i;
+                                    if (i < 0) {
+                                        break;
                                     }
                                 }
-                                --i;
                             }
+                            ;
                         }
-                        ;
                     }
                     indexes[0] = lowerQuery;
                     indexes[1] = upperQuery;
@@ -20295,6 +21527,9 @@ var org;
                     }
                     else {
                         proxy.overlapCount = 2;
+                        if (!(this.m_queryResultCount < org.jbox2d.common.Settings.maxProxies))
+                            throw new Error("Assertion error line 609: assert m_queryResultCount < Settings.maxProxies;");
+                        ;
                         this.m_queryResults[this.m_queryResultCount] = proxyId;
                         ++this.m_queryResultCount;
                     }
@@ -20346,7 +21581,11 @@ var org;
                     var by = Math.fround(this.m_worldAABB.lowerBound.y - aabb.upperBound.y);
                     var dx = org.jbox2d.common.MathUtils.max$float$float(ax, bx);
                     var dy = org.jbox2d.common.MathUtils.max$float$float(ay, by);
-                    return (org.jbox2d.common.MathUtils.max$float$float(dx, dy) < 0.0);
+                    var inRange = (org.jbox2d.common.MathUtils.max$float$float(dx, dy) < 0.0);
+                    if (BroadPhase.debugPrint) {
+                        console.info("inRange (" + inRange + "): aabb=" + aabb + " // world[" + this.m_worldAABB + "] => dx=" + dx + " dy=" + dy);
+                    }
+                    return inRange;
                 };
                 BroadPhase.tlResults_$LI$ = function () { if (BroadPhase.tlResults == null)
                     BroadPhase.tlResults = new org.jbox2d.pooling.arrays.IntegerArray(); return BroadPhase.tlResults; };
@@ -20357,6 +21596,9 @@ var org;
                     var dy = Math.fround((Math.fround(segment.p2.y - segment.p1.y)) * this.m_quantizationFactor.y);
                     var sx = dx < -org.jbox2d.common.Settings.EPSILON ? -1 : (dx > org.jbox2d.common.Settings.EPSILON ? 1 : 0);
                     var sy = dy < -org.jbox2d.common.Settings.EPSILON ? -1 : (dy > org.jbox2d.common.Settings.EPSILON ? 1 : 0);
+                    if (!((sx !== 0 || sy !== 0)))
+                        throw new Error("Assertion error line 670: assert (sx != 0 || sy != 0);");
+                    ;
                     var p1x = Math.fround((Math.fround(segment.p1.x - this.m_worldAABB.lowerBound.x)) * this.m_quantizationFactor.x);
                     var p1y = Math.fround((Math.fround(segment.p1.y - this.m_worldAABB.lowerBound.y)) * this.m_quantizationFactor.y);
                     var startValues = [0, 0];
@@ -20525,7 +21767,13 @@ var org;
                     var count = 0;
                     for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
                         {
+                            if (!((this.m_queryResults[i] < org.jbox2d.common.Settings.maxProxies)))
+                                throw new Error("Assertion error line 794: assert (m_queryResults[i] < Settings.maxProxies);");
+                            ;
                             var proxya = this.m_proxyPool[this.m_queryResults[i]];
+                            if (!((proxya.isValid())))
+                                throw new Error("Assertion error line 796: assert (proxya.isValid());");
+                            ;
                             userData[i] = proxya.userData;
                         }
                         ;
@@ -20853,6 +22101,9 @@ var org;
                     this.m_jointCount = 0;
                 };
                 Island.prototype.add$org_jbox2d_dynamics_Body = function (body) {
+                    if (!(this.m_bodyCount < this.m_bodyCapacity))
+                        throw new Error("Assertion error line 38: assert m_bodyCount < m_bodyCapacity;");
+                    ;
                     this.m_bodies[this.m_bodyCount++] = body;
                 };
                 Island.prototype.add = function (body) {
@@ -20869,9 +22120,15 @@ var org;
                         throw new Error('invalid overload');
                 };
                 Island.prototype.add$org_jbox2d_dynamics_contacts_Contact = function (contact) {
+                    if (!((this.m_contactCount < this.m_contactCapacity)))
+                        throw new Error("Assertion error line 53: assert (m_contactCount < m_contactCapacity);");
+                    ;
                     this.m_contacts[this.m_contactCount++] = contact;
                 };
                 Island.prototype.add$org_jbox2d_dynamics_joints_Joint = function (joint) {
+                    if (!((this.m_jointCount < this.m_jointCapacity)))
+                        throw new Error("Assertion error line 58: assert (m_jointCount < m_jointCapacity);");
+                    ;
                     this.m_joints[this.m_jointCount++] = joint;
                 };
                 Island.prototype.init = function (bodyCapacity, contactCapacity, jointCapacity, listener) {
@@ -21410,9 +22667,9 @@ var org;
                  * @return {org.jbox2d.dynamics.Body}
                  */
                 World.prototype.createBody = function (def) {
-                    if (this.m_lock === true) {
-                        return null;
-                    }
+                    if (!((this.m_lock === false)))
+                        throw new Error("Assertion error line 280: assert (m_lock == false);");
+                    ;
                     var b = new org.jbox2d.dynamics.Body(def, this);
                     b.m_prev = null;
                     b.m_next = this.m_bodyList;
@@ -21431,9 +22688,12 @@ var org;
                  * @param {org.jbox2d.dynamics.Body} b
                  */
                 World.prototype.destroyBody = function (b) {
-                    if (this.m_lock === true) {
-                        return;
-                    }
+                    if (!((this.m_bodyCount > 0)))
+                        throw new Error("Assertion error line 300: assert (m_bodyCount > 0);");
+                    ;
+                    if (!((this.m_lock === false)))
+                        throw new Error("Assertion error line 301: assert (m_lock == false);");
+                    ;
                     var jn = b.m_jointList;
                     while ((jn != null)) {
                         {
@@ -21487,6 +22747,9 @@ var org;
                  * @return {org.jbox2d.dynamics.joints.Joint}
                  */
                 World.prototype.createJoint = function (def) {
+                    if (!((this.m_lock === false)))
+                        throw new Error("Assertion error line 347: assert (m_lock == false);");
+                    ;
                     var j = org.jbox2d.dynamics.joints.Joint.create(def);
                     j.m_prev = null;
                     j.m_next = this.m_jointList;
@@ -21528,6 +22791,9 @@ var org;
                  * @param {org.jbox2d.dynamics.joints.Joint} j
                  */
                 World.prototype.destroyJoint = function (j) {
+                    if (!((this.m_lock === false)))
+                        throw new Error("Assertion error line 387: assert (m_lock == false);");
+                    ;
                     var collideConnected = j.m_collideConnected;
                     if (j.m_prev != null) {
                         j.m_prev.m_next = j.m_next;
@@ -21565,6 +22831,9 @@ var org;
                     j.m_node2.prev = null;
                     j.m_node2.next = null;
                     org.jbox2d.dynamics.joints.Joint.destroy(j);
+                    if (!(this.m_jointCount > 0))
+                        throw new Error("Assertion error line 425: assert m_jointCount > 0;");
+                    ;
                     --this.m_jointCount;
                     if (collideConnected === false) {
                         var b = body1.m_shapeCount < body2.m_shapeCount ? body1 : body2;
@@ -21589,6 +22858,9 @@ var org;
                     return controller;
                 };
                 World.prototype.destroyController = function (controller) {
+                    if (!((this.m_controllerCount > 0)))
+                        throw new Error("Assertion error line 449: assert (m_controllerCount > 0);");
+                    ;
                     if (controller.m_next != null) {
                         controller.m_next.m_prev = controller.m_prev;
                     }
@@ -21611,7 +22883,12 @@ var org;
                  */
                 World.prototype.step = function (dt, iterations) {
                     this.m_lock = true;
-                    var step = World.tlStep_$LI$().initialValue();
+                    var step = (function (tlObj) { if (tlObj.___value) {
+                        return tlObj.___value;
+                    }
+                    else {
+                        return tlObj.___value = tlObj.initialValue();
+                    } })(World.tlStep_$LI$());
                     step.dt = dt;
                     step.maxIterations = iterations;
                     if (dt > 0.0) {
@@ -21778,6 +23055,9 @@ var org;
                                             if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
                                                 continue;
                                             }
+                                            if (!(stackCount < stackSize))
+                                                throw new Error("Assertion error line 612: assert stackCount < stackSize;");
+                                            ;
                                             stack[stackCount++] = other;
                                             other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                                         }
@@ -21794,6 +23074,9 @@ var org;
                                             if ((other.m_flags & org.jbox2d.dynamics.Body.e_islandFlag) > 0) {
                                                 continue;
                                             }
+                                            if (!((stackCount < stackSize)))
+                                                throw new Error("Assertion error line 626: assert (stackCount < stackSize);");
+                                            ;
                                             stack[stackCount++] = other;
                                             other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                                         }
@@ -21896,7 +23179,13 @@ var org;
                                             t0 = b1_1.m_sweep.t0;
                                             b2_1.m_sweep.advance(t0);
                                         }
+                                        if (!((t0 < 1.0)))
+                                            throw new Error("Assertion error line 703: assert (t0 < 1.0F);");
+                                        ;
                                         toi = org.jbox2d.collision.TOI.timeOfImpact(c.m_shape1, b1_1.m_sweep, c.m_shape2, b2_1.m_sweep);
+                                        if (!((0.0 <= toi && toi <= 1.0)))
+                                            throw new Error("Assertion error line 705: assert (0.0F <= toi && toi <= 1.0F);");
+                                        ;
                                         if (toi > 0.0 && toi < 1.0) {
                                             toi = org.jbox2d.common.MathUtils.min(Math.fround(Math.fround((Math.fround(1.0 - toi)) * t0) + toi), 1.0);
                                         }
@@ -21963,6 +23252,9 @@ var org;
                                                 other.advance(minTOI);
                                                 other.wakeUp();
                                             }
+                                            if (!((queueSize < queueCapacity)))
+                                                throw new Error("Assertion error line 768: assert (queueSize < queueCapacity);");
+                                            ;
                                             queue[queueStart + queueSize++] = other;
                                             other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                                         }
@@ -21986,6 +23278,9 @@ var org;
                                                 other.advance(minTOI);
                                                 other.wakeUp();
                                             }
+                                            if (!((queueSize < queueCapacity)))
+                                                throw new Error("Assertion error line 789: assert (queueSize < queueCapacity);");
+                                            ;
                                             queue[queueStart + queueSize++] = other;
                                             other.m_flags |= org.jbox2d.dynamics.Body.e_islandFlag;
                                         }
@@ -21997,6 +23292,9 @@ var org;
                             var subStep = World.steps_$LI$().get();
                             subStep.warmStarting = false;
                             subStep.dt = Math.fround((Math.fround(1.0 - minTOI)) * step.dt);
+                            if (!((subStep.dt > org.jbox2d.common.Settings.EPSILON)))
+                                throw new Error("Assertion error line 797: assert (subStep.dt > Settings.EPSILON);");
+                            ;
                             subStep.inv_dt = Math.fround(1.0 / subStep.dt);
                             subStep.maxIterations = step.maxIterations;
                             island.solveTOI(subStep);
@@ -22095,6 +23393,9 @@ var org;
                         var poly = shape;
                         var vertexCount = poly.getVertexCount();
                         var localVertices = poly.getVertices();
+                        if (!((vertexCount <= org.jbox2d.common.Settings.maxPolygonVertices)))
+                            throw new Error("Assertion error line 892: assert (vertexCount <= Settings.maxPolygonVertices);");
+                        ;
                         var vertices = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(vertexCount);
                         for (var i = 0; i < vertexCount; ++i) {
@@ -22432,6 +23733,9 @@ var org;
                     var count = this.raycast(segment, shapes, maxCount, solidShapes, userData);
                     if (count === 0)
                         return null;
+                    if (!((count === 1)))
+                        throw new Error("Assertion error line 1222: assert (count == 1);");
+                    ;
                     shapes[0].testSegment(shapes[0].getBody().getMemberXForm(), result, segment, 1.0);
                     return shapes[0];
                 };
@@ -22498,6 +23802,9 @@ var org;
                             _this.m_radius = 0;
                         if (_this.m_localPosition === undefined)
                             _this.m_localPosition = null;
+                        if (!((def.type === org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE)))
+                            throw new Error("Assertion error line 21: assert (def.type == ShapeType.CIRCLE_SHAPE);");
+                        ;
                         var circleDef = def;
                         _this.m_type = org.jbox2d.collision.shapes.ShapeType.CIRCLE_SHAPE;
                         _this.m_localPosition = (function (o) { if (o.clone != undefined) {
@@ -22535,7 +23842,12 @@ var org;
                      * @return {boolean}
                      */
                     CircleShape.prototype.testPoint = function (transform, p) {
-                        var center = CircleShape.tlCenter_$LI$().initialValue();
+                        var center = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleShape.tlCenter_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform.R, this.m_localPosition, center);
                         center.addLocal$org_jbox2d_common_Vec2(transform.position);
                         var d = center.subLocal(p).negateLocal();
@@ -22560,8 +23872,18 @@ var org;
                      * @return {org.jbox2d.collision.SegmentCollide}
                      */
                     CircleShape.prototype.testSegment = function (xf, out, segment, maxLambda) {
-                        var position = CircleShape.tlPosition_$LI$().initialValue();
-                        var s = CircleShape.tlS_$LI$().initialValue();
+                        var position = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleShape.tlPosition_$LI$());
+                        var s = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleShape.tlS_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_localPosition, position);
                         position.addLocal$org_jbox2d_common_Vec2(xf.position);
                         s.set$org_jbox2d_common_Vec2(segment.p1);
@@ -22570,7 +23892,12 @@ var org;
                         if (b < 0.0) {
                             return org.jbox2d.collision.SegmentCollide.STARTS_INSIDE_COLLIDE;
                         }
-                        var r = CircleShape.tlR_$LI$().initialValue();
+                        var r = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleShape.tlR_$LI$());
                         r.set$org_jbox2d_common_Vec2(segment.p2).subLocal(segment.p1);
                         var c = org.jbox2d.common.Vec2.dot(s, r);
                         var rr = org.jbox2d.common.Vec2.dot(r, r);
@@ -22597,7 +23924,12 @@ var org;
                      * @param {org.jbox2d.common.XForm} transform
                      */
                     CircleShape.prototype.computeAABB = function (aabb, transform) {
-                        var p = CircleShape.tlP_$LI$().initialValue();
+                        var p = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleShape.tlP_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform.R, this.m_localPosition, p);
                         p.addLocal$org_jbox2d_common_Vec2(transform.position);
                         aabb.lowerBound.x = Math.fround(p.x - this.m_radius);
@@ -22666,7 +23998,12 @@ var org;
                         return this.m_localPosition;
                     };
                     CircleShape.prototype.computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_XForm$org_jbox2d_common_Vec2 = function (normal, offset, xf, c) {
-                        var p = CircleShape.tlP_$LI$().initialValue();
+                        var p = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(CircleShape.tlP_$LI$());
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_localPosition, p);
                         var l = -(Math.fround(org.jbox2d.common.Vec2.dot(normal, p) - offset));
                         if (l < Math.fround(-this.m_radius + org.jbox2d.common.Settings.EPSILON)) {
@@ -22759,6 +24096,9 @@ var org;
                             _this.m_nextEdge = null;
                         if (_this.m_prevEdge === undefined)
                             _this.m_prevEdge = null;
+                        if (!((def.type === org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE)))
+                            throw new Error("Assertion error line 56: assert (def.type == ShapeType.EDGE_SHAPE);");
+                        ;
                         _this.m_type = org.jbox2d.collision.shapes.ShapeType.EDGE_SHAPE;
                         _this.m_prevEdge = null;
                         _this.m_nextEdge = null;
@@ -22829,11 +24169,36 @@ var org;
                      * @return {org.jbox2d.collision.SegmentCollide}
                      */
                     EdgeShape.prototype.testSegment = function (xf, out, segment, maxLambda) {
-                        var r = EdgeShape.tlR_$LI$().initialValue();
-                        var v1 = EdgeShape.tlV1_$LI$().initialValue();
-                        var d = EdgeShape.tlD_$LI$().initialValue();
-                        var n = EdgeShape.tlN_$LI$().initialValue();
-                        var b = EdgeShape.tlB_$LI$().initialValue();
+                        var r = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlR_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlV1_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlD_$LI$());
+                        var n = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlN_$LI$());
+                        var b = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlB_$LI$());
                         r.set$org_jbox2d_common_Vec2(segment.p2).subLocal(segment.p1);
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_v1, v1);
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_v2, d);
@@ -22867,7 +24232,12 @@ var org;
                      */
                     EdgeShape.prototype.computeAABB = function (aabb, transform) {
                         org.jbox2d.common.XForm.mulToOut(transform, this.m_v1, aabb.lowerBound);
-                        var v2 = EdgeShape.tlV2_$LI$().initialValue();
+                        var v2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlV2_$LI$());
                         org.jbox2d.common.XForm.mulToOut(transform, this.m_v2, v2);
                         org.jbox2d.common.Vec2.maxToOut(aabb.lowerBound, v2, aabb.upperBound);
                         org.jbox2d.common.Vec2.minToOut(aabb.lowerBound, v2, aabb.lowerBound);
@@ -22891,10 +24261,30 @@ var org;
                      * @param {org.jbox2d.common.XForm} transform2
                      */
                     EdgeShape.prototype.computeSweptAABB = function (aabb, transform1, transform2) {
-                        var sweptV1 = EdgeShape.tlSwept1_$LI$().initialValue();
-                        var sweptV2 = EdgeShape.tlSwept2_$LI$().initialValue();
-                        var sweptV3 = EdgeShape.tlSwept3_$LI$().initialValue();
-                        var sweptV4 = EdgeShape.tlSwept4_$LI$().initialValue();
+                        var sweptV1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlSwept1_$LI$());
+                        var sweptV2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlSwept2_$LI$());
+                        var sweptV3 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlSwept3_$LI$());
+                        var sweptV4 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlSwept4_$LI$());
                         org.jbox2d.common.XForm.mulToOut(transform1, this.m_v1, sweptV1);
                         org.jbox2d.common.XForm.mulToOut(transform1, this.m_v2, sweptV2);
                         org.jbox2d.common.XForm.mulToOut(transform2, this.m_v1, sweptV3);
@@ -22928,8 +24318,18 @@ var org;
                      * @param {org.jbox2d.common.Vec2} d
                      */
                     EdgeShape.prototype.support = function (dest, xf, d) {
-                        var supportV1 = EdgeShape.tlSupportV1_$LI$().initialValue();
-                        var supportV2 = EdgeShape.tlSupportV2_$LI$().initialValue();
+                        var supportV1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlSupportV1_$LI$());
+                        var supportV2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlSupportV2_$LI$());
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_coreV1, supportV1);
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_coreV2, supportV2);
                         dest.set$org_jbox2d_common_Vec2(org.jbox2d.common.Vec2.dot(supportV1, d) > org.jbox2d.common.Vec2.dot(supportV2, d) ? supportV1 : supportV2);
@@ -23042,10 +24442,30 @@ var org;
                         EdgeShape.tlE2 = (function () { var __o = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return EdgeShape.tlE2; };
                     ;
                     EdgeShape.prototype.computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_XForm$org_jbox2d_common_Vec2 = function (normal, offset, xf, c) {
-                        var v0 = EdgeShape.tlV0_$LI$().initialValue();
-                        var v1 = EdgeShape.tlV1_$LI$().initialValue();
-                        var v2 = EdgeShape.tlV2_$LI$().initialValue();
-                        var temp = EdgeShape.tlTemp_$LI$().initialValue();
+                        var v0 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlV0_$LI$());
+                        var v1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlV1_$LI$());
+                        var v2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlV2_$LI$());
+                        var temp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlTemp_$LI$());
                         v0.set$org_jbox2d_common_Vec2(normal).mul(offset);
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_v1, v1);
                         org.jbox2d.common.XForm.mulToOut(xf, this.m_v2, v2);
@@ -23068,8 +24488,18 @@ var org;
                             else {
                             }
                         }
-                        var e1 = EdgeShape.tlE1_$LI$().initialValue();
-                        var e2 = EdgeShape.tlE2_$LI$().initialValue();
+                        var e1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlE1_$LI$());
+                        var e2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(EdgeShape.tlE2_$LI$());
                         var k_inv3 = Math.fround(1.0 / 3.0);
                         c.x = Math.fround(k_inv3 * (Math.fround(Math.fround(v0.x + v1.x) + v2.x)));
                         c.y = Math.fround(k_inv3 * (Math.fround(Math.fround(v0.y + v1.y) + v2.y)));
@@ -23118,6 +24548,9 @@ var org;
                             _this.m_localPosition = null;
                         if (_this.m_mass === undefined)
                             _this.m_mass = 0;
+                        if (!((def.type === org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE)))
+                            throw new Error("Assertion error line 18: assert (def.type == ShapeType.POINT_SHAPE);");
+                        ;
                         var pointDef = def;
                         _this.m_type = org.jbox2d.collision.shapes.ShapeType.POINT_SHAPE;
                         _this.m_localPosition = (function (o) { if (o.clone != undefined) {
@@ -23143,7 +24576,12 @@ var org;
                      * @param {org.jbox2d.common.XForm} transform
                      */
                     PointShape.prototype.computeAABB = function (aabb, transform) {
-                        var p = PointShape.tlP_$LI$().initialValue();
+                        var p = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointShape.tlP_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform.R, this.m_localPosition, p);
                         p.add(transform.position);
                         aabb.lowerBound.set$float$float(Math.fround(p.x - org.jbox2d.common.Settings.EPSILON), Math.fround(p.y - org.jbox2d.common.Settings.EPSILON));
@@ -23171,8 +24609,18 @@ var org;
                      * @param {org.jbox2d.common.XForm} transform2
                      */
                     PointShape.prototype.computeSweptAABB = function (aabb, transform1, transform2) {
-                        var sweptP1 = PointShape.tlSwept1_$LI$().initialValue();
-                        var sweptP2 = PointShape.tlSwept2_$LI$().initialValue();
+                        var sweptP1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointShape.tlSwept1_$LI$());
+                        var sweptP2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointShape.tlSwept2_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform2.R, this.m_localPosition, sweptP1);
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(transform2.R, this.m_localPosition, sweptP2);
                         org.jbox2d.common.Vec2.minToOut(sweptP1, sweptP2, aabb.lowerBound);
@@ -23209,8 +24657,18 @@ var org;
                      * @return {org.jbox2d.collision.SegmentCollide}
                      */
                     PointShape.prototype.testSegment = function (xf, out, segment, maxLambda) {
-                        var position = PointShape.tlPosition_$LI$().initialValue();
-                        var s = PointShape.tlS_$LI$().initialValue();
+                        var position = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointShape.tlPosition_$LI$());
+                        var s = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointShape.tlS_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_localPosition, position);
                         position.addLocal$org_jbox2d_common_Vec2(xf.position);
                         s.set$org_jbox2d_common_Vec2(segment.p1);
@@ -23219,7 +24677,12 @@ var org;
                         if (b < 0.0) {
                             return org.jbox2d.collision.SegmentCollide.STARTS_INSIDE_COLLIDE;
                         }
-                        var r = PointShape.tlR_$LI$().initialValue();
+                        var r = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PointShape.tlR_$LI$());
                         r.set$org_jbox2d_common_Vec2(segment.p2).subLocal(segment.p1);
                         var c = org.jbox2d.common.Vec2.dot(s, r);
                         var rr = org.jbox2d.common.Vec2.dot(r, r);
@@ -23311,6 +24774,9 @@ var org;
                             _this.m_coreVertices = null;
                         if (_this.m_vertexCount === undefined)
                             _this.m_vertexCount = 0;
+                        if (!((def.type === org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE)))
+                            throw new Error("Assertion error line 60: assert (def.type == ShapeType.POLYGON_SHAPE);");
+                        ;
                         _this.m_type = org.jbox2d.collision.shapes.ShapeType.POLYGON_SHAPE;
                         var poly = def;
                         _this.m_vertexCount = poly.getVertexCount();
@@ -23321,6 +24787,9 @@ var org;
                         _this.m_coreVertices = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(_this.m_vertexCount);
                         _this.m_obb = new org.jbox2d.collision.OBB();
+                        if (!((3 <= _this.m_vertexCount && _this.m_vertexCount <= org.jbox2d.common.Settings.maxPolygonVertices)))
+                            throw new Error("Assertion error line 68: assert (3 <= m_vertexCount && m_vertexCount <= Settings.maxPolygonVertices);");
+                        ;
                         for (var i = 0; i < _this.m_vertexCount; ++i) {
                             {
                                 _this.m_vertices[i] = (function (o) { if (o.clone != undefined) {
@@ -23337,12 +24806,20 @@ var org;
                             }
                             ;
                         }
-                        var edge = PolygonShape.tlEdge_$LI$().initialValue();
+                        var edge = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlEdge_$LI$());
                         for (var i = 0; i < _this.m_vertexCount; ++i) {
                             {
                                 var i1 = i;
                                 var i2 = i + 1 < _this.m_vertexCount ? i + 1 : 0;
                                 edge.set$org_jbox2d_common_Vec2(_this.m_vertices[i2]).subLocal(_this.m_vertices[i1]);
+                                if (!((edge.lengthSquared() > Math.fround(org.jbox2d.common.Settings.EPSILON * org.jbox2d.common.Settings.EPSILON))))
+                                    throw new Error("Assertion error line 77: assert (edge.lengthSquared() > Settings.EPSILON * Settings.EPSILON);");
+                                ;
                                 _this.m_normals[i] = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$float(edge, 1.0);
                                 _this.m_normals[i].normalize();
                             }
@@ -23356,6 +24833,9 @@ var org;
                                             if (j === i || j === (i + 1) % _this.m_vertexCount) {
                                                 continue;
                                             }
+                                            if (!((org.jbox2d.common.Vec2.dot(_this.m_normals[i], _this.m_vertices[j].sub(_this.m_vertices[i])) < -org.jbox2d.common.Settings.linearSlop_$LI$())))
+                                                throw new Error("Assertion error line 87: assert (Vec2.dot(m_normals[i], m_vertices[j].sub(m_vertices[i])) < -Settings.linearSlop);");
+                                            ;
                                         }
                                         ;
                                     }
@@ -23367,15 +24847,33 @@ var org;
                                     var cross = org.jbox2d.common.Vec2.cross$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(_this.m_normals[i - 1], _this.m_normals[i]);
                                     cross = org.jbox2d.common.MathUtils.clamp$float$float$float(cross, -1.0, 1.0);
                                     var angle = Math.fround(Math.asin(cross));
+                                    if (!((angle > org.jbox2d.common.Settings.angularSlop_$LI$())))
+                                        throw new Error("Assertion error line 94: assert (angle > Settings.angularSlop);");
+                                    ;
                                 }
                                 ;
                             }
                         }
                         _this.m_centroid = PolygonShape.computeCentroid(poly.vertices);
                         PolygonShape.computeOBB(_this.m_obb, _this.m_vertices);
-                        var v = PolygonShape.tlV_$LI$().initialValue();
-                        var d = PolygonShape.tlD_$LI$().initialValue();
-                        var A = PolygonShape.tlA_$LI$().initialValue();
+                        var v = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlV_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlD_$LI$());
+                        var A = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlA_$LI$());
                         for (var i = 0; i < _this.m_vertexCount; ++i) {
                             {
                                 var i1 = i - 1 >= 0 ? i - 1 : _this.m_vertexCount - 1;
@@ -23391,6 +24889,12 @@ var org;
                                     console.info("n1: " + n1 + "; n2: " + n2);
                                     console.info("v: " + v);
                                 }
+                                if (!((d.x >= 0.0)))
+                                    throw new Error("Assertion error line 116: assert (d.x >= 0.0F);");
+                                ;
+                                if (!((d.y >= 0.0)))
+                                    throw new Error("Assertion error line 117: assert (d.y >= 0.0F);");
+                                ;
                                 A.col1.x = n1.x;
                                 A.col2.x = n1.y;
                                 A.col1.y = n2.x;
@@ -23443,7 +24947,12 @@ var org;
                      * @param {org.jbox2d.common.Vec2} center
                      */
                     PolygonShape.prototype.updateSweepRadius = function (center) {
-                        var d = PolygonShape.tlD_$LI$().initialValue();
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlD_$LI$());
                         this.m_sweepRadius = 0.0;
                         for (var i = 0; i < this.m_vertexCount; ++i) {
                             {
@@ -23467,8 +24976,18 @@ var org;
                      * @return {boolean}
                      */
                     PolygonShape.prototype.testPoint = function (xf, p) {
-                        var temp = PolygonShape.tlTemp_$LI$().initialValue();
-                        var pLocal = PolygonShape.tlPLocal_$LI$().initialValue();
+                        var temp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlTemp_$LI$());
+                        var pLocal = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlPLocal_$LI$());
                         temp.set$org_jbox2d_common_Vec2(p);
                         temp.subLocal(xf.position);
                         org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, temp, pLocal);
@@ -23513,10 +25032,30 @@ var org;
                     PolygonShape.prototype.testSegment = function (xf, out, segment, maxLambda) {
                         var lower = 0.0;
                         var upper = maxLambda;
-                        var p1 = PolygonShape.tlP1_$LI$().initialValue();
-                        var p2 = PolygonShape.tlP2_$LI$().initialValue();
-                        var d = PolygonShape.tlD_$LI$().initialValue();
-                        var temp = PolygonShape.tlTemp_$LI$().initialValue();
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlP1_$LI$());
+                        var p2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlP2_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlD_$LI$());
+                        var temp = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlTemp_$LI$());
                         p1.set$org_jbox2d_common_Vec2(segment.p1).subLocal(xf.position);
                         org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, p1, p1);
                         p2.set$org_jbox2d_common_Vec2(segment.p2).subLocal(xf.position);
@@ -23546,6 +25085,9 @@ var org;
                             }
                             ;
                         }
+                        if (!((0.0 <= lower && lower <= maxLambda)))
+                            throw new Error("Assertion error line 235: assert (0.0F <= lower && lower <= maxLambda);");
+                        ;
                         if (index >= 0) {
                             out.lambda = lower;
                             org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, this.m_normals[index], out.normal);
@@ -23566,7 +25108,12 @@ var org;
                      * @param {org.jbox2d.common.Vec2} d
                      */
                     PolygonShape.prototype.support = function (dest, xf, d) {
-                        var supportDLocal = PolygonShape.tlSupDLocal_$LI$().initialValue();
+                        var supportDLocal = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlSupDLocal_$LI$());
                         org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, d, supportDLocal);
                         var bestIndex = 0;
                         var bestValue = org.jbox2d.common.Vec2.dot(this.m_coreVertices[0], supportDLocal);
@@ -23593,14 +25140,37 @@ var org;
                     ;
                     PolygonShape.computeCentroid = function (vs) {
                         var count = vs.length;
+                        if (!((count >= 3)))
+                            throw new Error("Assertion error line 278: assert (count >= 3);");
+                        ;
                         var c = new org.jbox2d.common.Vec2();
                         var area = 0.0;
-                        var pRef = PolygonShape.tlPRef_$LI$().initialValue();
+                        var pRef = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlPRef_$LI$());
                         pRef.setZero();
                         var inv3 = Math.fround(1.0 / 3.0);
-                        var e1 = PolygonShape.tlE1_$LI$().initialValue();
-                        var e2 = PolygonShape.tlE2_$LI$().initialValue();
-                        var p1 = PolygonShape.tlP1_$LI$().initialValue();
+                        var e1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlE1_$LI$());
+                        var e2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlE2_$LI$());
+                        var p1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlP1_$LI$());
                         for (var i = 0; i < count; ++i) {
                             {
                                 p1.set$org_jbox2d_common_Vec2(pRef);
@@ -23616,6 +25186,9 @@ var org;
                             }
                             ;
                         }
+                        if (!((area > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 299: assert (area > Settings.EPSILON);");
+                        ;
                         c.mulLocal(Math.fround(1.0 / area));
                         return c;
                     };
@@ -23639,13 +25212,51 @@ var org;
                     ;
                     PolygonShape.computeOBB = function (obb, vs) {
                         var count = vs.length;
-                        var ux = PolygonShape.tlUX_$LI$().initialValue();
-                        var uy = PolygonShape.tlUY_$LI$().initialValue();
-                        var lower = PolygonShape.tlLower_$LI$().initialValue();
-                        var upper = PolygonShape.tlUpper_$LI$().initialValue();
-                        var d = PolygonShape.tlD_$LI$().initialValue();
-                        var r = PolygonShape.tlR_$LI$().initialValue();
-                        var center = PolygonShape.tlCenter_$LI$().initialValue();
+                        if (!((count <= org.jbox2d.common.Settings.maxPolygonVertices)))
+                            throw new Error("Assertion error line 318: assert (count <= Settings.maxPolygonVertices);");
+                        ;
+                        var ux = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlUX_$LI$());
+                        var uy = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlUY_$LI$());
+                        var lower = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlLower_$LI$());
+                        var upper = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlUpper_$LI$());
+                        var d = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlD_$LI$());
+                        var r = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlR_$LI$());
+                        var center = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlCenter_$LI$());
                         var pRay = (function (s) { var a = []; while (s-- > 0)
                             a.push(null); return a; })(org.jbox2d.common.Settings.maxPolygonVertices + 1);
                         for (var i = 0; i < count; ++i) {
@@ -23662,6 +25273,9 @@ var org;
                                 ux.set$org_jbox2d_common_Vec2(pRay[i]);
                                 ux.subLocal(root);
                                 var length_4 = ux.normalize();
+                                if (!((length_4 > org.jbox2d.common.Settings.EPSILON)))
+                                    throw new Error("Assertion error line 337: assert (length > Settings.EPSILON);");
+                                ;
                                 uy.x = -ux.y;
                                 uy.y = ux.x;
                                 lower.x = 3.4028235E38;
@@ -23693,6 +25307,9 @@ var org;
                             }
                             ;
                         }
+                        if (!((minArea < 3.4028235E38)))
+                            throw new Error("Assertion error line 364: assert (minArea < Float.MAX_VALUE);");
+                        ;
                     };
                     PolygonShape.tlCaabbR_$LI$ = function () { if (PolygonShape.tlCaabbR == null)
                         PolygonShape.tlCaabbR = (function () { var __o = new org.jbox2d.pooling.TLMat22(); __o.__delegate = new org.jbox2d.pooling.TLMat22(); return __o; })(); return PolygonShape.tlCaabbR; };
@@ -23706,8 +25323,18 @@ var org;
                      * @param {org.jbox2d.common.XForm} xf
                      */
                     PolygonShape.prototype.computeAABB = function (aabb, xf) {
-                        var caabbR = PolygonShape.tlCaabbR_$LI$().initialValue();
-                        var caabbH = PolygonShape.tlCaabbH_$LI$().initialValue();
+                        var caabbR = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlCaabbR_$LI$());
+                        var caabbH = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlCaabbH_$LI$());
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Mat22$org_jbox2d_common_Mat22(xf.R, this.m_obb.R, caabbR);
                         caabbR.absLocal();
                         org.jbox2d.common.Mat22.mulToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(caabbR, this.m_obb.extents, caabbH);
@@ -23730,8 +25357,18 @@ var org;
                      * @param {org.jbox2d.common.XForm} transform2
                      */
                     PolygonShape.prototype.computeSweptAABB = function (aabb, transform1, transform2) {
-                        var sweptAABB1 = PolygonShape.tlSwept1_$LI$().initialValue();
-                        var sweptAABB2 = PolygonShape.tlSwept2_$LI$().initialValue();
+                        var sweptAABB1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlSwept1_$LI$());
+                        var sweptAABB2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlSwept2_$LI$());
                         this.computeAABB(sweptAABB1, transform1);
                         this.computeAABB(sweptAABB2, transform2);
                         org.jbox2d.common.Vec2.minToOut(sweptAABB1.lowerBound, sweptAABB2.lowerBound, aabb.lowerBound);
@@ -23741,15 +25378,38 @@ var org;
                         this.computeMass$org_jbox2d_collision_MassData$float(massData, this.m_density);
                     };
                     PolygonShape.prototype.computeMass$org_jbox2d_collision_MassData$float = function (massData, density) {
-                        var center = PolygonShape.tlCenter_$LI$().initialValue();
+                        if (!((this.m_vertexCount >= 3)))
+                            throw new Error("Assertion error line 413: assert (m_vertexCount >= 3);");
+                        ;
+                        var center = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlCenter_$LI$());
                         center.setZero();
                         var area = 0.0;
                         var I = 0.0;
-                        var pRef = PolygonShape.tlPRef_$LI$().initialValue();
+                        var pRef = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlPRef_$LI$());
                         pRef.setZero();
                         var k_inv3 = Math.fround(1.0 / 3.0);
-                        var e1 = PolygonShape.tlE1_$LI$().initialValue();
-                        var e2 = PolygonShape.tlE2_$LI$().initialValue();
+                        var e1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlE1_$LI$());
+                        var e2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlE2_$LI$());
                         for (var i = 0; i < this.m_vertexCount; ++i) {
                             {
                                 var p1 = pRef;
@@ -23777,6 +25437,9 @@ var org;
                             ;
                         }
                         massData.mass = Math.fround(density * area);
+                        if (!((area > org.jbox2d.common.Settings.EPSILON)))
+                            throw new Error("Assertion error line 447: assert (area > Settings.EPSILON);");
+                        ;
                         center.mulLocal(Math.fround(1.0 / area));
                         massData.center.set$org_jbox2d_common_Vec2(center);
                         massData.I = Math.fround(I * density);
@@ -23895,8 +25558,18 @@ var org;
                         PolygonShape.tlP3 = (function () { var __o = new org.jbox2d.pooling.TLVec2(); __o.__delegate = new org.jbox2d.pooling.TLVec2(); return __o; })(); return PolygonShape.tlP3; };
                     ;
                     PolygonShape.prototype.computeSubmergedArea$org_jbox2d_common_Vec2$float$org_jbox2d_common_XForm$org_jbox2d_common_Vec2 = function (normal, offset, xf, c) {
-                        var normalL = PolygonShape.tlNormalL_$LI$().initialValue();
-                        var md = PolygonShape.tlMd_$LI$().initialValue();
+                        var normalL = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlNormalL_$LI$());
+                        var md = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlMd_$LI$());
                         org.jbox2d.common.Mat22.mulTransToOut$org_jbox2d_common_Mat22$org_jbox2d_common_Vec2$org_jbox2d_common_Vec2(xf.R, normal, normalL);
                         var offsetL = Math.fround(offset - org.jbox2d.common.Vec2.dot(normal, xf.position));
                         var depths = (function (s) { var a = []; while (s-- > 0)
@@ -23947,10 +25620,30 @@ var org;
                                 }
                                 break;
                         }
-                        var intoVec = PolygonShape.tlIntoVec_$LI$().initialValue();
-                        var outoVec = PolygonShape.tlOutoVec_$LI$().initialValue();
-                        var e1 = PolygonShape.tlE1_$LI$().initialValue();
-                        var e2 = PolygonShape.tlE2_$LI$().initialValue();
+                        var intoVec = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlIntoVec_$LI$());
+                        var outoVec = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlOutoVec_$LI$());
+                        var e1 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlE1_$LI$());
+                        var e2 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlE2_$LI$());
                         var intoIndex2 = (intoIndex + 1) % this.m_vertexCount;
                         var outoIndex2 = (outoIndex + 1) % this.m_vertexCount;
                         var intoLambda = Math.fround((Math.fround(0 - depths[intoIndex])) / (Math.fround(depths[intoIndex2] - depths[intoIndex])));
@@ -23958,10 +25651,25 @@ var org;
                         intoVec.set$float$float(Math.fround(Math.fround(this.m_vertices[intoIndex].x * (Math.fround(1 - intoLambda))) + Math.fround(this.m_vertices[intoIndex2].x * intoLambda)), Math.fround(Math.fround(this.m_vertices[intoIndex].y * (Math.fround(1 - intoLambda))) + Math.fround(this.m_vertices[intoIndex2].y * intoLambda)));
                         outoVec.set$float$float(Math.fround(Math.fround(this.m_vertices[outoIndex].x * (Math.fround(1 - outoLambda))) + Math.fround(this.m_vertices[outoIndex2].x * outoLambda)), Math.fround(Math.fround(this.m_vertices[outoIndex].y * (Math.fround(1 - outoLambda))) + Math.fround(this.m_vertices[outoIndex2].y * outoLambda)));
                         var area = 0;
-                        var center = PolygonShape.tlCenter_$LI$().initialValue();
+                        var center = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlCenter_$LI$());
                         center.setZero();
-                        var p2b = PolygonShape.tlP2b_$LI$().initialValue().set$org_jbox2d_common_Vec2(this.m_vertices[intoIndex2]);
-                        var p3 = PolygonShape.tlP3_$LI$().initialValue();
+                        var p2b = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlP2b_$LI$()).set$org_jbox2d_common_Vec2(this.m_vertices[intoIndex2]);
+                        var p3 = (function (tlObj) { if (tlObj.___value) {
+                            return tlObj.___value;
+                        }
+                        else {
+                            return tlObj.___value = tlObj.initialValue();
+                        } })(PolygonShape.tlP3_$LI$());
                         p3.setZero();
                         var k_inv3 = Math.fround(1.0 / 3.0);
                         i = intoIndex2;
