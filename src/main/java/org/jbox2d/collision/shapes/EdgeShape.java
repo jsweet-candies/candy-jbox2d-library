@@ -1,254 +1,376 @@
-/*******************************************************************************
- * Copyright (c) 2013, Daniel Murphy
- * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- * 	* Redistributions of source code must retain the above copyright notice,
- * 	  this list of conditions and the following disclaimer.
- * 	* Redistributions in binary form must reproduce the above copyright notice,
- * 	  this list of conditions and the following disclaimer in the documentation
- * 	  and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
- * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
 package org.jbox2d.collision.shapes;
 
 import org.jbox2d.collision.AABB;
-import org.jbox2d.collision.RayCastInput;
-import org.jbox2d.collision.RayCastOutput;
+import org.jbox2d.collision.MassData;
+import org.jbox2d.collision.Segment;
+import org.jbox2d.collision.SegmentCollide;
+import org.jbox2d.collision.SupportsGenericDistance;
 import org.jbox2d.common.MathUtils;
-import org.jbox2d.common.Rot;
+import org.jbox2d.common.RaycastResult;
 import org.jbox2d.common.Settings;
-import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.common.XForm;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.pooling.TLVec2;
 
 /**
- * A line segment (edge) shape. These can be connected in chains or loops to other edge shapes. The
- * connectivity information is used to ensure correct contact normals.
- * 
- * @author Daniel
+ * An edge shape.  Create using {@link Body#createShape(ShapeDef)} with an {@link EdgeChainDef},
+ * not the constructor here.
+ * @see Body#createShape(ShapeDef)
+ * @see EdgeChainDef
+ * @author daniel
  */
-public class EdgeShape extends Shape {
+public class EdgeShape extends Shape implements SupportsGenericDistance {
+	//private updatesweepradius
+	private final Vec2 m_v1;
+	private final Vec2 m_v2;
+	private final Vec2 m_coreV1;
+	private final Vec2 m_coreV2;
+	private final float m_length;
+	private final Vec2 m_normal;
+	private final Vec2 m_direction;
+	// Unit vector halfway between m_direction and m_prevEdge.m_direction:
+	private final Vec2 m_cornerDir1;
+	// Unit vector halfway between m_direction and m_nextEdge.m_direction:
+	private final Vec2 m_cornerDir2;
+	private boolean m_cornerConvex1;
+	private boolean m_cornerConvex2;
+	EdgeShape m_nextEdge;
+	EdgeShape m_prevEdge;
 
-  /**
-   * edge vertex 1
-   */
-  public final Vec2 m_vertex1 = new Vec2();
-  /**
-   * edge vertex 2
-   */
-  public final Vec2 m_vertex2 = new Vec2();
+	/**
+	 * Don't use this.  Instead create using {@link Body#createShape(ShapeDef)} with an
+	 * {@link EdgeChainDef}, not the constructor here.
+	 * @see Body#createShape(ShapeDef)
+	 * @see EdgeChainDef
+	 * @param v1
+	 * @param v2
+	 * @param def
+	 */
+	public EdgeShape(final Vec2 v1, final Vec2 v2, final ShapeDef def) {
+		super(def);
+		assert(def.type == ShapeType.EDGE_SHAPE);
 
-  /**
-   * optional adjacent vertex 1. Used for smooth collision
-   */
-  public final Vec2 m_vertex0 = new Vec2();
-  /**
-   * optional adjacent vertex 2. Used for smooth collision
-   */
-  public final Vec2 m_vertex3 = new Vec2();
-  public boolean m_hasVertex0 = false, m_hasVertex3 = false;
+		m_type = ShapeType.EDGE_SHAPE;
 
+		m_prevEdge = null;
+		m_nextEdge = null;
 
-  public EdgeShape() {
-    super(ShapeType.EDGE);
-    m_radius = Settings.polygonRadius;
-  }
+		m_v1 = v1;
+		m_v2 = v2;
 
-  @Override
-  public int getChildCount() {
-    return 1;
-  }
+		m_direction = m_v2.sub(m_v1);
+		m_length = m_direction.normalize();
+		m_normal = new Vec2(m_direction.y, -m_direction.x);
 
-  public void set(Vec2 v1, Vec2 v2) {
-    m_vertex1.set(v1);
-    m_vertex2.set(v2);
-    m_hasVertex0 = m_hasVertex3 = false;
-  }
+		// djm they are new objects after that first math call
+		m_coreV1 = (m_normal.sub(m_direction)).mulLocal(-Settings.toiSlop).addLocal(m_v1);
+		m_coreV2 = (m_normal.add(m_direction)).mulLocal(-Settings.toiSlop).addLocal(m_v2);
 
-  @Override
-  public boolean testPoint(Transform xf, Vec2 p) {
-    return false;
-  }
+		m_cornerDir1 = m_normal.clone();
+		m_cornerDir2 = m_normal.mul(-1.0f);
+	}
 
-  // for pooling
-  private final Vec2 normal = new Vec2();
+	/**
+	 * @see Shape#updateSweepRadius(Vec2)
+	 */
+	@Override
+	public void updateSweepRadius(final Vec2 center) {
+		// Update the sweep radius (maximum radius) as measured from
+		// a local center point.
+		final float dx = m_coreV1.x - center.x;
+		final float dy = m_coreV1.y - center.y;
+		final float d1 = dx*dx+dy*dy;
+		final float dx2 = m_coreV2.x - center.x;
+		final float dy2 = m_coreV2.y - center.y;
+		final float d2 = dx2*dx2+dy2*dy2;
+		m_sweepRadius = MathUtils.sqrt(d1 > d2 ? d1 : d2);
+	}
 
-  @Override
-  public float computeDistanceToOut(Transform xf, Vec2 p, int childIndex, Vec2 normalOut) {
-    float xfqc = xf.q.c;
-    float xfqs = xf.q.s;
-    float xfpx = xf.p.x;
-    float xfpy = xf.p.y;
-    float v1x = (xfqc * m_vertex1.x - xfqs * m_vertex1.y) + xfpx;
-    float v1y = (xfqs * m_vertex1.x + xfqc * m_vertex1.y) + xfpy;
-    float v2x = (xfqc * m_vertex2.x - xfqs * m_vertex2.y) + xfpx;
-    float v2y = (xfqs * m_vertex2.x + xfqc * m_vertex2.y) + xfpy;
+	/**
+	 * @see Shape#testPoint(XForm, Vec2)
+	 */
+	@Override
+	public boolean testPoint(final XForm transform, final Vec2 p) {
+		// djm this could use some optimization.
+		return false;
+	}
 
-    float dx = p.x - v1x;
-    float dy = p.y - v1y;
-    float sx = v2x - v1x;
-    float sy = v2y - v1y;
-    float ds = dx * sx + dy * sy;
-    if (ds > 0) {
-      float s2 = sx * sx + sy * sy;
-      if (ds > s2) {
-        dx = p.x - v2x;
-        dy = p.y - v2y;
-      } else {
-        dx -= ds / s2 * sx;
-        dy -= ds / s2 * sy;
-      }
-    }
+	private static final TLVec2 tlR = new TLVec2();
+	private static final TLVec2 tlV1 = new TLVec2();
+	private static final TLVec2 tlD= new TLVec2();
+	private static final TLVec2 tlN = new TLVec2();
+	private static final TLVec2 tlB = new TLVec2();
 
-    float d1 = MathUtils.sqrt(dx * dx + dy * dy);
-    if (d1 > 0) {
-      normalOut.x = 1 / d1 * dx;
-      normalOut.y = 1 / d1 * dy;
-    } else {
-      normalOut.x = 0;
-      normalOut.y = 0;
-    }
-    return d1;
-  }
+	/**
+	 * @see Shape#testSegment(XForm, RaycastResult, Segment, float)
+	 */
+	@Override
+	public SegmentCollide testSegment(final XForm xf, final RaycastResult out, final Segment segment, final float maxLambda){
+		final Vec2 r = tlR.get();
+		final Vec2 v1 = tlV1.get();
+		final Vec2 d = tlD.get();
+		final Vec2 n = tlN.get();
+		final Vec2 b = tlB.get();
+		
+		
+		r.set(segment.p2).subLocal(segment.p1);
+		XForm.mulToOut( xf, m_v1, v1);
+		XForm.mulToOut( xf, m_v2, d);
+		d.subLocal(v1);
+		Vec2.crossToOut(d, 1.0f, n);
 
-  // p = p1 + t * d
-  // v = v1 + s * e
-  // p1 + t * d = v1 + s * e
-  // s * e - t * d = p1 - v1
-  @Override
-  public boolean raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex) {
+		final float k_slop = 100.0f * Settings.EPSILON;
+		final float denom = -Vec2.dot(r, n);
 
-    float tempx, tempy;
-    final Vec2 v1 = m_vertex1;
-    final Vec2 v2 = m_vertex2;
-    final Rot xfq = xf.q;
-    final Vec2 xfp = xf.p;
+		// Cull back facing collision and ignore parallel segments.
+		if (denom > k_slop)
+		{
+			// Does the segment intersect the infinite line associated with this segment?
+			b.set(segment.p1).subLocal(v1);
+			float a = Vec2.dot(b, n);
 
-    // Put the ray into the edge's frame of reference.
-    // b2Vec2 p1 = b2MulT(xf.q, input.p1 - xf.p);
-    // b2Vec2 p2 = b2MulT(xf.q, input.p2 - xf.p);
-    tempx = input.p1.x - xfp.x;
-    tempy = input.p1.y - xfp.y;
-    final float p1x = xfq.c * tempx + xfq.s * tempy;
-    final float p1y = -xfq.s * tempx + xfq.c * tempy;
+			if (0.0f <= a && a <= maxLambda * denom)
+			{
+				final float mu2 = -r.x * b.y + r.y * b.x;
 
-    tempx = input.p2.x - xfp.x;
-    tempy = input.p2.y - xfp.y;
-    final float p2x = xfq.c * tempx + xfq.s * tempy;
-    final float p2y = -xfq.s * tempx + xfq.c * tempy;
+				// Does the segment intersect this segment?
+				if (-k_slop * denom <= mu2 && mu2 <= denom * (1.0f + k_slop))
+				{
+					a /= denom;
+					n.normalize();
+					out.lambda = a;
+					out.normal.set(n);
+					return SegmentCollide.HIT_COLLIDE;
+				}
+			}
+		}
+		
+		return SegmentCollide.MISS_COLLIDE;
+	}
 
-    final float dx = p2x - p1x;
-    final float dy = p2y - p1y;
+	// djm pooling
+	private static final TLVec2 tlV2 = new TLVec2();
+	/**
+	 * @see Shape#computeAABB(AABB, XForm)
+	 */
+	@Override
+	public void computeAABB(final AABB aabb, final XForm transform) {
+		/*Vec2 v1 = XForm.mul(transform, m_v1);
+		Vec2 v2 = XForm.mul(transform, m_v2);
+		aabb.lowerBound = Vec2.min(v1, v2);
+		aabb.upperBound = Vec2.max(v1, v2);*/
 
-    // final Vec2 normal = pool2.set(v2).subLocal(v1);
-    // normal.set(normal.y, -normal.x);
-    normal.x = v2.y - v1.y;
-    normal.y = v1.x - v2.x;
-    normal.normalize();
-    final float normalx = normal.x;
-    final float normaly = normal.y;
+		// djm we avoid one creation. crafty huh?
+		XForm.mulToOut(transform, m_v1, aabb.lowerBound);
+		final Vec2 v2 = tlV2.get();
+		XForm.mulToOut(transform, m_v2, v2);
 
-    // q = p1 + t * d
-    // dot(normal, q - v1) = 0
-    // dot(normal, p1 - v1) + t * dot(normal, d) = 0
-    tempx = v1.x - p1x;
-    tempy = v1.y - p1y;
-    float numerator = normalx * tempx + normaly * tempy;
-    float denominator = normalx * dx + normaly * dy;
+		Vec2.maxToOut(aabb.lowerBound, v2, aabb.upperBound);
+		Vec2.minToOut(aabb.lowerBound, v2, aabb.lowerBound);
+	}
 
-    if (denominator == 0.0f) {
-      return false;
-    }
+	// djm pooling
+	private static final TLVec2 tlSwept1 = new TLVec2();
+	private static final TLVec2 tlSwept2 = new TLVec2();
+	private static final TLVec2 tlSwept3 = new TLVec2();
+	private static final TLVec2 tlSwept4 = new TLVec2();
 
-    float t = numerator / denominator;
-    if (t < 0.0f || 1.0f < t) {
-      return false;
-    }
+	/**
+	 * @see Shape#computeSweptAABB(AABB, XForm, XForm)
+	 */
+	@Override
+	public void computeSweptAABB(final AABB aabb, final XForm transform1, final XForm transform2) {
+		// djm this method is pretty hot (called every time step)
+		 final Vec2 sweptV1 = tlSwept1.get();
+		 final Vec2 sweptV2 = tlSwept2.get();
+		 final Vec2 sweptV3 = tlSwept3.get();
+		 final Vec2 sweptV4 = tlSwept4.get();
+		
+		XForm.mulToOut(transform1, m_v1, sweptV1);
+		XForm.mulToOut(transform1, m_v2, sweptV2);
+		XForm.mulToOut(transform2, m_v1, sweptV3);
+		XForm.mulToOut(transform2, m_v2, sweptV4);
 
-    // Vec2 q = p1 + t * d;
-    final float qx = p1x + t * dx;
-    final float qy = p1y + t * dy;
+		//aabb.lowerBound = Vec2.min(Vec2.min(Vec2.min(v1, v2), v3), v4);
+		//aabb.upperBound = Vec2.max(Vec2.max(Vec2.max(v1, v2), v3), v4);
 
-    // q = v1 + s * r
-    // s = dot(q - v1, r) / dot(r, r)
-    // Vec2 r = v2 - v1;
-    final float rx = v2.x - v1.x;
-    final float ry = v2.y - v1.y;
-    final float rr = rx * rx + ry * ry;
-    if (rr == 0.0f) {
-      return false;
-    }
-    tempx = qx - v1.x;
-    tempy = qy - v1.y;
-    // float s = Vec2.dot(pool5, r) / rr;
-    float s = (tempx * rx + tempy * ry) / rr;
-    if (s < 0.0f || 1.0f < s) {
-      return false;
-    }
+		// djm ok here's the non object-creation-crazy way
+		Vec2.minToOut( sweptV1, sweptV2, aabb.lowerBound);
+		Vec2.minToOut( aabb.lowerBound, sweptV3, aabb.lowerBound);
+		Vec2.minToOut( aabb.lowerBound, sweptV4, aabb.lowerBound);
 
-    output.fraction = t;
-    if (numerator > 0.0f) {
-      // output.normal = -b2Mul(xf.q, normal);
-      output.normal.x = -xfq.c * normal.x + xfq.s * normal.y;
-      output.normal.y = -xfq.s * normal.x - xfq.c * normal.y;
-    } else {
-      // output->normal = b2Mul(xf.q, normal);
-      output.normal.x = xfq.c * normal.x - xfq.s * normal.y;
-      output.normal.y = xfq.s * normal.x + xfq.c * normal.y;
-    }
-    return true;
-  }
+		Vec2.maxToOut( sweptV1, sweptV2, aabb.upperBound);
+		Vec2.maxToOut( aabb.upperBound, sweptV3, aabb.upperBound);
+		Vec2.maxToOut( aabb.upperBound, sweptV4, aabb.upperBound);
+	}
 
-  @Override
-  public void computeAABB(AABB aabb, Transform xf, int childIndex) {
-    final Vec2 lowerBound = aabb.lowerBound;
-    final Vec2 upperBound = aabb.upperBound;
-    final Rot xfq = xf.q;
+	/**
+	 * @see Shape#computeMass(MassData)
+	 */
+	@Override
+	public void computeMass(final MassData massData) {
+		massData.mass = 0;
+		massData.center.set(m_v1);
 
-    final float v1x = (xfq.c * m_vertex1.x - xfq.s * m_vertex1.y) + xf.p.x;
-    final float v1y = (xfq.s * m_vertex1.x + xfq.c * m_vertex1.y) + xf.p.y;
-    final float v2x = (xfq.c * m_vertex2.x - xfq.s * m_vertex2.y) + xf.p.x;
-    final float v2y = (xfq.s * m_vertex2.x + xfq.c * m_vertex2.y) + xf.p.y;
+		// inertia about the local origin
+		massData.I = 0;
+	}
 
-    lowerBound.x = v1x < v2x ? v1x : v2x;
-    lowerBound.y = v1y < v2y ? v1y : v2y;
-    upperBound.x = v1x > v2x ? v1x : v2x;
-    upperBound.y = v1y > v2y ? v1y : v2y;
+	// djm pooling
+	private static final TLVec2 tlSupportV1 = new TLVec2();
+	private static final TLVec2 tlSupportV2 = new TLVec2();
+	/**
+	 * @see SupportsGenericDistance#support(Vec2, XForm, Vec2)
+	 */
+	public void support(final Vec2 dest, final XForm xf, final Vec2 d) {
+		 final Vec2 supportV1 = tlSupportV1.get();
+		 final Vec2 supportV2 = tlSupportV2.get();
+		
+		XForm.mulToOut(xf, m_coreV1, supportV1);
+		XForm.mulToOut(xf, m_coreV2, supportV2);
+		dest.set(Vec2.dot(supportV1, d) > Vec2.dot(supportV2, d) ? supportV1 : supportV2);
+	}
 
-    lowerBound.x -= m_radius;
-    lowerBound.y -= m_radius;
-    upperBound.x += m_radius;
-    upperBound.y += m_radius;
-  }
+	public void setPrevEdge(final EdgeShape edge, final Vec2 core, final Vec2 cornerDir, final boolean convex) {
+		m_prevEdge = edge;
+		m_coreV1.set(core);
+		m_cornerDir1.set(cornerDir);
+		m_cornerConvex1 = convex;
+	}
 
-  @Override
-  public void computeMass(MassData massData, float density) {
-    massData.mass = 0.0f;
-    massData.center.set(m_vertex1).addLocal(m_vertex2).mulLocal(0.5f);
-    massData.I = 0.0f;
-  }
+	public void setNextEdge(final EdgeShape edge, final Vec2 core, final Vec2 cornerDir, final boolean convex) {
+		// djm note: the vec2s are probably pooled, don't use them
+		m_nextEdge = edge;
+		m_coreV2.set(core);
+		m_cornerDir2.set(cornerDir);
+		m_cornerConvex2 = convex;
+	}
 
-  @Override
-  public Shape clone() {
-    EdgeShape edge = new EdgeShape();
-    edge.m_radius = this.m_radius;
-    edge.m_hasVertex0 = this.m_hasVertex0;
-    edge.m_hasVertex3 = this.m_hasVertex3;
-    edge.m_vertex0.set(this.m_vertex0);
-    edge.m_vertex1.set(this.m_vertex1);
-    edge.m_vertex2.set(this.m_vertex2);
-    edge.m_vertex3.set(this.m_vertex3);
-    return edge;
-  }
+	/** Linear distance from vertex1 to vertex2 */
+	public float getLength() {
+		return m_length;
+	}
+
+	/** Local position of vertex in parent body */
+	public Vec2 getVertex1() {
+		return m_v1;
+	}
+
+	/** Local position of vertex in parent body */
+	public Vec2 getVertex2() {
+		return m_v2;
+	}
+
+	/** "Core" vertex with TOI slop for b2Distance functions */
+	public Vec2 getCoreVertex1() {
+		return m_coreV1;
+	}
+
+	/** "Core" vertex with TOI slop for b2Distance functions */
+	public Vec2 getCoreVertex2() {
+		return m_coreV2;
+	}
+
+	/** Perpendecular unit vector point, pointing from the solid side to the empty side. */
+	public Vec2 getNormalVector() {
+		return m_normal;
+	}
+
+	/** Parallel unit vector, pointing from vertex1 to vertex2 */
+	public Vec2 getDirectionVector() {
+		return m_direction;
+	}
+
+	public Vec2 getCorner1Vector() {
+		return m_cornerDir1;
+	}
+
+	public Vec2 getCorner2Vector() {
+		return m_cornerDir2;
+	}
+
+	/** Get the next edge in the chain. */
+	public EdgeShape getNextEdge() {
+		return m_nextEdge;
+	}
+
+	/** Get the previous edge in the chain. */
+	public EdgeShape getPrevEdge() {
+		return m_prevEdge;
+	}
+
+	/**
+	 * @see SupportsGenericDistance#getFirstVertexToOut(XForm, Vec2)
+	 */
+	public void getFirstVertexToOut(final XForm xf, final Vec2 out) {
+		XForm.mulToOut(xf, m_coreV1, out);
+	}
+
+	public boolean corner1IsConvex() {
+		return m_cornerConvex1;
+	}
+
+	public boolean corner2IsConvex() {
+		return m_cornerConvex2;
+	}
+	
+	// djm pooled, and from above
+	private static final TLVec2 tlV0 = new TLVec2();
+	private static final TLVec2 tlTemp = new TLVec2();
+	private static final TLVec2 tlE1 = new TLVec2();
+	private static final TLVec2 tlE2 = new TLVec2();
+	
+	public float computeSubmergedArea(final Vec2 normal,float offset,XForm xf,Vec2 c) {
+		final Vec2 v0 = tlV0.get();
+		final Vec2 v1 = tlV1.get();
+		final Vec2 v2 = tlV2.get();
+		final Vec2 temp = tlTemp.get();
+		
+		
+		//Note that v0 is independent of any details of the specific edge
+		//We are relying on v0 being consistent between multiple edges of the same body
+		v0.set(normal).mul(offset);
+		//b2Vec2 v0 = xf.position + (offset - b2Dot(normal, xf.position)) * normal;
+
+		XForm.mulToOut(xf, m_v1, v1);
+		XForm.mulToOut(xf, m_v2, v2);
+
+		float d1 = Vec2.dot(normal, v1) - offset;
+		float d2 = Vec2.dot(normal, v2) - offset;
+
+		if (d1 > 0.0f){
+			if (d2 > 0.0f){
+				return 0.0f;
+			}
+			else{
+				temp.set(v2).mulLocal(d1 / (d1 - d2));
+				v1.mulLocal(-d2 / (d1 - d2)).addLocal(temp);
+			}
+		}
+		else{
+			if (d2 > 0.0f){
+				temp.set(v1).mulLocal( -d2 / (d1 - d2));
+				v2.mulLocal(d1 / (d1 - d2)).addLocal( temp);
+			}
+			else{
+				//Nothing
+			}
+		}
+
+		final Vec2 e1 = tlE1.get();
+		final Vec2 e2 = tlE2.get();
+		
+		// v0,v1,v2 represents a fully submerged triangle
+		float k_inv3 = 1.0f / 3.0f;
+
+		// Area weighted centroid
+		c.x = k_inv3 * (v0.x + v1.x + v2.x);
+		c.y = k_inv3 * (v0.y + v1.y + v2.y);
+
+		e1.set(v1).subLocal(v0);
+		e2.set(v2).subLocal(v0);
+		
+		return 0.5f * Vec2.cross(e1, e2);
+	}
 }

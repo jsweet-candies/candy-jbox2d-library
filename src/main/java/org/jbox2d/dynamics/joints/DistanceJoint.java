@@ -1,26 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2013, Daniel Murphy
- * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- * 	* Redistributions of source code must retain the above copyright notice,
- * 	  this list of conditions and the following disclaimer.
- * 	* Redistributions in binary form must reproduce the above copyright notice,
- * 	  this list of conditions and the following disclaimer in the documentation
- * 	  and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
- * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
 /*
  * JBox2D - A Java Port of Erin Catto's Box2D
  * 
@@ -46,12 +23,16 @@
 
 package org.jbox2d.dynamics.joints;
 
+import org.jbox2d.common.Mat22;
 import org.jbox2d.common.MathUtils;
-import org.jbox2d.common.Rot;
 import org.jbox2d.common.Settings;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.SolverData;
-import org.jbox2d.pooling.IWorldPool;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.TimeStep;
+import org.jbox2d.pooling.TLVec2;
+
+
+//Updated to rev 56->130->142 of b2DistanceJoint.cpp/.h
 
 //C = norm(p2 - p1) - L
 //u = (p2 - p1) / norm(p2 - p1)
@@ -60,297 +41,229 @@ import org.jbox2d.pooling.IWorldPool;
 //K = J * invM * JT
 //= invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
 
-/**
- * A distance joint constrains two points on two bodies to remain at a fixed distance from each
- * other. You can view this as a massless, rigid rod.
- */
+/// A distance joint constrains two points on two bodies
+/// to remain at a fixed distance from each other. You can view
+/// this as a massless, rigid rod.
+
 public class DistanceJoint extends Joint {
 
-  private float m_frequencyHz;
-  private float m_dampingRatio;
-  private float m_bias;
+	public final Vec2 m_localAnchor1;
+	public final Vec2 m_localAnchor2;
+	public final Vec2 m_u;
+	public float m_impulse;
+	public float m_mass;		// effective mass for the constraint.
+	public float m_length;
+	public float m_frequencyHz;
+	public float m_dampingRatio;
+	public float m_gamma;
+	public float m_bias;
 
-  // Solver shared
-  private final Vec2 m_localAnchorA;
-  private final Vec2 m_localAnchorB;
-  private float m_gamma;
-  private float m_impulse;
-  private float m_length;
+	public DistanceJoint(final DistanceJointDef def) {
+		super(def);
+		m_localAnchor1 = def.localAnchor1.clone();
+		m_localAnchor2 = def.localAnchor2.clone();
+		m_length = def.length;
+		m_impulse = 0.0f;
+		m_u = new Vec2();
+		m_frequencyHz = def.frequencyHz;
+		m_dampingRatio = def.dampingRatio;
+		m_gamma = 0.0f;
+		m_bias = 0.0f;
+		m_inv_dt = 0.0f;
+	}
 
-  // Solver temp
-  private int m_indexA;
-  private int m_indexB;
-  private final Vec2 m_u = new Vec2();
-  private final Vec2 m_rA = new Vec2();
-  private final Vec2 m_rB = new Vec2();
-  private final Vec2 m_localCenterA = new Vec2();
-  private final Vec2 m_localCenterB = new Vec2();
-  private float m_invMassA;
-  private float m_invMassB;
-  private float m_invIA;
-  private float m_invIB;
-  private float m_mass;
+	public void setFrequency(final float hz) {
+		m_frequencyHz = hz;
+	}
 
-  protected DistanceJoint(IWorldPool argWorld, final DistanceJointDef def) {
-    super(argWorld, def);
-    m_localAnchorA = def.localAnchorA.clone();
-    m_localAnchorB = def.localAnchorB.clone();
-    m_length = def.length;
-    m_impulse = 0.0f;
-    m_frequencyHz = def.frequencyHz;
-    m_dampingRatio = def.dampingRatio;
-    m_gamma = 0.0f;
-    m_bias = 0.0f;
-  }
+	public float getFrequency() {
+		return m_frequencyHz;
+	}
 
-  public void setFrequency(float hz) {
-    m_frequencyHz = hz;
-  }
+	public void setDampingRatio(final float damp) {
+		m_dampingRatio = damp;
+	}
 
-  public float getFrequency() {
-    return m_frequencyHz;
-  }
+	public float getDampingRatio() {
+		return m_dampingRatio;
+	}
 
-  public float getLength() {
-    return m_length;
-  }
+	@Override
+	public Vec2 getAnchor1() {
+		return m_body1.getWorldLocation(m_localAnchor1);
+	}
 
-  public void setLength(float argLength) {
-    m_length = argLength;
-  }
+	@Override
+	public Vec2 getAnchor2() {
+		return m_body2.getWorldLocation(m_localAnchor2);
+	}
 
-  public void setDampingRatio(float damp) {
-    m_dampingRatio = damp;
-  }
+	// djm pooled
+	private static final TLVec2 tlReactionForce = new TLVec2();
+	@Override
+	public Vec2 getReactionForce() {
+		final Vec2 reactionForce = tlReactionForce.get();
+		reactionForce.x = m_impulse * m_u.x;
+		reactionForce.y = m_impulse * m_u.y;
+		return reactionForce;
+	}
 
-  public float getDampingRatio() {
-    return m_dampingRatio;
-  }
+	@Override
+	public float getReactionTorque() {
+		return 0.0f;
+	}
 
-  @Override
-  public void getAnchorA(Vec2 argOut) {
-    m_bodyA.getWorldPointToOut(m_localAnchorA, argOut);
-  }
+	// djm pooled
+	private static final TLVec2 tlr1 = new TLVec2();
+	private static final TLVec2 tlr2 = new TLVec2();
+	private static final TLVec2 tlP = new TLVec2();
+	@Override
+	public void initVelocityConstraints(final TimeStep step) {
+		m_inv_dt = step.inv_dt;
+		
+		final Vec2 r1 = tlr1.get();
+		final Vec2 r2 = tlr2.get();
+		final Vec2 P = tlP.get();
 
-  @Override
-  public void getAnchorB(Vec2 argOut) {
-    m_bodyB.getWorldPointToOut(m_localAnchorB, argOut);
-  }
+		//TODO: fully inline temp Vec2 ops
+		final Body b1 = m_body1;
+		final Body b2 = m_body2;
 
-  public Vec2 getLocalAnchorA() {
-    return m_localAnchorA;
-  }
+		// Compute the effective mass matrix.
+		Mat22.mulToOut(b1.getMemberXForm().R, m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
+		Mat22.mulToOut(b2.getMemberXForm().R, m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
+		m_u.x = b2.m_sweep.c.x + r2.x - b1.m_sweep.c.x - r1.x;
+		m_u.y = b2.m_sweep.c.y + r2.y - b1.m_sweep.c.y - r1.y;
 
-  public Vec2 getLocalAnchorB() {
-    return m_localAnchorB;
-  }
+		// Handle singularity.
+		final float length = m_u.length();
+		if (length > Settings.linearSlop) {
+			m_u.x *= 1.0f / length;
+			m_u.y *= 1.0f / length;
+		} else {
+			m_u.set(0.0f, 0.0f);
+		}
 
-  /**
-   * Get the reaction force given the inverse time step. Unit is N.
-   */
-  @Override
-  public void getReactionForce(float inv_dt, Vec2 argOut) {
-    argOut.x = m_impulse * m_u.x * inv_dt;
-    argOut.y = m_impulse * m_u.y * inv_dt;
-  }
+		final float cr1u = Vec2.cross(r1, m_u);
+		final float cr2u = Vec2.cross(r2, m_u);
 
-  /**
-   * Get the reaction torque given the inverse time step. Unit is N*m. This is always zero for a
-   * distance joint.
-   */
-  @Override
-  public float getReactionTorque(float inv_dt) {
-    return 0.0f;
-  }
+		final float invMass = b1.m_invMass + b1.m_invI * cr1u * cr1u + b2.m_invMass + b2.m_invI * cr2u * cr2u;
+		assert(invMass > Settings.EPSILON);
+		m_mass = 1.0f / invMass;
 
-  @Override
-  public void initVelocityConstraints(final SolverData data) {
+		if (m_frequencyHz > 0.0f) {
+			final float C = length - m_length;
 
-    m_indexA = m_bodyA.m_islandIndex;
-    m_indexB = m_bodyB.m_islandIndex;
-    m_localCenterA.set(m_bodyA.m_sweep.localCenter);
-    m_localCenterB.set(m_bodyB.m_sweep.localCenter);
-    m_invMassA = m_bodyA.m_invMass;
-    m_invMassB = m_bodyB.m_invMass;
-    m_invIA = m_bodyA.m_invI;
-    m_invIB = m_bodyB.m_invI;
+			// Frequency
+			final float omega = 2.0f * MathUtils.PI * m_frequencyHz;
 
-    Vec2 cA = data.positions[m_indexA].c;
-    float aA = data.positions[m_indexA].a;
-    Vec2 vA = data.velocities[m_indexA].v;
-    float wA = data.velocities[m_indexA].w;
+			// Damping coefficient
+			final float d = 2.0f * m_mass * m_dampingRatio * omega;
 
-    Vec2 cB = data.positions[m_indexB].c;
-    float aB = data.positions[m_indexB].a;
-    Vec2 vB = data.velocities[m_indexB].v;
-    float wB = data.velocities[m_indexB].w;
+			// Spring stiffness
+			final float k = m_mass * omega * omega;
 
-    final Rot qA = pool.popRot();
-    final Rot qB = pool.popRot();
+			// magic formulas
+			m_gamma = 1.0f / (step.dt * (d + step.dt * k));
+			m_bias = C * step.dt * k * m_gamma;
 
-    qA.set(aA);
-    qB.set(aB);
+			m_mass = 1.0f / (invMass + m_gamma);
+		}
 
-    // use m_u as temporary variable
-    Rot.mulToOutUnsafe(qA, m_u.set(m_localAnchorA).subLocal(m_localCenterA), m_rA);
-    Rot.mulToOutUnsafe(qB, m_u.set(m_localAnchorB).subLocal(m_localCenterB), m_rB);
-    m_u.set(cB).addLocal(m_rB).subLocal(cA).subLocal(m_rA);
+		if (step.warmStarting) {
+			m_impulse *= step.dtRatio;
+			P.set(m_u);
+			P.mulLocal(m_impulse);
+			b1.m_linearVelocity.x -= b1.m_invMass * P.x;
+			b1.m_linearVelocity.y -= b1.m_invMass * P.y;
+			b1.m_angularVelocity -= b1.m_invI * Vec2.cross(r1, P);
+			b2.m_linearVelocity.x += b2.m_invMass * P.x;
+			b2.m_linearVelocity.y += b2.m_invMass * P.y;
+			b2.m_angularVelocity += b2.m_invI * Vec2.cross(r2, P);
+		} else {
+			m_impulse = 0.0f;
+		}
+	}
 
-    pool.pushRot(2);
+	// djm pooled, and use pooled objects above
+	private static final TLVec2 tld = new TLVec2();
+	
+	@Override
+	public boolean solvePositionConstraints() {
+		if (m_frequencyHz > 0.0f) {
+			return true;
+		}
+		
+		final Vec2 d = tld.get();
+		final Vec2 r2 = tlr2.get();
+		final Vec2 r1 = tlr1.get();
 
-    // Handle singularity.
-    float length = m_u.length();
-    if (length > Settings.linearSlop) {
-      m_u.x *= 1.0f / length;
-      m_u.y *= 1.0f / length;
-    } else {
-      m_u.set(0.0f, 0.0f);
-    }
+		final Body b1 = m_body1;
+		final Body b2 = m_body2;
 
+		Mat22.mulToOut(b1.getMemberXForm().R, m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
+		Mat22.mulToOut(b2.getMemberXForm().R, m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
 
-    float crAu = Vec2.cross(m_rA, m_u);
-    float crBu = Vec2.cross(m_rB, m_u);
-    float invMass = m_invMassA + m_invIA * crAu * crAu + m_invMassB + m_invIB * crBu * crBu;
+		d.x = b2.m_sweep.c.x + r2.x - b1.m_sweep.c.x - r1.x;
+		d.y = b2.m_sweep.c.y + r2.y - b1.m_sweep.c.y - r1.y;
 
-    // Compute the effective mass matrix.
-    m_mass = invMass != 0.0f ? 1.0f / invMass : 0.0f;
+		final float length = d.normalize();
+		float C = length - m_length;
+		C = MathUtils.clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
 
-    if (m_frequencyHz > 0.0f) {
-      float C = length - m_length;
+		final float impulse = -m_mass * C;
+		m_u.set(d);
+		final float Px = impulse * m_u.x;
+		final float Py = impulse * m_u.y;
 
-      // Frequency
-      float omega = 2.0f * MathUtils.PI * m_frequencyHz;
+		b1.m_sweep.c.x -= b1.m_invMass * Px;
+		b1.m_sweep.c.y -= b1.m_invMass * Py;
+		b1.m_sweep.a -= b1.m_invI * (r1.x*Py-r1.y*Px);//b2Cross(r1, P);
+		b2.m_sweep.c.x += b2.m_invMass * Px;
+		b2.m_sweep.c.y += b2.m_invMass * Py;
+		b2.m_sweep.a += b2.m_invI * (r2.x*Py-r2.y*Px);//b2Cross(r2, P);
 
-      // Damping coefficient
-      float d = 2.0f * m_mass * m_dampingRatio * omega;
+		b1.synchronizeTransform();
+		b2.synchronizeTransform();
 
-      // Spring stiffness
-      float k = m_mass * omega * omega;
+		return MathUtils.abs(C) < Settings.linearSlop;
+	}
 
-      // magic formulas
-      float h = data.step.dt;
-      m_gamma = h * (d + h * k);
-      m_gamma = m_gamma != 0.0f ? 1.0f / m_gamma : 0.0f;
-      m_bias = C * h * k * m_gamma;
+	// djm pooled, and use pool above
+	private static final TLVec2 tlv1 = new TLVec2();
+	private static final TLVec2 tlv2 = new TLVec2();
+	@Override
+	public void solveVelocityConstraints(final TimeStep step) {
+		final Body b1 = m_body1;
+		final Body b2 = m_body2;
 
-      invMass += m_gamma;
-      m_mass = invMass != 0.0f ? 1.0f / invMass : 0.0f;
-    } else {
-      m_gamma = 0.0f;
-      m_bias = 0.0f;
-    }
-    if (data.step.warmStarting) {
+		final Vec2 v1 = tlv1.get();
+		final Vec2 v2 = tlv2.get();
+		final Vec2 r1 = tlr1.get();
+		final Vec2 r2 = tlr2.get();
+		
+		Mat22.mulToOut(b1.m_xf.R, m_localAnchor1.sub(b1.getMemberLocalCenter()), r1);
+		Mat22.mulToOut(b2.m_xf.R, m_localAnchor2.sub(b2.getMemberLocalCenter()), r2);
 
-      // Scale the impulse to support a variable time step.
-      m_impulse *= data.step.dtRatio;
+		// Cdot = dot(u, v + cross(w, r))
+		Vec2.crossToOut( b1.m_angularVelocity, r1, v1);
+		Vec2.crossToOut( b2.m_angularVelocity, r2, v2);
+		v1.addLocal( b1.m_linearVelocity);
+		v2.addLocal( b2.m_linearVelocity);
+		//Vec2 v1 = b1.m_linearVelocity.add(Vec2.cross(b1.m_angularVelocity, r1));
+		//Vec2 v2 = b2.m_linearVelocity.add(Vec2.cross(b2.m_angularVelocity, r2));
+		final float Cdot = Vec2.dot(m_u, v2.subLocal(v1));
 
-      Vec2 P = pool.popVec2();
-      P.set(m_u).mulLocal(m_impulse);
+		final float impulse = -m_mass * (Cdot + m_bias + m_gamma * m_impulse);
+		m_impulse += impulse;
 
-      vA.x -= m_invMassA * P.x;
-      vA.y -= m_invMassA * P.y;
-      wA -= m_invIA * Vec2.cross(m_rA, P);
-
-      vB.x += m_invMassB * P.x;
-      vB.y += m_invMassB * P.y;
-      wB += m_invIB * Vec2.cross(m_rB, P);
-
-      pool.pushVec2(1);
-    } else {
-      m_impulse = 0.0f;
-    }
-//    data.velocities[m_indexA].v.set(vA);
-    data.velocities[m_indexA].w = wA;
-//    data.velocities[m_indexB].v.set(vB);
-    data.velocities[m_indexB].w = wB;
-  }
-
-  @Override
-  public void solveVelocityConstraints(final SolverData data) {
-    Vec2 vA = data.velocities[m_indexA].v;
-    float wA = data.velocities[m_indexA].w;
-    Vec2 vB = data.velocities[m_indexB].v;
-    float wB = data.velocities[m_indexB].w;
-
-    final Vec2 vpA = pool.popVec2();
-    final Vec2 vpB = pool.popVec2();
-
-    // Cdot = dot(u, v + cross(w, r))
-    Vec2.crossToOutUnsafe(wA, m_rA, vpA);
-    vpA.addLocal(vA);
-    Vec2.crossToOutUnsafe(wB, m_rB, vpB);
-    vpB.addLocal(vB);
-    float Cdot = Vec2.dot(m_u, vpB.subLocal(vpA));
-
-    float impulse = -m_mass * (Cdot + m_bias + m_gamma * m_impulse);
-    m_impulse += impulse;
-
-
-    float Px = impulse * m_u.x;
-    float Py = impulse * m_u.y;
-
-    vA.x -= m_invMassA * Px;
-    vA.y -= m_invMassA * Py;
-    wA -= m_invIA * (m_rA.x * Py - m_rA.y * Px);
-    vB.x += m_invMassB * Px;
-    vB.y += m_invMassB * Py;
-    wB += m_invIB * (m_rB.x * Py - m_rB.y * Px);
-
-//    data.velocities[m_indexA].v.set(vA);
-    data.velocities[m_indexA].w = wA;
-//    data.velocities[m_indexB].v.set(vB);
-    data.velocities[m_indexB].w = wB;
-
-    pool.pushVec2(2);
-  }
-
-  @Override
-  public boolean solvePositionConstraints(final SolverData data) {
-    if (m_frequencyHz > 0.0f) {
-      return true;
-    }
-    final Rot qA = pool.popRot();
-    final Rot qB = pool.popRot();
-    final Vec2 rA = pool.popVec2();
-    final Vec2 rB = pool.popVec2();
-    final Vec2 u = pool.popVec2();
-
-    Vec2 cA = data.positions[m_indexA].c;
-    float aA = data.positions[m_indexA].a;
-    Vec2 cB = data.positions[m_indexB].c;
-    float aB = data.positions[m_indexB].a;
-
-    qA.set(aA);
-    qB.set(aB);
-
-    Rot.mulToOutUnsafe(qA, u.set(m_localAnchorA).subLocal(m_localCenterA), rA);
-    Rot.mulToOutUnsafe(qB, u.set(m_localAnchorB).subLocal(m_localCenterB), rB);
-    u.set(cB).addLocal(rB).subLocal(cA).subLocal(rA);
-
-
-    float length = u.normalize();
-    float C = length - m_length;
-    C = MathUtils.clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
-
-    float impulse = -m_mass * C;
-    float Px = impulse * u.x;
-    float Py = impulse * u.y;
-
-    cA.x -= m_invMassA * Px;
-    cA.y -= m_invMassA * Py;
-    aA -= m_invIA * (rA.x * Py - rA.y * Px);
-    cB.x += m_invMassB * Px;
-    cB.y += m_invMassB * Py;
-    aB += m_invIB * (rB.x * Py - rB.y * Px);
-
-//    data.positions[m_indexA].c.set(cA);
-    data.positions[m_indexA].a = aA;
-//    data.positions[m_indexB].c.set(cB);
-    data.positions[m_indexB].a = aB;
-
-    pool.pushVec2(3);
-    pool.pushRot(2);
-
-    return MathUtils.abs(C) < Settings.linearSlop;
-  }
+		final float Px = impulse * m_u.x;
+		final float Py = impulse * m_u.y;
+		b1.m_linearVelocity.x -= b1.m_invMass * Px;
+		b1.m_linearVelocity.y -= b1.m_invMass * Py;
+		b1.m_angularVelocity -= b1.m_invI * (r1.x*Py - r1.y*Px);//b2Cross(r1, P);
+		b2.m_linearVelocity.x += b2.m_invMass * Px;
+		b2.m_linearVelocity.y += b2.m_invMass * Py;
+		b2.m_angularVelocity += b2.m_invI * (r2.x*Py - r2.y*Px);//b2Cross(r2, P);
+	}
 }

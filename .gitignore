@@ -4,5 +4,4 @@
 /.project
 /.settings/
 /.jsweet/
-src/main/resources/META-INF/resources/typings
-/jbox2d-library
+/jbox2d-library/

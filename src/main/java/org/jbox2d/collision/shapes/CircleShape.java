@@ -1,205 +1,289 @@
-/*******************************************************************************
- * Copyright (c) 2013, Daniel Murphy
- * All rights reserved.
+/*
+ * JBox2D - A Java Port of Erin Catto's Box2D
  * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- * 	* Redistributions of source code must retain the above copyright notice,
- * 	  this list of conditions and the following disclaimer.
- * 	* Redistributions in binary form must reproduce the above copyright notice,
- * 	  this list of conditions and the following disclaimer in the documentation
- * 	  and/or other materials provided with the distribution.
+ * JBox2D homepage: http://jbox2d.sourceforge.net/
+ * Box2D homepage: http://www.box2d.org
  * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
- * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
 package org.jbox2d.collision.shapes;
 
 import org.jbox2d.collision.AABB;
-import org.jbox2d.collision.RayCastInput;
-import org.jbox2d.collision.RayCastOutput;
-
+import org.jbox2d.collision.MassData;
+import org.jbox2d.collision.Segment;
+import org.jbox2d.collision.SegmentCollide;
+import org.jbox2d.common.Mat22;
 import org.jbox2d.common.MathUtils;
-import org.jbox2d.common.Rot;
+import org.jbox2d.common.RaycastResult;
 import org.jbox2d.common.Settings;
-import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.common.XForm;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.pooling.TLVec2;
+
+//Updated to rev 56->108->139 of b2Shape.cpp/.h
 
 /**
- * A circle shape.
+ * A circle shape. Create using {@link Body#createShape(ShapeDef)} with a
+ * {@link CircleDef}, not the constructor here.
+ * 
+ * @see Body#createShape(ShapeDef)
+ * @see CircleDef
  */
 public class CircleShape extends Shape {
 
-  public final Vec2 m_p;
+	public float m_radius;
+	public final Vec2 m_localPosition;
 
-  public CircleShape() {
-    super(ShapeType.CIRCLE);
-    m_p = new Vec2();
-    m_radius = 0;
-  }
+	/**
+	 * this is used internally, instead use {@link Body#createShape(ShapeDef)}
+	 * with a {@link CircleDef}
+	 * 
+	 * @see Body#createShape(ShapeDef)
+	 * @see CircleDef
+	 * @param def
+	 */
+	public CircleShape(final ShapeDef def) {
+		super(def);
+		assert (def.type == ShapeType.CIRCLE_SHAPE);
+		final CircleDef circleDef = (CircleDef) def;
+		m_type = ShapeType.CIRCLE_SHAPE;
+		m_localPosition = circleDef.localPosition.clone();
+		m_radius = circleDef.radius;
+	}
 
-  public final Shape clone() {
-    CircleShape shape = new CircleShape();
-    shape.m_p.x = m_p.x;
-    shape.m_p.y = m_p.y;
-    shape.m_radius = m_radius;
-    return shape;
-  }
+	/**
+	 * @see Shape#updateSweepRadius(Vec2)
+	 */
+	@Override
+	public void updateSweepRadius(final Vec2 center) {
+		// Update the sweep radius (maximum radius) as measured from
+		// a local center point.
+		// Vec2 d = m_localPosition.sub(center);
+		final float dx = m_localPosition.x - center.x;
+		final float dy = m_localPosition.y - center.y;
+		m_sweepRadius = MathUtils.sqrt(dx * dx + dy * dy) + m_radius
+				- Settings.toiSlop;
+	}
 
-  public final int getChildCount() {
-    return 1;
-  }
+	// djm pooling
+	private static final TLVec2 tlCenter = new TLVec2();	
+	/**
+	 * checks to see if the point is in this shape.
+	 * 
+	 * @see Shape#testPoint(XForm, Vec2)
+	 */
+	@Override
+	public boolean testPoint(final XForm transform, final Vec2 p) {
+		final Vec2 center = tlCenter.get();
+		Mat22.mulToOut(transform.R, m_localPosition, center);
+		center.addLocal(transform.position);
 
-  /**
-   * Get the supporting vertex index in the given direction.
-   * 
-   * @param d
-   * @return
-   */
-  public final int getSupport(final Vec2 d) {
-    return 0;
-  }
+		final Vec2 d = center.subLocal(p).negateLocal();
+		boolean ret = Vec2.dot(d, d) <= m_radius * m_radius;
+		return ret;
+	}
 
-  /**
-   * Get the supporting vertex in the given direction.
-   * 
-   * @param d
-   * @return
-   */
-  public final Vec2 getSupportVertex(final Vec2 d) {
-    return m_p;
-  }
+	
+	// djm pooling
+	private static final TLVec2 tlS = new TLVec2();
+	private static final TLVec2 tlPosition = new TLVec2();
+	private static final TLVec2 tlR = new TLVec2();
+	// Collision Detection in Interactive 3D Environments by Gino van den Bergen
+	// From Section 3.1.2
+	// x = s + a * r
+	// norm(x) = radius
+	/**
+	 * @see Shape#testSegment(XForm, RaycastResult, Segment, float)
+	 */
+	@Override
+	public SegmentCollide testSegment(final XForm xf, final RaycastResult out,
+			final Segment segment, final float maxLambda) {
+		Vec2 position = tlPosition.get();
+		Vec2 s = tlS.get();
+		
+		Mat22.mulToOut(xf.R, m_localPosition, position);
+		position.addLocal(xf.position);
+		s.set(segment.p1);
+		s.subLocal(position);
+		final float b = Vec2.dot(s, s) - m_radius * m_radius;
 
-  /**
-   * Get the vertex count.
-   * 
-   * @return
-   */
-  public final int getVertexCount() {
-    return 1;
-  }
+		// Does the segment start inside the circle?
+		if (b < 0.0f) {
+			return SegmentCollide.STARTS_INSIDE_COLLIDE;
+		}
 
-  /**
-   * Get a vertex by index.
-   * 
-   * @param index
-   * @return
-   */
-  public final Vec2 getVertex(final int index) {
-    assert (index == 0);
-    return m_p;
-  }
+		Vec2 r = tlR.get();
+		// Solve quadratic equation.
+		r.set(segment.p2).subLocal(segment.p1);
+		final float c = Vec2.dot(s, r);
+		final float rr = Vec2.dot(r, r);
+		final float sigma = c * c - rr * b;
 
-  @Override
-  public final boolean testPoint(final Transform transform, final Vec2 p) {
-    // Rot.mulToOutUnsafe(transform.q, m_p, center);
-    // center.addLocal(transform.p);
-    //
-    // final Vec2 d = center.subLocal(p).negateLocal();
-    // return Vec2.dot(d, d) <= m_radius * m_radius;
-    final Rot q = transform.q;
-    final Vec2 tp = transform.p;
-    float centerx = -(q.c * m_p.x - q.s * m_p.y + tp.x - p.x);
-    float centery = -(q.s * m_p.x + q.c * m_p.y + tp.y - p.y);
+		// Check for negative discriminant and short segment.
+		if (sigma < 0.0f || rr < Settings.EPSILON) {
+			return SegmentCollide.MISS_COLLIDE;
+		}
 
-    return centerx * centerx + centery * centery <= m_radius * m_radius;
-  }
+		// Find the point of intersection of the line with the circle.
+		float a = -(c + MathUtils.sqrt(sigma));
 
-  @Override
-  public float computeDistanceToOut(Transform xf, Vec2 p, int childIndex, Vec2 normalOut) {
-    final Rot xfq = xf.q;
-    float centerx = xfq.c * m_p.x - xfq.s * m_p.y + xf.p.x;
-    float centery = xfq.s * m_p.x + xfq.c * m_p.y + xf.p.y;
-    float dx = p.x - centerx;
-    float dy = p.y - centery;
-    float d1 = MathUtils.sqrt(dx * dx + dy * dy);
-    normalOut.x = dx * 1 / d1;
-    normalOut.y = dy * 1 / d1;
-    return d1 - m_radius;
-  }
+//		 System.out.println(a + "; " + maxLambda + "; " + rr + "  ; " + (a <= maxLambda * rr));
 
-  // Collision Detection in Interactive 3D Environments by Gino van den Bergen
-  // From Section 3.1.2
-  // x = s + a * r
-  // norm(x) = radius
-  @Override
-  public final boolean raycast(RayCastOutput output, RayCastInput input, Transform transform,
-      int childIndex) {
+		// Is the intersection point on the segment?
+		if (0.0f <= a && a <= maxLambda * rr) {
+			// System.out.println("Got here");
+			a /= rr;
+			out.lambda = a;
+			out.normal.set(r).mulLocal(a).addLocal(s);
+			out.normal.normalize();
+			
+			return SegmentCollide.HIT_COLLIDE;
+		}
 
-    final Vec2 inputp1 = input.p1;
-    final Vec2 inputp2 = input.p2;
-    final Rot tq = transform.q;
-    final Vec2 tp = transform.p;
+		return SegmentCollide.MISS_COLLIDE; // thanks FrancescoITA
+	}
 
-    // Rot.mulToOutUnsafe(transform.q, m_p, position);
-    // position.addLocal(transform.p);
-    final float positionx = tq.c * m_p.x - tq.s * m_p.y + tp.x;
-    final float positiony = tq.s * m_p.x + tq.c * m_p.y + tp.y;
+	// djm pooling
+	private static final TLVec2 tlP = new TLVec2();
+	/**
+	 * @see Shape#computeAABB(AABB, XForm)
+	 */
+	@Override
+	public void computeAABB(final AABB aabb, final XForm transform) {
+		
+		final Vec2 p = tlP.get();
+		Mat22.mulToOut(transform.R, m_localPosition, p);
+		p.addLocal(transform.position);
 
-    final float sx = inputp1.x - positionx;
-    final float sy = inputp1.y - positiony;
-    // final float b = Vec2.dot(s, s) - m_radius * m_radius;
-    final float b = sx * sx + sy * sy - m_radius * m_radius;
+		aabb.lowerBound.x = p.x - m_radius;
+		aabb.lowerBound.y = p.y - m_radius;
+		aabb.upperBound.x = p.x + m_radius;
+		aabb.upperBound.y = p.y + m_radius;
+	}
 
-    // Solve quadratic equation.
-    final float rx = inputp2.x - inputp1.x;
-    final float ry = inputp2.y - inputp1.y;
-    // final float c = Vec2.dot(s, r);
-    // final float rr = Vec2.dot(r, r);
-    final float c = sx * rx + sy * ry;
-    final float rr = rx * rx + ry * ry;
-    final float sigma = c * c - rr * b;
+	/**
+	 * @see Shape#computeSweptAABB(AABB, XForm, XForm)
+	 */
+	@Override
+	public void computeSweptAABB(final AABB aabb, final XForm transform1,
+			final XForm transform2) {
+		// INLINED
+//		 Vec2 p1 = transform1.position.add(Mat22.mul(transform1.R,
+//		 m_localPosition));
+//		 Vec2 p2 = transform2.position.add(Mat22.mul(transform2.R,
+//		 m_localPosition));
+//		 Vec2 lower = Vec2.min(p1, p2);
+//		 Vec2 upper = Vec2.max(p1, p2);
+//		 aabb.lowerBound.set(lower.x - m_radius, lower.y - m_radius);
+//		 aabb.upperBound.set(upper.x + m_radius, upper.y + m_radius);
+		final float p1x = transform1.position.x + transform1.R.col1.x
+				* m_localPosition.x + transform1.R.col2.x * m_localPosition.y;
+		final float p1y = transform1.position.y + transform1.R.col1.y
+				* m_localPosition.x + transform1.R.col2.y * m_localPosition.y;
+		final float p2x = transform2.position.x + transform2.R.col1.x
+				* m_localPosition.x + transform2.R.col2.x * m_localPosition.y;
+		final float p2y = transform2.position.y + transform2.R.col1.y
+				* m_localPosition.x + transform2.R.col2.y * m_localPosition.y;
+		final float lowerx = p1x < p2x ? p1x : p2x;
+		final float lowery = p1y < p2y ? p1y : p2y;
+		final float upperx = p1x > p2x ? p1x : p2x;
+		final float uppery = p1y > p2y ? p1y : p2y;
+		aabb.lowerBound.x = lowerx - m_radius;
+		aabb.lowerBound.y = lowery - m_radius;
+		aabb.upperBound.x = upperx + m_radius;
+		aabb.upperBound.y = uppery + m_radius;
+//		 System.out.println("Circle swept AABB: " + aabb.lowerBound + " " +
+//		 aabb.upperBound);
+		// System.out.println("Transforms: "+transform1.position+ " " +
+		// transform2.position+"\n");
 
-    // Check for negative discriminant and short segment.
-    if (sigma < 0.0f || rr < Settings.EPSILON) {
-      return false;
-    }
+	}
 
-    // Find the point of intersection of the line with the circle.
-    float a = -(c + MathUtils.sqrt(sigma));
+	/**
+	 * @see Shape#computeMass(MassData)
+	 */
+	@Override
+	public void computeMass(final MassData massData) {
+		massData.mass = m_density * MathUtils.PI * m_radius * m_radius;
+		massData.center.set(m_localPosition);
 
-    // Is the intersection point on the segment?
-    if (0.0f <= a && a <= input.maxFraction * rr) {
-      a /= rr;
-      output.fraction = a;
-      output.normal.x = rx * a + sx;
-      output.normal.y = ry * a + sy;
-      output.normal.normalize();
-      return true;
-    }
+		// inertia about the local origin
+		massData.I = massData.mass
+				* (0.5f * m_radius * m_radius + Vec2.dot(m_localPosition,
+						m_localPosition));
+	}
 
-    return false;
-  }
+	public float getRadius() {
+		return m_radius;
+	}
 
-  @Override
-  public final void computeAABB(final AABB aabb, final Transform transform, int childIndex) {
-    final Rot tq = transform.q;
-    final Vec2 tp = transform.p;
-    final float px = tq.c * m_p.x - tq.s * m_p.y + tp.x;
-    final float py = tq.s * m_p.x + tq.c * m_p.y + tp.y;
+	/**
+	 * Returns a copy of the local position
+	 * 
+	 * @return
+	 */
+	public Vec2 getLocalPosition() {
+		return m_localPosition.clone();
+	}
 
-    aabb.lowerBound.x = px - m_radius;
-    aabb.lowerBound.y = py - m_radius;
-    aabb.upperBound.x = px + m_radius;
-    aabb.upperBound.y = py + m_radius;
-  }
+	/**
+	 * Returns the member variable of the local position. Don't change this.
+	 * 
+	 * @return
+	 */
+	public Vec2 getMemberLocalPosition() {
+		return m_localPosition;
+	}
+	
+	// djm pooling from above
+	/**
+	 * @see Shape#computeSubmergedArea(Vec2, float, XForm, Vec2)
+	 */
+	public float computeSubmergedArea(final Vec2 normal, float offset,
+			XForm xf, Vec2 c) {
+		// pooling
+		final Vec2 p = tlP.get();
+		
+		XForm.mulToOut(xf, m_localPosition, p);
+		float l = -(Vec2.dot(normal, p) - offset);
+		
+		if (l < -m_radius + Settings.EPSILON) {
+			// Completely dry
+			return 0;
+		}
+		if (l > m_radius) {
+			// Completely wet
+			c.set(p);
+			return Settings.pi * m_radius * m_radius;
+		}
 
-  @Override
-  public final void computeMass(final MassData massData, final float density) {
-    massData.mass = density * Settings.PI * m_radius * m_radius;
-    massData.center.x = m_p.x;
-    massData.center.y = m_p.y;
+		// Magic
+		float r2 = m_radius * m_radius;
+		float l2 = l * l;
+		float area = (float) (r2
+				* (Math.asin(l / m_radius) + Settings.pi / 2.0f) + l
+				* MathUtils.sqrt(r2 - l2));
+		float com = (float) (-2.0f / 3.0f * MathUtils.pow(r2 - l2, 1.5f) / area);
 
-    // inertia about the local origin
-    // massData.I = massData.mass * (0.5f * m_radius * m_radius + Vec2.dot(m_p, m_p));
-    massData.I = massData.mass * (0.5f * m_radius * m_radius + (m_p.x * m_p.x + m_p.y * m_p.y));
-  }
+		c.x = p.x + normal.x * com;
+		c.y = p.y + normal.y * com;
+
+		return area;
+	}
 }
