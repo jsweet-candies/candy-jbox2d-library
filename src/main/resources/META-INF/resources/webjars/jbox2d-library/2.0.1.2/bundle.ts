@@ -1,4 +1,4 @@
-/* Generated from Java with JSweet 2.2.0-SNAPSHOT - http://www.jsweet.org */
+/* Generated from Java with JSweet 2.3.0 - http://www.jsweet.org */
 namespace org.jbox2d.collision {
     /**
      * Creates an AABB object using the given bounding
